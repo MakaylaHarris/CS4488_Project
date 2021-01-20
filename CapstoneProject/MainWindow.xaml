@@ -1,0 +1,41 @@
+﻿<Window x:Name="frmMain" x:Class="CapstoneProject.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CapstoneProject"
+        mc:Ignorable="d"
+        Title="PERT Chart" Height="450" Width="800" AutomationProperties.Name="winMain" WindowState="Normal">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="515*"/>
+            <ColumnDefinition Width="277*"/>
+        </Grid.ColumnDefinitions>
+        <Menu HorizontalAlignment="Stretch" Height="20" VerticalAlignment="Top" Margin="0" Grid.ColumnSpan="2">
+            <MenuItem Header="File" Height="20" Width="auto">
+
+                <MenuItem x:Name="save_project" Header="Save" HorizontalAlignment="Left" Height="20" Width="auto" Click="save_project_Click" IsEnabled="False"/>
+                <Separator/>
+                <MenuItem x:Name="mi_projectProperties" Header="Project Properties" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_projectProperties_Click" IsEnabled="False"/>
+                <Separator/>
+                <MenuItem x:Name="go_main" Header="Main Menu" HorizontalAlignment="Left" Height="20" Width="auto" Click="go_main_Click" IsEnabled="True"/>
+                <Separator/>
+                <MenuItem x:Name="mi_exit" Header="Exit" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="Edit" Height="20" Width="auto">
+                <MenuItem x:Name="mi_addUser" Header="Add New User" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_addUser_Click"/>
+            </MenuItem>
+            
+            <MenuItem x:Name="mi_help" Header="Help" Height="20" Width="auto"/>
+        </Menu>
+
+        <Canvas x:Name="secCanvas" Margin="10,20,-18,-1" Width="800" Height="400" Grid.ColumnSpan="2">
+
+        </Canvas>
+
+
+        <Frame x:Name="frameMain" Margin="0,20,0,0" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>
+
+    </Grid>
+</Window>

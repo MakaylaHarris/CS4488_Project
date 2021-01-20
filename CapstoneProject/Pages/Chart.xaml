@@ -1,0 +1,24 @@
+﻿<!--Levi Delezene-->
+<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CapstoneProject.Pages"
+      xmlns:CapstoneProject="clr-namespace:CapstoneProject" x:Class="CapstoneProject.Pages.Chart"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Chart" Loaded="Page_Loaded" KeyDown="Page_KeyDown">
+
+    <Grid x:Name="mainGrid">
+        <ScrollViewer x:Name="scrollViewer" HorizontalContentAlignment="Left" VerticalContentAlignment="top" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" PreviewMouseWheel="scrollViewer_PreviewMouseWheel">
+            <Canvas x:Name="mainCanvas" Background="Transparent" Margin="10,0,10,30">
+                <Canvas.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="mi_addTask" Header="Add Task" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_addTask_Click"/>
+                    </ContextMenu>
+                </Canvas.ContextMenu>
+            </Canvas>
+        </ScrollViewer>
+    </Grid>
+</Page>

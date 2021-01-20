@@ -1,0 +1,157 @@
+﻿<!--By Levi Delezene-->
+<Page x:Class="CapstoneProject.Pages.ProjectProperties"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CapstoneProject.Pages"
+      xmlns:Filters="clr-namespace:CapstoneProject.Validators"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Project Properties" Height="389.773" Width="654.545" KeyDown="Page_KeyDown" Loaded="Page_Loaded">
+
+    <Page.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Save"
+                        Executed="SaveCmdExecuted"
+                        CanExecute="SaveCmdCanExecute"/>
+    </Page.CommandBindings>
+    
+    <Page.Resources>
+        <ControlTemplate x:Key="ValidationTemplate">
+            <DockPanel>
+                <TextBlock Foreground="Red" FontSize="20">!</TextBlock>
+                <AdornedElementPlaceholder/>
+            </DockPanel>
+        </ControlTemplate>
+
+        <Style x:Key="TextBoxInError" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                              Path=(Validation.Errors)[0].ErrorContent}"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ComboBoxInError" TargetType="{x:Type ComboBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                              Path=(Validation.Errors)[0].ErrorContent}"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DatePickerInError" TargetType="{x:Type DatePicker}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                              Path=(Validation.Errors)[0].ErrorContent}"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+    </Page.Resources>
+    
+    <Grid Loaded="Grid_Loaded">
+        <Label Content="Project Name" HorizontalAlignment="Left" Margin="135,53,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbxName"
+                 Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                 Style="{StaticResource TextBoxInError}"
+                 HorizontalAlignment="Left"
+                 Height="23" Margin="231,56,0,0" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Top" 
+                 Width="277" LostFocus="TbxName_LostFocus">
+            <TextBox.Text>
+                <Binding Path="TextProp" ValidatesOnExceptions="True" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
+                    <Binding.ValidationRules>
+                        <Filters:EmptyRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
+        <Label Content="Description" HorizontalAlignment="Left" Margin="147,84,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbxDescription"
+                 Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                 Style="{StaticResource TextBoxInError}"
+                 HorizontalAlignment="Left" 
+                 Height="90" 
+                 Margin="231,87,0,0" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Top" 
+                 Width="277" LostFocus="TbxDescription_LostFocus">
+            <TextBox.Text>
+                <Binding Path="TextProp" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
+                    <Binding.ValidationRules>
+                        <Filters:EmptyRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
+        <Label Content="Start Date" HorizontalAlignment="Left" Margin="154,183,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.012,0.516"/>
+        <DatePicker x:Name="dpStartDate" 
+                    Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                    Style="{StaticResource DatePickerInError}"
+                    HorizontalAlignment="Left" 
+                    Margin="231,184,0,0" 
+                    VerticalAlignment="Top" 
+                    Width="277" LostFocus="DpStartDate_LostFocus">
+            <DatePicker.SelectedDate>
+                <Binding Path="TextProp" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
+                    <Binding.ValidationRules>
+                        <Filters:EmptyRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </DatePicker.SelectedDate>
+        </DatePicker>
+
+        <Label Content="Working Hours" HorizontalAlignment="Left" Margin="127,214,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbxWorkingHours"
+                 Validation.ErrorTemplate="{StaticResource ValidationTemplate}"
+                 Style="{StaticResource TextBoxInError}"
+                 PreviewTextInput="numberValidation" 
+                 HorizontalAlignment="Left" 
+                 Height="23" 
+                 Margin="231,217,0,0" 
+                 TextWrapping="Wrap" 
+                 VerticalAlignment="Top" 
+                 Width="277" 
+                 LostFocus="tbxWorkingHours_LostFocus">
+            <TextBox.Text>
+                <Binding Path="TextProp" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
+                    <Binding.ValidationRules>
+                        <Filters:EmptyRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+
+        <Label Content="Owner" HorizontalAlignment="Left" Margin="172,252,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="cboOwner" 
+                  HorizontalAlignment="Left" 
+                  Margin="231,256,0,0" 
+                  VerticalAlignment="Top" 
+                  Width="277"
+                  LostFocus="cboOwner_LostFocus">
+            <ComboBox.Text>
+                <Binding Path="TextProp" ValidatesOnDataErrors="True" UpdateSourceTrigger="Explicit">
+                    <Binding.ValidationRules>
+                        <Filters:EmptyRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </ComboBox.Text>
+        </ComboBox>
+        
+        <Button x:Name="btnSubmit" Command="ApplicationCommands.Save" Content="Submit" IsDefault="True" HorizontalAlignment="Left" Margin="231,320,0,0" VerticalAlignment="Top" Width="277" Click="btnSubmit_Click"/>
+        <Label x:Name ="lblAddOwner" Content="Add New Owner" HorizontalAlignment="Left" Margin="119,283,0,0" VerticalAlignment="Top" Width="98"/>
+        <Button x:Name ="btnAddOwner" Content="Add Owner" HorizontalAlignment="Left" Margin="231,289,0,0" VerticalAlignment="Top" Width="75" Click="btnAddOwner_Click"/>
+
+    </Grid>
+</Page>
