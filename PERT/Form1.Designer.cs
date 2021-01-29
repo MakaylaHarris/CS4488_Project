@@ -1,12 +1,22 @@
 ﻿
+using PERT.Model;
+using PERT.View;
+
 namespace PERT
 {
-    partial class Form1
+    partial class Form1 : IViewModel
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        private IModel model;
+
+        public void OnModelUpdate(Project p)
+        {
+            throw new System.NotImplementedException();
+        }
+
 
         /// <summary>
         /// Clean up any resources being used.
@@ -33,6 +43,7 @@ namespace PERT
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Text = "Form1";
+            model = new Model.Model(this);
         }
 
         #endregion
