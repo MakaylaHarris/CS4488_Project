@@ -1,11 +1,42 @@
-﻿namespace PERT.Model
+﻿using System.Data.SqlClient;
+
+namespace PERT.Model
 {
-    interface IDBItem
+    /// <summary>
+    /// Objects inherit from IDBItem if they are updated, inserted, and deleted from the sql database
+    /// Created 1/28/2021 by Robert Nelson
+    /// </summary>
+    public abstract class IDBItem
     {
-        void Update();
 
-        void Insert();
-        void Delete();
+        private SqlConnection connection;
 
+        #region Protected Methods
+        protected SqlCommand OpenConnection(string query)
+        {
+            connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
+            connection.Open();
+            return new SqlCommand(query, connection);
+        }
+
+        protected int ExecuteSql(string query)
+        {
+            SqlCommand cmd = OpenConnection(query);
+            int result = (int)cmd.ExecuteNonQuery();
+            connection.Close();
+            return result;
+        }
+
+        protected void CloseConnection()
+        {
+            connection.Close();
+        }
+        #endregion
+
+        #region Abstract Methods
+        abstract protected void Update();
+        abstract protected int Insert();
+        abstract protected void Delete();
+        #endregion
     }
 }

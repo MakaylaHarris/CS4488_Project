@@ -1,4 +1,7 @@
 ﻿
+using PERT.Model;
+using PERT.View;
+
 namespace PERT
 {
     partial class Form1

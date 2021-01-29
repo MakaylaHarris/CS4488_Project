@@ -35,5 +35,17 @@ namespace PERT.Properties {
                 this["ConnectionString"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public int RefreshPeriod {
+            get {
+                return ((int)(this["RefreshPeriod"]));
+            }
+            set {
+                this["RefreshPeriod"] = value;
+            }
+        }
     }
 }
