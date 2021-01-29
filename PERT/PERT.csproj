@@ -70,7 +70,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\DBPolling.cs" />
+    <Compile Include="Model\DBPoller.cs" />
     <Compile Include="Model\DBReader.cs" />
     <Compile Include="Model\DBUpdateReceiver.cs" />
     <Compile Include="Model\IDBItem.cs" />

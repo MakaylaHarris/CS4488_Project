@@ -7,14 +7,21 @@ using System.Threading.Tasks;
 
 namespace PERT.Model
 {
+    /// <summary>
+    /// A PERT/Gantt project with tasks
+    /// Created 1/28/2021 by Robert Nelson
+    /// </summary>
     public class Project : TimedItem
     {
         private List<Task> tasks;
+
+        public List<Task> Tasks { get => tasks; }
 
         public Project(string name, DateTime start, DateTime end, string description = "", int id = -1) : base(name, start, end, description, id) {
             tasks = new List<Task>();
         }
 
+        #region Task Methods
         public void AddTask(Task t)
         {
             tasks.Add(t);
@@ -24,7 +31,9 @@ namespace PERT.Model
         {
             tasks.Remove(t);
         }
+        #endregion
 
+        #region Database
         protected override void Delete()
         {
             ExecuteSql("Delete from Project Where ProjectId= " + this.Id + ";");
@@ -54,5 +63,6 @@ namespace PERT.Model
                 (string)reader["Description"],
                 (int)reader["ProjectId"]);
         }
+        #endregion
     }
 }

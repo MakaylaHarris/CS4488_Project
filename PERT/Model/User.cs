@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace PERT.Model
 {
+    /// <summary>
+    /// A single user that works on the project
+    /// Created 1/29/2021 by Robert Nelson
+    /// </summary>
     public class User : IDBItem
     {
         private uint id;
@@ -14,6 +18,7 @@ namespace PERT.Model
         private string email;
         private string password;
 
+        #region Properties
         public string Name { get => name;
             set
             {
@@ -39,6 +44,8 @@ namespace PERT.Model
                 Update();
             }
         }
+        #endregion
+
 
         public User(string name, string email="", string password = "", int id = -1)
         {
@@ -51,6 +58,7 @@ namespace PERT.Model
                 this.id = (uint) id;
         }
 
+        #region Database Methods
         protected override void Delete()
         {
             ExecuteSql("Delete from User Where Id= " + id + ";");
@@ -77,5 +85,6 @@ namespace PERT.Model
                 (string) reader["Password"], 
                 (int) reader["UserId"]);
         }
+        #endregion
     }
 }

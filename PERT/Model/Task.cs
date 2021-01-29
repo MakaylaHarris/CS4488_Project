@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace PERT.Model
 {
-
+    /// <summary>
+    /// A Task is a single item on the Pert chart that has a most likely duration, minimum duration, and maximum duration.
+    /// Dependencies are Tasks that cannot be started until this one is finished.
+    /// Created 1/29/2021 by Robert Nelson
+    /// </summary>
     public class Task : TimedItem
     {
         private uint mostLikelyDuration;
@@ -33,7 +37,7 @@ namespace PERT.Model
 
 
 
-
+        #region Dependencies
         public void UpdateDependencies()
         {
 
@@ -48,7 +52,9 @@ namespace PERT.Model
         {
 
         }
+        #endregion
 
+        #region Database Methods
         protected override void Update()
         {
             throw new NotImplementedException();
@@ -76,5 +82,6 @@ namespace PERT.Model
                 (string)reader["Description"],
                 (int)reader["TaskId"]);
         }
+        #endregion
     }
 }

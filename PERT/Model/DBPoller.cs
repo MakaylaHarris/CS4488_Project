@@ -8,15 +8,20 @@ using System.Windows.Forms;
 
 namespace PERT.Model
 {
-    class DBPolling
+    /// <summary>
+    /// Polling class that checks for updates from the database
+    /// Created 1/28/2021 by Robert Nelson
+    /// </summary>
+    class DBPoller
     {
         private SynchronizationContext context;
         private Thread thread;
         private bool finished;
         private int refreshTime;
+        private DateTime lastUpdated;
         DBReader receiver;
 
-        public DBPolling(DBReader receiver)
+        public DBPoller(DBReader receiver)
         {
             context = SynchronizationContext.Current;
             this.receiver = receiver;
@@ -26,13 +31,23 @@ namespace PERT.Model
             refreshTime = Properties.Settings.Default.RefreshPeriod;
             thread.Start();
         }
+
+        private void Handler(object state)
+        {
+            this.receiver.OnDBUpdate();
+        }
+
+        #region Worker Thread
         private bool DBIsUpdated()
         {
             // Todo: an actual check of the database, this just makes it update every time
+            // Make sure to use the lastUpdated variable
             return true;
         }
 
-
+        /// <summary>
+        /// Worker thread function that continuously checks for updates.
+        /// </summary>
         private void CheckForUpdates()
         {
             while (!finished)
@@ -44,11 +59,8 @@ namespace PERT.Model
                 Thread.Sleep(refreshTime);
             }
         }
+        #endregion
 
-        private void Handler(object state)
-        {
-            this.receiver.OnDBUpdate();
-        }
         
     }
 }

@@ -18,7 +18,7 @@ namespace PERT.Model
         private DBUpdateReceiver receiver;
         private List<Project> projects;
         private List<User> users;
-        private DBPolling polling;
+        private DBPoller polling;
         private SqlConnection connection;
 
         internal Project CurrentProject { get => currentProject; }
@@ -29,10 +29,10 @@ namespace PERT.Model
         {
             connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
             this.receiver = receiver;
-            polling = new DBPolling(this);
+            polling = new DBPoller(this);
         }
 
-
+        #region Private Methods
         private SqlDataReader OpenReader(string query)
         {
             connection.Open();
@@ -90,8 +90,9 @@ namespace PERT.Model
             // todo: Update those working on each task and project
             throw new NotImplementedException();
         }
+        #endregion
 
-
+        #region Public Methods
         public List<Project> GetUserProjects()
         {
             // Currently, this only returns all projects and not those the user is member to
@@ -113,5 +114,6 @@ namespace PERT.Model
             this.currentProject = project;
             this.OnDBUpdate();
         }
+        #endregion
     }
 }

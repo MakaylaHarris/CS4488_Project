@@ -17,6 +17,7 @@ namespace PERT.Model
         protected bool isComplete;
         private List<User> workers;
 
+        #region Properties
         public DateTime StartDate { get => startDate; 
             set { 
                 startDate = value;
@@ -48,7 +49,9 @@ namespace PERT.Model
 
         public List<User> Workers { get => workers; }
         public uint Id { get => id; }
+        #endregion
 
+        #region Constructor
         public TimedItem(string name, DateTime start, DateTime end, string description = "", int id = -1)
         {
             this.Name = name;
@@ -65,7 +68,9 @@ namespace PERT.Model
             }
             isComplete = EndDate != null && EndDate < DateTime.Now;
         }
+        #endregion
 
+        #region Worker Methods
         public void AddWorker(User worker)
         {
             workers.Add(worker);
@@ -75,5 +80,6 @@ namespace PERT.Model
         {
             workers.Remove(worker);
         }
+        #endregion
     }
 }
