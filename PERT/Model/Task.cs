@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PERT.Model
 {
@@ -19,10 +16,11 @@ namespace PERT.Model
         private uint minDuration;
         private List<Task> dependencies;
 
-        public Task(string name, DateTime start, DateTime end, uint duration, uint maxDuration=0, uint minDuration=0, string description = "", int id = -1) : base(name, start, end, description, id) {
-            if(duration == 0)
+        public Task(string name, DateTime start, DateTime? end, uint duration, uint maxDuration = 0, uint minDuration = 0, string description = "", int id = -1) : base(name, start, end, description, id)
+        {
+            if (duration == 0)
                 mostLikelyDuration = 1;
-            else 
+            else
                 mostLikelyDuration = duration;
             if (maxDuration <= 0)
                 this.maxDuration = mostLikelyDuration;
@@ -75,11 +73,11 @@ namespace PERT.Model
             return new Task(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
-                (DateTime)reader["EndDate"],
+                DBFunctions.DateCast(reader, "EndDate"),
                 (uint)reader["MostLikelyEstDuration"],
                 (uint)reader["MaxEstDuration"],
                 (uint)reader["MinEstDuration"],
-                (string)reader["Description"],
+                DBFunctions.StringCast(reader, "Description"),
                 (int)reader["TaskId"]);
         }
         #endregion

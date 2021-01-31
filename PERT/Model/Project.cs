@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PERT.Model
 {
@@ -17,7 +14,8 @@ namespace PERT.Model
 
         public List<Task> Tasks { get => tasks; }
 
-        public Project(string name, DateTime start, DateTime end, string description = "", int id = -1) : base(name, start, end, description, id) {
+        public Project(string name, DateTime start, DateTime? end, string description = "", int id = -1) : base(name, start, end, description, id)
+        {
             tasks = new List<Task>();
         }
 
@@ -59,8 +57,8 @@ namespace PERT.Model
             return new Project(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
-                (DateTime)reader["EndDate"],
-                (string)reader["Description"],
+                DBFunctions.DateCast(reader, "EndDate"),
+                DBFunctions.StringCast(reader, "Description"),
                 (int)reader["ProjectId"]);
         }
         #endregion

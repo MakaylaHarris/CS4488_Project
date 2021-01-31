@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 
 namespace PERT.Model
 {
@@ -13,13 +8,15 @@ namespace PERT.Model
     /// </summary>
     public class User : IDBItem
     {
-        private uint id;
+        private string username;
         private string name;
         private string email;
         private string password;
 
         #region Properties
-        public string Name { get => name;
+        public string Name
+        {
+            get => name;
             set
             {
                 name = value;
@@ -27,7 +24,9 @@ namespace PERT.Model
             }
         }
 
-        public string Email { get => email;
+        public string Email
+        {
+            get => email;
             set
             {
                 email = value;
@@ -44,46 +43,48 @@ namespace PERT.Model
                 Update();
             }
         }
+
+        public string Username { get => username; }
         #endregion
 
 
-        public User(string name, string email="", string password = "", int id = -1)
+        public User(string name, string email = "", string password = "", string username = "")
         {
-            this.Name = name;
-            this.Email = email;
-            this.Password = password;
-            if (id < 0)
-                this.id = (uint) Insert();
+            this.name = name;
+            this.email = email;
+            this.password = password;
+            if (username == "")
+                this.username = name;
             else
-                this.id = (uint) id;
+                this.username = username;
         }
 
         #region Database Methods
         protected override void Delete()
         {
-            ExecuteSql("Delete from User Where Id= " + id + ";");
+            ExecuteSql("Delete from [User] Where UserName= '" + username + "';");
         }
 
         protected override int Insert()
         {
-            return ExecuteSql("INSERT INTO User(Name, Email, Password) values('"
-                + name + "', '" + email + "', '" + password + "');");
+            return ExecuteSql("INSERT INTO [User](UserName, Name, Email, Password) values('"
+                + username + "', '" + name + "', '" + email + "', '" + password + "');");
         }
 
         protected override void Update()
         {
-            ExecuteSql("update User set Name= '" + name
+            ExecuteSql("update [User] set [Name]='" + name
                 + "', Email= '" + email
-                + "', Password= '" + password
-                + "' Where Id=" + id + ";");
+                + "', [Password]= '" + password
+                + "' Where UserName = '" + username + "';");
         }
 
         static public User Parse(SqlDataReader reader)
         {
-            return new User((string) reader["Name"], 
-                (string) reader["Email"], 
-                (string) reader["Password"], 
-                (int) reader["UserId"]);
+            return new User((string)reader["Name"],
+                (string)reader["Email"],
+                (string)reader["Password"],
+                (string)reader["UserName"]);
         }
         #endregion
     }

@@ -10,7 +10,7 @@ namespace PERT.Model
     public abstract class TimedItem : IDBItem
     {
         private DateTime startDate;
-        private DateTime endDate;
+        private DateTime? endDate;
         private string name;
         private string description;
         private uint id;
@@ -18,20 +18,29 @@ namespace PERT.Model
         private List<User> workers;
 
         #region Properties
-        public DateTime StartDate { get => startDate; 
-            set { 
+        public DateTime StartDate
+        {
+            get => startDate;
+            set
+            {
                 startDate = value;
-                Update(); 
-            } }
+                Update();
+            }
+        }
 
-        public DateTime EndDate { get => endDate;
+        public DateTime? EndDate
+        {
+            get => endDate;
             set
             {
                 endDate = value;
                 Update();
-            } }
+            }
+        }
 
-        public string Name { get => name;
+        public string Name
+        {
+            get => name;
             set
             {
                 name = value;
@@ -39,7 +48,9 @@ namespace PERT.Model
             }
         }
 
-        public string Description { get => description; 
+        public string Description
+        {
+            get => description;
             set
             {
                 description = value;
@@ -52,12 +63,12 @@ namespace PERT.Model
         #endregion
 
         #region Constructor
-        public TimedItem(string name, DateTime start, DateTime end, string description = "", int id = -1)
+        public TimedItem(string name, DateTime start, DateTime? end, string description = "", int id = -1)
         {
-            this.Name = name;
-            this.StartDate = start;
-            this.EndDate = end;
-            this.Description = description;
+            this.name = name;
+            this.startDate = start;
+            this.endDate = end;
+            this.description = description;
             if (id >= 0)
             {
                 this.id = (uint)id;

@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -67,6 +67,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\DBFunctions.cs" />
     <Compile Include="Model\DBPoller.cs" />
     <Compile Include="Model\DBReader.cs" />
     <Compile Include="Model\DBUpdateReceiver.cs" />
@@ -104,19 +105,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="database\SmartPertDB.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="database\Pert.mdf" />
+    <Content Include="database\Pert_log.ldf">
+      <DependentUpon>Pert.mdf</DependentUpon>
     </Content>
-    <Content Include="database\SmartPertDB_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>SmartPertDB.mdf</DependentUpon>
-    </Content>
-    <Content Include="database\SQL\Dependency.sql" />
-    <Content Include="database\SQL\insert.sql" />
-    <Content Include="database\SQL\Project.sql" />
-    <Content Include="database\SQL\Status.sql" />
-    <Content Include="database\SQL\Task.sql" />
-    <Content Include="database\SQL\User.sql" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

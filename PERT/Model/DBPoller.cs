@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data;
+using System.Data.SqlClient;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace PERT.Model
 {
@@ -18,11 +16,12 @@ namespace PERT.Model
         private Thread thread;
         private bool finished;
         private int refreshTime;
-        private DateTime lastUpdated;
+        private long lastVersion;
         DBReader receiver;
 
         public DBPoller(DBReader receiver)
         {
+            lastVersion = -1;
             context = SynchronizationContext.Current;
             this.receiver = receiver;
             thread = new Thread(new ThreadStart(CheckForUpdates));
@@ -40,9 +39,19 @@ namespace PERT.Model
         #region Worker Thread
         private bool DBIsUpdated()
         {
-            // Todo: an actual check of the database, this just makes it update every time
-            // Make sure to use the lastUpdated variable
-            return true;
+            SqlConnection connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
+            connection.Open();
+            SqlCommand command = connection.CreateCommand();
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = "dbo.TRACKING_VERSION";
+            var tmp = command.Parameters.Add("@ret_value", SqlDbType.BigInt);
+            tmp.Direction = ParameterDirection.Output;
+            command.ExecuteNonQuery();
+            long newVersion = (long) tmp.Value;
+            bool result = newVersion > lastVersion;
+            connection.Close();
+            lastVersion = newVersion;
+            return result;
         }
 
         /// <summary>
@@ -61,6 +70,6 @@ namespace PERT.Model
         }
         #endregion
 
-        
+
     }
 }
