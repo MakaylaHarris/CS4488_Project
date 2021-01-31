@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
 
 namespace PERT.Model
 {
@@ -29,6 +25,17 @@ namespace PERT.Model
         {
             connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
             this.receiver = receiver;
+            string lastProject = Properties.Settings.Default.LastProject;
+            if (lastProject != "")
+            {
+                UpdateProject();
+                foreach(Project p in projects)
+                {
+                    if (p.Name == lastProject)
+                        currentProject = p;
+                }
+            }
+
             polling = new DBPoller(this);
         }
 
@@ -42,7 +49,7 @@ namespace PERT.Model
 
         private SqlDataReader ReadTable(string table)
         {
-            return OpenReader("Select * from " + table + ";");
+            return OpenReader("Select * From " + table + ";");
         }
 
 
@@ -50,12 +57,12 @@ namespace PERT.Model
         {
             projects = new List<Project>();
             SqlDataReader reader = ReadTable("Project");
-            while(reader.Read())
+            while (reader.Read())
             {
                 Project p = Project.Parse(reader);
-                Projects.Add(p);
-                if (p.Id == CurrentProject.Id)
-                    currentProject= p;
+                projects.Add(p);
+                if (CurrentProject != null && p.Id == CurrentProject.Id)
+                    currentProject = p;
             }
             connection.Close();
         }
@@ -63,7 +70,7 @@ namespace PERT.Model
         private void UpdateTasks()
         {
             SqlDataReader reader = OpenReader("Select * from Task Where ProjectId=" + CurrentProject.Id + ";");
-            while(reader.Read())
+            while (reader.Read())
             {
                 CurrentProject.AddTask(Task.Parse(reader));
             }
@@ -73,16 +80,17 @@ namespace PERT.Model
         private void UpdateUsers()
         {
             users = new List<User>();
-            SqlDataReader reader = ReadTable("User");
+            SqlDataReader reader = ReadTable("[User]");
             while (reader.Read())
             {
-                Users.Add(User.Parse(reader));
+                users.Add(User.Parse(reader));
             }
+            connection.Close();
         }
 
         private void UpdateDependencies()
         {
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
         }
 
         private void UpdateWorkers()
@@ -103,9 +111,12 @@ namespace PERT.Model
         {
             UpdateProject();
             UpdateUsers();
-            UpdateTasks();
-            UpdateDependencies();
-            UpdateWorkers();
+            if (CurrentProject != null)
+            {
+                UpdateTasks();
+                UpdateDependencies();
+                UpdateWorkers();
+            }
             this.receiver.OnDBUpdate(CurrentProject);
         }
 
