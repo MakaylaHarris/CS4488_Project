@@ -6,7 +6,7 @@
       <Value Profile="(Default)">10000</Value>
     </Setting>
     <Setting Name="ConnectionString" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Pert.mdf;Integrated Security=True</Value>
+      <Value Profile="(Default)">"System.Data.SqlClient" ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Pert;Integrated Security=True;Pooling=False;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False"</Value>
     </Setting>
   </Settings>
 </SettingsFile>

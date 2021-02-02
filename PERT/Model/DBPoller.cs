@@ -40,6 +40,7 @@ namespace PERT.Model
         #region Worker Thread
         private bool DBIsUpdated()
         {
+           
             // Todo: an actual check of the database, this just makes it update every time
             // Make sure to use the lastUpdated variable
             return true;
@@ -60,7 +61,6 @@ namespace PERT.Model
             }
         }
         #endregion
-
         
     }
 }

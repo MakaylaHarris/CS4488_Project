@@ -91,7 +91,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="database\PertChartDatabase.pdf" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -104,21 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="database\SmartPertDB.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="database\SmartPertDB_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>SmartPertDB.mdf</DependentUpon>
-    </Content>
-    <Content Include="database\SQL\Dependency.sql" />
-    <Content Include="database\SQL\insert.sql" />
-    <Content Include="database\SQL\Project.sql" />
-    <Content Include="database\SQL\Status.sql" />
-    <Content Include="database\SQL\Task.sql" />
-    <Content Include="database\SQL\User.sql" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

@@ -37,8 +37,9 @@ namespace PERT.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\Pert.mdf;Inte" +
-            "grated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"System.Data.SqlClient\" ConnectionString=\"Data Source=(localdb)\\MSSQLLocalDB;Init" +
+            "ial Catalog=Pert;Integrated Security=True;Pooling=False;Connect Timeout=30;Encry" +
+            "pt=False;TrustServerCertificate=False\"")]
         public string ConnectionString {
             get {
                 return ((string)(this["ConnectionString"]));
