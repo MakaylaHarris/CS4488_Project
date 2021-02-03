@@ -16,9 +16,30 @@ namespace WPF.Model
         private int minDuration;
         private List<Task> dependencies;
 
-        public int LikelyDuration { get => mostLikelyDuration; set => mostLikelyDuration; Update(); }
-        public int MaxDuration { get => maxDuration; }
-        public int MinDuration { get => minDuration; }
+        public int LikelyDuration
+        {
+            get => mostLikelyDuration;
+            set
+            {
+                mostLikelyDuration = value;
+                Update();
+            }
+        }
+        public int MaxDuration { get => maxDuration; 
+            set {
+                maxDuration = value;
+                Update();
+            } 
+        }
+
+        public int MinDuration
+        {
+            get => minDuration; set
+            {
+                minDuration = value;
+                Update();
+            }
+        }
         public List<Task> Dependencies { get => dependencies; }
 
         public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "", int id = -1) : base(name, start, end, description, id)
