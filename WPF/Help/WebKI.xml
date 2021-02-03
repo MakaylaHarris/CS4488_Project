@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpKI>
+  <HelpKINode Title="App class">
+    <HelpKINode Title="App Class" Url="html/92733560-5b66-3a9b-79a7-fae0e4987175.htm" />
+    <HelpKINode Title="constructor" Url="html/5b2f3ed9-01f2-5f4a-f681-8bfe0f3c782f.htm" />
+    <HelpKINode Title="events" Url="html/970da504-0dd9-dc35-4aa3-18a57dbb26ff.htm" />
+    <HelpKINode Title="methods" Url="html/f0a5bd12-edfd-d192-5da8-befe484ed424.htm" />
+    <HelpKINode Title="properties" Url="html/a94b65e3-5d4e-a8b7-92d0-1f329e433866.htm" />
+  </HelpKINode>
+  <HelpKINode Title="App.App constructor" Url="html/5b2f3ed9-01f2-5f4a-f681-8bfe0f3c782f.htm" />
+  <HelpKINode Title="App.InitializeComponent method" Url="html/5dd9729d-b0ab-a37a-64f2-ec97299cc8c7.htm" />
+  <HelpKINode Title="App.Main method" Url="html/2ba3caa3-1893-ef39-e03d-f72fc4613b6d.htm" />
+  <HelpKINode Title="InitializeComponent method">
+    <HelpKINode Title="App.InitializeComponent Method " Url="html/5dd9729d-b0ab-a37a-64f2-ec97299cc8c7.htm" />
+    <HelpKINode Title="MainWindow.InitializeComponent Method " Url="html/f4e910a8-daa9-2ee6-83cc-fb9868f3dfb7.htm" />
+  </HelpKINode>
+  <HelpKINode Title="Main method" Url="html/2ba3caa3-1893-ef39-e03d-f72fc4613b6d.htm" />
+  <HelpKINode Title="MainWindow class">
+    <HelpKINode Title="MainWindow Class" Url="html/370e8645-6116-79f8-9794-6cd7abd3b3f7.htm" />
+    <HelpKINode Title="constructor" Url="html/f3fb15d0-c7a5-e701-687f-4c41a17aa2b1.htm" />
+    <HelpKINode Title="events" Url="html/214588e9-0bca-96ce-134f-2efe4a348e5b.htm" />
+    <HelpKINode Title="methods" Url="html/59671f5c-7600-993e-5040-fee0ff8e7f7a.htm" />
+    <HelpKINode Title="properties" Url="html/3396d360-71c1-87f5-fd29-031d33abe0ca.htm" />
+  </HelpKINode>
+  <HelpKINode Title="MainWindow.InitializeComponent method" Url="html/f4e910a8-daa9-2ee6-83cc-fb9868f3dfb7.htm" />
+  <HelpKINode Title="MainWindow.MainWindow constructor" Url="html/f3fb15d0-c7a5-e701-687f-4c41a17aa2b1.htm" />
+  <HelpKINode Title="WPF namespace" Url="html/72d498f2-bfd9-d6e0-de67-17e14a135913.htm" />
+  <HelpKINode Title="WPF.App class" Url="html/92733560-5b66-3a9b-79a7-fae0e4987175.htm" />
+  <HelpKINode Title="WPF.MainWindow class" Url="html/370e8645-6116-79f8-9794-6cd7abd3b3f7.htm" />
+</HelpKI>
