@@ -12,14 +12,14 @@ namespace PERT.Model
         Project GetProject();
         void SetProject(Project project);
         List<Project> GetProjectList();
-        Project CreateProject(string name, DateTime start, DateTime end, string description = "");
+        Project CreateProject(string name, DateTime start, DateTime? end, string description = "");
 
         void DeleteProject(Project project);
         #endregion
 
         #region Task Methods
         List<Task> GetTasks();
-        Task CreateTask(string name, DateTime start, DateTime end, string description = "", int duration = 1, int maxDuration = 0, int minDuration = 0);
+        Task CreateTask(string name, DateTime start, DateTime? end, string description = "", int duration = 1, int maxDuration = 0, int minDuration = 0);
         void DeleteTask(Task task);
         #endregion
 
