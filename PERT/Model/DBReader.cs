@@ -36,6 +36,7 @@ namespace PERT.Model
         private SqlDataReader OpenReader(string query)
         {
             connection.Open();
+            connection.
             SqlCommand command = new SqlCommand(query, connection);
             return command.ExecuteReader();
         }
