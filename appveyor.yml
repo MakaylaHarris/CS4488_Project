@@ -1,6 +1,6 @@
 before_build:
   - nuget restore
 environment:
-  SHFBROOT = C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
+  SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
 build:
   choco install sandcastle
