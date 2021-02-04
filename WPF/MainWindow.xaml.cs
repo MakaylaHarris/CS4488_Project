@@ -184,6 +184,11 @@ namespace WPF
                 UpdateDBStatus("Connection failed!", Brushes.Red);
         }
 
+        private void ConnectString_GetHelp(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://docs.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqlconnection.connectionstring?view=dotnet-plat-ext-5.0#remarks");
+        }
+
         private void DBConnect_Cancel(object sender, RoutedEventArgs e)
         {
             InputBox.Visibility = Visibility.Collapsed;

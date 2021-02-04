@@ -136,8 +136,11 @@ namespace WPF.Model
                 polling.Stop();
                 return false;
             }
-            if(connectString != Properties.Settings.Default.ConnectionString)
+            if (connectString != Properties.Settings.Default.ConnectionString)
+            {
                 Properties.Settings.Default.ConnectionString = connectString;
+                Properties.Settings.Default.Save();
+            }
             if (Connected)
                 polling.Reset();
             else
@@ -167,7 +170,11 @@ namespace WPF.Model
         public void SetProject(Project project)
         {
             currentProject = project;
-            Properties.Settings.Default.LastProject = project.Name;
+            if(project.Name != Properties.Settings.Default.LastProject)
+            {
+                Properties.Settings.Default.LastProject = project.Name;
+                Properties.Settings.Default.Save();
+            }
             OnDBUpdate();
         }
         #endregion

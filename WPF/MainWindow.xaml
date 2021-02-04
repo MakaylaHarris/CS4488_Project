@@ -97,7 +97,12 @@
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center">
                 <StackPanel>
-                    <TextBlock Margin="10" Text="Database Connection:" FontWeight="Bold" FontFamily="Cambria" />
+                    <TextBlock Margin="10" FontWeight="Bold" FontFamily="Cambria"><Run Text="Database Connection String:     "/><InlineUIContainer>
+                            <Button HorizontalAlignment="Right" Content="?" Background="{x:Null}" Foreground="Yellow" BorderBrush="{x:Null}" 
+                                    ToolTip="Used to connect to database. Consists of a series of Key Value pairs separated by semicolons (SqlConnection.ConnectionString)"
+                                    Click="ConnectString_GetHelp"
+                                    />
+                        </InlineUIContainer></TextBlock>
                     <TextBox Margin="5" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="InputTextBox"/>
                     <TextBlock Margin="10" Text="Disconnected" Foreground="Red" HorizontalAlignment="Center" x:Name="DBStatus"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
