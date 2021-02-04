@@ -17,15 +17,25 @@ namespace PertTest.Model
             model = new WPF.Model.Model(this);
         }
 
+        public bool IsConnected()
+        {
+            throw new NotImplementedException();
+        }
+
         public void OnModelUpdate(Project p)
         {
             Console.WriteLine("Update received");
         }
 
+        public bool SetConnectionString(string s)
+        {
+            throw new NotImplementedException();
+        }
+
         [TestMethod]
         public void TestSetConnectionString()
         {
-            string cantConnect = @"Data Source = (LocalDB)\\MSSQLLocalDB; Database = ABadNameThatDoesntWork; Integrated Security = True;Timeout=1";
+            string cantConnect = @"BadConnect";
             Assert.IsFalse(model.SetConnectionString(cantConnect));
         }
     }
