@@ -37,7 +37,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>D:\.CapstoneProject\PERTGIT\PertDB\</OutputPath>
+    <OutputPath>
+    </OutputPath>
     <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DebugSymbols>true</DebugSymbols>
@@ -76,6 +77,7 @@
     <None Include="Scripts\Insert.sql" />
     <Build Include="dbo\Views\Tasks_View.sql" />
     <Build Include="dbo\StoredProcedures\ViewTasks.sql" />
+    <Build Include="dbo\StoredProcedures\ReadTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PertDB.refactorlog" />
