@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Project]
 (
-	[ProjectId] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
+	[ProjectId] INT  NOT NULL PRIMARY KEY IDENTITY, 
     [Name] NVARCHAR(50) NULL, 
     [StartDate] DATETIME NULL, 
     [WorkingHours] FLOAT NULL, 
