@@ -359,16 +359,28 @@ ALTER TABLE [dbo].[Project]
 
 
 GO
-PRINT N'Creating [dbo].[TEST]...';
+PRINT N'Creating [dbo].[Tasks_View]...';
 
 
 GO
-CREATE PROCEDURE [dbo].[TEST]
-	@param1 int = 0,
-	@param2 int
+CREATE VIEW [Tasks_View]
+	AS SELECT [t].[TaskId], [t].[Name] AS TaskName, [t].[Description], [t].[MinEstDuration], [t].[MaxEstDuration], 
+	[t].[MostLikelyEstDuration], [t].[StartDate] AS TaskStartDate, [t].[EndDate], [t].[ModifiedDate], [t].[StatusId], 
+	[t].[UserId], [t].[ProjectId] AS Id, [p].[ProjectId], [p].[Name], [p].[StartDate] AS ProjectStartDate, 
+	[p].[WorkingHours], [p].[ProjectOwner] 
+	FROM dbo.Task t
+	left join dbo.Project p ON t.ProjectId = p.ProjectId
+GO
+PRINT N'Creating [dbo].[ViewTasks]...';
+
+
+GO
+CREATE PROCEDURE [dbo].[ViewTasks]
 AS
-	SELECT @param1, @param2
-RETURN 0
+BEGIN
+	SELECT *
+	FROM dbo.Tasks_View
+END
 GO
 -- Refactoring step to update target server with deployed transaction logs
 
