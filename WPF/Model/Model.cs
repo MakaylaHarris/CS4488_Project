@@ -15,7 +15,7 @@ namespace WPF.Model
         public Model(IViewModel viewModel)
         {
             this.viewModel = viewModel;
-            reader = new DBReader(this);
+            reader = DBReader.Instantiate(this);
         }
 
         #region Project Methods
@@ -89,9 +89,31 @@ namespace WPF.Model
             viewModel.OnModelUpdate(p);
         }
 
+        /// <summary>
+        /// Refreshes the model
+        /// </summary>
         public void Refresh()
         {
-            throw new NotImplementedException();
+            reader.OnDBUpdate();
+        }
+
+        /// <summary>
+        /// Determines if database is connected
+        /// </summary>
+        /// <returns>boolean</returns>
+        public bool IsConnected()
+        {
+            return reader.Connected;
+        }
+
+        /// <summary>
+        /// Sets the database connection string
+        /// </summary>
+        /// <param name="connectString">string</param>
+        /// <returns>boolean</returns>
+        public bool SetConnectionString(string connectString)
+        {
+            return this.reader.TestNewConnection(connectString);
         }
         #endregion
     }

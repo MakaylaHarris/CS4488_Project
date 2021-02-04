@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PertTests", "PertTests\PertTests.csproj", "{70D7A376-960F-4FA1-9ADD-8D0C7EA6E72B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartPert", "WPF\SmartPert.csproj", "{4711BED0-3418-4FB0-BA2D-6AA5596F8F51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF", "WPF\WPF.csproj", "{4711BED0-3418-4FB0-BA2D-6AA5596F8F51}"
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Sandcastle", "WPF\Sandcastle.shfbproj", "{AEDBEF07-B150-4541-9822-71464B957A85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PertTest", "PertTest\PertTest.csproj", "{B7C33A50-D163-434F-B250-F3DD325F3C33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{70D7A376-960F-4FA1-9ADD-8D0C7EA6E72B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70D7A376-960F-4FA1-9ADD-8D0C7EA6E72B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70D7A376-960F-4FA1-9ADD-8D0C7EA6E72B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70D7A376-960F-4FA1-9ADD-8D0C7EA6E72B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4711BED0-3418-4FB0-BA2D-6AA5596F8F51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4711BED0-3418-4FB0-BA2D-6AA5596F8F51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4711BED0-3418-4FB0-BA2D-6AA5596F8F51}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{AEDBEF07-B150-4541-9822-71464B957A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEDBEF07-B150-4541-9822-71464B957A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEDBEF07-B150-4541-9822-71464B957A85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7C33A50-D163-434F-B250-F3DD325F3C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7C33A50-D163-434F-B250-F3DD325F3C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7C33A50-D163-434F-B250-F3DD325F3C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7C33A50-D163-434F-B250-F3DD325F3C33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
