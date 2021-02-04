@@ -382,6 +382,19 @@ BEGIN
 	FROM dbo.Tasks_View
 END
 GO
+PRINT N'Creating [dbo].[spReadTable]...';
+
+
+GO
+CREATE PROCEDURE [dbo].[spReadTable]
+	@tableName nvarchar(30)
+AS
+BEGIN
+	declare @query nvarchar(500)
+	set @query = 'SELECT * FROM dbo.' + @tableName + '_View'
+	EXEC(@query)
+END
+GO
 -- Refactoring step to update target server with deployed transaction logs
 
 IF OBJECT_ID(N'dbo.__RefactorLog') IS NULL
