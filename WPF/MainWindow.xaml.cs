@@ -15,9 +15,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPF.Model;
+using WPF.View;
 
 /// <summary>
-/// Name space for the SmartPert WPF Application
+/// Name space for the WPF WPF Application
 /// </summary>
 namespace WPF
 {
@@ -27,10 +29,12 @@ namespace WPF
     public partial class MainWindow : Window
     {
         static private Random random = new Random();
+        private IViewModel viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
+            viewModel = new ViewModel(this);
         }
 
         #region Menu bar
@@ -144,17 +148,40 @@ namespace WPF
             throw new NotImplementedException();
         }
 
-        private void DBConnect_Execute(object sender, ExecutedRoutedEventArgs e)
+        public void ShowDBConnectionSettings()
         {
             InputTextBox.Text = Properties.Settings.Default.ConnectionString;
             InputBox.Visibility = Visibility.Visible;
+            if (viewModel != null && viewModel.IsConnected())
+                UpdateDBStatus("Connected", Brushes.Green);
+            else
+                UpdateDBStatus("Disconnected", Brushes.Red);
+
         }
+
+        private void DBConnect_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ShowDBConnectionSettings();
+        }
+
+        private void UpdateDBStatus(string status, Brush brush)
+        {
+            DBStatus.Text = status;
+            DBStatus.Foreground = brush;
+        }
+
 
         private void DBString_Change(object sender, RoutedEventArgs e)
         {
-            InputBox.Visibility = Visibility.Collapsed;
             string connect_string = InputTextBox.Text;
-            // Todo: Test connection here and then set it in properties
+            UpdateDBStatus("Connecting...", Brushes.Yellow);
+            if (viewModel.SetConnectionString(connect_string))
+            {
+                UpdateDBStatus("Connected", Brushes.Green);
+                InputBox.Visibility = Visibility.Collapsed;
+            }
+            else
+                UpdateDBStatus("Connection failed!", Brushes.Red);
         }
 
         private void DBConnect_Cancel(object sender, RoutedEventArgs e)
@@ -206,7 +233,7 @@ namespace WPF
             {
                 bit_size = "32-Bit";
             }
-            string version = "SmartPert " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string version = "WPF " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             string authors = "Authors: Dan, Kaden, Makayla, Robert, Tyler";
             string website = "https://github.com/MakaylaHarris/CS4488_Project";
             string about = version + " " + bit_size + "\n" + authors + "\n" + website;
@@ -217,6 +244,7 @@ namespace WPF
         {
             throw new NotImplementedException();
         }
+
         #endregion
 
     }

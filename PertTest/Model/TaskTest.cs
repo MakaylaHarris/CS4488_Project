@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PertTests.Model
+namespace PertTest.Model
 {
     [TestClass]
-    class ModelTest
+    class TaskTest
     {
     }
 }

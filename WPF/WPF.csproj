@@ -82,6 +82,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="View\IViewModel.cs" />
+    <Compile Include="View\ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -169,11 +170,19 @@
     <Resource Include="logo.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="database\Pert.mdf" />
+    <Content Include="database\AttachPert.sql" />
+    <Content Include="database\Pert.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="database\Pert_log.ldf">
       <DependentUpon>Pert.mdf</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="database\SQL\BaseLine.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>
