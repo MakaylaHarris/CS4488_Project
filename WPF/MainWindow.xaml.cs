@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -29,13 +30,33 @@ namespace WPF
     public partial class MainWindow : Window
     {
         static private Random random = new Random();
-        private IViewModel viewModel;
+        private ViewModel viewModel;
+        private List<MenuItemViewModel> items;
+        public List<MenuItemViewModel> OpenItems { get => items;  }
+
 
         public MainWindow()
         {
             InitializeComponent();
             viewModel = new ViewModel(this);
+            items = new List<MenuItemViewModel>();
+            TestPopulateProjects();
         }
+
+        private void TestPopulateProjects()
+        {
+            string name = "Project";
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now.AddDays(5);
+            string description = "Dummy";
+            for (int i = 0; i < 10; i++)
+            {
+                Project p = new Project(name + i, start, end, description, i);
+                items.Add(new MenuItemViewModel(p.Name, new OpenProjectCommand(viewModel.Model, p)));
+            }
+
+        }
+
 
         #region Menu bar
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -247,7 +268,7 @@ namespace WPF
 
         private void Refresh_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            viewModel.Refresh();
         }
 
         #endregion

@@ -82,6 +82,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="View\IViewModel.cs" />
+    <Compile Include="View\MenuItemViewModel.cs" />
+    <Compile Include="View\OpenProjectCommand.cs" />
     <Compile Include="View\ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

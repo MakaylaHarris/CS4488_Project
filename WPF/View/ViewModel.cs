@@ -11,6 +11,9 @@ namespace WPF.View
     {
         private IModel model;
         private MainWindow mainWindow;
+
+        public IModel Model { get; }
+
         public ViewModel(MainWindow window)
         {
             model = new Model.Model(this);
@@ -21,6 +24,8 @@ namespace WPF.View
             }
         }
 
+
+        #region Public Methods
         public bool SetConnectionString(string s) => model.SetConnectionString(s);
 
         public bool IsConnected() => model.IsConnected();
@@ -29,5 +34,8 @@ namespace WPF.View
         {
             Console.WriteLine("Model was updated");
         }
+
+        public void Refresh() => model.Refresh();
+        #endregion
     }
 }

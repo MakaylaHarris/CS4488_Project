@@ -12,13 +12,18 @@ namespace WPF.Model
     /// </summary>
     class DBPoller
     {
+        #region private members
         private SynchronizationContext context;
         private Thread thread;
         private bool running;
         private int refreshTime;
         private long lastVersion;
         private DBReader receiver;
+        #endregion
 
+        /// <summary>
+        /// Polling thread running
+        /// </summary>
         public bool Running { get => running; }
 
         public DBPoller(DBReader receiver)
@@ -34,6 +39,9 @@ namespace WPF.Model
         }
 
         #region Public Methods
+        /// <summary>
+        /// Starts the poller
+        /// </summary>
         public void Start()
         {
             if (!running)
@@ -43,11 +51,17 @@ namespace WPF.Model
             }
         }
 
+        /// <summary>
+        /// Resets the last version number which will trigger an update if running
+        /// </summary>
         public void Reset()
         {
             lastVersion = -1;
         }
 
+        /// <summary>
+        /// Stops the polling thread
+        /// </summary>
         public void Stop()
         {
             running = false;
@@ -61,6 +75,10 @@ namespace WPF.Model
             receiver.OnDBUpdate();
         }
 
+        /// <summary>
+        /// Checks if the Database is updated since last call
+        /// </summary>
+        /// <returns>true if updated</returns>
         private bool DBIsUpdated()
         {
             SqlConnection connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
@@ -73,8 +91,8 @@ namespace WPF.Model
             tmp.Direction = ParameterDirection.Output;
             command.ExecuteNonQuery();
             long newVersion = (long)tmp.Value;
-            bool result = newVersion > lastVersion;
             connection.Close();
+            bool result = newVersion > lastVersion;
             lastVersion = newVersion;
             return result;
         }

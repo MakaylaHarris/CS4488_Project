@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:WPF"
         mc:Ignorable="d"
         Title="PertSmart" Height="450" Width="800">
-
     <!--#region Commands -->
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="CommandBinding_CanExecute" Executed="New_Executed" />
@@ -42,8 +41,16 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Command="New" />
-                    <MenuItem Command="Open"/>
+                    <MenuItem Command="New" >
+                    </MenuItem>
+                    <MenuItem Command="Open" ItemsSource="{Binding OpenItems}">
+                        <MenuItem.ItemContainerStyle>
+                            <Style TargetType="MenuItem">
+                                <Setter Property="Header" Value="{Binding Name}" />
+                                <Setter Property="Command" Value="{Binding Command}" />
+                            </Style>
+                        </MenuItem.ItemContainerStyle>
+                    </MenuItem>
                     <Separator />
                     <MenuItem Command="Print"/>
                     <Separator />

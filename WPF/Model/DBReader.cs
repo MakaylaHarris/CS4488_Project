@@ -11,6 +11,7 @@ namespace WPF.Model
     /// </summary>
     class DBReader
     {
+        #region private fields
         private static readonly DBReader instance = new DBReader();
         private Project currentProject;
         private DBUpdateReceiver receiver;
@@ -18,6 +19,7 @@ namespace WPF.Model
         private List<User> users;
         private DBPoller polling;
         private SqlConnection connection;
+        #endregion
 
         #region Properties
         /// <summary>
@@ -41,17 +43,7 @@ namespace WPF.Model
         public static DBReader Instantiate(DBUpdateReceiver receiver)
         {
             instance.receiver = receiver;
-            bool connected = instance.TestNewConnection(Properties.Settings.Default.ConnectionString);
-            string lastProject = Properties.Settings.Default.LastProject;
-            if (lastProject != "" && connected)
-            {
-                instance.UpdateProject();
-                foreach (Project p in instance.projects)
-                {
-                    if (p.Name == lastProject)
-                        instance.currentProject = p;
-                }
-            }
+            instance.TestNewConnection(Properties.Settings.Default.ConnectionString);
             return instance;
         }
 
@@ -64,7 +56,6 @@ namespace WPF.Model
         #region Private Methods
         private SqlDataReader OpenReader(string query)
         {
-            connection.Open();
             SqlCommand command = new SqlCommand(query, connection);
             return command.ExecuteReader();
         }
@@ -79,24 +70,38 @@ namespace WPF.Model
         {
             projects = new List<Project>();
             SqlDataReader reader = ReadTable("Project");
+            string name = Properties.Settings.Default.LastProject;
             while (reader.Read())
             {
                 Project p = Project.Parse(reader);
                 projects.Add(p);
-                if (CurrentProject != null && p.Id == CurrentProject.Id)
+                if (currentProject != null)
+                {
+                    if (p.Id == currentProject.Id)
+                        currentProject = p;
+                }   // Detect the last project
+                else if (name != "" && p.Name == name)
                     currentProject = p;
             }
-            connection.Close();
+            reader.Close();
         }
 
-        private void UpdateTasks()
+        /// <summary>
+        /// Gets all the tasks on the current project
+        /// </summary>
+        /// <returns>Dictionary of task id to tasks</returns>
+        private Dictionary<int, Task> UpdateTasks()
         {
+            Dictionary<int, Task> idToTask = new Dictionary<int, Task>();
             SqlDataReader reader = OpenReader("Select * from Task Where ProjectId=" + CurrentProject.Id + ";");
             while (reader.Read())
             {
-                CurrentProject.AddTask(Task.Parse(reader));
+                Task t = Task.Parse(reader);
+                idToTask[t.Id] = t;
+                CurrentProject.AddTask(t);
             }
-            connection.Close();
+            reader.Close();
+            return idToTask;
         }
 
         private void UpdateUsers()
@@ -104,25 +109,64 @@ namespace WPF.Model
             users = new List<User>();
             SqlDataReader reader = ReadTable("[User]");
             while (reader.Read())
-            {
                 users.Add(User.Parse(reader));
+            reader.Close();
+        }
+
+        /// <summary>
+        /// Implemented 2/4/2021 by Robert Nelson
+        /// </summary>s
+        private void UpdateDependencies(Dictionary<int, Task> idToTask)
+        {
+            SqlDataReader reader = ReadTable("Dependency");
+            while(reader.Read())
+            {
+                int rootId = (int) reader["RootId"];
+                int dependentId = (int)reader["DependentId"];
+                idToTask[rootId].AddDependency(idToTask[dependentId]);
             }
-            connection.Close();
+            reader.Close();
         }
 
-        private void UpdateDependencies()
-        {
-            throw new NotImplementedException();
-        }
 
-        private void UpdateWorkers()
+        private void UpdateWorkers(Dictionary<int, Task> idToTask)
         {
-            // todo: Update those working on each task and project
-            throw new NotImplementedException();
+            // First, Create dictionaries to access everything by id
+            Dictionary<int, Project> idToProject = new Dictionary<int, Project>();
+            Dictionary<string, User> idToUser = new Dictionary<string, User>();
+            foreach (Project p in projects)
+                idToProject[p.Id] = p;
+            foreach (User user in users)
+                idToUser[user.Username] = user;
+            
+            // Next, Read and update task workers
+            SqlDataReader reader = ReadTable("UserTask");
+            Task t;
+            while(reader.Read())
+            {
+                int taskId = (int)reader["TaskId"];
+                string username = (string)reader["UserName"];
+                if (idToTask.TryGetValue(taskId, out t))
+                    t.AddWorker(idToUser[username]);
+            }
+            reader.Close();
+
+            // Finally, Read and update project workers (current project only)
+            reader = OpenReader("Select * From UserProject Where ProjectId=" + currentProject.Id + ":");
+            while(reader.Read())
+            {
+                currentProject.AddWorker(idToUser[(string)reader["UserName"]]);
+            }
+            reader.Close();
         }
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Tests a new connection
+        /// </summary>
+        /// <param name="connectString">string to connect to database</param>
+        /// <returns>true if connection succeeds</returns>
         public bool TestNewConnection(string connectString)
         {
             try
@@ -148,25 +192,40 @@ namespace WPF.Model
             return true;
         }
 
+        /// <summary>
+        /// Gets all the projects
+        /// </summary>
+        /// <returns>list of projects</returns>
         public List<Project> GetUserProjects()
         {
             // Currently, this only returns all projects and not those the user is member to
+            // future todo is to let users be invited to project and only get those the user is a part of
             return Projects;
         }
 
+
+        /// <summary>
+        /// This updates the entire model and sends the update to the receiver.
+        /// </summary>
         public void OnDBUpdate()
         {
+            connection.Open();
             UpdateProject();
             UpdateUsers();
             if (CurrentProject != null)
             {
-                UpdateTasks();
-                UpdateDependencies();
-                UpdateWorkers();
+                Dictionary<int, Task> idToTask = UpdateTasks();
+                UpdateDependencies(idToTask);
+                UpdateWorkers(idToTask);
             }
+            connection.Close();
             receiver.OnDBUpdate(CurrentProject);
         }
 
+        /// <summary>
+        /// Sets the current project which triggers a model update
+        /// </summary>
+        /// <param name="project">the project</param>
         public void SetProject(Project project)
         {
             currentProject = project;
