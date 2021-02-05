@@ -27,36 +27,21 @@ namespace WPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IViewModel
     {
         static private Random random = new Random();
-        private ViewModel viewModel;
-        private List<MenuItemViewModel> items;
-        public List<MenuItemViewModel> OpenItems { get => items;  }
+        private IModel model;
+        private ObservableCollection<MenuItemViewModel> items;
+        public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }
 
 
         public MainWindow()
-        {
+        { 
             InitializeComponent();
-            viewModel = new ViewModel(this);
-            items = new List<MenuItemViewModel>();
-            TestPopulateProjects();
+            model = new Model.Model(this);
+            items = new ObservableCollection<MenuItemViewModel>();
+            DataContext = this;
         }
-
-        private void TestPopulateProjects()
-        {
-            string name = "Project";
-            DateTime start = DateTime.Now;
-            DateTime end = DateTime.Now.AddDays(5);
-            string description = "Dummy";
-            for (int i = 0; i < 10; i++)
-            {
-                Project p = new Project(name + i, start, end, description, i);
-                items.Add(new MenuItemViewModel(p.Name, new OpenProjectCommand(viewModel.Model, p)));
-            }
-
-        }
-
 
         #region Menu bar
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -71,7 +56,8 @@ namespace WPF
 
         private void Open_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            FileMenu.IsSubmenuOpen = true;
+            OpenMenu.IsSubmenuOpen = true;
         }
 
         /// <summary>
@@ -173,7 +159,7 @@ namespace WPF
         {
             InputTextBox.Text = Properties.Settings.Default.ConnectionString;
             InputBox.Visibility = Visibility.Visible;
-            if (viewModel != null && viewModel.IsConnected())
+            if (model != null && model.IsConnected())
                 UpdateDBStatus("Connected", Brushes.Green);
             else
                 UpdateDBStatus("Disconnected", Brushes.Red);
@@ -196,7 +182,7 @@ namespace WPF
         {
             string connect_string = InputTextBox.Text;
             UpdateDBStatus("Connecting...", Brushes.Yellow);
-            if (viewModel.SetConnectionString(connect_string))
+            if (model.SetConnectionString(connect_string))
             {
                 UpdateDBStatus("Connected", Brushes.Green);
                 InputBox.Visibility = Visibility.Collapsed;
@@ -245,7 +231,7 @@ namespace WPF
 
         private void Docs_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Process.Start(Properties.Resources.Website);
         }
 
         private void About_Execute(object sender, ExecutedRoutedEventArgs e)
@@ -259,18 +245,32 @@ namespace WPF
             {
                 bit_size = "32-Bit";
             }
-            string version = "WPF " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string version = "SmartPert " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             string authors = "Authors: Dan, Kaden, Makayla, Robert, Tyler";
-            string website = "https://github.com/MakaylaHarris/CS4488_Project";
+            string website = Properties.Resources.Website;
             string about = version + " " + bit_size + "\n" + authors + "\n" + website;
             MessageBox.Show(about, version, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void Refresh_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            viewModel.Refresh();
+            model.Refresh();
+        }
+        #endregion
+
+        #region Model Update
+        public void OnModelUpdate(Project p)
+        {
+            PopulateProjects();
+            Console.WriteLine("Model Updated");
         }
 
+        private void PopulateProjects()
+        {
+            items.Clear();
+            foreach (Project p in model.GetProjectList())
+                items.Add(new MenuItemViewModel(p.Name, new OpenProjectCommand(model, p)));
+        }
         #endregion
 
     }

@@ -152,7 +152,7 @@ namespace WPF.Model
             reader.Close();
 
             // Finally, Read and update project workers (current project only)
-            reader = OpenReader("Select * From UserProject Where ProjectId=" + currentProject.Id + ":");
+            reader = OpenReader("Select * From UserProject Where ProjectId=" + currentProject.Id + ";");
             while(reader.Read())
             {
                 currentProject.AddWorker(idToUser[(string)reader["UserName"]]);

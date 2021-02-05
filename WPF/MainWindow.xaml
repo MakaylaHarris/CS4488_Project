@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF"
         mc:Ignorable="d"
-        Title="PertSmart" Height="450" Width="800">
+        Title="SmartPert" Height="450" Width="800">
     <!--#region Commands -->
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="CommandBinding_CanExecute" Executed="New_Executed" />
@@ -39,17 +39,21 @@
     <Grid>
         <!--#region Menus-->
         <DockPanel>
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_File">
+            <Menu DockPanel.Dock="Top" x:Name="TopMenu" IsMainMenu="True">
+                <MenuItem Header="_File" x:Name="FileMenu">
                     <MenuItem Command="New" >
                     </MenuItem>
-                    <MenuItem Command="Open" ItemsSource="{Binding OpenItems}">
+                    <MenuItem Command="Open" ItemsSource="{Binding OpenItems}" x:Name="OpenMenu">
                         <MenuItem.ItemContainerStyle>
-                            <Style TargetType="MenuItem">
-                                <Setter Property="Header" Value="{Binding Name}" />
+                            <Style TargetType="{x:Type MenuItem}">
                                 <Setter Property="Command" Value="{Binding Command}" />
                             </Style>
                         </MenuItem.ItemContainerStyle>
+                        <MenuItem.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type local:MenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                <TextBlock Text="{Binding Header}"/>
+                            </HierarchicalDataTemplate>
+                        </MenuItem.ItemTemplate>
                     </MenuItem>
                     <Separator />
                     <MenuItem Command="Print"/>
