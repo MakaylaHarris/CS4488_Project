@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WPF.Model;
+using Pert.Model;
+using Pert.View;
 
-namespace WPF.View
+namespace Pert.View
 {
     class ViewModel : IViewModel
     {

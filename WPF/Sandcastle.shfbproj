@@ -21,8 +21,8 @@
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="bin\Debug\WPF.xml" />
-      <DocumentationSource sourceFile="bin\Debug\WPF.exe" />
+      <DocumentationSource sourceFile="bin\Debug\Pert.exe" />
+      <DocumentationSource sourceFile="bin\Debug\Pert.xml" />
     </DocumentationSources>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
