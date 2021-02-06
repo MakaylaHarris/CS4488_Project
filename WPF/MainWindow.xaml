@@ -1,0 +1,111 @@
+﻿<Window x:Class="WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF"
+        mc:Ignorable="d"
+        Title="SmartPert" Height="450" Width="800">
+
+    <!--#region Commands -->
+    <Window.CommandBindings>
+        <CommandBinding Command="New" CanExecute="CommandBinding_CanExecute" Executed="New_Executed" />
+        <CommandBinding Command="Open" CanExecute="CommandBinding_CanExecute" Executed="Open_Execute"/>
+        <CommandBinding Command="Print" CanExecute="CommandBinding_CanExecute" Executed="Print_Execute"/>
+        <CommandBinding Command="Undo" CanExecute="Undo_CanExecute" Executed="Undo_Execute" />
+        <CommandBinding Command="Redo" CanExecute="Redo_CanExecute" Executed="Redo_Execute" />
+        <CommandBinding Command="Cut" CanExecute="Cut_CanExecute" Executed="Cut_Execute" />
+        <CommandBinding Command="Copy" CanExecute="Copy_CanExecute" Executed="Copy_Execute"/>
+        <CommandBinding Command="Paste" CanExecute="Paste_CanExecute" Executed="Paste_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.AddTaskCommand}" CanExecute="AddTask_CanExecute" Executed="AddTask_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.DBConnectCommand}" CanExecute="CommandBinding_CanExecute" Executed="DBConnect_Execute"/>
+        <!-- <CommandBinding Command="{x:Static local:CustomCommands.OptionsCommand}" CanExecute="CommandBinding_CanExecute" Executed="Options_Execute"/> -->
+        <CommandBinding Command="{x:Static local:CustomCommands.RefreshCommand}" Executed="Refresh_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.DocsCommand}" CanExecute="CommandBinding_CanExecute" Executed="Docs_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.AboutCommand}" CanExecute="CommandBinding_CanExecute" Executed="About_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.AddHelpCommand}" Executed="Additional_Help"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="New"/>
+        <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
+        <KeyBinding Key="P" Modifiers="Ctrl" Command="Print"/>
+        <KeyBinding Key="Z" Modifiers="Ctrl" Command="Undo"/>
+        <KeyBinding Key="Y" Modifiers="Ctrl" Command="Redo"/>
+        <KeyBinding Key="C" Modifiers="Ctrl" Command="Copy"/>
+        <KeyBinding Key="X" Modifiers="Ctrl" Command="Cut"/>
+        <KeyBinding Key="V" Modifiers="Ctrl" Command="Paste"/>
+    </Window.InputBindings>
+    <!--#endregion-->
+
+    <Grid>
+        <!--#region Menus-->
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Command="New" />
+                    <MenuItem Command="Open"/>
+                    <Separator />
+                    <MenuItem Command="Print"/>
+                    <Separator />
+                    <MenuItem Header="_Exit" />
+                </MenuItem>
+                <MenuItem Header="_Edit">
+                    <MenuItem Command="Undo"/>
+                    <MenuItem Command="Redo"/>
+                    <Separator/>
+                    <MenuItem Command="Cut"/>
+                    <MenuItem Command="Copy"/>
+                    <MenuItem Command="Paste"/>
+                </MenuItem>
+                <MenuItem Header="_Tools">
+                    <MenuItem Command="{x:Static local:CustomCommands.AddTaskCommand}"/>
+                    <Separator/>
+                    <MenuItem Command="{x:Static local:CustomCommands.DBConnectCommand}"/>
+                    <!-- <MenuItem Command="{x:Static local:CustomCommands.OptionsCommand}"/> -->
+                    <Separator/>
+                    <MenuItem Command="{x:Static local:CustomCommands.RefreshCommand}"/>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Command="{x:Static local:CustomCommands.DocsCommand}" />
+                    <MenuItem Command="{x:Static local:CustomCommands.AddHelpCommand}"/>
+                    <Separator />
+                    <MenuItem Command="{x:Static local:CustomCommands.AboutCommand}" />
+                </MenuItem>
+            </Menu>
+            <TextBox AcceptsReturn="True" />
+        </DockPanel>
+        <!--#endregion-->
+
+        <!--#region  Main Content-->
+        <Grid x:Name="MainContent" Height="380" Margin="10,10,10,10" VerticalAlignment="Bottom">
+            <TextBlock>
+                <Run>This is some content.</Run>
+            </TextBlock>
+        </Grid>
+        <!--#endregion-->
+        
+        <!--#region Connection String-->
+        <!-- It's important that this is in the end of the XAML as it needs to be on top of everything else! -->
+        <Grid x:Name="InputBox" Visibility="Collapsed">
+            <Grid Background="Black" Opacity="0.5"/>
+            <Border
+                MinWidth="250"
+                Background="LightBlue" 
+                BorderBrush="Black" 
+                BorderThickness="1" 
+                CornerRadius="0,55,0,55" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Margin="10" Text="Connection String:" FontWeight="Bold" FontFamily="Cambria" />
+                    <TextBox Margin="5" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="InputTextBox"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="Connect" Margin="5" Content="Connect" Background="{x:Null}" Click="DBString_Change"/>
+                        <Button x:Name="Cancel" Margin="5" Content="Cancel" Background="{x:Null}" Click="DBConnect_Cancel" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+        <!--#endregion-->
+    </Grid>
+</Window>
