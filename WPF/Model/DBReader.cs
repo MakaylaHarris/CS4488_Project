@@ -5,11 +5,13 @@ using System.Data.SqlClient;
 namespace Pert.Model
 {
     /// <summary>
-    /// DBReader checks updates from the database and updates the entire model
+    /// DBReader Singleton checks updates from the database and updates the entire model
+    /// Can be used to check database connection with DBReader.Connected
     /// Robert Nelson 1/28/2021
     /// </summary>
     class DBReader
     {
+        private static readonly DBReader instance = new DBReader();
         private Project currentProject;
         private DBUpdateReceiver receiver;
         private List<Project> projects;
@@ -17,27 +19,47 @@ namespace Pert.Model
         private DBPoller polling;
         private SqlConnection connection;
 
+        #region Properties
+        /// <summary>
+        /// Determines if connected to database
+        /// </summary>
+        public bool Connected { get => instance.polling.Running;  }
+        static public DBReader Instance { get => instance; }
+
+
         internal Project CurrentProject { get => currentProject; }
         internal List<Project> Projects { get => projects; }
         internal List<User> Users { get => users; }
+        #endregion
 
-        public DBReader(DBUpdateReceiver receiver)
+        #region Constructor
+        /// <summary>
+        /// This initiates the receiver
+        /// </summary>
+        /// <param name="receiver">The update receiver</param>
+        /// <returns>DBReader instance</returns>
+        public static DBReader Instantiate(DBUpdateReceiver receiver)
         {
-            connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
-            this.receiver = receiver;
+            instance.receiver = receiver;
+            bool connected = instance.TestNewConnection(Properties.Settings.Default.ConnectionString);
             string lastProject = Properties.Settings.Default.LastProject;
-            if (lastProject != "")
+            if (lastProject != "" && connected)
             {
-                UpdateProject();
-                foreach (Project p in projects)
+                instance.UpdateProject();
+                foreach (Project p in instance.projects)
                 {
                     if (p.Name == lastProject)
-                        currentProject = p;
+                        instance.currentProject = p;
                 }
             }
+            return instance;
+        }
 
+        private DBReader()
+        {
             polling = new DBPoller(this);
         }
+        #endregion
 
         #region Private Methods
         private SqlDataReader OpenReader(string query)
@@ -101,6 +123,31 @@ namespace Pert.Model
         #endregion
 
         #region Public Methods
+        public bool TestNewConnection(string connectString)
+        {
+            try
+            {
+                connection = new SqlConnection(connectString);
+                connection.Open();
+                connection.Close();
+            } catch(Exception e)
+            {
+                Console.WriteLine(e);
+                polling.Stop();
+                return false;
+            }
+            if (connectString != Properties.Settings.Default.ConnectionString)
+            {
+                Properties.Settings.Default.ConnectionString = connectString;
+                Properties.Settings.Default.Save();
+            }
+            if (Connected)
+                polling.Reset();
+            else
+                polling.Start();
+            return true;
+        }
+
         public List<Project> GetUserProjects()
         {
             // Currently, this only returns all projects and not those the user is member to
@@ -123,6 +170,11 @@ namespace Pert.Model
         public void SetProject(Project project)
         {
             currentProject = project;
+            if(project.Name != Properties.Settings.Default.LastProject)
+            {
+                Properties.Settings.Default.LastProject = project.Name;
+                Properties.Settings.Default.Save();
+            }
             OnDBUpdate();
         }
         #endregion

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pert"
         mc:Ignorable="d"
-        Title="SmartPert" Height="450" Width="800">
+        Title="PertSmart" Height="450" Width="800">
 
     <!--#region Commands -->
     <Window.CommandBindings>
@@ -97,8 +97,14 @@
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center">
                 <StackPanel>
-                    <TextBlock Margin="10" Text="Connection String:" FontWeight="Bold" FontFamily="Cambria" />
+                    <TextBlock Margin="10" FontWeight="Bold" FontFamily="Cambria"><Run Text="Database Connection String:     "/><InlineUIContainer>
+                            <Button HorizontalAlignment="Right" Content="?" Background="{x:Null}" Foreground="Yellow" BorderBrush="{x:Null}" 
+                                    ToolTip="Used to connect to database. Consists of a series of Key Value pairs separated by semicolons (SqlConnection.ConnectionString)"
+                                    Click="ConnectString_GetHelp"
+                                    />
+                        </InlineUIContainer></TextBlock>
                     <TextBox Margin="5" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="InputTextBox"/>
+                    <TextBlock Margin="10" Text="Disconnected" Foreground="Red" HorizontalAlignment="Center" x:Name="DBStatus"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button x:Name="Connect" Margin="5" Content="Connect" Background="{x:Null}" Click="DBString_Change"/>
                         <Button x:Name="Cancel" Margin="5" Content="Cancel" Background="{x:Null}" Click="DBConnect_Cancel" />

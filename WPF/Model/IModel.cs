@@ -6,7 +6,7 @@ namespace Pert.Model
     /// <summary>
     /// Interface that talks with IViewModel
     /// </summary>
-    interface IModel
+    public interface IModel
     {
         #region Project Methods
         Project GetProject();
@@ -32,6 +32,11 @@ namespace Pert.Model
         bool Register(string name, string email, string password);
         #endregion
 
+        #region Database Methods
+        bool IsConnected();
+
+        bool SetConnectionString(string connectString);
         void Refresh();
+        #endregion
     }
 }
