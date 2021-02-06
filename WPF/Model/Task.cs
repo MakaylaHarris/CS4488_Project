@@ -89,7 +89,7 @@ namespace WPF.Model
             throw new NotImplementedException();
         }
 
-        protected override void Delete()
+        public override void Delete()
         {
             throw new NotImplementedException();
         }

@@ -19,6 +19,7 @@ namespace WPF.Model
         private int refreshTime;
         private long lastVersion;
         private DBReader receiver;
+        private SqlConnection connection;
         #endregion
 
         /// <summary>
@@ -32,9 +33,6 @@ namespace WPF.Model
             running = false;
             context = SynchronizationContext.Current;
             this.receiver = receiver;
-            thread = new Thread(new ThreadStart(CheckForUpdates));
-            thread.IsBackground = true;
-            thread.Priority = ThreadPriority.BelowNormal;
             refreshTime = Properties.Settings.Default.RefreshPeriod;
         }
 
@@ -46,7 +44,11 @@ namespace WPF.Model
         {
             if (!running)
             {
+                connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
                 running = true;
+                thread = new Thread(new ThreadStart(CheckForUpdates));
+                thread.IsBackground = true;
+                thread.Priority = ThreadPriority.BelowNormal;
                 thread.Start();
             }
         }
@@ -57,6 +59,7 @@ namespace WPF.Model
         public void Reset()
         {
             lastVersion = -1;
+            connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
         }
 
         /// <summary>
@@ -65,14 +68,17 @@ namespace WPF.Model
         public void Stop()
         {
             running = false;
-            Reset();
+            lastVersion = -1;
         }
         #endregion
 
         #region Worker Thread
         private void Handler(object state)
         {
-            receiver.OnDBUpdate();
+            if (state == null)
+                receiver.OnDBUpdate();
+            else
+                receiver.OnDBDisconnect();
         }
 
         /// <summary>
@@ -81,8 +87,6 @@ namespace WPF.Model
         /// <returns>true if updated</returns>
         private bool DBIsUpdated()
         {
-            SqlConnection connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
-            Console.Write(connection.ConnectionString);
             connection.Open();
             SqlCommand command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
@@ -116,9 +120,9 @@ namespace WPF.Model
             catch (SqlException e)
             {
                 Console.WriteLine(e);
-                context.Post(new SendOrPostCallback(Handler), e);
             }
             running = false;
+            context.Post(new SendOrPostCallback(Handler), this);
         }
         #endregion
 

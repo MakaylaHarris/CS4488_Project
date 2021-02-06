@@ -36,7 +36,7 @@ namespace WPF.Model
         #region Abstract Methods
         abstract protected void Update();
         abstract protected int Insert();
-        abstract protected void Delete();
+        abstract public void Delete();
         #endregion
     }
 }

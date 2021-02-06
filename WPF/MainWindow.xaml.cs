@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WPF.Model;
 using WPF.View;
+using WPF.View.Login;
 
 /// <summary>
 /// Name space for the WPF WPF Application
@@ -41,6 +42,16 @@ namespace WPF
             model = new Model.Model(this);
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
+            // Check for database connection
+            if (!model.IsConnected())
+            {
+                ShowDBConnectionSettings();
+            } else
+            {
+                // if we're connected then login
+                LoginWindow login = new LoginWindow(model);
+                login.ShowDialog();
+            }
         }
 
         #region Menu bar

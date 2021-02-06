@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\DBReaderTest.cs" />
     <Compile Include="Model\ModelTest.cs" />
     <Compile Include="Model\ProjectTest.cs" />
     <Compile Include="Model\TaskTest.cs" />

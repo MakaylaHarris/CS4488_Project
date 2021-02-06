@@ -9,13 +9,14 @@ namespace WPF.Model
     /// Can be used to check database connection with DBReader.Connected
     /// Robert Nelson 1/28/2021
     /// </summary>
-    class DBReader
+    public class DBReader
     {
         #region private fields
         private static readonly DBReader instance = new DBReader();
         private Project currentProject;
         private DBUpdateReceiver receiver;
         private List<Project> projects;
+        private User currentUser;
         private List<User> users;
         private DBPoller polling;
         private SqlConnection connection;
@@ -32,6 +33,8 @@ namespace WPF.Model
         internal Project CurrentProject { get => currentProject; }
         internal List<Project> Projects { get => projects; }
         internal List<User> Users { get => users; }
+
+        public User CurrentUser {get => currentUser; }
         #endregion
 
         #region Constructor
@@ -50,6 +53,8 @@ namespace WPF.Model
         private DBReader()
         {
             polling = new DBPoller(this);
+            users = new List<User>();
+            projects = new List<Project>();
         }
         #endregion
 
@@ -65,10 +70,15 @@ namespace WPF.Model
             return OpenReader("Select * From " + table + ";");
         }
 
+        private SqlCommand OpenAndGetCmd(string cmd)
+        {
+            connection.Open();
+            return new SqlCommand(cmd, connection);
+        }
 
         private void UpdateProject()
         {
-            projects = new List<Project>();
+            projects.Clear();
             SqlDataReader reader = ReadTable("Project");
             string name = Properties.Settings.Default.LastProject;
             while (reader.Read())
@@ -106,7 +116,7 @@ namespace WPF.Model
 
         private void UpdateUsers()
         {
-            users = new List<User>();
+            users.Clear();
             SqlDataReader reader = ReadTable("[User]");
             while (reader.Read())
                 users.Add(User.Parse(reader));
@@ -162,6 +172,141 @@ namespace WPF.Model
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Determines if name is a valid username, must not be empty, contain an @, or be already used
+        /// </summary>
+        /// <param name="name">the name to test</param>
+        /// <returns>true</returns>
+        public bool IsValidUsername(string name)
+        {
+            if(name != "" && !name.Contains("@"))
+            {
+                SqlCommand command = OpenAndGetCmd("SELECT COUNT(*) FROM [USER] WHERE [USER].UserName=@username AND Password IS NOT Null AND PASSWORD !='';");
+                command.Parameters.AddWithValue("@username", name);
+                int result = (int)command.ExecuteScalar();
+                connection.Close();
+                return result == 0;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Determines if an email is valid
+        /// </summary>
+        /// <param name="email">email address</param>
+        /// <returns>true if valid</returns>
+        public bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                if(addr.Address == email)
+                {
+                    SqlCommand command = OpenAndGetCmd("SELECT COUNT(*) FROM [USER] WHERE [USER].Email=@email;");
+                    command.Parameters.AddWithValue("@email", email);
+                    int result = (int)command.ExecuteScalar();
+                    connection.Close();
+                    return result == 0;
+                }
+            }
+            catch { }
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to Login
+        /// </summary>
+        /// <param name="userId">UserName or Email</param>
+        /// <param name="password">Password</param>
+        /// <returns>True on success</returns>
+        public bool Login(string userId, string password)
+        {
+            SqlCommand command = OpenAndGetCmd("SELECT [dbo].TryLogin(@userId, @password);");
+            command.Parameters.AddWithValue("@userId", userId);
+            command.Parameters.AddWithValue("@password", password);
+            bool result = (bool) command.ExecuteScalar();
+            connection.Close();
+            if (result)
+            {
+                bool isUserName = false;
+                foreach (User user in users)
+                    if (user.Username == userId)
+                    {
+                        isUserName = true;
+                        currentUser = user;
+                        break;
+                    }
+                if(!isUserName)
+                    foreach(User user in users)
+                        if(user.Email == userId)
+                        {
+                            currentUser = user;
+                            break;
+                        }
+                if(userId != Properties.Settings.Default.UserName)
+                {
+                    Properties.Settings.Default.UserName = userId;
+                    Properties.Settings.Default.Save();
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Registers user if possible
+        /// </summary>
+        /// <param name="username">unique username</param>
+        /// <param name="password">password</param>
+        /// <param name="name">actual name</param>
+        /// <param name="email">email address</param>
+        /// <returns>true on success</returns>
+        public bool Register(string username, string password, string name, string email)
+        {
+            User user = new User(name, email, password, username);
+            if(user.Register())
+            {
+                currentUser = user;
+                Properties.Settings.Default.UserName = currentUser.Username;
+                Properties.Settings.Default.Save();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Used to create a user with just a name (unregistered)
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <returns>null if it failed, user on success</returns>
+        public User CreateUser(string name)
+        {
+            User user = new User(name);
+            if (!user.Register())
+                return null;
+            users.Add(user);
+            return user;
+        }
+
+        /// <summary>
+        /// Deletes the user. User must be logged in to delete a registered user.
+        /// </summary>
+        /// <param name="username">user to delete</param>
+        /// <returns>true on success</returns>
+        public bool DeleteUser(string username)
+        {
+            User user = users.Find(x => x.Username == username);
+            if(user != null)
+            {
+                if(user == currentUser || user.Password == "" || user.Password == null)
+                {
+                    user.Delete();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         /// <summary>
         /// Tests a new connection
         /// </summary>
@@ -220,6 +365,11 @@ namespace WPF.Model
             }
             connection.Close();
             receiver.OnDBUpdate(CurrentProject);
+        }
+
+        public void OnDBDisconnect()
+        {
+            currentUser = null;
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿namespace WPF.Model
 {
-    interface DBUpdateReceiver
+    public interface DBUpdateReceiver
     {
         void OnDBUpdate(Project p);
     }

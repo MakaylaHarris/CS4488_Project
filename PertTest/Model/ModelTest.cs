@@ -17,13 +17,6 @@ namespace PertTest.Model
             model = new WPF.Model.Model(this);
         }
 
-        [TestMethod]
-        public void TestSetConnectionString()
-        {
-            string cantConnect = @"BadConnect";
-            Assert.IsFalse(model.SetConnectionString(cantConnect));
-        }
-
         #region Interface Methods
         public bool IsConnected()
         {

@@ -32,7 +32,7 @@ namespace WPF.Model
         #endregion
 
         #region Database
-        protected override void Delete()
+        public override void Delete()
         {
             ExecuteSql("Delete from Project Where ProjectId= " + Id + ";");
         }
