@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using WPF.View;
+using Pert.View;
 
-namespace WPF.Model
+namespace Pert.Model
 {
     /// <summary>
     /// The model is the pipeline between the view and the database

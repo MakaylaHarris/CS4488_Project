@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 
-namespace WPF.Model
+namespace Pert.Model
 {
     /// <summary>
     /// Functions to safely cast null values in the database

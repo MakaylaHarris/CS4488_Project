@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace WPF.Model
+namespace Pert.Model
 {
     /// <summary>
     /// Objects inherit from IDBItem if they are updated, inserted, and deleted from the sql database

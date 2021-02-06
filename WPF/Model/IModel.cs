@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WPF.Model
+namespace Pert.Model
 {
     /// <summary>
     /// Interface that talks with IViewModel

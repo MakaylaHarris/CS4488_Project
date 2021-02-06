@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
 
-namespace WPF.Model
+namespace Pert.Model
 {
     /// <summary>
     /// Polling class that checks for updates from the database
