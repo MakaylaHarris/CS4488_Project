@@ -1,6 +1,8 @@
 environment:
   SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
 before_build:
+  - msbuild /t:restore C:\projects\cs4488-project\PertDB\PertDB.csproj
+  - msbuild /t: build C:\projects\cs4488-project\PertDB\PertDB.csproj
   - cmd: choco install sandcastle
   - nuget restore
 build:
