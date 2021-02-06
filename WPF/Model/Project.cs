@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace WPF.Model
+namespace Pert.Model
 {
     /// <summary>
     /// A PERT/Gantt project with tasks

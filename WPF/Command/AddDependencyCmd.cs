@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WPF.Model;
+using Pert.Model;
 
-namespace WPF.Command
+namespace Pert.Command
 {
     /// <summary>
     /// Adds dependency to task

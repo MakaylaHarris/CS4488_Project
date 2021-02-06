@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartPert", "WPF\SmartPert.
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Sandcastle", "WPF\Sandcastle.shfbproj", "{AEDBEF07-B150-4541-9822-71464B957A85}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PertDB", "C:\Users\Dan\Desktop\PertDB\PertDB.sqlproj", "{D7C97759-3478-45B5-824D-8B76B037575E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,12 @@ Global
 		{AEDBEF07-B150-4541-9822-71464B957A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEDBEF07-B150-4541-9822-71464B957A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEDBEF07-B150-4541-9822-71464B957A85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7C97759-3478-45B5-824D-8B76B037575E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7C97759-3478-45B5-824D-8B76B037575E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7C97759-3478-45B5-824D-8B76B037575E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D7C97759-3478-45B5-824D-8B76B037575E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7C97759-3478-45B5-824D-8B76B037575E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7C97759-3478-45B5-824D-8B76B037575E}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

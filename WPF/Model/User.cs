@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace WPF.Model
+namespace Pert.Model
 {
     /// <summary>
     /// A single user that works on the project

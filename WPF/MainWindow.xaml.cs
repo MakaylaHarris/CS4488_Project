@@ -17,9 +17,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 /// <summary>
-/// Name space for the SmartPert WPF Application
+/// Name space for the SmartPert Pert Application
 /// </summary>
-namespace WPF
+namespace Pert
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
