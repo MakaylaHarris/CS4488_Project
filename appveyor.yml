@@ -4,7 +4,8 @@ environment:
 before_build:
   - cmd: choco install sandcastle
   - nuget restore
-  -msbuild /t:restore C:\projects\cs4488-project\PertDB\PertDB.csproj
-  -msbuild /t: build C:\projects\cs4488-project\PertDB\PertDB.csproj
+build_script:
+  -msbuild /t:restore C:\projects\cs4488-project\PertDB\PertDB.sqlproj
+  -msbuild /t: build C:\projects\cs4488-project\PertDB\PertDB.sqlproj
 
 
