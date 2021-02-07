@@ -4,6 +4,6 @@ services:
   - MSSQL$SQL2016
 before_build:
   - ps: GenerateScripts\appveyor.ps1
-  -cmd: sqlcmd -S (local)\SQL2016 -U sa -P Password12! -i GenerateScripts\pertDB_create.sql
+  - cmd: sqlcmd -S (local)\SQL2016 -U sa -P Password12! -i GenerateScripts\pertDB_create.sql
   - nuget restore
   - msbuild /t:restore
