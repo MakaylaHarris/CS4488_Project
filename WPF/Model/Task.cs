@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace WPF.Model
+namespace Pert.Model
 {
     /// <summary>
     /// A Task is a single item on the Pert chart that has a most likely duration, minimum duration, and maximum duration.

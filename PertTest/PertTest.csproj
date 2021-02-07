@@ -61,9 +61,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WPF\WPF.csproj">
+    <ProjectReference Include="..\WPF\Pert.csproj">
       <Project>{4711bed0-3418-4fb0-ba2d-6aa5596f8f51}</Project>
-      <Name>WPF</Name>
+      <Name>Pert</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

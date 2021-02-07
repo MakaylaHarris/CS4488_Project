@@ -1,4 +1,4 @@
-﻿namespace WPF.Model
+﻿namespace Pert.Model
 {
     public interface DBUpdateReceiver
     {

@@ -3,18 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using WPF.Model;
-using WPF.View;
+using Pert.Model;
+using Pert.View;
 
 namespace PertTest.Model
 {
     [TestClass]
     public class ModelTest : IViewModel
     {
-        private WPF.Model.IModel model;
+        private Pert.Model.IModel model;
         public ModelTest()
         {
-            model = new WPF.Model.Model(this);
+            model = new Pert.Model.Model(this);
         }
 
         #region Interface Methods

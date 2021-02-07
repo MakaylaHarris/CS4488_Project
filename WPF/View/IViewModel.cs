@@ -1,6 +1,6 @@
-﻿using WPF.Model;
+﻿using Pert.Model;
 
-namespace WPF.View
+namespace Pert.View
 {
     public interface IViewModel
     {
