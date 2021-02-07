@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace WPF.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// A Task is a single item on the Pert chart that has a most likely duration, minimum duration, and maximum duration.
@@ -89,7 +89,7 @@ namespace WPF.Model
             throw new NotImplementedException();
         }
 
-        protected override void Delete()
+        public override void Delete()
         {
             throw new NotImplementedException();
         }

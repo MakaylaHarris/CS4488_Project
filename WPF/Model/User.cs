@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace WPF.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// A single user that works on the project
@@ -59,24 +59,59 @@ namespace WPF.Model
                 this.username = username;
         }
 
-        #region Database Methods
-        protected override void Delete()
+        public override string ToString() => username;
+
+        /// <summary>
+        /// Attempts to register user
+        /// </summary>
+        /// <returns>true on success</returns>
+        public bool Register()
         {
-            ExecuteSql("Delete from [User] Where UserName= '" + username + "';");
+            SqlCommand command = OpenConnection("Exec dbo.Register @username, @password, @email, @name, @result out");
+            command.Parameters.AddWithValue("@username", username);
+            command.Parameters.AddWithValue("@password", password);
+            command.Parameters.AddWithValue("@email", email);
+            command.Parameters.AddWithValue("@name", name);
+            var result = command.Parameters.Add("@result", System.Data.SqlDbType.Bit);
+            result.Direction = System.Data.ParameterDirection.Output;
+            command.ExecuteNonQuery();
+            CloseConnection();
+            return (bool) result.Value;
         }
 
+        
+        #region Database Methods
+        /// <summary>
+        /// Deletes user from database
+        /// </summary>
+        public override void Delete()
+        {
+            SqlCommand command = OpenConnection("Delete from [User] Where [User].[UserName]=@username;");
+            command.Parameters.AddWithValue("@username", username);
+            command.ExecuteNonQuery();
+            CloseConnection();
+        }
+
+        /// <summary>
+        /// Not used, use register instead.
+        /// </summary>
         protected override int Insert()
         {
-            return ExecuteSql("INSERT INTO [User](UserName, Name, Email, Password) values('"
-                + username + "', '" + name + "', '" + email + "', '" + password + "');");
+            throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Updates the user's name email and password
+        /// </summary>
         protected override void Update()
         {
-            ExecuteSql("update [User] set [Name]='" + name
-                + "', Email= '" + email
-                + "', [Password]= '" + password
-                + "' Where UserName = '" + username + "';");
+            SqlCommand command = OpenConnection("Update [User] set [Name]=@name, Email=@email, [Password]=@password WHERE UserName=@username");
+            command.Parameters.AddWithValue("@name", name);
+            command.Parameters.AddWithValue("@email", email);
+            command.Parameters.AddWithValue("@password", password);
+            command.Parameters.AddWithValue("@username", username);
+            command.ExecuteNonQuery();
+            CloseConnection();
         }
 
         static public User Parse(SqlDataReader reader)
@@ -86,6 +121,7 @@ namespace WPF.Model
                 (string)reader["Password"],
                 (string)reader["UserName"]);
         }
+
         #endregion
     }
 }

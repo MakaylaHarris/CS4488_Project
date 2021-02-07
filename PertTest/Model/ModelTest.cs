@@ -3,20 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using WPF.Model;
-using WPF.View;
+using SmartPert.Model;
+using SmartPert.View;
 
 namespace PertTest.Model
 {
     [TestClass]
     public class ModelTest : IViewModel
     {
-        private WPF.Model.IModel model;
+        private SmartPert.Model.IModel model;
         public ModelTest()
         {
-            model = new WPF.Model.Model(this);
+            model = new SmartPert.Model.Model(this);
         }
 
+        #region Interface Methods
         public bool IsConnected()
         {
             throw new NotImplementedException();
@@ -27,16 +28,15 @@ namespace PertTest.Model
             Console.WriteLine("Update received");
         }
 
-        public bool SetConnectionString(string s)
+        public void Refresh()
         {
             throw new NotImplementedException();
         }
 
-        [TestMethod]
-        public void TestSetConnectionString()
+        public bool SetConnectionString(string s)
         {
-            string cantConnect = @"BadConnect";
-            Assert.IsFalse(model.SetConnectionString(cantConnect));
+            throw new NotImplementedException();
         }
+        #endregion
     }
 }

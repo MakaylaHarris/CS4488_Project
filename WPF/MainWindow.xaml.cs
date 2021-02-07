@@ -1,40 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+﻿using SmartPert.View;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WPF.Model;
-using WPF.View;
+using SmartPert.Model;
+using SmartPert.View.Login;
 
 /// <summary>
-/// Name space for the WPF WPF Application
+/// Name space for the SmartPert Pert Application
 /// </summary>
-namespace WPF
+namespace SmartPert
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IViewModel
     {
         static private Random random = new Random();
-        private IViewModel viewModel;
+        private IModel model;
+        private ObservableCollection<MenuItemViewModel> items;
+        public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }
+
 
         public MainWindow()
         {
             InitializeComponent();
-            viewModel = new ViewModel(this);
+            items = new ObservableCollection<MenuItemViewModel>();
+            DataContext = this;
+            InitModel();
+        }
+
+        private void InitModel()
+        {
+            model = new Model.Model(this);
+            // Check for database connection
+            if (!model.IsConnected())
+            {
+                ShowDBConnectionSettings();
+            }
+            else
+            {
+                // if we're connected then login
+                LoginWindow login = new LoginWindow(model);
+                login.ShowDialog();
+            }
         }
 
         #region Menu bar
@@ -50,7 +68,8 @@ namespace WPF
 
         private void Open_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            FileMenu.IsSubmenuOpen = true;
+            OpenMenu.IsSubmenuOpen = true;
         }
 
         /// <summary>
@@ -152,7 +171,7 @@ namespace WPF
         {
             InputTextBox.Text = Properties.Settings.Default.ConnectionString;
             InputBox.Visibility = Visibility.Visible;
-            if (viewModel != null && viewModel.IsConnected())
+            if (model != null && model.IsConnected())
                 UpdateDBStatus("Connected", Brushes.Green);
             else
                 UpdateDBStatus("Disconnected", Brushes.Red);
@@ -175,7 +194,7 @@ namespace WPF
         {
             string connect_string = InputTextBox.Text;
             UpdateDBStatus("Connecting...", Brushes.Yellow);
-            if (viewModel.SetConnectionString(connect_string))
+            if (model.SetConnectionString(connect_string))
             {
                 UpdateDBStatus("Connected", Brushes.Green);
                 InputBox.Visibility = Visibility.Collapsed;
@@ -224,7 +243,7 @@ namespace WPF
 
         private void Docs_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Process.Start(Properties.Resources.Website);
         }
 
         private void About_Execute(object sender, ExecutedRoutedEventArgs e)
@@ -238,18 +257,32 @@ namespace WPF
             {
                 bit_size = "32-Bit";
             }
-            string version = "WPF " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string version = "SmartPert " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
             string authors = "Authors: Dan, Kaden, Makayla, Robert, Tyler";
-            string website = "https://github.com/MakaylaHarris/CS4488_Project";
+            string website = Properties.Resources.Website;
             string about = version + " " + bit_size + "\n" + authors + "\n" + website;
             MessageBox.Show(about, version, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void Refresh_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            model.Refresh();
+        }
+        #endregion
+
+        #region Model Update
+        public void OnModelUpdate(Project p)
+        {
+            PopulateProjects();
+            Console.WriteLine("Model Updated");
         }
 
+        private void PopulateProjects()
+        {
+            items.Clear();
+            foreach (Project p in model.GetProjectList())
+                items.Add(new MenuItemViewModel(p.Name, new OpenProjectCommand(model, p)));
+        }
         #endregion
 
     }

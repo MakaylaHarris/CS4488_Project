@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace WPF.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// Objects inherit from IDBItem if they are updated, inserted, and deleted from the sql database
@@ -36,7 +36,7 @@ namespace WPF.Model
         #region Abstract Methods
         abstract protected void Update();
         abstract protected int Insert();
-        abstract protected void Delete();
+        abstract public void Delete();
         #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WPF.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// Interface that talks with IViewModel
@@ -27,9 +27,15 @@ namespace WPF.Model
         List<User> GetUsers();
         User CreateUser(string name);
 
+        bool IsValidNewUsername(string name);
+
+        bool IsValidNewEmail(string email);
+
+        bool IsLoggedIn();
+
         bool Login(string email, string password);
 
-        bool Register(string name, string email, string password);
+        bool Register(string username, string email, string password, string name);
         #endregion
 
         #region Database Methods

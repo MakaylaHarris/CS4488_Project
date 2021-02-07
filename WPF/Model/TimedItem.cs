@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WPF.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// A named item with a start and end date, not used directly (abstract).

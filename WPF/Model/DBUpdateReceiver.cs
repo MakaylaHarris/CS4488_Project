@@ -1,6 +1,6 @@
-﻿namespace WPF.Model
+﻿namespace SmartPert.Model
 {
-    interface DBUpdateReceiver
+    public interface DBUpdateReceiver
     {
         void OnDBUpdate(Project p);
     }

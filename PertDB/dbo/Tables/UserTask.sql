@@ -1,0 +1,24 @@
+﻿/****** Object:  Table [dbo].[UserTask]    Script Date: 2/6/2021 8:00:27 PM ******/
+CREATE TABLE [dbo].[UserTask](
+	[UserTaskId] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [varchar](50) NOT NULL,
+	[TaskId] [int] NOT NULL,
+ CONSTRAINT [PK_UserTask] PRIMARY KEY CLUSTERED 
+(
+	[UserTaskId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[UserTask] ENABLE CHANGE_TRACKING WITH(TRACK_COLUMNS_UPDATED = ON)
+GO
+ALTER TABLE [dbo].[UserTask]  WITH CHECK ADD  CONSTRAINT [FK_UserTask_Task] FOREIGN KEY([TaskId])
+REFERENCES [dbo].[Task] ([TaskId])
+GO
+ALTER TABLE [dbo].[UserTask] CHECK CONSTRAINT [FK_UserTask_Task]
+GO
+ALTER TABLE [dbo].[UserTask]  WITH CHECK ADD  CONSTRAINT [FK_UserTask_User] FOREIGN KEY([UserName])
+REFERENCES [dbo].[User] ([UserName])
+GO
+ALTER TABLE [dbo].[UserTask] CHECK CONSTRAINT [FK_UserTask_User]
+GO
+

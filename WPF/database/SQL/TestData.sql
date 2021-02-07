@@ -1,0 +1,1 @@
+﻿INSERT INTO dbo.[User] (UserName, Password, Email, Name) Values('TestUser', 'Pass', 'Email@address.com', 'Name');

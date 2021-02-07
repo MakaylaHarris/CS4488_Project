@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using WPF.View;
+using SmartPert.View;
 
-namespace WPF.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// The model is the pipeline between the view and the database
@@ -12,6 +12,7 @@ namespace WPF.Model
     {
         private IViewModel viewModel;
         private DBReader reader;
+        private User currentUser;
         public Model(IViewModel viewModel)
         {
             this.viewModel = viewModel;
@@ -62,25 +63,57 @@ namespace WPF.Model
         #endregion
 
         #region User Methods
-        public User CreateUser(string name)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Used to create a user with just a name (unregistered)
+        /// </summary>
+        /// <param name="name">name</param>
+        /// <returns>null if it failed, user on success</returns>
+        public User CreateUser(string name) => reader.CreateUser(name);
 
-        public List<User> GetUsers()
-        {
-            return reader.Users;
-        }
+        /// <summary>
+        /// Gets all users
+        /// </summary>
+        /// <returns>user list</returns>
+        public List<User> GetUsers() => reader.Users;
 
-        public bool Login(string email, string password)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Logs the user in
+        /// </summary>
+        /// <param name="email">email or username</param>
+        /// <param name="password">password</param>
+        /// <returns>true on success</returns>
+        public bool Login(string email, string password) => reader.Login(email, password);
 
-        public bool Register(string name, string email, string password)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Registers new user
+        /// </summary>
+        /// <param name="username">username that is unique</param>
+        /// <param name="email">unique email</param>
+        /// <param name="password">password</param>
+        /// <param name="name">actual name</param>
+        /// <returns></returns>
+        public bool Register(string username, string email, string password, string name) => reader.Register(username, password, name, email);
+
+        /// <summary>
+        /// Checks if user is logged in
+        /// </summary>
+        /// <returns>true if logged in</returns>
+        public bool IsLoggedIn() => reader.CurrentUser != null;
+
+        /// <summary>
+        /// Determines if new username is valid
+        /// </summary>
+        /// <param name="name">username</param>
+        /// <returns>True if valid</returns>
+        public bool IsValidNewUsername(string name) => reader.IsValidUsername(name);
+
+        /// <summary>
+        /// Determines if new email is valid
+        /// </summary>
+        /// <param name="email">email address</param>
+        /// <returns>True if valid</returns>
+        public bool IsValidNewEmail(string email) => reader.IsValidEmail(email);
+
         #endregion
 
         #region Database Methods
@@ -115,6 +148,7 @@ namespace WPF.Model
         {
             return this.reader.TestNewConnection(connectString);
         }
+
         #endregion
     }
 }

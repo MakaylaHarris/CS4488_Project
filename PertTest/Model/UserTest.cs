@@ -6,7 +6,7 @@ using System.Text;
 namespace PertTest.Model
 {
     [TestClass]
-    class UserTest
+    public class UserTest
     {
     }
 }

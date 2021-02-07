@@ -1,6 +1,10 @@
-environment:
-  SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
-before_build:
-  - cmd: choco install sandcastle
-  - nuget restore
+# Appveyor configuration file
 
+image: Visual Studio 2019
+configuration: Appveyor   # This builds SmartPert and tests
+before_build:
+  - nuget restore
+  - msbuild /t:restore
+  - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
+  # create Pert database
+  - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql

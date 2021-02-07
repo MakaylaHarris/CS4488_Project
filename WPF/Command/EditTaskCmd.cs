@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WPF.Model;
+using SmartPert.Model;
 
-namespace WPF.Command
+namespace SmartPert.Command
 {
     /// <summary>
     /// Command to edit task
