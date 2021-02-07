@@ -83,4 +83,7 @@
     </PostBuildEvent>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Appveyor' ">
+    <OutputPath>bin\Appveyor\</OutputPath>
+  </PropertyGroup>
 </Project>
