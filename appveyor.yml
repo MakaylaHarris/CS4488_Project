@@ -7,4 +7,4 @@ before_build:
   - msbuild /t:restore
   - msbuild PertDB\PertDB.sqlproj   # Build PertDB
   # create Pert database
-  - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\PertDB\bin\Output\Pert_Create.sql
+  - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
