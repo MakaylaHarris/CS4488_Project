@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Pert.View.Login
+namespace SmartPert.View.Login
 {
     /// <summary>
     /// Interaction logic for RegisterPage.xaml

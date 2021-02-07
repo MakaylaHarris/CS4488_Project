@@ -172,8 +172,8 @@
     <HelpKINode Title="IModel.IsValidNewUsername Method " Url="html/bb5785fc-3581-0072-86fe-29d95eebdcaa.htm" />
     <HelpKINode Title="Model.IsValidNewUsername Method " Url="html/d5b1b3b6-0a79-7c89-acd2-1d81db2f1bdb.htm" />
   </HelpKINode>
-  <HelpKINode Title="IsValidUserName method" Url="html/ebfdd145-4854-45f5-da29-a0e21070122c.htm" />
   <HelpKINode Title="IsValidUsername method" Url="html/ecd59122-4790-9cba-7099-6b3cb6b57cf5.htm" />
+  <HelpKINode Title="IsValidUserName method" Url="html/ebfdd145-4854-45f5-da29-a0e21070122c.htm" />
   <HelpKINode Title="IViewModel interface">
     <HelpKINode Title="IViewModel Interface" Url="html/f7004abb-ca3d-9a96-4111-3060506432f7.htm" />
     <HelpKINode Title="methods" Url="html/642acd91-4d5e-0c8f-159d-cc74df317849.htm" />

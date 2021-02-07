@@ -11,9 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Pert.Model;
+using SmartPert.Model;
 
-namespace Pert.View.Login
+namespace SmartPert.View.Login
 {
     /// <summary>
     /// Interaction logic for Login.xaml

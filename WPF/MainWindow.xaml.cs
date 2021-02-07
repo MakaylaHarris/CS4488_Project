@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-﻿using Pert.View;
+﻿using SmartPert.View;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -12,13 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Pert.Model;
-using Pert.View.Login;
+using SmartPert.Model;
+using SmartPert.View.Login;
 
 /// <summary>
 /// Name space for the SmartPert Pert Application
 /// </summary>
-namespace Pert
+namespace SmartPert
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

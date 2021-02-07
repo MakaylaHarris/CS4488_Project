@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace Pert.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// A single user that works on the project
@@ -86,7 +86,7 @@ namespace Pert.Model
         /// </summary>
         public override void Delete()
         {
-            SqlCommand command = OpenConnection("Delete from [User] Where [User].UserName=@username;");
+            SqlCommand command = OpenConnection("Delete from [User] Where [User].[UserName]=@username;");
             command.Parameters.AddWithValue("@username", username);
             command.ExecuteNonQuery();
             CloseConnection();

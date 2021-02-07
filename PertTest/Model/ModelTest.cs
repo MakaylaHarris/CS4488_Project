@@ -3,18 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Pert.Model;
-using Pert.View;
+using SmartPert.Model;
+using SmartPert.View;
 
 namespace PertTest.Model
 {
     [TestClass]
     public class ModelTest : IViewModel
     {
-        private Pert.Model.IModel model;
+        private SmartPert.Model.IModel model;
         public ModelTest()
         {
-            model = new Pert.Model.Model(this);
+            model = new SmartPert.Model.Model(this);
         }
 
         #region Interface Methods

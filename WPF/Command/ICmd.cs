@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pert.Command
+namespace SmartPert.Command
 {
     /// <summary>
     /// Command pattern interface, any command that can be undone should implement

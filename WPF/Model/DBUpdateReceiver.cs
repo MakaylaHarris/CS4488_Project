@@ -1,4 +1,4 @@
-﻿namespace Pert.Model
+﻿namespace SmartPert.Model
 {
     public interface DBUpdateReceiver
     {

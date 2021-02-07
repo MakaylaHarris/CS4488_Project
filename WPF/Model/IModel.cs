@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pert.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// Interface that talks with IViewModel

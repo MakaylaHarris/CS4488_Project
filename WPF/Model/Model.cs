@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Pert.View;
+using SmartPert.View;
 
-namespace Pert.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// The model is the pipeline between the view and the database

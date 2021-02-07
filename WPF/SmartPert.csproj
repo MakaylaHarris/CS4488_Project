@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4711BED0-3418-4FB0-BA2D-6AA5596F8F51}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Pert</RootNamespace>
-    <AssemblyName>Pert</AssemblyName>
+    <RootNamespace>SmartPert</RootNamespace>
+    <AssemblyName>SmartPert</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -39,7 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Pert.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\SmartPert.xml</DocumentationFile>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
@@ -205,7 +205,6 @@
     <None Include="Diagrams\Class Diagrams.pdf" />
     <None Include="Diagrams\Database ERD.pdf" />
     <None Include="Diagrams\Pert Activity Diagram.pdf" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

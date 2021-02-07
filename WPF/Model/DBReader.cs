@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace Pert.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// DBReader Singleton checks updates from the database and updates the entire model
@@ -271,6 +271,7 @@ namespace Pert.Model
                 currentUser = user;
                 Properties.Settings.Default.UserName = currentUser.Username;
                 Properties.Settings.Default.Save();
+                users.Add(user);
                 return true;
             }
             return false;

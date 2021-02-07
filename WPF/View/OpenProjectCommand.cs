@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Pert.Model;
+using SmartPert.Model;
 
-namespace Pert.View
+namespace SmartPert.View
 {
     class OpenProjectCommand : ICommand
     {

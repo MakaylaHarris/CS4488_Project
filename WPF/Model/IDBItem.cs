@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace Pert.Model
+namespace SmartPert.Model
 {
     /// <summary>
     /// Objects inherit from IDBItem if they are updated, inserted, and deleted from the sql database

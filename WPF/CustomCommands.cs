@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Pert
+namespace SmartPert
 {
     /// <summary>
     /// Custom Commands with keyboard shortcuts used by main menu.

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>PertDB</Name>
+    <Name>SmartPertDB</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{d7c97759-3478-45b5-824d-8b76b037575e}</ProjectGuid>
@@ -11,8 +11,8 @@
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>Pert</RootNamespace>
-    <AssemblyName>Pert</AssemblyName>
+    <RootNamespace>SmartPertDB</RootNamespace>
+    <AssemblyName>SmartPertDB</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -25,6 +25,7 @@
     <DacApplicationName>Pert</DacApplicationName>
     <GenerateCreateScript>True</GenerateCreateScript>
     <IsChangeTrackingOn>True</IsChangeTrackingOn>
+    <PermissionSet>SAFE</PermissionSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>

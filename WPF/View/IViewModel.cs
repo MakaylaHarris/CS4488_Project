@@ -1,6 +1,6 @@
-﻿using Pert.Model;
+﻿using SmartPert.Model;
 
-namespace Pert.View
+namespace SmartPert.View
 {
     public interface IViewModel
     {

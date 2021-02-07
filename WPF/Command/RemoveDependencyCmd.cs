@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Pert.Model;
+using SmartPert.Model;
 
-namespace Pert.Command
+namespace SmartPert.Command
 {
     /// <summary>
     /// Removes Task Dependency

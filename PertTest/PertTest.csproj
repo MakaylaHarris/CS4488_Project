@@ -97,9 +97,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WPF\Pert.csproj">
+    <ProjectReference Include="..\WPF\SmartPert.csproj">
       <Project>{4711bed0-3418-4fb0-ba2d-6aa5596f8f51}</Project>
-      <Name>Pert</Name>
+      <Name>SmartPert</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
