@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using WPF.Model;
+using Pert.Model;
 
-namespace WPF.View
+namespace Pert.View
 {
     class OpenProjectCommand : ICommand
     {

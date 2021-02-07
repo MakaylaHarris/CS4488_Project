@@ -11,9 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using WPF.Model;
+using Pert.Model;
 
-namespace WPF.View.Login
+namespace Pert.View.Login
 {
     /// <summary>
     /// Interaction logic for Login.xaml

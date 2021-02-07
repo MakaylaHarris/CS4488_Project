@@ -15,7 +15,7 @@ SmartPert was developed using [MSSQLSERVER](https://en.wikipedia.org/wiki/Micros
 2. Publish the project by right clicking on *PertDB* in the Solution Explorer and clicking _publish_.
 3. In the Publish Database window, select the target database connection.
 (ie. `(LocalDB)\\MSSQLLocalDB`)
-4. (Optional) Name the database *Pert*.
+4. Name the database *Pert*.
 5. Run publish.
 
 

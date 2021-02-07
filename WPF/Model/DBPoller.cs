@@ -90,7 +90,7 @@ namespace Pert.Model
             connection.Open();
             SqlCommand command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = "dbo.TRACKING_VERSION";
+            command.CommandText = "dbo.TrackingVersion";
             var tmp = command.Parameters.Add("@ret_value", SqlDbType.BigInt);
             tmp.Direction = ParameterDirection.Output;
             command.ExecuteNonQuery();

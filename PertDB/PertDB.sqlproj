@@ -24,6 +24,7 @@
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <DacApplicationName>Pert</DacApplicationName>
     <GenerateCreateScript>True</GenerateCreateScript>
+    <IsChangeTrackingOn>True</IsChangeTrackingOn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -48,7 +49,7 @@
     <DefineTrace>true</DefineTrace>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <SqlTargetName>PertDB</SqlTargetName>
+    <SqlTargetName>Pert</SqlTargetName>
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
@@ -63,27 +64,31 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="Scripts\" />
-    <Folder Include="Docs" />
     <Folder Include="PublicLocations" />
     <Folder Include="dbo\Views" />
     <Folder Include="dbo\StoredProcedures" />
+    <Folder Include="dbo\StoredFunctions" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Project.sql" />
     <Build Include="dbo\Tables\Dependency.sql" />
-    <Build Include="dbo\Tables\Status.sql" />
     <Build Include="dbo\Tables\Task.sql" />
     <Build Include="dbo\Tables\User.sql" />
     <None Include="Scripts\Insert.sql" />
     <Build Include="dbo\Views\Tasks_View.sql" />
     <Build Include="dbo\StoredProcedures\ViewTasks.sql" />
     <Build Include="dbo\StoredProcedures\ReadTable.sql" />
+    <Build Include="dbo\Tables\UserTask.sql" />
+    <Build Include="dbo\Tables\UserProject.sql" />
+    <Build Include="dbo\StoredProcedures\Register.sql" />
+    <Build Include="dbo\StoredProcedures\TrackingVersion.sql" />
+    <Build Include="dbo\StoredFunctions\TryLogin.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PertDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Docs\PertChartDatabase.pdf" />
     <None Include="PublicLocations\PertDBDevelop.publish.xml" />
+    <None Include="PublicLocations\PertDB.publish.xml" />
   </ItemGroup>
 </Project>
