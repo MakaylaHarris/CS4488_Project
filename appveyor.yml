@@ -1,9 +1,10 @@
+# Appveyor configuration file
+
 image: Visual Studio 2019
-configuration: Appveyor
-services:
-  - mssql2012sp1
+configuration: Appveyor   # This builds Pert and PertTest
 before_build:
-  - ps: GenerateScripts\appveyor.ps1
-  - cmd: sqlcmd -S (local)\mssql2012sp1 -U sa -P Password12! -i GenerateScripts\pertDB_create.sql
   - nuget restore
   - msbuild /t:restore
+  - msbuild PertDB\PertDB.sqlproj   # Build PertDB
+  # create Pert database
+  - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\PertDB\bin\Output\Pert_Create.sql
