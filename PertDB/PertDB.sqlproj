@@ -91,7 +91,4 @@
     <None Include="PublicLocations\PertDBDevelop.publish.xml" />
     <None Include="PublicLocations\PertDB.publish.xml" />
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>"$(DevEnvDir)\devenv"  "GenerateScripts\GenerateScripts.csproj" /Rebuild</PostBuildEvent>
-  </PropertyGroup>
 </Project>
