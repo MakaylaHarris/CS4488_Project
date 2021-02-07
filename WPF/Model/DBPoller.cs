@@ -38,12 +38,17 @@ namespace Pert.Model
 
         #region Public Methods
         /// <summary>
-        /// Starts the poller
+        /// Starts the poller, if the context exists.
         /// </summary>
         public void Start()
         {
             if (!running)
             {
+                if(context == null)
+                {
+                    Console.WriteLine("No context found, database updates won't be detected.");
+                    return;
+                }
                 connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
                 running = true;
                 thread = new Thread(new ThreadStart(CheckForUpdates));
@@ -110,11 +115,11 @@ namespace Pert.Model
             {
                 while (running)
                 {
-                    if (DBIsUpdated())
+                    Thread.Sleep(refreshTime);
+                    if (DBIsUpdated() && context != null)
                     {
                         context.Post(new SendOrPostCallback(Handler), null);
                     }
-                    Thread.Sleep(refreshTime);
                 }
             }
             catch (SqlException e)

@@ -12,48 +12,73 @@ namespace PertTest.Model
     public class DBReaderTest : DBUpdateReceiver
     {
         private DBReader reader;
+        private string name;
+        private string pass;
+        private string email;
 
         public DBReaderTest()
         {
             reader = DBReader.Instantiate(this);
+            name = "SomeRandomUser5551";
+            pass = "Pass";
+            email = "somethin@somethin.co";
         }
 
         #region Tests
         [TestMethod]
         public void TestNewConnectionTest()
         {
+            Assert.IsTrue(reader.Connected);
             string cantConnect = @"BadConnect";
             Assert.IsFalse(reader.TestNewConnection(cantConnect));
         }
 
         [TestMethod]
-        public void TestLogin()
+        public void TestLoginRegisterDelete()
         {
-            reader.Register("TestUser", "Pass", "Name", "Email");
-            Assert.IsTrue(reader.Login("TestUser", "Pass"));
-            Assert.IsFalse(reader.Login("NotAUser", "Pass"));
-            Assert.IsFalse(reader.Login("TestUser", "IncorrectPass"));
+            // First Setup
+            Unregister();
+            // Now we should be able to register and test
+            Assert.IsTrue(reader.Register(name, pass, name, email));
+            // And Login
+            Assert.IsTrue(reader.Login(name, pass));
+            // And Delete
+            Assert.IsTrue(reader.DeleteUser(name));
+
         }
 
         [TestMethod]
-        public void TestRegister()
+        public void TestCreateUserRegister()
         {
-            // setup: These user names must not be in the database!
-            string unregistered = "UnregisteredUser";
-            string notAUser = "NotAUser";
-            reader.CreateUser(unregistered);
-
-            // Already registered test
-            Assert.IsFalse(reader.Register("TestUser", "Pass", "Mischievious OR SELECT 1;", "email"));
+            Unregister();
+            Assert.IsTrue(reader.CreateUser(name) != null);
             // Register Test
-            Assert.IsTrue(reader.Register(notAUser, "Pass", "Name", "Email"));
-            reader.DeleteUser(notAUser);        // Immediately delete so it doesn't stay in database
-            Assert.IsTrue(reader.Register(unregistered, "Pass", "Name", "Email"));
-            reader.DeleteUser(unregistered);    // Immediately delete so it doesn't stay in database
+            Assert.IsTrue(reader.Register(name, pass, name, email));
+            reader.DeleteUser(name);
         }
 
+        [TestMethod]
+        public void TestAlreadyRegistered()
+        {
+            // Already registered test
+            Assert.IsFalse(reader.Register("TestUser", "Pass", "Mischievious OR SELECT 1;", "email"));
+        }
+
+        [TestMethod]
+        public void TestBadLogin()
+        {
+            Assert.IsFalse(reader.Login(name, "WrongPass"));
+            Assert.IsFalse(reader.Login("WrongUser", pass));
+        }
         #endregion
 
+        private void Unregister()
+        {
+            // see if the user is already in database
+            if (reader.Login(name, pass))
+                reader.DeleteUser(name);
+
+        }
 
         public void OnDBUpdate(Project p)
         {

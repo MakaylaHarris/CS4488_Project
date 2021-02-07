@@ -59,6 +59,8 @@ namespace Pert.Model
                 this.username = username;
         }
 
+        public override string ToString() => username;
+
         /// <summary>
         /// Attempts to register user
         /// </summary>
@@ -84,7 +86,7 @@ namespace Pert.Model
         /// </summary>
         public override void Delete()
         {
-            SqlCommand command = OpenConnection("Delete from [User] Where UserName=@username;");
+            SqlCommand command = OpenConnection("Delete from [User] Where [User].UserName=@username;");
             command.Parameters.AddWithValue("@username", username);
             command.ExecuteNonQuery();
             CloseConnection();
@@ -119,6 +121,7 @@ namespace Pert.Model
                 (string)reader["Password"],
                 (string)reader["UserName"]);
         }
+
         #endregion
     }
 }

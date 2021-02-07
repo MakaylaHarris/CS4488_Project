@@ -331,9 +331,12 @@ namespace Pert.Model
                 Properties.Settings.Default.Save();
             }
             if (Connected)
+            {
                 polling.Reset();
+            }
             else
                 polling.Start();
+            OnDBUpdate();
             return true;
         }
 
