@@ -2,10 +2,7 @@ image: Visual Studio 2019
 configuration: Appveyor
 services:
   - MSSQL$SQL2016
-environment:
-  SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
 before_build:
   - ps: GenerateScripts\appveyor.ps1
-  - cmd: choco install sandcastle
   - nuget restore
   - msbuild /t:restore
