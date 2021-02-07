@@ -4,7 +4,7 @@ image: Visual Studio 2019
 configuration: Appveyor   # This builds Pert and PertTest
 before_build:
   - nuget restore
-  - msbuild /t:restore
+  # - msbuild /t:restore
   - msbuild PertDB\PertDB.sqlproj   # Build PertDB
   # create Pert database
   - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\PertDB\bin\Output\Pert_Create.sql
