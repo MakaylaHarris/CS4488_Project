@@ -61,7 +61,8 @@ namespace PertTest.Model
         public void TestAlreadyRegistered()
         {
             // Already registered test
-            Assert.IsFalse(reader.Register("TestUser", "Pass", "Mischievious OR SELECT 1;", "email"));
+            reader.Register(name, pass, name, email);
+            Assert.IsFalse(reader.Register(name, "Pass", "Mischievious OR SELECT 1;", "email"));
         }
 
         [TestMethod]

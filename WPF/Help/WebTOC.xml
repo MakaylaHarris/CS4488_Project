@@ -1,32 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <HelpTOC>
 
-  <HelpTOCNode Id="17ba9bec-0f19-4928-9ca5-25a1c8b063f0" Title="Namespaces" Url="html/d75eb659-6335-53f6-af7a-81814a21ab7f.htm">
-    <HelpTOCNode Id="82d1fd66-4bdb-4ce6-976f-e63d2a9a73de" Title="Pert" Url="html/79c2b4fd-f9d5-a5dd-3535-fe35e4f5a577.htm">
-      <HelpTOCNode Id="bf8c6997-4c54-4047-91ad-e26889c08d59" Title="App Class" Url="html/d184bc53-e091-9ee0-5980-a6ea0911916b.htm">
+  <HelpTOCNode Id="a5e8684c-29a6-41ce-a981-4bf2648c4e9e" Title="Namespaces" Url="html/d75eb659-6335-53f6-af7a-81814a21ab7f.htm">
+    <HelpTOCNode Id="9609f38e-6f23-42f2-bd7b-a3a710eeacd9" Title="Pert" Url="html/79c2b4fd-f9d5-a5dd-3535-fe35e4f5a577.htm">
+      <HelpTOCNode Id="4c674d9e-0b17-47ed-b6ff-bac71e4044d5" Title="App Class" Url="html/d184bc53-e091-9ee0-5980-a6ea0911916b.htm">
         <HelpTOCNode Title="App Constructor " Url="html/0876b4db-eb4b-1a2a-6385-18ffa95dee02.htm" />
         <HelpTOCNode Title="App Properties" Url="html/fac91ad5-0d8d-feee-f498-3d9b7248fc6b.htm" />
-        <HelpTOCNode Id="918b3e1e-14dc-40db-9d84-6210d560a64f" Title="App Methods" Url="html/c409926f-86bd-0ce8-3591-c85f5158a6fb.htm">
+        <HelpTOCNode Id="00d815a9-d43e-4805-8ca8-542eb0b41146" Title="App Methods" Url="html/c409926f-86bd-0ce8-3591-c85f5158a6fb.htm">
           <HelpTOCNode Title="InitializeComponent Method " Url="html/974192a3-99d8-33f9-d6f3-8800a15fb316.htm" />
           <HelpTOCNode Title="Main Method " Url="html/29910919-c8a1-a1e4-0cfd-40a1f31a8b8c.htm" />
         </HelpTOCNode>
         <HelpTOCNode Title="App Events" Url="html/7e9ecaae-d224-26b9-d0c0-bf32a72302cc.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="eb098041-d150-405a-8948-e4b227685ebc" Title="MainWindow Class" Url="html/8f24b758-8c9c-2a2f-9e26-9a2231874f4a.htm">
+      <HelpTOCNode Id="b6b2e90e-b82d-44b8-8aa2-dfb5472f05a7" Title="MainWindow Class" Url="html/8f24b758-8c9c-2a2f-9e26-9a2231874f4a.htm">
         <HelpTOCNode Title="MainWindow Constructor " Url="html/717c4b37-4298-fed4-326a-db506b0decfc.htm" />
-        <HelpTOCNode Id="4269163f-63d4-43b4-85d1-d6783d4b430c" Title="MainWindow Properties" Url="html/e541bcf2-6205-0ca3-91b3-47edc72aaffd.htm">
+        <HelpTOCNode Id="fafa035c-e08a-4f6b-a807-a5dff5398c6b" Title="MainWindow Properties" Url="html/e541bcf2-6205-0ca3-91b3-47edc72aaffd.htm">
           <HelpTOCNode Title="OpenItems Property " Url="html/2561c8fa-dfa7-8964-59b2-26410dc16b7f.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="0600a77f-d65c-4b75-9d02-bb94b54b3faf" Title="MainWindow Methods" Url="html/3623f57f-247a-8b40-47a3-feab7f49484a.htm">
+        <HelpTOCNode Id="31f0f515-0a65-40b9-a0cb-d4aa3f76415a" Title="MainWindow Methods" Url="html/3623f57f-247a-8b40-47a3-feab7f49484a.htm">
           <HelpTOCNode Title="InitializeComponent Method " Url="html/6a9d4dc3-83d2-dfc5-35ec-f0876606f190.htm" />
           <HelpTOCNode Title="OnModelUpdate Method " Url="html/594eb0eb-7e93-70ca-f243-a47b52701c4e.htm" />
           <HelpTOCNode Title="ShowDBConnectionSettings Method " Url="html/2929937b-29ea-4a1e-d146-ecc3569bba85.htm" />
         </HelpTOCNode>
         <HelpTOCNode Title="MainWindow Events" Url="html/cd30e308-2db2-8571-07e8-8cb35d52b4c2.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="d9f2b443-0513-45ee-baee-8cd0d0008153" Title="MenuItemViewModel Class" Url="html/e397a041-765f-9586-3cf1-5f77a68a499b.htm">
+      <HelpTOCNode Id="04d29e15-bd8b-48ce-905c-ab01efa0a964" Title="MenuItemViewModel Class" Url="html/e397a041-765f-9586-3cf1-5f77a68a499b.htm">
         <HelpTOCNode Title="MenuItemViewModel Constructor " Url="html/2ecdddf4-5878-ae84-b37e-91189605454f.htm" />
-        <HelpTOCNode Id="c7e02c44-1127-4cb8-a749-c64e210b4581" Title="MenuItemViewModel Properties" Url="html/567c6b41-b76d-8a5d-cab0-1466981ce593.htm">
+        <HelpTOCNode Id="13c7ffbe-b766-41f1-a20f-48ab99112b11" Title="MenuItemViewModel Properties" Url="html/567c6b41-b76d-8a5d-cab0-1466981ce593.htm">
           <HelpTOCNode Title="Command Property " Url="html/e18fca9e-aed0-f8c3-92cb-1124a59abb03.htm" />
           <HelpTOCNode Title="Header Property " Url="html/d0fe532f-a3db-7fec-7823-08800bea80af.htm" />
           <HelpTOCNode Title="MenuItems Property " Url="html/f51d4097-f45a-1e37-11d5-7f7a6d3bc4df.htm" />
@@ -34,22 +34,22 @@
         <HelpTOCNode Title="MenuItemViewModel Methods" Url="html/c83ebdde-5298-9267-ba7b-faeaf17e0954.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="51b33c6e-cc27-4a0d-891f-2c2473060ccd" Title="Pert.Command" Url="html/13bc1c73-67d4-3f38-1619-3eeed1270fbb.htm">
-      <HelpTOCNode Id="bf750a1a-47a4-4c17-8c58-36848549515c" Title="ICmd Interface" Url="html/2c1593ec-5dde-6d29-ae1f-45af7dc9b526.htm">
-        <HelpTOCNode Id="c3dafb66-8b71-44f0-8500-a19259aae3b6" Title="ICmd Methods" Url="html/627f2e5f-e391-51b4-7669-995189efc1e9.htm">
+    <HelpTOCNode Id="fe92ffc2-38c1-4f29-ac21-8309c3383549" Title="Pert.Command" Url="html/13bc1c73-67d4-3f38-1619-3eeed1270fbb.htm">
+      <HelpTOCNode Id="e8952e0f-8e40-4d9c-bbac-3b905da404c8" Title="ICmd Interface" Url="html/2c1593ec-5dde-6d29-ae1f-45af7dc9b526.htm">
+        <HelpTOCNode Id="b24ee597-4462-4547-9e46-d87d25c005c9" Title="ICmd Methods" Url="html/627f2e5f-e391-51b4-7669-995189efc1e9.htm">
           <HelpTOCNode Title="Execute Method " Url="html/669933c4-52eb-b7be-d0fe-bda440428b30.htm" />
           <HelpTOCNode Title="Undo Method " Url="html/77cf5869-88e6-5f9a-86b1-5622731dee59.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="c49c951f-133c-489b-930e-9768ba1641e2" Title="Pert.Model" Url="html/bddb4869-c4ae-5517-b8c7-e13420612b3d.htm">
-      <HelpTOCNode Id="462f81fc-fdfc-409e-94b8-61fd849b4dac" Title="DBReader Class" Url="html/ff50eea2-225d-f792-55c9-148268b1c61d.htm">
-        <HelpTOCNode Id="e9fb4958-1152-45de-a00b-3657cce3907f" Title="DBReader Properties" Url="html/5c63d533-0431-c106-f28d-eec5bbc8b57e.htm">
+    <HelpTOCNode Id="b13b21b9-2f34-45f6-9b55-a391f7fa6fc3" Title="Pert.Model" Url="html/bddb4869-c4ae-5517-b8c7-e13420612b3d.htm">
+      <HelpTOCNode Id="e9aeaeb8-e9fe-41e8-961a-563d7ea9aa81" Title="DBReader Class" Url="html/ff50eea2-225d-f792-55c9-148268b1c61d.htm">
+        <HelpTOCNode Id="b8b52977-7378-4c79-b002-0d86be0e9758" Title="DBReader Properties" Url="html/5c63d533-0431-c106-f28d-eec5bbc8b57e.htm">
           <HelpTOCNode Title="Connected Property " Url="html/7770412f-9aaf-3c26-55f3-2e21fb163bdf.htm" />
           <HelpTOCNode Title="CurrentUser Property " Url="html/3ab88373-ff71-5218-837f-77799d0e0210.htm" />
           <HelpTOCNode Title="Instance Property " Url="html/e7c36b13-5378-66a6-4755-e2f23a397466.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="e76d4711-e749-42ef-901d-e00eadbd0dc7" Title="DBReader Methods" Url="html/eb0e25f4-c092-a8d8-bc78-37574c15d2c4.htm">
+        <HelpTOCNode Id="1a1d1836-6c3a-44b8-93a9-13ae4f9bcd91" Title="DBReader Methods" Url="html/eb0e25f4-c092-a8d8-bc78-37574c15d2c4.htm">
           <HelpTOCNode Title="CreateUser Method " Url="html/a2fd6ba1-12fb-a979-6946-197dac2d0c46.htm" />
           <HelpTOCNode Title="DeleteUser Method " Url="html/1c4d60ef-9a25-3610-61ef-f604db80b932.htm" />
           <HelpTOCNode Title="GetUserProjects Method " Url="html/6486541a-f2a9-3e93-850e-8ea6db074d42.htm" />
@@ -64,14 +64,14 @@
           <HelpTOCNode Title="TestNewConnection Method " Url="html/e4345a20-6283-c4af-f9af-617674a4e3fb.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="f2141d63-83f7-42e3-98c7-f4fa43b6f704" Title="DBUpdateReceiver Interface" Url="html/639d10f1-aab6-9f8c-48a8-b7a7990bd3e8.htm">
-        <HelpTOCNode Id="905c497b-60e9-4bb2-aa49-633b0f47a7c2" Title="DBUpdateReceiver Methods" Url="html/9f6184b6-2a86-45ae-c704-32173331a3f0.htm">
+      <HelpTOCNode Id="9e6bfe71-7545-4a9b-b50f-93eb6fd70910" Title="DBUpdateReceiver Interface" Url="html/639d10f1-aab6-9f8c-48a8-b7a7990bd3e8.htm">
+        <HelpTOCNode Id="e443cb9f-4c30-4d46-a0ad-85282dd6052f" Title="DBUpdateReceiver Methods" Url="html/9f6184b6-2a86-45ae-c704-32173331a3f0.htm">
           <HelpTOCNode Title="OnDBUpdate Method " Url="html/b49204eb-7990-a2b8-7ae3-3dd6ed6f8c62.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="3d7cb9e7-3c96-42e4-bc25-8568495ff0b4" Title="IDBItem Class" Url="html/1f95b914-967a-eda8-a494-4c03214e49c2.htm">
+      <HelpTOCNode Id="76105be9-5665-41ef-baa1-94e226958ab5" Title="IDBItem Class" Url="html/1f95b914-967a-eda8-a494-4c03214e49c2.htm">
         <HelpTOCNode Title="IDBItem Constructor " Url="html/de37f809-7d35-744e-4683-83749b8b412b.htm" />
-        <HelpTOCNode Id="bc0d9988-9558-4786-933b-8d7375fbff3d" Title="IDBItem Methods" Url="html/9b3fda31-cc75-7c37-1552-238243ec8009.htm">
+        <HelpTOCNode Id="2bf16559-c87c-40c6-9ac5-bb7742c1774e" Title="IDBItem Methods" Url="html/9b3fda31-cc75-7c37-1552-238243ec8009.htm">
           <HelpTOCNode Title="CloseConnection Method " Url="html/c5f39dd1-1a71-6f39-f710-f77d18aa595f.htm" />
           <HelpTOCNode Title="Delete Method " Url="html/03573e75-8f96-f5d2-8366-18708abb372e.htm" />
           <HelpTOCNode Title="ExecuteSql Method " Url="html/4c5574c2-997d-8249-41e9-d11ea9453b88.htm" />
@@ -80,8 +80,8 @@
           <HelpTOCNode Title="Update Method " Url="html/37638eeb-9959-21d8-6c22-9e636d0c61a0.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="ede78e45-f1ca-47f7-9815-39bf17cac322" Title="IModel Interface" Url="html/2aa0983e-c9ae-fcb1-e4f3-0ba8d35b2327.htm">
-        <HelpTOCNode Id="b9805a18-159d-4066-99e1-b5786c09d197" Title="IModel Methods" Url="html/fb2a9ea4-1d09-1560-5b2f-5262d59e476e.htm">
+      <HelpTOCNode Id="25f48ac0-a3c9-4d8b-81be-f8dd4ee72dac" Title="IModel Interface" Url="html/2aa0983e-c9ae-fcb1-e4f3-0ba8d35b2327.htm">
+        <HelpTOCNode Id="317aba7f-707d-4557-b612-c8b0c05f9acc" Title="IModel Methods" Url="html/fb2a9ea4-1d09-1560-5b2f-5262d59e476e.htm">
           <HelpTOCNode Title="CreateProject Method " Url="html/c6f46636-b927-2a8c-724c-c7191b7213db.htm" />
           <HelpTOCNode Title="CreateTask Method " Url="html/f35ded84-f80c-4cb3-b67a-026de644da9c.htm" />
           <HelpTOCNode Title="CreateUser Method " Url="html/09f9fb8d-910a-90d4-47b5-c89ad73bdb01.htm" />
@@ -102,9 +102,9 @@
           <HelpTOCNode Title="SetProject Method " Url="html/f45f492d-8826-dc79-bd55-e805f812ad1a.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="5a3781ad-72fa-475b-994a-70b8ac6e139a" Title="Model Class" Url="html/090886e7-14b7-602f-d57f-efa9a2c0129e.htm">
+      <HelpTOCNode Id="3478ab01-4c87-468f-94c6-63763c729efe" Title="Model Class" Url="html/090886e7-14b7-602f-d57f-efa9a2c0129e.htm">
         <HelpTOCNode Title="Model Constructor " Url="html/0204ec3f-43a3-dd5f-a0d9-ca8e85189725.htm" />
-        <HelpTOCNode Id="7eb77a12-e212-4127-88e3-b17fa886f22d" Title="Model Methods" Url="html/6334f030-892d-7e0e-043f-13cc0000de15.htm">
+        <HelpTOCNode Id="406347aa-d82a-49c2-8d6a-c829a4b42126" Title="Model Methods" Url="html/6334f030-892d-7e0e-043f-13cc0000de15.htm">
           <HelpTOCNode Title="CreateProject Method " Url="html/a098651f-dfd5-a8a3-06cf-a415ae06bd64.htm" />
           <HelpTOCNode Title="CreateTask Method " Url="html/d13efdd1-8e5c-a3fe-a83b-65002f2cd72d.htm" />
           <HelpTOCNode Title="CreateUser Method " Url="html/f807f885-003c-7eb1-7ec0-063bfc8d733b.htm" />
@@ -126,12 +126,12 @@
           <HelpTOCNode Title="SetProject Method " Url="html/2eafa0fc-5a51-64e0-1ef1-6684d6c07439.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="6540c94e-20bc-40fb-9236-ba9aec1054ab" Title="Project Class" Url="html/d92ca2f1-5dc3-7381-f6d1-695e88c18ee2.htm">
+      <HelpTOCNode Id="719b8fa9-c973-4950-bf23-c74cbd599321" Title="Project Class" Url="html/d92ca2f1-5dc3-7381-f6d1-695e88c18ee2.htm">
         <HelpTOCNode Title="Project Constructor " Url="html/2b1e4e1c-9565-f181-d0c0-5c1c7da51028.htm" />
-        <HelpTOCNode Id="662aedb3-51ca-4aff-98d5-2edd33163d45" Title="Project Properties" Url="html/2f21a898-45d1-e49b-97c8-e81da9a5d453.htm">
+        <HelpTOCNode Id="7115b85d-0e10-4176-93bb-f6550f0d0db2" Title="Project Properties" Url="html/2f21a898-45d1-e49b-97c8-e81da9a5d453.htm">
           <HelpTOCNode Title="Tasks Property " Url="html/435b29d9-bd3f-4a93-9afd-829a02a49a1e.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="5ef4df4a-9ac1-4917-968f-67ddbbe148f8" Title="Project Methods" Url="html/757ba171-990c-94e5-9506-5f4eb8087e33.htm">
+        <HelpTOCNode Id="c61959c1-baba-44b7-811f-63448db5165a" Title="Project Methods" Url="html/757ba171-990c-94e5-9506-5f4eb8087e33.htm">
           <HelpTOCNode Title="AddTask Method " Url="html/dd2a8c06-bf35-5c0b-5afa-cbdef071a6a0.htm" />
           <HelpTOCNode Title="Delete Method " Url="html/dd9fbd2d-6ea6-0b5b-70d3-762f2574d40a.htm" />
           <HelpTOCNode Title="Insert Method " Url="html/31b1c3bc-de70-ea0a-fc93-549c62dae9df.htm" />
@@ -141,15 +141,15 @@
         </HelpTOCNode>
         <HelpTOCNode Title="Project Fields" Url="html/5e401b4c-a0a2-5ba5-aaea-23cae3a59b67.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="e9b13bcb-ba8f-4409-ae71-c137d187c74f" Title="Task Class" Url="html/b2af1d03-48cd-293d-505f-52dfd3caa1ed.htm">
+      <HelpTOCNode Id="66d1d1a9-cdc4-49a2-be47-e270856e8193" Title="Task Class" Url="html/b2af1d03-48cd-293d-505f-52dfd3caa1ed.htm">
         <HelpTOCNode Title="Task Constructor " Url="html/cc964ff0-7606-1e3c-a0eb-8e14542e843d.htm" />
-        <HelpTOCNode Id="1f297442-2a92-4f1e-940d-5b57d19a7207" Title="Task Properties" Url="html/59971076-a1b1-b203-05be-4b1325735d8e.htm">
+        <HelpTOCNode Id="b1ed2499-49ed-4203-879a-eed4b8f9af19" Title="Task Properties" Url="html/59971076-a1b1-b203-05be-4b1325735d8e.htm">
           <HelpTOCNode Title="Dependencies Property " Url="html/7280b583-9b51-9bb6-04d9-c787907bbefb.htm" />
           <HelpTOCNode Title="LikelyDuration Property " Url="html/d832aea9-af52-1d80-a324-a67c3d9891a2.htm" />
           <HelpTOCNode Title="MaxDuration Property " Url="html/af61f75d-ccb6-437a-cc11-f7d8b9dd989a.htm" />
           <HelpTOCNode Title="MinDuration Property " Url="html/bbb1d09b-a359-c51e-6ec3-8722244b0ae4.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="44668dbd-55e1-4ade-a373-13058506434f" Title="Task Methods" Url="html/1a9588e2-8d07-ddc3-5c9f-3512e57b5d44.htm">
+        <HelpTOCNode Id="f1f24f56-1aef-4e3c-9ef9-0026c2faa9b9" Title="Task Methods" Url="html/1a9588e2-8d07-ddc3-5c9f-3512e57b5d44.htm">
           <HelpTOCNode Title="AddDependency Method " Url="html/f31da80a-7f05-de70-1e73-d7ac96d51c32.htm" />
           <HelpTOCNode Title="Delete Method " Url="html/66173f83-ef37-7cda-740a-ba03522562a2.htm" />
           <HelpTOCNode Title="Insert Method " Url="html/a98f1389-8c7e-bc9b-ec21-725cd70ccf8d.htm" />
@@ -160,9 +160,9 @@
         </HelpTOCNode>
         <HelpTOCNode Title="Task Fields" Url="html/d3564bb0-7848-95a1-aaed-a8b7dcb0ba7c.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="f8f6ff4e-8663-4f3e-8e81-af6e96f96b7f" Title="TimedItem Class" Url="html/065bd0b5-b037-e71c-acea-ac5cdce26295.htm">
+      <HelpTOCNode Id="8960deb3-0dc1-4944-9e03-1cb6ce08439b" Title="TimedItem Class" Url="html/065bd0b5-b037-e71c-acea-ac5cdce26295.htm">
         <HelpTOCNode Title="TimedItem Constructor " Url="html/b125bf59-735f-1ffa-08fb-7700f2046c69.htm" />
-        <HelpTOCNode Id="39e231d1-68ba-446c-b471-0668f2440d37" Title="TimedItem Properties" Url="html/7bb15978-2d26-ad47-befd-7b54ba9f2f6b.htm">
+        <HelpTOCNode Id="426ae4e7-46e5-43da-8779-869398122cab" Title="TimedItem Properties" Url="html/7bb15978-2d26-ad47-befd-7b54ba9f2f6b.htm">
           <HelpTOCNode Title="Description Property " Url="html/8e2d0c74-b6e7-1c77-41b9-e0a001748d84.htm" />
           <HelpTOCNode Title="EndDate Property " Url="html/8787da0a-82d5-6501-ba7d-515d99c37421.htm" />
           <HelpTOCNode Title="Id Property " Url="html/c005014a-ad07-36f8-0a9d-af086ebb7dc1.htm" />
@@ -170,23 +170,23 @@
           <HelpTOCNode Title="StartDate Property " Url="html/a70300cf-f2fe-8646-9b17-0b1144f8f405.htm" />
           <HelpTOCNode Title="Workers Property " Url="html/f0db676e-c3c2-5195-61c4-4082123207b0.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="15c41341-2a59-4207-9bca-6f966dd915ca" Title="TimedItem Methods" Url="html/8cd4ad57-cf69-f010-1574-a61c717b1cce.htm">
+        <HelpTOCNode Id="70dd8e69-f258-4497-af7a-278ba30b5627" Title="TimedItem Methods" Url="html/8cd4ad57-cf69-f010-1574-a61c717b1cce.htm">
           <HelpTOCNode Title="AddWorker Method " Url="html/4e12adef-f343-a3f4-9e11-320b565b20a8.htm" />
           <HelpTOCNode Title="RemoveWorker Method " Url="html/5ab5a74c-3da8-2ae9-0323-bb66df52ac11.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="5909540a-dc26-4029-909a-0d5f62f6dd09" Title="TimedItem Fields" Url="html/9036a4f7-6d99-8afb-65be-2f89ea484053.htm">
+        <HelpTOCNode Id="e3fd43a0-b859-4d68-ac5d-a9f80a220ffc" Title="TimedItem Fields" Url="html/9036a4f7-6d99-8afb-65be-2f89ea484053.htm">
           <HelpTOCNode Title="isComplete Field" Url="html/8b3fa9f4-08cd-95e8-5005-feb25bf2a0dc.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="d44e4591-76d5-4c32-8e72-887004824062" Title="User Class" Url="html/b05419b9-1777-fa9d-b45a-8978467643c1.htm">
+      <HelpTOCNode Id="7f05fffc-f1d0-4dec-ad19-4265f23869b8" Title="User Class" Url="html/b05419b9-1777-fa9d-b45a-8978467643c1.htm">
         <HelpTOCNode Title="User Constructor " Url="html/beefebe2-0f5a-4dc1-3c36-dd870b741c02.htm" />
-        <HelpTOCNode Id="b5e4fbb8-d5c4-45bc-b6cf-4cf02b330558" Title="User Properties" Url="html/2dc5c4e4-be8f-242e-3d8d-c1b8154f06bc.htm">
+        <HelpTOCNode Id="0d506e24-957b-44b1-b627-a45c2a99eae3" Title="User Properties" Url="html/2dc5c4e4-be8f-242e-3d8d-c1b8154f06bc.htm">
           <HelpTOCNode Title="Email Property " Url="html/b7c13756-8bb4-d930-988b-f8763ec16eed.htm" />
           <HelpTOCNode Title="Name Property " Url="html/4b73c402-1ff5-8ec1-430d-b1950cd7d62f.htm" />
           <HelpTOCNode Title="Password Property " Url="html/70ab2ca4-f6ef-a2e4-29d6-a2117340ad96.htm" />
           <HelpTOCNode Title="Username Property " Url="html/3c281afc-3731-8f3b-48d1-53c3c5a57e11.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="5e2e3b7a-8e2a-48d1-9f59-80c631d09d22" Title="User Methods" Url="html/7ae0bea7-c727-b94a-c0c7-dd1d3bb7eebf.htm">
+        <HelpTOCNode Id="caa2b7e9-cc1d-418e-8d95-53b0aea5706a" Title="User Methods" Url="html/7ae0bea7-c727-b94a-c0c7-dd1d3bb7eebf.htm">
           <HelpTOCNode Title="Delete Method " Url="html/455fe859-917e-8509-87d2-473431158c47.htm" />
           <HelpTOCNode Title="Insert Method " Url="html/57319a12-1865-5f6f-189d-5ffede962b27.htm" />
           <HelpTOCNode Title="Parse Method " Url="html/25852cdc-8f5b-82c5-e7ab-bc63db150953.htm" />
@@ -196,27 +196,27 @@
         </HelpTOCNode>
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="66d0660d-9a25-450c-81c2-6126795e61f4" Title="Pert.View Namespaces" Url="html/8d937022-b8cc-6d98-39c2-234e2343a1c1.htm">
-      <HelpTOCNode Id="cdbd1f9f-acf1-4b86-ab25-f0836faf52aa" Title="Pert.View" Url="html/7f16d61f-1231-3179-a84c-7335fa62fb5c.htm">
-        <HelpTOCNode Id="bbb33351-cce5-4050-95c3-4ce8f90e3b0e" Title="IViewModel Interface" Url="html/f7004abb-ca3d-9a96-4111-3060506432f7.htm">
-          <HelpTOCNode Id="09e142b5-88dd-4eb9-a687-0134c513415a" Title="IViewModel Methods" Url="html/642acd91-4d5e-0c8f-159d-cc74df317849.htm">
+    <HelpTOCNode Id="093cd4ab-d166-4205-a16a-3fc959a9fb9b" Title="Pert.View Namespaces" Url="html/8d937022-b8cc-6d98-39c2-234e2343a1c1.htm">
+      <HelpTOCNode Id="f909dffc-6b2d-4645-8212-002e583848a8" Title="Pert.View" Url="html/7f16d61f-1231-3179-a84c-7335fa62fb5c.htm">
+        <HelpTOCNode Id="19389f77-a4e5-41af-9a13-c2e7915c86af" Title="IViewModel Interface" Url="html/f7004abb-ca3d-9a96-4111-3060506432f7.htm">
+          <HelpTOCNode Id="d882de14-cd67-4d5a-aa32-b08e6f4054bc" Title="IViewModel Methods" Url="html/642acd91-4d5e-0c8f-159d-cc74df317849.htm">
             <HelpTOCNode Title="OnModelUpdate Method " Url="html/c720845f-9f06-0b18-47fa-901a913387c7.htm" />
           </HelpTOCNode>
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="7235b137-74dc-4a7b-a90b-724a05080187" Title="Pert.View.Login" Url="html/62acb924-33d9-d8c9-de52-0c1f039c3f9f.htm">
-        <HelpTOCNode Id="41f5135d-896c-4a2b-ac66-3402c645e4d2" Title="LoginPage Class" Url="html/905c925a-8b45-853b-3e30-e0335f8ddefc.htm">
+      <HelpTOCNode Id="b386107d-4427-4947-a105-f6b905f96d23" Title="Pert.View.Login" Url="html/62acb924-33d9-d8c9-de52-0c1f039c3f9f.htm">
+        <HelpTOCNode Id="40f9c6e5-4725-465b-aaeb-6b56c5d13586" Title="LoginPage Class" Url="html/905c925a-8b45-853b-3e30-e0335f8ddefc.htm">
           <HelpTOCNode Title="LoginPage Constructor " Url="html/03e95b04-cae7-7041-d47f-dfea2df00552.htm" />
           <HelpTOCNode Title="LoginPage Properties" Url="html/98d1a859-ee1e-5f4b-ab60-d52a8bfdc653.htm" />
-          <HelpTOCNode Id="7b78508d-1b68-4f6b-a4f4-6bfb632972a6" Title="LoginPage Methods" Url="html/7afa12a9-c670-bc7a-8b44-4b521de29c4f.htm">
+          <HelpTOCNode Id="ced6b8fb-06f3-41b8-9d66-2706e2cf891e" Title="LoginPage Methods" Url="html/7afa12a9-c670-bc7a-8b44-4b521de29c4f.htm">
             <HelpTOCNode Title="InitializeComponent Method " Url="html/d0bbd861-fad2-a2f5-d7d6-b748062a272e.htm" />
           </HelpTOCNode>
           <HelpTOCNode Title="LoginPage Events" Url="html/795391c7-2254-016b-0bbb-f34ec417e8f4.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="e9246f69-b079-423d-bb53-4f11d460f9cf" Title="LoginWindow Class" Url="html/296caa07-27e4-7ddd-78dd-178e8aa212ba.htm">
+        <HelpTOCNode Id="cf797013-32a0-4d68-aa67-470cee337a6b" Title="LoginWindow Class" Url="html/296caa07-27e4-7ddd-78dd-178e8aa212ba.htm">
           <HelpTOCNode Title="LoginWindow Constructor " Url="html/03e3f673-795e-e4b6-cc00-c8ac01a39345.htm" />
           <HelpTOCNode Title="LoginWindow Properties" Url="html/800a8f63-1e3d-30b6-1b99-1e6d4541c569.htm" />
-          <HelpTOCNode Id="b41f36dd-6bd7-4174-9303-7630d2737e1b" Title="LoginWindow Methods" Url="html/ec557ec3-0319-30e2-f1ec-cc8202218cd6.htm">
+          <HelpTOCNode Id="31128b52-77e0-4e00-bf06-8fc11c3e25d2" Title="LoginWindow Methods" Url="html/ec557ec3-0319-30e2-f1ec-cc8202218cd6.htm">
             <HelpTOCNode Title="Cancel Method " Url="html/b89ec067-a5bd-e64a-9e04-fdba3ca8e57c.htm" />
             <HelpTOCNode Title="InitializeComponent Method " Url="html/8a940b81-506b-78ae-ab09-0bb72f3ac9b3.htm" />
             <HelpTOCNode Title="IsValidEmail Method " Url="html/c6ee8482-8dcb-f8ce-b6e8-2ad3c5fc5357.htm" />
@@ -228,10 +228,10 @@
           </HelpTOCNode>
           <HelpTOCNode Title="LoginWindow Events" Url="html/9cede2f7-eea5-494b-b222-e742a264f3b0.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="c78b9021-0433-45ee-96c5-734d3c8efaf9" Title="RegisterPage Class" Url="html/574f0694-ee2b-e4ba-8388-dd75b41c30ad.htm">
+        <HelpTOCNode Id="961299f3-2dd8-444c-917c-ad0fcf2c7e4e" Title="RegisterPage Class" Url="html/574f0694-ee2b-e4ba-8388-dd75b41c30ad.htm">
           <HelpTOCNode Title="RegisterPage Constructor " Url="html/780ce41d-6718-19e5-805b-4d60424dffc5.htm" />
           <HelpTOCNode Title="RegisterPage Properties" Url="html/b5c9774d-162d-31b6-f8b1-87db4c78d34e.htm" />
-          <HelpTOCNode Id="553f2449-fd27-4aa7-952c-dc12a25590b7" Title="RegisterPage Methods" Url="html/024053e9-7012-cc1a-b0a7-08e12e861ba4.htm">
+          <HelpTOCNode Id="5b5206c2-7fce-4a77-9c90-1d8168266001" Title="RegisterPage Methods" Url="html/024053e9-7012-cc1a-b0a7-08e12e861ba4.htm">
             <HelpTOCNode Title="InitializeComponent Method " Url="html/7ffc20c1-38e4-5e8e-a124-0bff903952fc.htm" />
           </HelpTOCNode>
           <HelpTOCNode Title="RegisterPage Events" Url="html/b01de957-32e5-2165-7f21-ec3bf823cf2f.htm" />
