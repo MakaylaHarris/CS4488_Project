@@ -46,8 +46,7 @@ namespace Pert.Model
             {
                 if(context == null)
                 {
-                    Console.WriteLine("No context found, database updates won't be detected.");
-                    return;
+                    Console.WriteLine("No context found, database updates won't be sent.");
                 }
                 connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
                 running = true;
@@ -116,7 +115,7 @@ namespace Pert.Model
                 while (running)
                 {
                     Thread.Sleep(refreshTime);
-                    if (DBIsUpdated() && context != null)
+                    if (context != null && DBIsUpdated())
                     {
                         context.Post(new SendOrPostCallback(Handler), null);
                     }

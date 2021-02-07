@@ -45,8 +45,8 @@ namespace Pert.Model
         /// <returns>DBReader instance</returns>
         public static DBReader Instantiate(DBUpdateReceiver receiver)
         {
-            instance.receiver = receiver;
             instance.TestNewConnection(Properties.Settings.Default.ConnectionString);
+            instance.receiver = receiver;
             return instance;
         }
 
@@ -221,10 +221,13 @@ namespace Pert.Model
         /// <returns>True on success</returns>
         public bool Login(string userId, string password)
         {
-            SqlCommand command = OpenAndGetCmd("SELECT [dbo].TryLogin(@userId, @password);");
+            SqlCommand command = OpenAndGetCmd("EXECUTE [dbo].TryLogin @userId, @password, @success out;");
             command.Parameters.AddWithValue("@userId", userId);
             command.Parameters.AddWithValue("@password", password);
-            bool result = (bool) command.ExecuteScalar();
+            var success = command.Parameters.Add("@success", System.Data.SqlDbType.Bit);
+            success.Direction = System.Data.ParameterDirection.Output;
+            command.ExecuteNonQuery();
+            bool result = (bool) success.Value;
             connection.Close();
             if (result)
             {
@@ -367,7 +370,8 @@ namespace Pert.Model
                 UpdateWorkers(idToTask);
             }
             connection.Close();
-            receiver.OnDBUpdate(CurrentProject);
+            if(receiver != null)
+                receiver.OnDBUpdate(CurrentProject);
         }
 
         public void OnDBDisconnect()

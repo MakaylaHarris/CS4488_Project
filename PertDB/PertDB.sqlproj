@@ -82,7 +82,7 @@
     <Build Include="dbo\Tables\UserProject.sql" />
     <Build Include="dbo\StoredProcedures\Register.sql" />
     <Build Include="dbo\StoredProcedures\TrackingVersion.sql" />
-    <Build Include="dbo\StoredFunctions\TryLogin.sql" />
+    <Build Include="dbo\StoredProcedures\TryLogin.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PertDB.refactorlog" />
@@ -91,4 +91,7 @@
     <None Include="PublicLocations\PertDBDevelop.publish.xml" />
     <None Include="PublicLocations\PertDB.publish.xml" />
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>"$(DevEnvDir)\devenv"  "GenerateScripts\GenerateScripts.csproj" /Rebuild</PostBuildEvent>
+  </PropertyGroup>
 </Project>

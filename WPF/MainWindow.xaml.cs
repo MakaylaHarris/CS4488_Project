@@ -34,14 +34,20 @@ namespace Pert
         public MainWindow()
         {
             InitializeComponent();
-            model = new Model.Model(this);
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
+            InitModel();
+        }
+
+        private void InitModel()
+        {
+            model = new Model.Model(this);
             // Check for database connection
             if (!model.IsConnected())
             {
                 ShowDBConnectionSettings();
-            } else
+            }
+            else
             {
                 // if we're connected then login
                 LoginWindow login = new LoginWindow(model);

@@ -1,9 +1,9 @@
+services:
+  - mssql2016
 environment:
   SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
 before_build:
   - cmd: choco install sandcastle
   - nuget restore
+  - sqlcmd -S (local)\SQL2016 -U sa -P Password12! -i GenerateScripts\pertDB_create.sql
   - msbuild /t:restore
-
-
-
