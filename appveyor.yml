@@ -1,3 +1,4 @@
+image: Visual Studio 2019
 services:
   - mssql2016
 environment:
@@ -5,5 +6,5 @@ environment:
 before_build:
   - cmd: choco install sandcastle
   - nuget restore
-  - sqlcmd -S (local)\SQL2016 -U sa -P Password12! -i GenerateScripts\pertDB_create.sql
+  - ps: GenerateScripts\appveyor.ps1
   - msbuild /t:restore
