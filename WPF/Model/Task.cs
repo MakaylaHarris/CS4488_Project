@@ -16,6 +16,7 @@ namespace SmartPert.Model
         private int minDuration;
         private List<Task> dependencies;
 
+        #region Properties
         public int LikelyDuration
         {
             get => mostLikelyDuration;
@@ -42,6 +43,8 @@ namespace SmartPert.Model
         }
         public List<Task> Dependencies { get => dependencies; }
 
+        #endregion
+
         public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "", int id = -1) : base(name, start, end, description, id)
         {
             if (duration == 0)
@@ -59,7 +62,17 @@ namespace SmartPert.Model
             dependencies = new List<Task>();
         }
 
+        #region Workers
+        public override void AddWorker(User worker)
+        {
+            throw new NotImplementedException();
+        }
 
+        public override void RemoveWorker(User worker)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
 
         #region Dependencies
         public void UpdateDependencies()
@@ -106,6 +119,7 @@ namespace SmartPert.Model
                 DBFunctions.StringCast(reader, "Description"),
                 (int)reader["TaskId"]);
         }
+
         #endregion
     }
 }

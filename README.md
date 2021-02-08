@@ -21,7 +21,7 @@ SmartPert was developed using [MSSQLSERVER](https://en.wikipedia.org/wiki/Micros
 
 # Building
 Building the project is done using visual studio. The solution contains the following:
-* SmartPert: The main project for building the client interface in wpf.
+* SmartPert: The main project for building the client interface in WPF.
 * SmartPertDB: Project for editing and creating the database.
 * PertTest: Unit test project.
 * Sandcastle: Builds the code documentation, found in the folder WPF/Help.
