@@ -1,11 +1,10 @@
 ﻿/****** Object:  Table [dbo].[UserTask]    Script Date: 2/6/2021 8:00:27 PM ******/
 CREATE TABLE [dbo].[UserTask](
-	[UserTaskId] [int] IDENTITY(1,1) NOT NULL,
 	[UserName] [varchar](50) NOT NULL,
 	[TaskId] [int] NOT NULL,
  CONSTRAINT [PK_UserTask] PRIMARY KEY CLUSTERED 
 (
-	[UserTaskId] ASC
+	UserName, TaskId
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO

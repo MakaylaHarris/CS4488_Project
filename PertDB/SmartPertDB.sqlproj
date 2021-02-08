@@ -119,6 +119,7 @@
     <Folder Include="dbo\Views" />
     <Folder Include="dbo\StoredProcedures" />
     <Folder Include="dbo\StoredFunctions" />
+    <Folder Include="dbo\Triggers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Project.sql" />
@@ -134,6 +135,10 @@
     <Build Include="dbo\StoredProcedures\Register.sql" />
     <Build Include="dbo\StoredProcedures\TrackingVersion.sql" />
     <Build Include="dbo\StoredProcedures\TryLogin.sql" />
+    <Build Include="dbo\Triggers\DeleteProject.sql" />
+    <Build Include="dbo\Triggers\DeleteTask.sql" />
+    <Build Include="dbo\Triggers\DeleteUser.sql" />
+    <Build Include="dbo\StoredFunctions\GetTaskId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PertDB.refactorlog" />

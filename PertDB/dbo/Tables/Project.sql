@@ -16,11 +16,6 @@ UNIQUE NONCLUSTERED
 GO
 ALTER TABLE [dbo].[Project] ENABLE CHANGE_TRACKING WITH(TRACK_COLUMNS_UPDATED = ON)
 GO
-ALTER TABLE [dbo].[Project]  WITH CHECK ADD  CONSTRAINT [FK_Project_Project] FOREIGN KEY([ProjectId])
-REFERENCES [dbo].[Project] ([ProjectId])
-GO
-ALTER TABLE [dbo].[Project] CHECK CONSTRAINT [FK_Project_Project]
-GO
 ALTER TABLE [dbo].[Project]  WITH CHECK ADD  CONSTRAINT [CK_Project_End_After_Start] CHECK  (([EndDate]>=[StartDate]))
 GO
 ALTER TABLE [dbo].[Project] CHECK CONSTRAINT [CK_Project_End_After_Start]

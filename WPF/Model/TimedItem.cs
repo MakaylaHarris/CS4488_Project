@@ -82,15 +82,9 @@ namespace SmartPert.Model
         #endregion
 
         #region Worker Methods
-        public void AddWorker(User worker)
-        {
-            workers.Add(worker);
-        }
+        abstract public void AddWorker(User worker);
 
-        public void RemoveWorker(User worker)
-        {
-            workers.Remove(worker);
-        }
+        abstract public void RemoveWorker(User worker);
         #endregion
     }
 }

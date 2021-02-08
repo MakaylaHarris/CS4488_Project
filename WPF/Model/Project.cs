@@ -31,6 +31,19 @@ namespace SmartPert.Model
         }
         #endregion
 
+        #region Workers
+        public override void AddWorker(User worker)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveWorker(User worker)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         #region Database
         public override void Delete()
         {
@@ -61,6 +74,7 @@ namespace SmartPert.Model
                 DBFunctions.StringCast(reader, "Description"),
                 (int)reader["ProjectId"]);
         }
+
         #endregion
     }
 }
