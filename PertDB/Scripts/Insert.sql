@@ -10,6 +10,8 @@ GO
 INSERT INTO [dbo].[Project] ([Name], [StartDate], [EndDate], [Description]) 
 VALUES (N'Test', N'2021-02-06 00:00:00', N'2021-05-07 00:00:00', N'A test project');
 
+DECLARE @projectId int = (SELECT ProjectId FROM Project WHERE [Name] = 'Test');
+
 -- Users
 INSERT INTO [dbo].[User] (UserName, [Password], Email, [Name])
 VALUES ('TestUser', 'Pass', 'Test@email.com', 'Test Name');
@@ -22,43 +24,44 @@ VALUES ('TestUser3', 'Pass3', 'Test3@email.com', 'Test Name3');
 
 -- Tasks
 INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task1', '2/6/2021', '2/8/2021', 'This is the first task', 1, 1, 2, 1);
+VALUES ('Task1', '2/6/2021', '2/8/2021', 'This is the first task', @projectId, 1, 2, 1);
 
 INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task2', '2/8/2021', '2/10/2021', 'This is the second task', 1, 3, 5, 2);
+VALUES ('Task2', '2/8/2021', '2/10/2021', 'This is the second task', @projectId, 3, 5, 2);
 
 INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task3', '2/9/2021', '2/11/2021', 'This is the third task', 1, 2, 2, 1);
+VALUES ('Task3', '2/9/2021', '2/11/2021', 'This is the third task', @projectId, 2, 2, 1);
 
 INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task4', '2/6/2021', '2/8/2021', 'This task has an earlier start date on purpose', 1, 5, 7, 3);
+VALUES ('Task4', '2/6/2021', '2/8/2021', 'This task has an earlier start date on purpose', @projectId, 5, 7, 3);
 
 INSERT INTO [dbo].[Task] (Name, StartDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task5', '2/8/2021', 'This is the fifth task and is not complete', 1, 3, 10, 2);
+VALUES ('Task5', '2/8/2021', 'This is the fifth task and is not complete', @projectId, 3, 10, 2);
 
 INSERT INTO [dbo].[Task] (Name, StartDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task6', '2/10/2021', 'This is the sixth task and is not complete', 1, 5, 8, 3);
+VALUES ('Task6', '2/10/2021', 'This is the sixth task and is not complete', @projectId, 5, 8, 3);
+
 
 -- Dependencies
-INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (1, 2);
-INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (1, 3);
-INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (3, 6);
-INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (4, 5);
-INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (5, 6);
+INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task1'), dbo.GetTaskId('Task2'));
+INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task1'), dbo.GetTaskId('Task3'));
+INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task3'), dbo.GetTaskId('Task6'));
+INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task4'), dbo.GetTaskId('Task5'));
+INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task5'), dbo.GetTaskId('Task6'));
 
 -- Add users to project
-INSERT INTO [dbo].UserProject (UserName, ProjectId) VALUES ('TestUser', 1);
-INSERT INTO [dbo].UserProject (UserName, ProjectId) VALUES ('TestUser2', 1);
-INSERT INTO [dbo].UserProject (UserName, ProjectId) VALUES ('TestUser3', 1);
+INSERT INTO [dbo].UserProject (UserName, ProjectId) VALUES ('TestUser', @projectId);
+INSERT INTO [dbo].UserProject (UserName, ProjectId) VALUES ('TestUser2', @projectId);
+INSERT INTO [dbo].UserProject (UserName, ProjectId) VALUES ('TestUser3', @projectId);
 
 -- Add users to tasks
-INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser', 1);
-INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser2', 1);
-INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser', 3);
-INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser3', 4);
-INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser3', 5);
-INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser2', 6);
-INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser3', 1);
+INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser', dbo.GetTaskId('Task1'));
+INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser2', dbo.GetTaskId('Task1'));
+INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser', dbo.GetTaskId('Task3'));
+INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser3', dbo.GetTaskId('Task4'));
+INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser3', dbo.GetTaskId('Task5'));
+INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser2', dbo.GetTaskId('Task6'));
+INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser3', dbo.GetTaskId('Task1'));
 
 
 /* Old Insert stuff */
