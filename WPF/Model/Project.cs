@@ -32,14 +32,47 @@ namespace SmartPert.Model
         #endregion
 
         #region Workers
-        public override void AddWorker(User worker)
+        /// <summary>
+        /// Adds the worker to the project
+        /// Implemented 2/9/2021 by Robert Nelson
+        /// </summary>
+        /// <param name="worker">User on project to add</param>
+        /// <param name="updateDB">Also adds the user to the database</param>
+        public override void AddWorker(User worker, bool updateDB=true)
         {
-            throw new NotImplementedException();
+            if(!workers.Contains(worker))
+            {
+                workers.Add(worker);
+                if(updateDB)
+                {
+                    SqlCommand command = OpenConnection("INSERT INTO UserProject (UserName, ProjectId) VALUES(@username, @projectId);");
+                    command.Parameters.AddWithValue("@username", worker.Username);
+                    command.Parameters.AddWithValue("@projectId", this.Id);
+                    command.ExecuteNonQuery();      // Todo: If error is thrown and it's because the primary key exists then ignore (stored procedure?)
+                    CloseConnection();
+                }
+            }
         }
 
-        public override void RemoveWorker(User worker)
+        /// <summary>
+        /// Removes the worker from the project
+        /// Implemented 2/9/2021 by Robert Nelson
+        /// </summary>
+        /// <param name="worker">User to remove</param>
+        /// <param name="updateDB">Update the database</param>
+        public override void RemoveWorker(User worker, bool updateDB=true)
         {
-            throw new NotImplementedException();
+            if(workers.Remove(worker))
+            {
+                if(updateDB)
+                {
+                    SqlCommand command = OpenConnection("DELETE FROM UserProject WHERE ProjectId = @projectId AND UserName = @username);");
+                    command.Parameters.AddWithValue("@projectId", Id);
+                    command.Parameters.AddWithValue("@username", worker.Username);
+                    command.ExecuteNonQuery();      // Todo: ignore if the user is already removed
+                    CloseConnection();
+                }
+            }
         }
 
         #endregion

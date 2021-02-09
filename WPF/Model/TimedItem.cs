@@ -15,7 +15,7 @@ namespace SmartPert.Model
         private string description;
         private int id;
         protected bool isComplete;
-        private List<User> workers;
+        protected List<User> workers;
 
         #region Properties
         public DateTime StartDate
@@ -78,13 +78,14 @@ namespace SmartPert.Model
                 this.id = (int)Insert();
             }
             isComplete = EndDate != null && EndDate < DateTime.Now;
+            workers = new List<User>();
         }
         #endregion
 
         #region Worker Methods
-        abstract public void AddWorker(User worker);
+        abstract public void AddWorker(User worker, bool UpdateDB=true);
 
-        abstract public void RemoveWorker(User worker);
+        abstract public void RemoveWorker(User worker, bool UpdateDB=true);
         #endregion
     }
 }

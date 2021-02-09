@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="SmartPert.View.Controls.TaskControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartPert.View.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100">
+    <Grid>
+        <Border x:Name="taskBorder"
+                BorderBrush="White"
+                Background="LightGray"
+                BorderThickness="1,1,1,1"
+                CornerRadius="8,8,8,8">
+            <Grid>
+                <TextBlock x:Name="tbxTaskId" Text="{Binding Id}" Visibility="Hidden"></TextBlock>
+                <!--Make this use the name-->
+                <TextBlock x:Name="tbxTaskName" Grid.Row="0" Text="{Binding Name}"></TextBlock>
+                <TextBlock x:Name="tbsTaskDesc" Grid.Row="1" Text="{Binding Description}"></TextBlock>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="mi_editTask" Header="Edit" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_editTask_Click"/>
+                        <MenuItem x:Name="mi_deleteTask" Header="Delete" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_deleteTask_Click"/>
+                    </ContextMenu>
+                </Grid.ContextMenu>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

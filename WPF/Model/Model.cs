@@ -10,14 +10,24 @@ namespace SmartPert.Model
     /// </summary>
     public class Model : IModel, DBUpdateReceiver
     {
-        private IViewModel viewModel;
+        private List<IViewModel> viewModels;
         private DBReader reader;
         private User currentUser;
+
+        #region Constructor
         public Model(IViewModel viewModel)
         {
-            this.viewModel = viewModel;
+            viewModels = new List<IViewModel>();
+            Subscribe(viewModel);
             reader = DBReader.Instantiate(this);
         }
+
+        public Model()
+        {
+            viewModels = new List<IViewModel>();
+            reader = DBReader.Instantiate(this);
+        }
+        #endregion
 
         #region Project Methods
         public Project CreateProject(string name, DateTime start, DateTime? end, string description = "")
@@ -116,10 +126,25 @@ namespace SmartPert.Model
 
         #endregion
 
+        #region Subscriber Methods
+        public void Subscribe(IViewModel viewModel)
+        {
+            if (!viewModels.Contains(viewModel))
+                viewModels.Add(viewModel);
+        }
+
+        public void Unsubscribe(IViewModel viewModel)
+        {
+            if (viewModels.Contains(viewModel))
+                viewModels.Remove(viewModel);
+        }
+        #endregion
+
         #region Database Methods
         public void OnDBUpdate(Project p)
         {
-            viewModel.OnModelUpdate(p);
+            foreach(IViewModel viewModel in viewModels)
+                viewModel.OnModelUpdate(p);
         }
 
         /// <summary>

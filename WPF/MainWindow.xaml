@@ -88,11 +88,8 @@
         <!--#endregion-->
 
         <!--#region  Main Content-->
-        <Grid x:Name="MainContent" Height="380" Margin="10,10,10,10" VerticalAlignment="Bottom">
-            <TextBlock>
-                <Run>This is some content.</Run>
-            </TextBlock>
-        </Grid>
+        <Frame x:Name="MainContent" Margin="10,30,10,10">
+        </Frame>
         <!--#endregion-->
         
         <!--#region Connection String-->

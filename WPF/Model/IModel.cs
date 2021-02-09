@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartPert.View;
+using System;
 using System.Collections.Generic;
 
 namespace SmartPert.Model
@@ -36,6 +37,12 @@ namespace SmartPert.Model
         bool Login(string email, string password);
 
         bool Register(string username, string email, string password, string name);
+        #endregion
+
+        #region Observer Methods
+        void Subscribe(IViewModel viewModel);
+
+        void Unsubscribe(IViewModel viewModel);
         #endregion
 
         #region Database Methods

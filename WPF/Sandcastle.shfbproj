@@ -21,8 +21,8 @@
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="bin\Debug\Pert.exe" />
-      <DocumentationSource sourceFile="bin\Debug\Pert.xml" />
+      <DocumentationSource sourceFile="bin\Debug\SmartPert.exe" />
+      <DocumentationSource sourceFile="bin\Debug\SmartPert.xml" />
     </DocumentationSources>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
