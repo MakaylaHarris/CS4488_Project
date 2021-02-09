@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SmartPert.Model;
 using SmartPert.View.Login;
+using SmartPert.View.Pages;
 
 /// <summary>
 /// Name space for the SmartPert Pert Application
@@ -27,9 +28,10 @@ namespace SmartPert
     {
         static private Random random = new Random();
         private IModel model;
+        private Chart chart;
         private ObservableCollection<MenuItemViewModel> items;
         public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }
-
+        
 
         public MainWindow()
         {
@@ -37,6 +39,8 @@ namespace SmartPert
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
             InitModel();
+            chart = new Chart(model);
+            this.MainContent.Content = chart;
         }
 
         private void InitModel()

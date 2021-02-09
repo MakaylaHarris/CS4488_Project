@@ -42,7 +42,6 @@ namespace SmartPert.Model
             }
         }
         public List<Task> Dependencies { get => dependencies; }
-
         #endregion
 
         public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "", int id = -1) : base(name, start, end, description, id)
@@ -63,14 +62,36 @@ namespace SmartPert.Model
         }
 
         #region Workers
-        public override void AddWorker(User worker)
+        public override void AddWorker(User worker, bool updateDB=true)
         {
-            throw new NotImplementedException();
+            if (!workers.Contains(worker))
+            {
+                workers.Add(worker);
+                if (updateDB)
+                {
+                    SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
+                    command.Parameters.AddWithValue("@username", worker.Username);
+                    command.Parameters.AddWithValue("@taskId", this.Id);
+                    command.ExecuteNonQuery();
+                    CloseConnection();
+                }
+            }
         }
 
-        public override void RemoveWorker(User worker)
+        public override void RemoveWorker(User worker, bool updateDB=true)
         {
-            throw new NotImplementedException();
+            if (workers.Contains(worker))
+            {
+                workers.Remove(worker);
+                if(updateDB)
+                {
+                    SqlCommand command = OpenConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username");
+                    command.Parameters.AddWithValue("@taskId", this.Id);
+                    command.Parameters.AddWithValue("@username", worker.Username);
+                    command.ExecuteNonQuery();
+                    CloseConnection();
+                }
+            }
         }
         #endregion
 

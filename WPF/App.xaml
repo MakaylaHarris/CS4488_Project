@@ -4,6 +4,62 @@
              xmlns:local="clr-namespace:SmartPert"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <!--
+            Created by: Chris Neeser
+            Date: 10/20/2019
+        -->
+        <Style x:Key="AppToolTip"
+               TargetType="local:TaskToolTip">
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="local:TaskToolTip">
+                        <StackPanel>
+                            <GroupBox HorizontalAlignment="Left" Height="245" VerticalAlignment="Top" Width="500" Background="White" BorderBrush="Black">
+                                <GroupBox.Header>
+                                    <Border CornerRadius="5">
+                                        <Label FontWeight="Bold">Task Information</Label>
+                                    </Border>
+                                </GroupBox.Header>
+                                <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="2*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="1" Content="Name: "></Label>
+                                    <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="2" Content="Description: "></Label>
+                                    <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="3" Content="Min Duration: "></Label>
+                                    <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="4" Content="Max Duration: "></Label>
+                                    <Label HorizontalAlignment="Right" Grid.Column="1" Grid.Row="5" Content="Most Likely: "></Label>
+
+                                    <Label Grid.Column="2" Grid.Row="1" Content="{Binding Task.Name, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                    <Label Grid.Column="2" Grid.Row="2" Content="{Binding Task.Description, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                    <Label Grid.Column="2" Grid.Row="3" Content="{Binding Task.MinDuration, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                    <Label Grid.Column="2" Grid.Row="4" Content="{Binding Task.MaxDuration, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                    <Label Grid.Column="2" Grid.Row="5" Content="{Binding Task.LikelyDuration, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"></Label>
+                                </Grid>
+                            </GroupBox>
+                        </StackPanel>
+
+                        <!--<StackPanel Background="Blue">
+                            <Label Content="{TemplateBinding Content}" FontWeight="Bold" Foreground="White"/>
+                            <Label Content="{Binding Task.Name, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" FontWeight="Bold" Foreground="White"/>
+                            <Label Content="{Binding Task.MostLikelyDuration, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" FontWeight="Bold" Foreground="White"/>
+                        </StackPanel>-->
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

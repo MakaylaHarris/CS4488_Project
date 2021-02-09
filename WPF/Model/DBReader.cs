@@ -157,7 +157,7 @@ namespace SmartPert.Model
                 int taskId = (int)reader["TaskId"];
                 string username = (string)reader["UserName"];
                 if (idToTask.TryGetValue(taskId, out t))
-                    t.AddWorker(idToUser[username]);
+                    t.AddWorker(idToUser[username], false);
             }
             reader.Close();
 
@@ -165,7 +165,7 @@ namespace SmartPert.Model
             reader = OpenReader("Select * From UserProject Where ProjectId=" + currentProject.Id + ";");
             while(reader.Read())
             {
-                currentProject.AddWorker(idToUser[(string)reader["UserName"]]);
+                currentProject.AddWorker(idToUser[(string)reader["UserName"]], false);
             }
             reader.Close();
         }
