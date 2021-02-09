@@ -29,5 +29,7 @@ Building the project is done using visual studio. The solution contains the foll
 ## Build Configurations
 * Debug: For regular debugging and testing, does not build Sandcastle documentation.
 * Release: For releases, builds everything.
-* Demo: Builds all and creates a Demo, run by clicking CLICK_ME_FIRST_DEMO.bat
 * Appveyor: Used by the CI Appveyor and only builds the application and test suite.
+
+## Build Demo
+For convenience a python script called *CreateDemo.py* is provided. Once the demo has been built it can be launched with the *CLICK_ME_FIRST_DEMO.bat* script, which will create a demo database and launch the demo application.

@@ -1,7 +1,7 @@
 # Appveyor configuration file
 
 image: Visual Studio 2019
-configuration: Demo   # This builds SmartPert and tests
+configuration: Appveyor   # This builds SmartPert and tests
 before_build:
   - nuget restore
   - msbuild /t:restore
