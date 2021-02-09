@@ -63,6 +63,7 @@ INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser3', dbo.GetTaskId
 INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser2', dbo.GetTaskId('Task6'));
 INSERT INTO [dbo].UserTask (UserName, TaskId) VALUES ('TestUser3', dbo.GetTaskId('Task1'));
 
+PRINT 'Finished Inserting Test Data';
 
 /* Old Insert stuff */
 

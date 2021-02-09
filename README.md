@@ -25,3 +25,11 @@ Building the project is done using visual studio. The solution contains the foll
 * SmartPertDB: Project for editing and creating the database.
 * PertTest: Unit test project.
 * Sandcastle: Builds the code documentation, found in the folder WPF/Help.
+
+## Build Configurations
+* Debug: For regular debugging and testing, does not build Sandcastle documentation.
+* Release: For releases, builds everything.
+* Appveyor: Used by the CI Appveyor and only builds the application and test suite.
+
+## Build Demo
+For convenience a python script called *CreateDemo.py* is provided. Once the demo has been built it can be launched with the *CLICK_ME_FIRST_DEMO.bat* script, which will create a demo database and launch the demo application.
