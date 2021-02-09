@@ -25,7 +25,8 @@ namespace SmartPert.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;Database=SmartPertDB;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;Database=SmartPertDB;Integrated Security=True;" +
+            "Timeout=5")]
         public string ConnectionString {
             get {
                 return ((string)(this["ConnectionString"]));
