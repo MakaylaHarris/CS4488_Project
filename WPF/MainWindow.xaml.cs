@@ -47,9 +47,11 @@ namespace SmartPert
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
         {
+#if !DEBUG
             ErrorCatch errorCatch = new ErrorCatch(args.Exception, ErrorCatchBackToApp);
             MainContent.Content = errorCatch;
             args.Handled = true;
+#endif
         }
 
         void ErrorCatchBackToApp()
@@ -73,7 +75,7 @@ namespace SmartPert
             }
         }
 
-        #region Menu bar
+#region Menu bar
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             throw new NotImplementedException();
@@ -286,9 +288,9 @@ namespace SmartPert
         {
             model.Refresh();
         }
-        #endregion
+#endregion
 
-        #region Model Update
+#region Model Update
         public void OnModelUpdate(Project p)
         {
             PopulateProjects();
@@ -301,7 +303,7 @@ namespace SmartPert
             foreach (Project p in model.GetProjectList())
                 items.Add(new MenuItemViewModel(p.Name, new OpenProjectCommand(model, p)));
         }
-        #endregion
+#endregion
 
     }
 }

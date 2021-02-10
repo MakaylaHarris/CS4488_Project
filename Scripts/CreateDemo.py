@@ -23,15 +23,26 @@ def which(pgm):
 
 
 def genString():
+    exe_path = os.path.join(demo_folder, exe_name)
     return (
         f':: Auto-Generated Script to create database on {server} and run SmartPert\n'
         f'@echo off\n'
-        f'sqlcmd -S {server} -i {demo_folder}/Create.sql &&(\n'
-        f'  sqlcmd -S {server} -i {demo_folder}/Insert.sql\n'
-        f'  {os.path.join(demo_folder, exe_name)}'
-        f')||(\n'
-        f'  CLICK_ME_FIRST_DEMO.bat\n'
-        f')\n'
+        f'echo Trying to connect to server...\n'
+        f'sqlcmd -b -S {server} -i {demo_folder}/Create.sql\n'
+        f'IF ERRORLEVEL 1 goto errHandler\n'
+        f'sqlcmd -S {server} -i {demo_folder}/Insert.sql\n'
+        f'{exe_path}\n'
+        f'goto done\n\n'
+        ':errHandler\n'
+        'IF %CLICK_ME_FIRST_RAN%==1(\n'
+        'echo Failed to connect to database!\n'
+        f'{exe_path}\n'
+        ') ELSE (\n'
+        'SET /A CLICK_ME_FIRST_RAN = 1\n'
+        f'{startup}\n'
+        ')\n\n'
+
+        ':done\n'
     )
 
 
@@ -125,6 +136,7 @@ if(zip):
         print('Unable to find 7z on your path, zipping files failed!')
     else:
         print('Creating zip file...')
+        os.remove(zip_file)
         cmd = f"git archive -o code.zip HEAD"
         if(os.system(cmd)):
             print('Failed to create archive of code files!')
