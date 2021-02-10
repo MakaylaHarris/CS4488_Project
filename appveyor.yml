@@ -36,14 +36,17 @@
 
   after_build:
     Scripts\CreateDemo.py -zip
-    7z a SmartPert.zip WPF\bin\$(configuration)\* PertDB\bin\Output\Pert_Create.sql
+    CD WPF\bin\$(configuration)
+    7z a ..\..\..\SmartPert.zip .\*
+    CD ..\..\..
+    7z a SmartPert.zip PertDB\bin\Output\Pert_Create.sql
 
   deploy:
     release: SmartPert-v$(APPVEYOR_BUILD_VERSION)
     description: 'First prerelease'
     provider: GitHub
     auth_token:
-      secure: scN+wfkFt43bmiZLVFouMZ6Zqa3y3y+j9VzFRZAyIFwyuWrQz+x61n80tOgRrzCV
+      secure: Bbu4gPaQMzmeshqtX8lclNe5ZbpqJijWHk6PGCMzHM7C6LFhQjV4lum3oafgbvB1
     artifact: SmartPert.zip, DemoAndCode.zip
     draft: true
     prerelease: true
