@@ -17,6 +17,9 @@ def which(pgm):
         p = os.path.join(p, pgm)
         if os.path.exists(p) and os.access(p, os.X_OK):
             return p
+        p += '.exe'
+        if os.path.exists(p) and os.access(p, os.X_OK):
+            return p
 
 
 def genString():
@@ -32,7 +35,10 @@ def genString():
 ###############################################################################
 # SETUP SECTION
 ###############################################################################
-
+zip = False
+for arg in sys.argv:
+    if arg.endswith("zip"):
+        zip = True
 print("Create Demo started...")
 
 # Some important variables
@@ -108,5 +114,21 @@ print(f"Creating {startup} Script...")
 
 with open(startup, "w") as f:
     f.write(genString())
+
+# Zip the files?
+if(zip):
+    zip_file = 'DemoAndCode.zip'
+    if not which('7z'):
+        print('Unable to find 7z on your path, zipping files failed!')
+    else:
+        print('Creating zip file...')
+        cmd = f"git archive -o {zip_file} --add-file={startup} HEAD"
+        if(os.system(cmd)):
+            print('Failed to create archive of code files!')
+            sys.exit(-1)
+        if(os.system(f'7z a {zip_file} Demo/')):
+            print('Failed to Add demo files!')
+            sys.exit(-1)
+
 
 print('done!')
