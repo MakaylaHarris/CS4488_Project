@@ -136,7 +136,8 @@ if(zip):
         print('Unable to find 7z on your path, zipping files failed!')
     else:
         print('Creating zip file...')
-        os.remove(zip_file)
+        if os.path.exists(zip_file):
+            os.remove(zip_file)
         cmd = f"git archive -o code.zip HEAD"
         if(os.system(cmd)):
             print('Failed to create archive of code files!')
