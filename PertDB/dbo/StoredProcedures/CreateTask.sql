@@ -13,9 +13,6 @@ CREATE PROCEDURE [dbo].[CreateTask]
 	@MaxEstDuration float,
 	@StartDate datetime,
 	@EndDate datetime,
-	@ModifiedDate datetime,
-	@StatusID int,
-	@UserId int,
 	@ProjectID int,
 	@Result BIT OUTPUT
 	
@@ -36,9 +33,7 @@ BEGIN
 	RETURN;
 
  /* Task is created referencing the current project (have project ID) */
- INSERT INTO dbo.[Task] (TaskName, Description, MinEstDuration, MaxEstDuration, StartDate, EndDate, ModifiedDate, StatusID,
- UserId, ProjectID) Values(@TaskName, @Description, @MinEstDuration, @MaxEstDuration, @StartDate, @EndDate, @ModifiedDate,
- @StatusID, @UserId, @ProjectID);
+ INSERT INTO dbo.[Task] (Name, Description, MinEstDuration, MaxEstDuration, StartDate, EndDate, ProjectID) Values(@TaskName, @Description, @MinEstDuration, @MaxEstDuration, @StartDate, @EndDate, @ProjectID);
 
 
  /* Add Task to task list */
