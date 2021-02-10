@@ -21,8 +21,8 @@
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="bin\Debug\SmartPert.exe" />
       <DocumentationSource sourceFile="bin\Debug\SmartPert.xml" />
+      <DocumentationSource sourceFile="SmartPert.csproj" />
     </DocumentationSources>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
@@ -44,6 +44,7 @@
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <ProjectSummary>A SmartPert namespace</ProjectSummary>
     <VisibleItems>ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, NonBrowsable</VisibleItems>
+    <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
@@ -81,7 +82,7 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Appveyor' ">
-    <OutputPath>bin\Appveyor\</OutputPath>
+    <OutputPath>bin\Help\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Demo' ">
     <OutputPath>bin\Demo\</OutputPath>
