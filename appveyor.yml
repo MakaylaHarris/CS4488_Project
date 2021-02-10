@@ -14,7 +14,7 @@
 -
   branches:
     only:
-      - main
+      - test_deploy
   configuration: Release
   environment:
     SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
