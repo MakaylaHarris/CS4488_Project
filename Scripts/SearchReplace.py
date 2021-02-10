@@ -1,7 +1,7 @@
 import sys
 
 
-def searchReplace(src, dst, search, replace):
+def searchReplace(src, dst, search, replace=""):
     contents = ''
     with open(src, "r") as f:
         contents = f.read()
@@ -10,4 +10,8 @@ def searchReplace(src, dst, search, replace):
 
 
 if __name__ == "__main__":
-    searchReplace(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+    if len(sys.argv) < 4:
+        print("Insufficient number of arguments")
+        sys.exit(-1)
+    replace = "" if len(sys.argv) == 4 else sys.argv[4]
+    searchReplace(sys.argv[1], sys.argv[2], sys.argv[3], replace)

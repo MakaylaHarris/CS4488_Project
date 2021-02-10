@@ -1,0 +1,22 @@
+﻿<Page x:Class="SmartPert.View.Pages.ErrorCatch"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SmartPert.View.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ErrorCatch">
+
+    <Grid Margin="50">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+        <Label x:Name="errLabel" Foreground="Red"/>
+        <Image Source="/images/broke_cow.png" />
+        <Label Content="Mooooops! Something went wrong..." HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" FontSize="20px" FontFamily="Comic Sans" Foreground="Red"/>
+        <Button Content="Back to Main Screen?" Grid.Row="2" HorizontalAlignment="Center" Background="Transparent" Click="Button_Click"/>
+    </Grid>
+</Page>

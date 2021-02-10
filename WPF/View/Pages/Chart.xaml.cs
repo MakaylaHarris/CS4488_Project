@@ -33,6 +33,8 @@ namespace SmartPert.View.Pages
         private TranslateTransform move;
         private ScaleTransform zoom;
         private Project _project;
+        private Color taskColor;
+        private Color taskColorCompleted;
 
         private double dayWidth = 75;
         int buttonSpacing = 50;
@@ -46,9 +48,6 @@ namespace SmartPert.View.Pages
 
         private Brush taskBrush;
         LinearGradientBrush taskGradient = new LinearGradientBrush();
-
-        private Dictionary<string, int> dayMonths = new Dictionary<string, int>(); //Dictionary to add months and their respective days
-        private string duration = "";
         WindowState prevWindowState = new WindowState();
 
         public Chart(IModel model)
@@ -61,8 +60,9 @@ namespace SmartPert.View.Pages
             this.PreviewMouseWheel += ZoomCanvas;
             this.MouseMove += DragCanvas;
             this.MouseUp += ReleaseMouseDrag;
+            taskColor = Color.FromRgb(120, 200, 255);
+            taskColorCompleted = Color.FromRgb(100, 255, 100);
 
-            addItemsHashTable();
             // addItemsCombo();
         }
 
@@ -98,11 +98,11 @@ namespace SmartPert.View.Pages
 
                 int screenHeight = top;
                 mainCanvas.Height = (screenHeight > System.Windows.SystemParameters.PrimaryScreenHeight) ? screenHeight : System.Windows.SystemParameters.PrimaryScreenHeight;
-                DrawCalendar(2);
+                DrawCalendar();
             }
             else
             {
-                DrawCalendar(2);
+                DrawCalendar();
             }
             return top;
         }
@@ -123,10 +123,11 @@ namespace SmartPert.View.Pages
             double minDuration = parent.MinDuration;
             double mostDuration = parent.LikelyDuration;
 
-            // Colors fromRgb
-            Color maxColor = Color.FromRgb(249, 192, 192);
-            Color minColor = Color.FromRgb(204, 246, 200);
-            Color mostColor = Color.FromRgb(250, 252, 194);
+            Color maxColor, minColor, mostColor; 
+            maxColor = minColor = mostColor = parent.IsComplete ? taskColorCompleted : taskColor;
+            mostColor.A = 180;
+            maxColor.A = 20;
+            minColor.A = 80;
 
             double newTopMargin = topMargin;
             double minWidth = int.MaxValue;
@@ -172,10 +173,10 @@ namespace SmartPert.View.Pages
 
             // Making and adding gradient stopps for min/most/max
             // https://docs.microsoft.com/en-us/dotnet/api/system.windows.media.lineargradientbrush?view=net-5.0
-            GradientStop minStop = new GradientStop(minColor, minOffset * .95);
-            GradientStop mostStart = new GradientStop(mostColor, minOffset * 1.05);
-            GradientStop mostStop = new GradientStop(mostColor, mostOffset * .95);
-            GradientStop maxStart = new GradientStop(maxColor, mostOffset * 1.05);
+            GradientStop minStop = new GradientStop(minColor, minOffset * .85);
+            GradientStop mostStart = new GradientStop(mostColor, minOffset * 1.15);
+            GradientStop mostStop = new GradientStop(mostColor, mostOffset * .85);
+            GradientStop maxStart = new GradientStop(maxColor, mostOffset * 1.15);
 
             taskGradient = new LinearGradientBrush(minColor, maxColor, 0);
 
@@ -192,13 +193,18 @@ namespace SmartPert.View.Pages
             t.taskBorder.Background = taskBrush;
             t.ToolTip = createToolTip(parent);
             t.MouseDown += resizeTask;
+            if(parent.IsComplete)
+            {
+                t.Completed.Visibility = Visibility.Visible;
+                t.Completed.Width = dayWidth * ((DateTime)parent.EndDate - parent.StartDate).TotalDays;
+            }
             Canvas.SetLeft(t, ((DateTime)parent.StartDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(t, topMargin);
 
 
             //Min/Max/mostlikely view----By Alankar Pokhrel
             // Updated by Andrew Christiansen 11/6/2020
-            if (parent.EndDate == null)
+            if (true)
             {
                 t.Width = tempDuration * dayWidth - dayWidth;
             }
@@ -387,52 +393,30 @@ namespace SmartPert.View.Pages
         }
 
         // Created by Sandro Pawlidis (9/25/2019)
-        private void DrawCalendar(int years)
+        // Edited 2/9/2021 by Robert Nelson to make it use actual dates
+        private void DrawCalendar()
         {
-            int startDay = Project.StartDate.Day;
-            int startMonth = Project.StartDate.Month - 1;
-
-            Line initialLine = CreateLine(0);
-
-            mainCanvas.Children.Add(initialLine);
-
-            Label initialLabel = new Label();
-
-            initialLabel.Content = dayMonths.Keys.ElementAt(startMonth) + "\r\n" + startDay;
-
-            Canvas.SetLeft(initialLabel, initialLine.X1);
-
-            mainCanvas.Children.Add(initialLabel);
-
-            startDay++;
-
-            for (int i = 1; i < 365 * years; i++)
+            DateTime start = Project.StartDate;
+            DateTime end;
+            if (Project.EndDate == null)
+                // todo, determine last task time and add a few months
+                end = start.AddYears(2);
+            else
+                end = (DateTime) Project.EndDate;
+            string text;
+            Label label;
+            for (int i = 0; i < (end - start).TotalDays; i++)
             {
                 Line nextLine = CreateLine(i);
                 mainCanvas.Children.Add(nextLine);
-                Label label;
-
-                if (startDay > dayMonths.Values.ElementAt(startMonth))
-                {
-                    startDay = 1;
-                    startMonth++;
-                }
-                if (startMonth > 11)
-                {
-                    startMonth = 0;
-                    startDay = 1;
-                }
-                if (startDay == 1)
-                {
-                    label = CreateLabel(dayMonths.Keys.ElementAt(startMonth) + "\r\n" + startDay.ToString());
-                }
+                if (start.Day == 1 || i == 0)
+                    text = start.ToString("MMMM") + "\r\n" + start.ToString("dd");
                 else
-                {
-                    label = CreateLabel("\r\n" + startDay.ToString());
-                }
-                startDay++;
+                    text = "\r\n" + start.ToString("dd");
+                label = CreateLabel(text);
                 Canvas.SetLeft(label, nextLine.X1);
                 mainCanvas.Children.Add(label);
+                start = start.AddDays(1);
             }
         }
 
@@ -569,24 +553,6 @@ namespace SmartPert.View.Pages
         private void scrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-        }
-
-
-        // Adds the months and days to the dictionary - Chase Torres (9/26/2019)
-        private void addItemsHashTable()
-        {
-            dayMonths.Add("January", 31);
-            dayMonths.Add("February", 28);
-            dayMonths.Add("March", 31);
-            dayMonths.Add("April", 30);
-            dayMonths.Add("May", 31);
-            dayMonths.Add("June", 30);
-            dayMonths.Add("July", 31);
-            dayMonths.Add("August", 31);
-            dayMonths.Add("September", 30);
-            dayMonths.Add("October", 31);
-            dayMonths.Add("November", 30);
-            dayMonths.Add("December", 31);
         }
 
         //Going to try to use a groupbox as the container to add tasks to the canvas

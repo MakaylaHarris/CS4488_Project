@@ -95,7 +95,7 @@ namespace SmartPert.Model
                 + "', Description = '" + Description +
                 "', StartDate='" + StartDate +
                 "', EndDate='" + EndDate +
-                "Where ProjectId=" + Id + ";");
+                "'Where ProjectId=" + Id + ";");
         }
 
         static public Project Parse(SqlDataReader reader)

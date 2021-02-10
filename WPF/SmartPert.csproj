@@ -179,6 +179,9 @@
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
     <Compile Include="TaskToolTip.cs" />
+    <Compile Include="View\Pages\ErrorCatch.xaml.cs">
+      <DependentUpon>ErrorCatch.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -220,6 +223,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Pages\Chart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\ErrorCatch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -290,6 +297,9 @@
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="images\SplashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\broke_cow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

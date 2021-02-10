@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using SmartPert.Model;
 using SmartPert.View.Login;
 using SmartPert.View.Pages;
+using System.Windows.Threading;
 
 /// <summary>
 /// Name space for the SmartPert Pert Application
@@ -35,11 +36,24 @@ namespace SmartPert
 
         public MainWindow()
         {
+            this.Dispatcher.UnhandledException += this.HandleException;
             InitializeComponent();
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
             InitModel();
             chart = new Chart(model);
+            this.MainContent.Content = chart;
+        }
+
+        void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
+        {
+            ErrorCatch errorCatch = new ErrorCatch(args.Exception, ErrorCatchBackToApp);
+            MainContent.Content = errorCatch;
+            args.Handled = true;
+        }
+
+        void ErrorCatchBackToApp()
+        {
             this.MainContent.Content = chart;
         }
 
