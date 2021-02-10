@@ -35,9 +35,7 @@
     - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
 
   after_build:
-    # build demo
     Scripts\CreateDemo.py -zip
-    # build main app zip
     7z a SmartPert.zip WPF\bin\$(configuration)\* PertDB\bin\Output\Pert_Create.sql
 
   deploy:
