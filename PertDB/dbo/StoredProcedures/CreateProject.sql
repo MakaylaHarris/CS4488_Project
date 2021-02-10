@@ -19,7 +19,6 @@ BEGIN
 	/* Check and make sure Project Name is unique. If not, do not insert into table. */
 	IF (SELECT COUNT(*) FROM [Project] WHERE [Project].Name = @ProjectName) = 0
 		INSERT INTO dbo.Project (Name, StartDate, EndDate, Description) VALUES (@ProjectName, @StartDate, @EndDate, @Description)
-	ELSE
 		SET @Result=1;
 END
 GO
