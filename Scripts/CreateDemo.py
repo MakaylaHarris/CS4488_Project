@@ -26,9 +26,12 @@ def genString():
     return (
         f':: Auto-Generated Script to create database on {server} and run SmartPert\n'
         f'@echo off\n'
-        f'sqlcmd -S {server} -i {demo_folder}/Create.sql\n'
-        f'sqlcmd -S {server} -i {demo_folder}/Insert.sql\n'
-        f'{os.path.join(demo_folder, exe_name)}'
+        f'sqlcmd -S {server} -i {demo_folder}/Create.sql &&(\n'
+        f'  sqlcmd -S {server} -i {demo_folder}/Insert.sql\n'
+        f'  {os.path.join(demo_folder, exe_name)}'
+        f')||(\n'
+        f'  CLICK_ME_FIRST_DEMO.bat\n'
+        f')\n'
     )
 
 
@@ -122,11 +125,11 @@ if(zip):
         print('Unable to find 7z on your path, zipping files failed!')
     else:
         print('Creating zip file...')
-        cmd = f"git archive -o {zip_file} HEAD"
+        cmd = f"git archive -o code.zip HEAD"
         if(os.system(cmd)):
             print('Failed to create archive of code files!')
             sys.exit(-1)
-        if(os.system(f'7z a {zip_file} Demo/ CLICK_ME_FIRST_DEMO.bat')):
+        if(os.system(f'7z a {zip_file} code.zip Demo/ CLICK_ME_FIRST_DEMO.bat')):
             print('Failed to Add demo files!')
             sys.exit(-1)
 
