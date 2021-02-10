@@ -122,11 +122,11 @@ if(zip):
         print('Unable to find 7z on your path, zipping files failed!')
     else:
         print('Creating zip file...')
-        cmd = f"git archive -o {zip_file} --add-file={startup} HEAD"
+        cmd = f"git archive -o {zip_file} HEAD"
         if(os.system(cmd)):
             print('Failed to create archive of code files!')
             sys.exit(-1)
-        if(os.system(f'7z a {zip_file} Demo/')):
+        if(os.system(f'7z a {zip_file} Demo/ CLICK_ME_FIRST_DEMO.bat')):
             print('Failed to Add demo files!')
             sys.exit(-1)
 
