@@ -14,7 +14,7 @@
 -
   branches:
     only:
-      - test_deploy
+      - main
   configuration: Release
   environment:
     SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
@@ -35,8 +35,8 @@
     - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
 
   after_build:
-    Scripts\CreateDemo.py -zip
-    Scripts\Package.py
+    -cmd: Scripts\CreateDemo.py -zip
+    -cmd: Scripts\Package.py
 
   deploy:
     release: SmartPert-v$(APPVEYOR_BUILD_VERSION)
