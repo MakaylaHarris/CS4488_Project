@@ -14,7 +14,7 @@
 -
   branches:
     only:
-      - main
+      - develop-robert
   configuration: Release
   environment:
     SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
@@ -41,8 +41,8 @@
     release: SmartPert-v$(APPVEYOR_BUILD_VERSION)
     description: 'First prerelease'
     provider: GitHub
-    auth_token:
-      secure: Bbu4gPaQMzmeshqtX8lclNe5ZbpqJijWHk6PGCMzHM7C6LFhQjV4lum3oafgbvB1
+#    auth_token:
+#      secure:
     artifact: SmartPert.zip, DemoAndCode.zip
     draft: true
     prerelease: true
