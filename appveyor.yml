@@ -35,7 +35,8 @@
     - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
 
   after_build:
-    -cmd: Scripts\CreateDemo.py -zip && Scripts\Package.py
+    - Scripts\CreateDemo.py -zip
+    - Scripts\Package.py
 
   deploy:
     release: SmartPert-v$(APPVEYOR_BUILD_VERSION)
