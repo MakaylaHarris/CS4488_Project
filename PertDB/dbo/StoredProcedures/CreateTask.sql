@@ -31,7 +31,7 @@ BEGIN
 	RETURN;
 
  /* Check if task has a unique name (Task already exists)*/
- IF (SELECT COUNT(*) FROM [Task] WHERE [Task].Name = @taskName) > 0
+ IF (SELECT COUNT(*) FROM [Task] WHERE [Task].Name = @taskName AND [Task].ProjectId = @ProjectID) > 0
 	/* Notify User and end procedure with result=0 */
 	RETURN;
 
