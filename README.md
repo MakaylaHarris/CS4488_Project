@@ -11,6 +11,11 @@ SmartPert was developed using [MSSQLSERVER](https://en.wikipedia.org/wiki/Micros
 
 *Prerequisite*: Setup your server.
 
+1. Run the script Pert_Create.sql on your server. Example:
+`sqlcmd -S .\MSSQLLocalDB -i Pert_Create.sql`
+
+OR
+
 1. Open the *SmartPertDB* Project in Visual Studio.
 2. Publish the project by right clicking on *SmartPertDB* in the Solution Explorer and clicking _publish_.
 3. In the Publish Database window, select the target database connection.

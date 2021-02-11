@@ -36,10 +36,7 @@
 
   after_build:
     Scripts\CreateDemo.py -zip
-    CD WPF\bin\$(configuration)
-    7z a ..\..\..\SmartPert.zip .\*
-    CD ..\..\..
-    7z a SmartPert.zip PertDB\bin\Output\Pert_Create.sql
+    Scripts\Package.py
 
   deploy:
     release: SmartPert-v$(APPVEYOR_BUILD_VERSION)

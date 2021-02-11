@@ -7,20 +7,11 @@ import os
 import shutil
 import sys
 from SearchReplace import searchReplace
+from which import which
 
 # -------------------------------------------------------------------
 # Functions
 # -------------------------------------------------------------------
-def which(pgm):
-    path = os.getenv('PATH')
-    for p in path.split(os.path.pathsep):
-        p = os.path.join(p, pgm)
-        if os.path.exists(p) and os.access(p, os.X_OK):
-            return p
-        p += '.exe'
-        if os.path.exists(p) and os.access(p, os.X_OK):
-            return p
-
 
 def genString():
     exe_path = os.path.join(demo_folder, exe_name)
@@ -131,6 +122,7 @@ with open(startup, "w") as f:
 
 # Zip the files?
 if(zip):
+    from Package import zip_all
     zip_file = 'DemoAndCode.zip'
     if not which('7z'):
         print('Unable to find 7z on your path, zipping files failed!')
@@ -142,7 +134,7 @@ if(zip):
         if(os.system(cmd)):
             print('Failed to create archive of code files!')
             sys.exit(-1)
-        if(os.system(f'7z a {zip_file} code.zip Demo/ CLICK_ME_FIRST_DEMO.bat')):
+        if(zip_all(zip_file, files=['code.zip', 'Demo/', 'CLICK_ME_FIRST_DEMO.bat'])):
             print('Failed to Add demo files!')
             sys.exit(-1)
 
