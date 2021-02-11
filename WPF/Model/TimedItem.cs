@@ -14,7 +14,7 @@ namespace SmartPert.Model
         private string name;
         private string description;
         private int id;
-        protected bool isComplete;
+        private bool isComplete;
         protected List<User> workers;
 
         #region Properties
@@ -60,6 +60,21 @@ namespace SmartPert.Model
 
         public List<User> Workers { get => workers; }
         public int Id { get => id; }
+        public bool IsComplete
+        {
+            get => isComplete;
+            set
+            {
+                if (value)
+                {
+                    if (endDate == null)
+                        EndDate = DateTime.Now;
+                }
+                else if (endDate != null)
+                    EndDate = null;
+                isComplete = value;
+            }
+        }
         #endregion
 
         #region Constructor

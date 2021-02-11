@@ -7,11 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100">
     <Grid>
+        <Frame x:Name="Completed" BorderBrush="Green" BorderThickness="1" Visibility="Hidden" HorizontalAlignment="Left"/>
         <Border x:Name="taskBorder"
                 BorderBrush="White"
                 Background="LightGray"
                 BorderThickness="1,1,1,1"
-                CornerRadius="8,8,8,8">
+                CornerRadius="8,8,8,8" Margin="3">
             <Grid>
                 <TextBlock x:Name="tbxTaskId" Text="{Binding Id}" Visibility="Hidden"></TextBlock>
                 <!--Make this use the name-->

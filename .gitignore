@@ -25,7 +25,6 @@ mono_crash.*
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-Demo/
 CLICK_ME_FIRST_DEMO.bat
 x64/
 x86/
@@ -366,3 +365,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+Demo/

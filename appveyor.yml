@@ -1,10 +1,51 @@
 # Appveyor configuration file
+-
+  image: Visual Studio 2019
+  configuration: Appveyor   # This builds SmartPert and tests
+  before_build:
+    - nuget restore
+    - msbuild /t:restore
+    - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
+    # create Pert database
+    - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
 
-image: Visual Studio 2019
-configuration: Appveyor   # This builds SmartPert and tests
-before_build:
-  - nuget restore
-  - msbuild /t:restore
-  - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
-  # create Pert database
-  - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
+
+# Release Configuration
+-
+  branches:
+    only:
+      - main
+  configuration: Release
+  environment:
+    SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
+
+  artifacts:
+  - path: SmartPert.zip
+    name: SmartPert
+
+  - path: DemoAndCode.zip
+    name: SmartPert_Demo
+
+  before_build:
+    - choco install sandcastle
+    - nuget restore
+    - msbuild /t:restore
+    - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
+    # create Pert database
+    - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
+
+  after_build:
+    - Scripts\CreateDemo.py -zip
+    - Scripts\Package.py
+
+  deploy:
+    release: SmartPert-v$(APPVEYOR_BUILD_VERSION)
+    description: 'First prerelease'
+    provider: GitHub
+#    auth_token:
+#      secure:
+    artifact: SmartPert.zip, DemoAndCode.zip
+    draft: true
+    prerelease: true
+    on:
+      branch: main                 # release from main only

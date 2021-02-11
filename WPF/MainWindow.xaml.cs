@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using SmartPert.Model;
 using SmartPert.View.Login;
 using SmartPert.View.Pages;
+using System.Windows.Threading;
 
 /// <summary>
 /// Name space for the SmartPert Pert Application
@@ -35,11 +36,26 @@ namespace SmartPert
 
         public MainWindow()
         {
+            this.Dispatcher.UnhandledException += this.HandleException;
             InitializeComponent();
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
             InitModel();
             chart = new Chart(model);
+            this.MainContent.Content = chart;
+        }
+
+        void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
+        {
+#if !DEBUG
+            ErrorCatch errorCatch = new ErrorCatch(args.Exception, ErrorCatchBackToApp);
+            MainContent.Content = errorCatch;
+            args.Handled = true;
+#endif
+        }
+
+        void ErrorCatchBackToApp()
+        {
             this.MainContent.Content = chart;
         }
 
@@ -59,7 +75,7 @@ namespace SmartPert
             }
         }
 
-        #region Menu bar
+#region Menu bar
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             throw new NotImplementedException();
@@ -272,9 +288,9 @@ namespace SmartPert
         {
             model.Refresh();
         }
-        #endregion
+#endregion
 
-        #region Model Update
+#region Model Update
         public void OnModelUpdate(Project p)
         {
             PopulateProjects();
@@ -287,7 +303,7 @@ namespace SmartPert
             foreach (Project p in model.GetProjectList())
                 items.Add(new MenuItemViewModel(p.Name, new OpenProjectCommand(model, p)));
         }
-        #endregion
+#endregion
 
     }
 }

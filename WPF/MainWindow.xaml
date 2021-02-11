@@ -88,8 +88,9 @@
         <!--#endregion-->
 
         <!--#region  Main Content-->
-        <Frame x:Name="MainContent" Margin="10,30,10,10">
-        </Frame>
+        <Border>
+            <Frame x:Name="MainContent" Margin="10,30,10,10" NavigationUIVisibility="Hidden"/>
+        </Border>
         <!--#endregion-->
         
         <!--#region Connection String-->

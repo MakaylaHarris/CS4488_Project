@@ -7,32 +7,43 @@ import os
 import shutil
 import sys
 from SearchReplace import searchReplace
+from which import which
 
 # -------------------------------------------------------------------
 # Functions
 # -------------------------------------------------------------------
-def which(pgm):
-    path = os.getenv('PATH')
-    for p in path.split(os.path.pathsep):
-        p = os.path.join(p, pgm)
-        if os.path.exists(p) and os.access(p, os.X_OK):
-            return p
-
 
 def genString():
+    exe_path = os.path.join(demo_folder, exe_name)
     return (
         f':: Auto-Generated Script to create database on {server} and run SmartPert\n'
         f'@echo off\n'
-        f'sqlcmd -S {server} -i {demo_folder}/Create.sql\n'
+        f'echo Trying to connect to server...\n'
+        f'sqlcmd -b -S {server} -i {demo_folder}/Create.sql\n'
+        f'IF ERRORLEVEL 1 goto errHandler\n'
         f'sqlcmd -S {server} -i {demo_folder}/Insert.sql\n'
-        f'{os.path.join(demo_folder, exe_name)}'
+        f'{exe_path}\n'
+        f'goto done\n\n'
+        ':errHandler\n'
+        'IF %CLICK_ME_FIRST_RAN%==1(\n'
+        'echo Failed to connect to database!\n'
+        f'{exe_path}\n'
+        ') ELSE (\n'
+        'SET /A CLICK_ME_FIRST_RAN = 1\n'
+        f'{startup}\n'
+        ')\n\n'
+
+        ':done\n'
     )
 
 
 ###############################################################################
 # SETUP SECTION
 ###############################################################################
-
+zip = False
+for arg in sys.argv:
+    if arg.endswith("zip"):
+        zip = True
 print("Create Demo started...")
 
 # Some important variables
@@ -108,5 +119,24 @@ print(f"Creating {startup} Script...")
 
 with open(startup, "w") as f:
     f.write(genString())
+
+# Zip the files?
+if(zip):
+    from Package import zip_all
+    zip_file = 'DemoAndCode.zip'
+    if not which('7z'):
+        print('Unable to find 7z on your path, zipping files failed!')
+    else:
+        print('Creating zip file...')
+        if os.path.exists(zip_file):
+            os.remove(zip_file)
+        cmd = f"git archive -o code.zip HEAD"
+        if(os.system(cmd)):
+            print('Failed to create archive of code files!')
+            sys.exit(-1)
+        if(zip_all(zip_file, files=['code.zip', 'Demo/', 'CLICK_ME_FIRST_DEMO.bat'])):
+            print('Failed to Add demo files!')
+            sys.exit(-1)
+
 
 print('done!')
