@@ -11,7 +11,7 @@ namespace SmartPert.Command
     /// Delete Project command
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class DeleteProjectCmd : ICmd
+    public class DeleteProjectCmd : ICmd
     {
         private readonly IModel model;
         private Project project;

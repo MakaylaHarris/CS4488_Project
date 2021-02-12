@@ -10,7 +10,7 @@ namespace SmartPert.Command
     /// Removes Task Dependency
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class RemoveDependencyCmd : ICmd
+    public class RemoveDependencyCmd : ICmd
     {
         private readonly Task parent;
         private readonly Task dependent;

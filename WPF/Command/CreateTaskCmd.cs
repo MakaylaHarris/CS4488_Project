@@ -7,7 +7,7 @@ using SmartPert.Model;
 
 namespace SmartPert.Command
 {
-    class CreateTaskCmd : ICmd
+    public class CreateTaskCmd : ICmd
     {
         private readonly IModel model;
         private readonly string name;

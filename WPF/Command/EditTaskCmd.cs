@@ -10,7 +10,7 @@ namespace SmartPert.Command
     /// Command to edit task
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class EditTaskCmd : ICmd
+    public class EditTaskCmd : ICmd
     {
         private readonly Task toEdit;
         private readonly string name;

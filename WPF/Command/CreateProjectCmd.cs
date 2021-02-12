@@ -11,7 +11,7 @@ namespace SmartPert.Command
     /// Command to create project
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class CreateProjectCmd : ICmd
+    public class CreateProjectCmd : ICmd
     {
         private IModel model;
         private readonly string name;

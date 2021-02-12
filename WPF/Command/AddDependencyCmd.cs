@@ -10,7 +10,7 @@ namespace SmartPert.Command
     /// Adds dependency to task
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class AddDependencyCmd : ICmd
+    public class AddDependencyCmd : ICmd
     {
         private readonly Task parent;
         private readonly Task dependent;

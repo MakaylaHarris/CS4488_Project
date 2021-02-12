@@ -70,6 +70,11 @@ namespace SmartPert.Model
             return GetProject().Tasks;
         }
 
+        public bool IsValidTaskName(string name)
+        {
+            return name != "" && GetTasks().Find(x => x.Name == name) == null;
+        }
+
         #endregion
 
         #region User Methods

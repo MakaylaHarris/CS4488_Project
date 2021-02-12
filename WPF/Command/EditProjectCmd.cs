@@ -7,7 +7,7 @@ using SmartPert.Model;
 
 namespace SmartPert.Command
 {
-    class EditProjectCmd : ICmd
+    public class EditProjectCmd : ICmd
     {
         private readonly Project toEdit;
         private readonly string name;

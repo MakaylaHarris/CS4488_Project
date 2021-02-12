@@ -11,7 +11,7 @@ namespace SmartPert.Command
     /// Command to delete a task
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class DeleteTaskCmd : ICmd
+    public class DeleteTaskCmd : ICmd
     {
         private readonly IModel model;
         private Model.Task task;

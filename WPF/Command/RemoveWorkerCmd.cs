@@ -11,7 +11,7 @@ namespace SmartPert.Command
     /// Remove worker from item
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class RemoveWorkerCmd : ICmd
+    public class RemoveWorkerCmd : ICmd
     {
         private readonly TimedItem item;
         private readonly User worker;

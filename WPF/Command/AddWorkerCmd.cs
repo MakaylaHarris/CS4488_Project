@@ -11,7 +11,7 @@ namespace SmartPert.Command
     /// Add worker to a item
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class AddWorkerCmd : ICmd
+    public class AddWorkerCmd : ICmd
     {
         private readonly TimedItem item;
         private readonly User worker;
