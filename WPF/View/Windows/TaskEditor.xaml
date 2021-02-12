@@ -6,39 +6,42 @@
         xmlns:local="clr-namespace:SmartPert.View.Windows"
         mc:Ignorable="d"
         Title="Create/Edit Task" Height="518.663" Width="347.411" Loaded="Window_Loaded">
-    <Grid Margin="21,0,2,0">
+    <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="173*"/>
-            <ColumnDefinition Width="143*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="28*"/>
-            <RowDefinition Height="33*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Label Content="Task Name:" HorizontalAlignment="Left" Margin="38,10,0,0" VerticalAlignment="Top" Height="26" Width="70"/>
-        <TextBox x:Name="TaskName" HorizontalAlignment="Left" Height="23" Margin="113,13,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+        <Label Content="Task Name:" HorizontalAlignment="Right" Margin="10"/>
+        <TextBox x:Name="TaskName" Grid.Column="2" Width="100"/>
 
-        <Label Content="Task Description:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Height="26" Width="98"/>
-        <TextBox x:Name="TaskDescription" HorizontalAlignment="Left" Height="87" Margin="113,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+        <Label Content="Task Description:" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="TaskDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Grid.ColumnSpan="2" Grid.Row="2"/>
 
-        <Label Content="Min Duration:" HorizontalAlignment="Left" Margin="25,130,0,0" VerticalAlignment="Top" Height="26" Width="83"/>
-        <TextBox x:Name="MinDuration" PreviewTextInput="numberValidation" HorizontalAlignment="Left" Height="23" Margin="113,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
-
-        <Label Content="Max Duration:" HorizontalAlignment="Left" Margin="23,158,0,0" VerticalAlignment="Top" Height="26" Width="85"/>
-        <TextBox x:Name="MaxDuration" PreviewTextInput="numberValidation" HorizontalAlignment="Left" Height="23" Margin="113,161,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
-
-        <Label Content="Assignees:" HorizontalAlignment="Left" Margin="60,124,0,0" VerticalAlignment="Top" Grid.Row="1" Height="26" Width="48"/>
-
-        <Label Content="Dependent Tasks:" HorizontalAlignment="Left" Margin="6,179,0,0" VerticalAlignment="Top" Grid.Row="1" Height="26" Width="102"/>
-        <Button x:Name="btnSubmitAndClose" Visibility="Hidden" Content="Submit and Close" HorizontalAlignment="Left" VerticalAlignment="Top" Width="223" Margin="10,89,0,0" Height="22" Click="btnSubmitAndClose_Click" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnSubmitAndContinue" Visibility="Hidden" Content="Submit and Continue" HorizontalAlignment="Left" VerticalAlignment="Top" Width="223" Margin="10,116,0,0" Height="22" Click="btnSubmitAndContinue_Click" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="126,227,0,0" VerticalAlignment="Top" Width="75" Click="btnSubmit_Click" Grid.Row="1" Grid.ColumnSpan="2" Height="20"/>
+        <Label Content="Start Date:" HorizontalAlignment="Right" Grid.Row="1"/>
         <DatePicker x:Name="StartDate" HorizontalAlignment="Left" Margin="113,62,0,0" VerticalAlignment="Top" Width="119" Grid.Row="1" Grid.ColumnSpan="2" Height="24"/>
-        <Label Content="Start Date:" HorizontalAlignment="Left" Margin="43,60,0,0" VerticalAlignment="Top" Grid.Row="1" Height="26" Width="65"/>
+
+        <Label Content="Min Duration:" HorizontalAlignment="Right" Grid.Row="3"/>
+        <TextBox x:Name="MinDuration" Grid.Row="3" Grid.Column="2"/>
+
+        <Label Content="Max Duration:" HorizontalAlignment="Right" Grid.Row="4"/>
+        <TextBox x:Name="MaxDuration"  Grid.Row="3" Grid.Column="2"/>
+
+
+        <Label Content="Assignees:" HorizontalAlignment="Right" Margin="60,124,0,0" VerticalAlignment="Top" Grid.Row="1" Height="26" Width="48"/>
+
+        <Button x:Name="btnSubmit" Content="Submit" HorizontalAlignment="Left" Margin="126,227,0,0" VerticalAlignment="Top" Width="75" Grid.Row="1" Grid.ColumnSpan="2" Height="20"/>
         <DatePicker x:Name="EndDate" HorizontalAlignment="Left" Margin="113,95,0,0" VerticalAlignment="Top" Width="119" Grid.Row="1" Grid.ColumnSpan="2" Height="24"/>
         <Label Content="Completed Date:" HorizontalAlignment="Left" Margin="10,93,0,0" VerticalAlignment="Top" Grid.Row="1" Height="26" Width="99"/>
         <Label Content="Most Likely Duration:" HorizontalAlignment="Left" Margin="-13,189,0,0" VerticalAlignment="Top" Height="26" Width="122"/>
-        <TextBox x:Name="MostLikelyDuration" PreviewTextInput="numberValidation" HorizontalAlignment="Left" Height="23" Margin="113,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="MostLikelyDuration" HorizontalAlignment="Left" Height="23" Margin="113,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>

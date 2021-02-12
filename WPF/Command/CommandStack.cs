@@ -79,7 +79,7 @@ namespace SmartPert.Command
         {
             if (CanRedo())
             {
-                return redoStack.Pop().Execute();
+                return redoStack.Pop().Run();
             }
             return false;
         }
