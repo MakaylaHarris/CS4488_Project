@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartPert"
         mc:Ignorable="d"
-        Title="SmartPert" Height="450" Width="800"
+        Title="SmartPert" Height="500" Width="900"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -97,7 +97,7 @@
 
         <!--#region  Main Content-->
         <Border>
-            <Frame x:Name="MainContent" Margin="10,30,10,10" NavigationUIVisibility="Hidden"/>
+            <Frame x:Name="MainContent" Margin="10,48,10,10" NavigationUIVisibility="Hidden"/>
         </Border>
         <!--#endregion-->
         
