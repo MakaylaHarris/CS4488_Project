@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using SmartPert.Model;
 using SmartPert.View.Controls;
+using SmartPert.View.Windows;
 
 namespace SmartPert.View.Pages
 {
@@ -366,7 +367,7 @@ namespace SmartPert.View.Pages
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            //new frmTask(this).ShowDialog();
+            new TaskEditor(model).ShowDialog();
             DrawGraph(Project.Tasks);
         }
 

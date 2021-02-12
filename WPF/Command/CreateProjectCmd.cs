@@ -28,13 +28,13 @@ namespace SmartPert.Command
             this.end = end;
             this.description = description;
         }
-        public bool Execute()
+        protected override bool Execute()
         {
             project = model.CreateProject(name, start, end, description);
             return project != null;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             model.DeleteProject(project);
             return true;

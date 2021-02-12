@@ -30,13 +30,13 @@ namespace SmartPert.Command
             this.minDuration = minDuration;
             this.description = description;
         }
-        public bool Execute()
+        protected override bool Execute()
         {
             task = model.CreateTask(name, start, end, description, duration, maxDuration, minDuration);
             return task != null;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             model.DeleteTask(task);
             return true;

@@ -26,7 +26,7 @@ namespace SmartPert.Command
             old = new Project(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.Description, toEdit.Id);
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
             toEdit.Name = name;
             toEdit.StartDate = start;
@@ -35,7 +35,7 @@ namespace SmartPert.Command
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             toEdit.Name = old.Name;
             toEdit.StartDate = old.StartDate;

@@ -21,13 +21,13 @@ namespace SmartPert.Command
             this.dependent = dependent;
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
             parent.AddDependency(dependent);
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             parent.RemoveDependency(dependent);
             return true;

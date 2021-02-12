@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 
 using SmartPert.Model;
 using SmartPert.View.Pages;
+using SmartPert.View.Windows;
 
 namespace SmartPert.View.Controls
 {
@@ -35,8 +36,7 @@ namespace SmartPert.View.Controls
         private void mi_editTask_Click(object sender, RoutedEventArgs e)
         {
             Task task = (Task)((MenuItem)sender).DataContext;
-            // new frmTask(_chart, task).ShowDialog();
-
+            new TaskEditor(null, task).ShowDialog();
             _chart.RefreshGraph();
             //_chart.DrawGraph(_chart.GetTasksAndDependanciesFromDatabase());
         }

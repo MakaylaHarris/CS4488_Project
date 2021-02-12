@@ -22,13 +22,13 @@ namespace SmartPert.Command
             this.worker = worker;
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
             item.RemoveWorker(worker);
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             item.AddWorker(worker);
             return true;

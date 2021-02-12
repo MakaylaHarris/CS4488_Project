@@ -21,13 +21,13 @@ namespace SmartPert.Command
             this.model = model;
             this.task = task;
         }
-        public bool Execute()
+        protected override bool Execute()
         {
             this.model.DeleteTask(task);
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             Model.Task newTask = model.CreateTask(task.Name, task.StartDate, task.EndDate, task.Description, task.LikelyDuration, task.MaxDuration, task.MinDuration);
             if (newTask != null)
