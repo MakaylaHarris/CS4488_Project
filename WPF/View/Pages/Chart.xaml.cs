@@ -302,7 +302,7 @@ namespace SmartPert.View.Pages
         private TaskToolTip createToolTip(Task task)
         {
             TaskToolTip ttp = new TaskToolTip(task);
-            ttp.Style = (Style)FindResource("AppToolTip");
+            //ttp.Style = (Style)FindResource("AppToolTip");
             return ttp;
         }
 
