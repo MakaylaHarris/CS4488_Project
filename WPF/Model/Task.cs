@@ -11,12 +11,22 @@ namespace SmartPert.Model
     /// </summary>
     public class Task : TimedItem
     {
+        private readonly Project project;
         private int mostLikelyDuration;
         private int maxDuration;
         private int minDuration;
         private List<Task> dependencies;
 
         #region Properties
+        /// <summary>
+        /// Gets the project the task is on
+        /// Added 2/13/2021 by Robert Nelson
+        /// </summary>
+        public Project Proj
+        {
+            get => project;
+        }
+
         public int LikelyDuration
         {
             get => mostLikelyDuration;
@@ -54,9 +64,10 @@ namespace SmartPert.Model
         #endregion
 
         public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, 
-            string description = "", User creator = null, DateTime? creationTime = null, int id = -1) 
+            string description = "", User creator = null, DateTime? creationTime = null, Project project=null, int id = -1) 
             : base(name, start, end, description, creator, creationTime, id)
         {
+            this.project = project;
             if (duration == 0)
                 mostLikelyDuration = 1;
             else
@@ -124,22 +135,66 @@ namespace SmartPert.Model
         #endregion
 
         #region Database Methods
+        /// <summary>
+        /// Updates the task data in the database
+        /// </summary>
         protected override void Update()
         {
-            throw new NotImplementedException();
+            string query = "UPDATE dbo.[Task] (Name, StartDate, EndDate, Description, MinEstDuration, MaxEstDuration, MostLikelyEstDuration)" +
+                "VALUES (@Name, " + StartDate + ", " + EndDate + ", @Description, " + MinDuration + ", " + MaxDuration + ", " + mostLikelyDuration + 
+                "WHERE TaskId = " + Id + ";";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@Name", Name);
+            command.Parameters.AddWithValue("@Description", Description);
+            command.ExecuteNonQuery();
+            CloseConnection();
         }
 
+        /// <summary>
+        /// Inserts a task into the database
+        /// 2/13//2021 by Robert Nelson
+        /// </summary>
+        /// <returns>Task id</returns>
+        /// <throws>Exception on error (task name is already taken in project or project does not exist)</throws>
         protected override int Insert()
         {
-            throw new NotImplementedException();
+            string query = "EXEC dbo.CreateTask @Name, @Description, " + MinDuration + ", " + MaxDuration + ", " + StartDate + ", " + EndDate + ", " +
+                "@ProjectId, @Creator, @CreationDate out, @Result out, @ResultId out";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@Name", Name);
+            command.Parameters.AddWithValue("@Description", Description);
+            command.Parameters.AddWithValue("@ProjectId", Proj.Id);
+            command.Parameters.AddWithValue("@Creator", creator.Name);
+            var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
+            createDate.Direction = System.Data.ParameterDirection.Output;
+            var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
+            result.Direction = System.Data.ParameterDirection.Output;
+            var resultId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
+            resultId.Direction = System.Data.ParameterDirection.Output;
+            command.ExecuteNonQuery();
+            if (!(bool)result.Value)
+                throw new Exception("Failed to insert task " + Name);
+            creationDate = (DateTime) createDate.Value;
+            return (int) resultId.Value;
         }
 
+        /// <summary>
+        /// Deletes a task
+        /// </summary>
         public override void Delete()
         {
-            throw new NotImplementedException();
+            string query = "EXEC dbo.TaskDelete " + Id + ";";
+            ExecuteSql(query);
         }
 
-        static public Task Parse(SqlDataReader reader, List<User> users)
+        /// <summary>
+        /// Parses the task from the sqldatareader
+        /// </summary>
+        /// <param name="reader">open SqlDataReader</param>
+        /// <param name="users">list of all users</param>
+        /// <param name="project">project that task is on</param>
+        /// <returns>Task</returns>
+        static public Task Parse(SqlDataReader reader, List<User> users, Project project)
         {
             return new Task(
                 (string)reader["Name"],
@@ -151,6 +206,7 @@ namespace SmartPert.Model
                 DBFunctions.StringCast(reader, "Description"),
                 users.Find(x => x.Name == (string) reader["CreatorUsername"]),
                 DBFunctions.DateCast(reader, "CreationDate"),
+                project,
                 (int)reader["TaskId"]);
         }
 

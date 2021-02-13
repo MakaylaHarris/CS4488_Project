@@ -106,7 +106,7 @@ namespace SmartPert.Model
             SqlDataReader reader = OpenReader("Select * from Task Where ProjectId=" + CurrentProject.Id + ";");
             while (reader.Read())
             {
-                Task t = Task.Parse(reader, users);
+                Task t = Task.Parse(reader, users, CurrentProject);
                 idToTask[t.Id] = t;
                 CurrentProject.AddTask(t);
             }
