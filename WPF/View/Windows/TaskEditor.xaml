@@ -6,8 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartPert.View.Windows" xmlns:controls="clr-namespace:SmartPert.View.Controls"
         mc:Ignorable="d"
-        WindowStyle="None"
-        Height="700" Width="350">
+        Height="650" Width="350">
     <Grid Margin="10">
         <Grid.Resources>
             <Style TargetType="{x:Type controls:IntegerEdit}">
@@ -33,19 +32,18 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="Task Name:"/>
-        <TextBox x:Name="TaskName" Grid.Column="2" Width="100" Height="30"/>
+        <Label Content="Name:"/>
+        <TextBox x:Name="TaskName" Grid.Column="2" Width="100" Height="30" LostFocus="TaskName_LostFocus"/>
 
         <Label x:Name="CreatedLabel" Content="(Not created)" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2"/>
-
-        <Label Content="Task Description:" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="TaskDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Width="250" Margin="0,0,0,10" Grid.ColumnSpan="2" Grid.Row="3"/>
-
+        <CheckBox x:Name="Complete" Content="Complete" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="Complete_Checked" />
+        <TextBox x:Name="TaskDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Width="250" Margin="0,0,0,10" Grid.ColumnSpan="2" Grid.Row="3" LostFocus="TaskDescription_LostFocus"/>
+        
         <Label Content="Start Date:" HorizontalAlignment="Right" Grid.Row="4"/>
-        <DatePicker x:Name="StartDate" Grid.Column="2"  Grid.Row="4"/>
+        <DatePicker x:Name="StartDate" Grid.Column="2"  Grid.Row="4" SelectedDateChanged="StartDate_SelectedDateChanged"/>
 
         <Label Content="Completed Date:" Grid.Row="5"/>
-        <DatePicker x:Name="EndDate" Grid.Row="5" Grid.Column="2"/>
+        <DatePicker x:Name="EndDate" Grid.Row="5" Grid.Column="2" SelectedDateChanged="EndDate_SelectedDateChanged"/>
 
         <Border Grid.Row="6" Grid.ColumnSpan="2">
             <Grid>
@@ -74,6 +72,6 @@
         <Label Content="Assignees:" Grid.Row="7"/>
         <Button x:Name="AssignBtn" Content="->" Grid.Column="2" Grid.Row="7" Foreground="Blue" Background="Transparent" BorderThickness="0" MouseEnter="AssignBtn_MouseEnter"/>
 
-        <Label x:Name="ValidateLabel" Content="Task Name Required" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Red"/>
+        <Label x:Name="ValidateLabel" Content="" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Red"/>
     </Grid>
 </Window>

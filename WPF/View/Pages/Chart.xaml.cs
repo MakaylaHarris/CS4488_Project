@@ -44,6 +44,8 @@ namespace SmartPert.View.Pages
         LinearGradientBrush taskGradient = new LinearGradientBrush();
         WindowState prevWindowState = new WindowState();
 
+        public IModel Model { get => model; }
+
         public Chart(IModel model)
         {
             InitializeComponent();

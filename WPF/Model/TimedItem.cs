@@ -27,8 +27,11 @@ namespace SmartPert.Model
             get => startDate;
             set
             {
-                startDate = value;
-                Update();
+                if(startDate != value)
+                {
+                    startDate = value;
+                    Update();
+                }
             }
         }
 
@@ -37,8 +40,11 @@ namespace SmartPert.Model
             get => endDate;
             set
             {
-                endDate = value;
-                Update();
+                if(endDate != value)
+                {
+                    endDate = value;
+                    Update();
+                }
             }
         }
 
@@ -47,8 +53,11 @@ namespace SmartPert.Model
             get => name;
             set
             {
-                name = value;
-                Update();
+                if(name != value)
+                {
+                    name = value;
+                    Update();
+                }
             }
         }
 
@@ -57,8 +66,11 @@ namespace SmartPert.Model
             get => description;
             set
             {
-                description = value;
-                Update();
+                if(description != value)
+                {
+                    description = value;
+                    Update();
+                }
             }
         }
 

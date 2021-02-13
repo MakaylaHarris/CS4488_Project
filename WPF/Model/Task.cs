@@ -22,14 +22,20 @@ namespace SmartPert.Model
             get => mostLikelyDuration;
             set
             {
-                mostLikelyDuration = value;
-                Update();
+                if(mostLikelyDuration != value)
+                {
+                    mostLikelyDuration = value;
+                    Update();
+                }
             }
         }
         public int MaxDuration { get => maxDuration; 
             set {
-                maxDuration = value;
-                Update();
+                if(maxDuration != value)
+                {
+                    maxDuration = value;
+                    Update();
+                }
             } 
         }
 
@@ -37,8 +43,11 @@ namespace SmartPert.Model
         {
             get => minDuration; set
             {
-                minDuration = value;
-                Update();
+                if (minDuration != value)
+                {
+                    minDuration = value;
+                    Update();
+                }
             }
         }
         public List<Task> Dependencies { get => dependencies; }

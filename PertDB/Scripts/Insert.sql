@@ -17,29 +17,29 @@ INSERT INTO [dbo].[User] (UserName, [Password], Email, [Name])
 VALUES ('TestUser3', 'Pass3', 'Test3@email.com', 'Test Name3');
 
 -- Projects
-INSERT INTO [dbo].[Project] ([Name], [StartDate], [EndDate], [Description]) 
-VALUES (N'Test', N'2021-02-06 00:00:00', N'2021-05-07 00:00:00', N'A test project');
+INSERT INTO [dbo].[Project] ([Name], [StartDate], [EndDate], [Description], [CreationDate], [Creator]) 
+VALUES (N'Test', N'2021-02-06 00:00:00', N'2021-05-07 00:00:00', N'A test project', '2/5/2021', 'TestUser');
 
 DECLARE @projectId int = (SELECT ProjectId FROM Project WHERE [Name] = 'Test');
 
 -- Tasks
-INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task1', '2/6/2021', '2/8/2021', 'This is the first task', @projectId, 1, 2, 1);
+INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration, [CreatorUsername], [CreationDate])
+VALUES ('Task1', '2/6/2021', '2/8/2021', 'This is the first task', @projectId, 1, 2, 1, 'TestUser', '2/6/2021');
 
-INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task2', '2/8/2021', '2/10/2021', 'This is the second task', @projectId, 3, 5, 2);
+INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration, [CreatorUsername], [CreationDate])
+VALUES ('Task2', '2/8/2021', '2/10/2021', 'This is the second task', @projectId, 3, 5, 2, 'TestUser', '2/6/2021');
 
-INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task3', '2/9/2021', '2/11/2021', 'This is the third task', @projectId, 2, 2, 1);
+INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration, [CreatorUsername], [CreationDate])
+VALUES ('Task3', '2/9/2021', '2/11/2021', 'This is the third task', @projectId, 2, 2, 1, 'TestUser', '2/7/2021');
 
-INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task4', '2/6/2021', '2/8/2021', 'This task has an earlier start date on purpose', @projectId, 5, 7, 3);
+INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration, [CreatorUsername], [CreationDate])
+VALUES ('Task4', '2/6/2021', '2/8/2021', 'This task has an earlier start date on purpose', @projectId, 5, 7, 3, 'TestUser', '2/6/2021');
 
-INSERT INTO [dbo].[Task] (Name, StartDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task5', '2/8/2021', 'This is the fifth task and is not complete', @projectId, 3, 10, 2);
+INSERT INTO [dbo].[Task] (Name, StartDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration, [CreatorUsername], [CreationDate])
+VALUES ('Task5', '2/8/2021', 'This is the fifth task and is not complete', @projectId, 3, 10, 2, 'TestUser', '2/6/2021');
 
-INSERT INTO [dbo].[Task] (Name, StartDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)
-VALUES ('Task6', '2/10/2021', 'This is the sixth task and is not complete', @projectId, 5, 8, 3);
+INSERT INTO [dbo].[Task] (Name, StartDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration, [CreatorUsername], [CreationDate])
+VALUES ('Task6', '2/10/2021', 'This is the sixth task and is not complete', @projectId, 5, 8, 3, 'TestUser', '2/6/2021');
 
 
 -- Dependencies

@@ -25,7 +25,7 @@ namespace SmartPert.View.Controls
         private void mi_editTask_Click(object sender, RoutedEventArgs e)
         {
             Task task = (Task)((MenuItem)sender).DataContext;
-            new TaskEditor(null, task).ShowDialog();
+            new TaskEditor(_chart.Model, task).ShowDialog();
             _chart.RefreshGraph();
             //_chart.DrawGraph(_chart.GetTasksAndDependanciesFromDatabase());
         }
@@ -33,7 +33,6 @@ namespace SmartPert.View.Controls
         private void mi_deleteTask_Click(object sender, RoutedEventArgs e)
         {
             Task task = (Task)((MenuItem)sender).DataContext;
-            _chart.DeleteTask(task);
             _chart.DeleteTask(task);
             _chart.RefreshGraph();
 

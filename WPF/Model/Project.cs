@@ -18,7 +18,6 @@ namespace SmartPert.Model
             User creator = null, DateTime? creationTime = null, int id = -1) 
             : base(name, start, end, description, creator, creationTime, id)
         {
-            AddWorker(creator);
             tasks = new List<Task>();
         }
 
@@ -109,7 +108,7 @@ namespace SmartPert.Model
                 (DateTime)reader["StartDate"],
                 DBFunctions.DateCast(reader, "EndDate"),
                 DBFunctions.StringCast(reader, "Description"),
-                users.Find(x => x.Username == (string)reader["CreatorUsername"]),
+                users.Find(x => x.Username == (string)reader["Creator"]),
                 DBFunctions.DateCast(reader, "CreationDate"),
                 (int)reader["ProjectId"]); ;
         }
