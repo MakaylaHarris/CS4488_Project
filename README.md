@@ -3,7 +3,7 @@ SmartPert is a Pert/Gantt chart creation tool for managing projects.
 Unlike other tools, this one allows for fuzzy task completion estimates which is particularly useful in software engineering.
 
 ## Client Installation
-Download a [release](releases) and follow the normal installation process.
+Download a [release](https://github.com/MakaylaHarris/CS4488_Project/releases) and follow the normal installation process.
 
 ## Server Installation
 Installation will create the database on your target server.
