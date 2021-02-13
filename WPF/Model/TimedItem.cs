@@ -16,8 +16,12 @@ namespace SmartPert.Model
         private int id;
         private bool isComplete;
         protected List<User> workers;
+        protected User creator;
+        protected DateTime creationDate;
 
         #region Properties
+        public User Creator { get => creator; }
+        public DateTime CreationDate { get => startDate; }
         public DateTime StartDate
         {
             get => startDate;
@@ -78,12 +82,15 @@ namespace SmartPert.Model
         #endregion
 
         #region Constructor
-        public TimedItem(string name, DateTime start, DateTime? end, string description = "", int id = -1)
+        public TimedItem(string name, DateTime start, DateTime? end, string description = "", 
+            User creator = null, DateTime? creationTime = null, int id = -1)
         {
             this.name = name;
             startDate = start;
             endDate = end;
             this.description = description;
+            this.creator = creator;
+            this.creationDate = creationTime != null ? (DateTime) creationTime : DateTime.Now;
             if (id >= 0)
             {
                 this.id = (int)id;

@@ -23,7 +23,7 @@ namespace SmartPert.Command
             this.start = start;
             this.end = end;
             this.description = description;
-            old = new Project(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.Description, toEdit.Id);
+            old = new Project(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.Description, toEdit.Creator, toEdit.CreationDate, toEdit.Id);
         }
 
         protected override bool Execute()

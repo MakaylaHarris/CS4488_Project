@@ -6,12 +6,6 @@ GO
 * Test data
 * Added 2/6/2021 by Robert Nelson
 ********************************************************************************/
--- Projects
-INSERT INTO [dbo].[Project] ([Name], [StartDate], [EndDate], [Description]) 
-VALUES (N'Test', N'2021-02-06 00:00:00', N'2021-05-07 00:00:00', N'A test project');
-
-DECLARE @projectId int = (SELECT ProjectId FROM Project WHERE [Name] = 'Test');
-
 -- Users
 INSERT INTO [dbo].[User] (UserName, [Password], Email, [Name])
 VALUES ('TestUser', 'Pass', 'Test@email.com', 'Test Name');
@@ -21,6 +15,12 @@ VALUES ('TestUser2', 'Pass2', 'Test2@email.com', 'Test Name2');
 
 INSERT INTO [dbo].[User] (UserName, [Password], Email, [Name])
 VALUES ('TestUser3', 'Pass3', 'Test3@email.com', 'Test Name3');
+
+-- Projects
+INSERT INTO [dbo].[Project] ([Name], [StartDate], [EndDate], [Description]) 
+VALUES (N'Test', N'2021-02-06 00:00:00', N'2021-05-07 00:00:00', N'A test project');
+
+DECLARE @projectId int = (SELECT ProjectId FROM Project WHERE [Name] = 'Test');
 
 -- Tasks
 INSERT INTO [dbo].[Task] (Name, StartDate, EndDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration)

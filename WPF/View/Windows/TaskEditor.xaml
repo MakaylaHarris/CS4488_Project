@@ -6,7 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartPert.View.Windows" xmlns:controls="clr-namespace:SmartPert.View.Controls"
         mc:Ignorable="d"
-        Title="Create/Edit Task" Height="700" Width="350">
+        WindowStyle="None"
+        Height="700" Width="350">
     <Grid Margin="10">
         <Grid.Resources>
             <Style TargetType="{x:Type controls:IntegerEdit}">
@@ -24,47 +25,55 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="4*"/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition Height="2*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Content="Task Name:"/>
         <TextBox x:Name="TaskName" Grid.Column="2" Width="100" Height="30"/>
-        <Label x:Name="NameInvalidLbl" Content="Invalid" HorizontalAlignment="Left" Foreground="Red" Visibility="Hidden"/>
 
-        <Label Content="Task Description:" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="TaskDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Width="250" Margin="0,0,0,10" Grid.ColumnSpan="2" Grid.Row="2"/>
+        <Label x:Name="CreatedLabel" Content="(Not created)" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2"/>
 
-        <Label Content="Start Date:" HorizontalAlignment="Right" Grid.Row="3"/>
-        <Label x:Name="StartInvalidLbl" Content="Invalid" HorizontalAlignment="Left" Foreground="Red" Grid.Row="3" Visibility="Hidden"/>
-        <DatePicker x:Name="StartDate" Grid.Column="2"  Grid.Row="3"/>
+        <Label Content="Task Description:" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="TaskDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Width="250" Margin="0,0,0,10" Grid.ColumnSpan="2" Grid.Row="3"/>
 
-        <Label Content="Min Duration:" Grid.Row="4"/>
-        <controls:IntegerEdit x:Name="MinDuration" Grid.Row="4" Grid.Column="2" IntegerChange="On_Min_Change"/>
-        
-        <Label Content="Most Likely Duration:" Grid.Row="5"/>
-        <controls:IntegerEdit x:Name="MostLikelyDuration" Grid.Row="5" Grid.Column="2" IntegerChange="On_Likely_Change"/>
+        <Label Content="Start Date:" HorizontalAlignment="Right" Grid.Row="4"/>
+        <DatePicker x:Name="StartDate" Grid.Column="2"  Grid.Row="4"/>
 
-        <Label Content="Max Duration:" Grid.Row="6"/>
-        <controls:IntegerEdit x:Name="MaxDuration"  Grid.Row="6" Grid.Column="2" IntegerChange="On_Max_Change"/>
+        <Label Content="Completed Date:" Grid.Row="5"/>
+        <DatePicker x:Name="EndDate" Grid.Row="5" Grid.Column="2"/>
 
-        <Label Content="Completed Date:" Grid.Row="7"/>
-        <Label x:Name="EndInvalidLbl" Grid.Row="7" HorizontalAlignment="Left" Foreground="Red" Content="Invalid" Visibility="Hidden"/>
-        <DatePicker x:Name="EndDate" Grid.Row="7" Grid.Column="2"/>
+        <Border Grid.Row="6" Grid.ColumnSpan="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Estimated Durations (days):" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" Grid.Row="0"/>
+                <Label Content="Minimum:" Grid.Row="1"/>
+                <controls:IntegerEdit x:Name="MinDuration" Grid.Row="1" Grid.Column="2" IntegerChange="On_Min_Change"/>
 
-        <Label Content="Assignees:" Grid.Row="8"/>
-        <Button Content="Assign to..." Grid.Column="2" Grid.Row="8" Foreground="Blue" Background="Transparent" BorderThickness="0"/>
-        <Grid x:Name="Assignees" Grid.Row="9" Grid.ColumnSpan="2">
-            
-        </Grid>
+                <Label Content="Likely:" Grid.Row="2"/>
+                <controls:IntegerEdit x:Name="MostLikelyDuration" Grid.Row="2" Grid.Column="2" IntegerChange="On_Likely_Change"/>
 
-        <Button x:Name="btnCancel" Content="Cancel" Grid.Row="10" Click="btnCancel_Click"/>
-        <Button x:Name="btnSubmit" Content="Submit" Grid.Row="10" Grid.Column="2" Click="btnSubmit_Click"/>
+                <Label Content="Maximum:" Grid.Row="4"/>
+                <controls:IntegerEdit x:Name="MaxDuration"  Grid.Row="4" Grid.Column="2" IntegerChange="On_Max_Change"/>
+            </Grid>
+        </Border>
+
+        <Label Content="Assignees:" Grid.Row="7"/>
+        <Button x:Name="AssignBtn" Content="->" Grid.Column="2" Grid.Row="7" Foreground="Blue" Background="Transparent" BorderThickness="0" MouseEnter="AssignBtn_MouseEnter"/>
+
+        <Label x:Name="ValidateLabel" Content="Task Name Required" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Red"/>
     </Grid>
 </Window>

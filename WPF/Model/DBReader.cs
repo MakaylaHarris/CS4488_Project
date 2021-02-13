@@ -83,7 +83,7 @@ namespace SmartPert.Model
             string name = Properties.Settings.Default.LastProject;
             while (reader.Read())
             {
-                Project p = Project.Parse(reader);
+                Project p = Project.Parse(reader, users);
                 projects.Add(p);
                 if (currentProject != null)
                 {
@@ -106,7 +106,7 @@ namespace SmartPert.Model
             SqlDataReader reader = OpenReader("Select * from Task Where ProjectId=" + CurrentProject.Id + ";");
             while (reader.Read())
             {
-                Task t = Task.Parse(reader);
+                Task t = Task.Parse(reader, users);
                 idToTask[t.Id] = t;
                 CurrentProject.AddTask(t);
             }
@@ -362,8 +362,8 @@ namespace SmartPert.Model
         public void OnDBUpdate()
         {
             connection.Open();
-            UpdateProject();
             UpdateUsers();
+            UpdateProject();
             if (CurrentProject != null)
             {
                 Dictionary<int, Task> idToTask = UpdateTasks();

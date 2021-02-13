@@ -59,67 +59,40 @@ namespace SmartPert.View.Windows
             MinDuration.Value = t.MinDuration;
             MostLikelyDuration.Value = t.LikelyDuration;
             MaxDuration.Value = t.MaxDuration;
-            // Todo assignees
         }
         #endregion
-
-        #region Button Clicks
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnSubmit_Click(object sender, RoutedEventArgs e)
-        {
-            if (isValidInput())
-            {
-                if (task != null)
-                {
-                    new EditTaskCmd(task, TaskName.Text, (DateTime)StartDate.SelectedDate, EndDate.SelectedDate,
-                        MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text).Run();
-                }
-                else
-                    createTask();
-                Close();
-            }
-        }
 
         private void createTask()
         {
-            new CreateTaskCmd(model, TaskName.Text, (DateTime)StartDate.SelectedDate, EndDate.SelectedDate,
-                MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text).Run();
+            if (task != null)
+                throw new Exception("Task " + task.Name + " already exists in editor, cannot recreate!");
+            CreateTaskCmd cmd = new CreateTaskCmd(model, TaskName.Text, (DateTime)StartDate.SelectedDate, EndDate.SelectedDate,
+                MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text);
+            cmd.Run();
+            task = cmd.Task;
+            CreatedLabel.Content = "Created " + task.CreationDate.ToString() + " by " + task.Creator.Name;
         }
 
-        private void AssignTo_Click(object sender, RoutedEventArgs e)
-        {
-            if (task == null)
-            {
-                if (isValidInput())
-                    createTask();
-                else
-                    return;
-            }
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region Private Validation Methods
         private bool isValidInput()
         {
-            return isValidTaskName() && isValidDates();
+            if(isValidTaskName() && isValidDates())
+            {
+                ValidateLabel.Content = "";
+                return true;
+            }
+            return false;
         }
 
         private bool isValidTaskName()
         {
-            if (!model.IsValidTaskName(TaskName.Text))
-            {
-                NameInvalidLbl.Visibility = Visibility.Visible;
-                return false;
-            } else
-            {
-                NameInvalidLbl.Visibility = Visibility.Hidden;
-                return true;
-            }
+            bool result = false;
+            if (TaskName.Text == "")
+                ValidateLabel.Content = "Task name is required!";
+            else if (!model.IsValidTaskName(TaskName.Text))
+                ValidateLabel.Content = "Task name " + TaskName.Text + " is not valid";
+            else
+                result = true;
+            return result;
         }
 
         private bool isValidDates()
@@ -128,21 +101,20 @@ namespace SmartPert.View.Windows
             bool result = true;
             if(StartDate.SelectedDate > EndDate.SelectedDate)
             {
-                EndInvalidLbl.Visibility = Visibility.Visible;
-                result = false;
-            } else
-                EndInvalidLbl.Visibility = Visibility.Hidden;
+                ValidateLabel.Content = "Start date must be before end date";
+                return false;
+            }
 
-            // Check if it's within project timeframe
+            // Check if it's within project time frame
             if (StartDate.SelectedDate < model.GetProject().StartDate)
             {
-                StartInvalidLbl.Visibility = Visibility.Visible;
+                ValidateLabel.Content = "Task start date must be after project start date.";
                 result = false;
             }
-            else
-                StartInvalidLbl.Visibility = Visibility.Hidden;
             return result;
         }
+
+        #region Event Handlers
 
         private void On_Min_Change(object sender, int val)
         {
@@ -167,6 +139,11 @@ namespace SmartPert.View.Windows
                 MostLikelyDuration.Value = val;
         }
 
+        private void AssignBtn_MouseEnter(object sender, MouseEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
+
     }
 }

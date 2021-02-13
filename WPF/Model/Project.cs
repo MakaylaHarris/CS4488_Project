@@ -14,8 +14,11 @@ namespace SmartPert.Model
 
         public List<Task> Tasks { get => tasks; }
 
-        public Project(string name, DateTime start, DateTime? end, string description = "", int id = -1) : base(name, start, end, description, id)
+        public Project(string name, DateTime start, DateTime? end, string description = "", 
+            User creator = null, DateTime? creationTime = null, int id = -1) 
+            : base(name, start, end, description, creator, creationTime, id)
         {
+            AddWorker(creator);
             tasks = new List<Task>();
         }
 
@@ -98,14 +101,17 @@ namespace SmartPert.Model
                 "'Where ProjectId=" + Id + ";");
         }
 
-        static public Project Parse(SqlDataReader reader)
+        static public Project Parse(SqlDataReader reader, List<User> users)
         {
+
             return new Project(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
                 DBFunctions.DateCast(reader, "EndDate"),
                 DBFunctions.StringCast(reader, "Description"),
-                (int)reader["ProjectId"]);
+                users.Find(x => x.Username == (string)reader["CreatorUsername"]),
+                DBFunctions.DateCast(reader, "CreationDate"),
+                (int)reader["ProjectId"]); ;
         }
 
         #endregion

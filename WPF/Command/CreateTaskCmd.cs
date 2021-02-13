@@ -19,6 +19,11 @@ namespace SmartPert.Command
         private readonly string description;
         private Model.Task task;
 
+        /// <summary>
+        /// Gets the created task
+        /// </summary>
+        public Model.Task Task { get => task; }
+
         public CreateTaskCmd(IModel model, string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "")
         {
             this.model = model;

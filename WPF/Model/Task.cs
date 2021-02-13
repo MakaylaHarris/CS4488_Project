@@ -44,7 +44,9 @@ namespace SmartPert.Model
         public List<Task> Dependencies { get => dependencies; }
         #endregion
 
-        public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "", int id = -1) : base(name, start, end, description, id)
+        public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, 
+            string description = "", User creator = null, DateTime? creationTime = null, int id = -1) 
+            : base(name, start, end, description, creator, creationTime, id)
         {
             if (duration == 0)
                 mostLikelyDuration = 1;
@@ -128,7 +130,7 @@ namespace SmartPert.Model
             throw new NotImplementedException();
         }
 
-        static public Task Parse(SqlDataReader reader)
+        static public Task Parse(SqlDataReader reader, List<User> users)
         {
             return new Task(
                 (string)reader["Name"],
@@ -138,6 +140,8 @@ namespace SmartPert.Model
                 (int)reader["MaxEstDuration"],
                 (int)reader["MinEstDuration"],
                 DBFunctions.StringCast(reader, "Description"),
+                users.Find(x => x.Name == (string) reader["CreatorUsername"]),
+                DBFunctions.DateCast(reader, "CreationDate"),
                 (int)reader["TaskId"]);
         }
 
