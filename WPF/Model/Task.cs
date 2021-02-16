@@ -68,6 +68,7 @@ namespace SmartPert.Model
             : base(name, start, end, description, creator, creationTime, id)
         {
             this.project = project;
+            // todo: move duration logic into properties (min <= likely <= max)
             if (duration == 0)
                 mostLikelyDuration = 1;
             else
@@ -81,6 +82,8 @@ namespace SmartPert.Model
             else
                 this.minDuration = minDuration;
             dependencies = new List<Task>();
+            if (id == -1)
+                this.id = Insert();
         }
 
         #region Workers
@@ -172,11 +175,17 @@ namespace SmartPert.Model
             command.Parameters.AddWithValue("@Name", Name);
             command.Parameters.AddWithValue("@Description", Description);
             command.Parameters.AddWithValue("@ProjectId", Proj.Id);
-            command.Parameters.AddWithValue("@Creator", creator.Name);
+            if (creator == null)
+                command.Parameters.AddWithValue("@Creator", DBNull.Value);
+            else
+                command.Parameters.AddWithValue("@Creator", creator.Name);
             var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
             sd.Value = StartDate;
             var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
-            ed.Value = EndDate;
+            if (EndDate != null)
+                ed.Value = EndDate;
+            else
+                ed.Value = DBNull.Value;
             var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
             createDate.Direction = System.Data.ParameterDirection.Output;
             var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
@@ -208,7 +217,7 @@ namespace SmartPert.Model
         /// <returns>Task</returns>
         static public Task Parse(SqlDataReader reader, List<User> users, Project project)
         {
-            User user = users.Find(x => x.Username == (string)reader["CreatorUsername"]);
+            User user = users != null ? users.Find(x => x.Username == (string)reader["CreatorUsername"]) : null;
             return new Task(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],

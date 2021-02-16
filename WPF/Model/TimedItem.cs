@@ -13,7 +13,7 @@ namespace SmartPert.Model
         private DateTime? endDate;
         private string name;
         private string description;
-        private int id;
+        protected int id;
         private bool isComplete;
         protected List<User> workers;
         protected User creator;
@@ -107,14 +107,7 @@ namespace SmartPert.Model
             this.description = description;
             this.creator = creator;
             this.creationDate = creationTime != null ? (DateTime) creationTime : DateTime.Now;
-            if (id >= 0)
-            {
-                this.id = (int)id;
-            }
-            else
-            {
-                this.id = (int)Insert();
-            }
+            this.id = id;
             isComplete = EndDate != null && EndDate < DateTime.Now;
             workers = new List<User>();
         }

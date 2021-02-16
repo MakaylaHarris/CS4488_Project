@@ -19,6 +19,8 @@ namespace SmartPert.Model
             : base(name, start, end, description, creator, creationTime, id)
         {
             tasks = new List<Task>();
+            if (id == -1)
+                id = Insert();
         }
 
         #region Task Methods
@@ -106,13 +108,13 @@ namespace SmartPert.Model
 
         static public Project Parse(SqlDataReader reader, List<User> users)
         {
-
+            User user = users != null ? users.Find(x => x.Username == (string)reader["Creator"]) : null;
             return new Project(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
                 DBFunctions.DateCast(reader, "EndDate"),
                 DBFunctions.StringCast(reader, "Description"),
-                users.Find(x => x.Username == (string)reader["Creator"]),
+                user,
                 DBFunctions.DateCast(reader, "CreationDate"),
                 (int)reader["ProjectId"]); ;
         }

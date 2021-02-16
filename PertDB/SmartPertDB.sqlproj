@@ -161,6 +161,10 @@
     <Build Include="dbo\Triggers\DeleteTask.sql" />
     <Build Include="dbo\Triggers\DeleteUser.sql" />
     <Build Include="dbo\StoredFunctions\GetTaskId.sql" />
+    <Build Include="dbo\StoredProcedures\CreateTask.sql" />
+    <Build Include="dbo\StoredProcedures\CreateProject.sql" />
+    <Build Include="dbo\StoredProcedures\ProjectDelete.sql" />
+    <Build Include="dbo\StoredProcedures\TaskDelete.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PertDB.refactorlog" />
