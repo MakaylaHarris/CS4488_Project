@@ -85,9 +85,11 @@ namespace SmartPert.View.Windows
         {
             CreateTaskCmd cmd = new CreateTaskCmd(model, TaskName.Text, (DateTime)StartDate.SelectedDate, EndDate.SelectedDate,
                 MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text);
-            cmd.Run();
-            task = cmd.Task;
-            CreatedLabel.Content = "Created " + task.CreationDate.ToString("d") + " by " + task.Creator.Name;
+            if(cmd.Run())
+            {
+                task = cmd.Task;
+                LoadTaskData(task);
+            }
         }
 
         private void runTaskEdit()
@@ -225,17 +227,6 @@ namespace SmartPert.View.Windows
             model.Unsubscribe(this);
         }
 
-        protected override void OnDeactivated(EventArgs e)
-        {
-            base.OnDeactivated(e);
-            try
-            {
-                Close();
-            }
-            catch(InvalidOperationException) { }
-        }
-
-
         private void AssignBtn_MouseEnter(object sender, MouseEventArgs e)
         {
             AssigneePopup.IsOpen = true;
@@ -275,5 +266,17 @@ namespace SmartPert.View.Windows
         }
         #endregion
 
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            if(IsLoaded)
+            {
+                // Todo: Known issue when creating task and pressing tab this throws null exception
+                try
+                {
+                    Close();
+                }
+                catch (InvalidOperationException) { }
+            }
+        }
     }
 }

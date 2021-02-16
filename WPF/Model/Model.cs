@@ -77,9 +77,29 @@ namespace SmartPert.Model
             return GetTasks().Find(x => x.Id == id);
         }
 
+        /// <summary>
+        /// Creates the task
+        ///   Date: 02/16/2021
+        ///   Author: Robert Nelson
+        /// </summary>
+        /// <param name="name">Task name</param>
+        /// <param name="start">start date</param>
+        /// <param name="end">end date</param>
+        /// <param name="description">task description</param>
+        /// <param name="duration">likely duration estimate</param>
+        /// <param name="maxDuration">maximum duration estimate</param>
+        /// <param name="minDuration">minimum duration estimate</param>
+        /// <returns>newly created task on success or null on failure</returns>
         public Task CreateTask(string name, DateTime start, DateTime? end, string description = "", int duration = 1, int maxDuration = 0, int minDuration = 0)
         {
-            throw new NotImplementedException();
+            Project project = GetProject();
+            Task task = null;
+            try
+            {
+                task = new Task(name, start, end, duration, maxDuration, minDuration, description, reader.CurrentUser, project: project);
+                project.AddTask(task);
+            } catch (Exception) { }
+            return task;
         }
 
         public void DeleteTask(Task t)

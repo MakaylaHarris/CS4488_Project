@@ -14,6 +14,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Closing="Window_Closing"
+        Deactivated="Window_Deactivated"
         Height="650" Width="350">
     <Grid Margin="10">
         <Grid.Resources>

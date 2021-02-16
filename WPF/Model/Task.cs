@@ -217,7 +217,8 @@ namespace SmartPert.Model
         /// <returns>Task</returns>
         static public Task Parse(SqlDataReader reader, List<User> users, Project project)
         {
-            User user = users != null ? users.Find(x => x.Username == (string)reader["CreatorUsername"]) : null;
+            string creator = DBFunctions.StringCast(reader, "CreatorUsername");
+            User user = users != null && creator != "" ? users.Find(x => x.Username == creator) : null;
             return new Task(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
