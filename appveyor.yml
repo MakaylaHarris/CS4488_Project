@@ -9,6 +9,9 @@
     # create Pert database
     - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
 
+build:
+  project: SmartPert.sln
+
 
 # Release Configuration
 -
