@@ -112,6 +112,7 @@ namespace SmartPert.Model
             command.Parameters.AddWithValue("@username", username);
             command.ExecuteNonQuery();
             CloseConnection();
+            Model.Instance.OnModelUpdate();
         }
 
         static public User Parse(SqlDataReader reader)

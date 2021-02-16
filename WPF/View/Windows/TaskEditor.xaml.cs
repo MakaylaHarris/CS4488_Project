@@ -2,6 +2,7 @@
 using SmartPert.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -19,11 +20,16 @@ namespace SmartPert.View.Windows
     /// Task Editor
     /// Created 2/11/2021 by Robert Nelson
     /// </summary>
-    public partial class TaskEditor : Window
+    public partial class TaskEditor : Window, IViewModel
     {
         private Task task;
         private IModel model;
+        private bool isLoading;
 
+        /// <summary>
+        /// Users assigned to task
+        /// </summary>
+        public List<User> Assignees { get; set; }
 
         #region Constructor
         /// <summary>
@@ -38,6 +44,8 @@ namespace SmartPert.View.Windows
             if (model == null)
                 throw new ArgumentNullException("task", "Task Editor requires model!");
             this.model = model;
+            model.Subscribe(this);
+            isLoading = false;
             Owner = Application.Current.MainWindow;
             if(task != null)
             {
@@ -47,11 +55,13 @@ namespace SmartPert.View.Windows
             {
                 DateTime projectStart = model.GetProject().StartDate;
                 StartDate.SelectedDate = DateTime.Now > projectStart ? DateTime.Now : projectStart;
+                Assignees = new List<User>();
             }
         }
 
         private void LoadTaskData(Task t)
         {
+            isLoading = true;
             TaskName.Text = t.Name;
             TaskDescription.Text = t.Description;
             EndDate.SelectedDate = t.EndDate;
@@ -63,6 +73,10 @@ namespace SmartPert.View.Windows
             if(t.Creator != null)
                 CreatedLabel.Content += " by " + t.Creator.Name;
             Complete.IsChecked = t.IsComplete;
+            Assignees = t.Workers;
+            //foreach(User user in t.Workers)
+            //    Assignees.Add(user.Username);
+            isLoading = false;
         }
         #endregion
 
@@ -99,7 +113,7 @@ namespace SmartPert.View.Windows
             bool result = false;
             if (TaskName.Text == "")
                 ValidateLabel.Content = "Task name is required!";
-            else if (TaskName.Text != task.Name && !model.IsValidTaskName(TaskName.Text))
+            else if ((task == null || TaskName.Text != task.Name) && !model.IsValidTaskName(TaskName.Text))
                 ValidateLabel.Content = "Task name " + TaskName.Text + " is not valid";
             else
                 result = true;
@@ -127,12 +141,13 @@ namespace SmartPert.View.Windows
         #endregion
 
         #region Event Handlers
+
         /// <summary>
         /// Call this every time an update occurs to a task field
         /// </summary>
         private void On_Update()
         {
-            if (isValidInput())
+            if (!isLoading && isValidInput())
             {
                 if (task == null)
                     createTask();
@@ -159,7 +174,7 @@ namespace SmartPert.View.Windows
             // Ensure that min is <= the others
             if (val > MostLikelyDuration.Value)
                 MostLikelyDuration.Value = val;
-            else if (val != task.MinDuration)
+            else
                 On_Update();
         }
 
@@ -170,7 +185,7 @@ namespace SmartPert.View.Windows
                 MinDuration.Value = val;
             else if (val > MaxDuration.Value)
                 MaxDuration.Value = val;
-            else if (val != task.LikelyDuration)
+            else
                 On_Update();
         }
 
@@ -179,7 +194,7 @@ namespace SmartPert.View.Windows
             // Ensure Max >= most likely
             if (val < MostLikelyDuration.Value)
                 MostLikelyDuration.Value = val;
-            else if (val != task.MaxDuration)
+            else
                 On_Update();
         }
         private void EndDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -205,10 +220,58 @@ namespace SmartPert.View.Windows
             if (task == null || TaskName.Text != task.Name)
                 On_Update();
         }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            model.Unsubscribe(this);
+        }
+
+        protected override void OnDeactivated(EventArgs e)
+        {
+            base.OnDeactivated(e);
+            try
+            {
+                Close();
+            }
+            catch(InvalidOperationException) { }
+        }
+
 
         private void AssignBtn_MouseEnter(object sender, MouseEventArgs e)
         {
-            throw new NotImplementedException();
+            AssigneePopup.IsOpen = true;
+        }
+        private void AssignBtn_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (!AssigneePopup.IsMouseOver)
+                AssigneePopup.IsOpen = false;
+        }
+        private void AssigneePopup_LostFocus(object sender, RoutedEventArgs e)
+        {
+            AssigneePopup.IsOpen = false;
+        }
+
+        private void AddAssignee_Click(object sender, RoutedEventArgs e)
+        {
+            if(task != null)
+            {
+                throw new NotImplementedException();
+            }
+        }
+        #endregion
+
+        #region Public methods
+
+        /// <summary>
+        /// Receives updates from the model and updates the task
+        /// </summary>
+        /// <param name="p">project</param>
+        public void OnModelUpdate(Project p)
+        {
+            if(task != null)
+            {
+                task = model.GetTaskById(task.Id);
+                LoadTaskData(task);
+            }
         }
         #endregion
 

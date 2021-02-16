@@ -87,17 +87,21 @@ namespace SmartPert.Model
 
         protected override int Insert()
         {
-            return ExecuteSql("insert into Project(Name, Description, StartDate, WorkingHours, ProjectOwner) output INSERTED.ProjectId values('"
+            // todo: fix this hot mess
+            int id = ExecuteSql("insert into Project(Name, Description, StartDate, WorkingHours, ProjectOwner) output INSERTED.ProjectId values('"
                    + Name + "', '" + Description + "', '" + StartDate + "', '" + EndDate + "');");
+            return id;
         }
 
         protected override void Update()
         {
+            // todo: fix this hot mess
             ExecuteSql("update Project set Name = '" + Name
                 + "', Description = '" + Description +
                 "', StartDate='" + StartDate +
                 "', EndDate='" + EndDate +
                 "'Where ProjectId=" + Id + ";");
+            Model.Instance.OnModelUpdate(this);
         }
 
         static public Project Parse(SqlDataReader reader, List<User> users)

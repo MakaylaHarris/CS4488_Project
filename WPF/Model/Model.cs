@@ -5,24 +5,34 @@ using SmartPert.View;
 namespace SmartPert.Model
 {
     /// <summary>
-    /// The model is the pipeline between the view and the database
+    /// The model is a singleton pipeline between the view and the database
     /// Created 1/28/2021 by Robert Nelson
     /// </summary>
     public class Model : IModel, DBUpdateReceiver
     {
+        private static readonly Model instance = new Model();
         private List<IViewModel> viewModels;
         private DBReader reader;
-        private User currentUser;
 
-        #region Constructor
-        public Model(IViewModel viewModel)
+        #region Model Instance
+        /// <summary>
+        /// Gets the instance and registers the view model
+        /// </summary>
+        /// <param name="viewModel">view model to register</param>
+        /// <returns>Model instance</returns>
+        static public Model GetInstance(IViewModel viewModel)
         {
-            viewModels = new List<IViewModel>();
-            Subscribe(viewModel);
-            reader = DBReader.Instantiate(this);
+            instance.Subscribe(viewModel);
+            return instance;
         }
 
-        public Model()
+        /// <summary>
+        /// Gets the model instance
+        /// </summary>
+        /// <returns>model</returns>
+        static public Model Instance { get => instance; }
+
+        private Model()
         {
             viewModels = new List<IViewModel>();
             reader = DBReader.Instantiate(this);
@@ -55,6 +65,18 @@ namespace SmartPert.Model
         #endregion
 
         #region Task Methods
+        /// <summary>
+        /// Gets the task by id
+        ///   Date: 02/13/2021
+        ///   Author: Robert Nelson
+        /// </summary>
+        /// <param name="id">task id</param>
+        /// <returns>Task or null</returns>
+        public Task GetTaskById(int id)
+        {
+            return GetTasks().Find(x => x.Id == id);
+        }
+
         public Task CreateTask(string name, DateTime start, DateTime? end, string description = "", int duration = 1, int maxDuration = 0, int minDuration = 0)
         {
             throw new NotImplementedException();
@@ -146,11 +168,15 @@ namespace SmartPert.Model
         #endregion
 
         #region Database Methods
-        public void OnDBUpdate(Project p)
+        public void OnModelUpdate(Project p = null)
         {
-            foreach(IViewModel viewModel in viewModels)
+            if (p == null)
+                p = GetProject();
+            foreach (IViewModel viewModel in viewModels)
                 viewModel.OnModelUpdate(p);
         }
+
+        public void OnDBUpdate(Project p = null) => OnModelUpdate(p);
 
         /// <summary>
         /// Refreshes the model

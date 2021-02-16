@@ -140,14 +140,22 @@ namespace SmartPert.Model
         /// </summary>
         protected override void Update()
         {
-            string query = "UPDATE dbo.[Task] (Name, StartDate, EndDate, Description, MinEstDuration, MaxEstDuration, MostLikelyEstDuration)" +
-                "VALUES (@Name, " + StartDate + ", " + EndDate + ", @Description, " + MinDuration + ", " + MaxDuration + ", " + mostLikelyDuration + 
-                "WHERE TaskId = " + Id + ";";
+            string query = "UPDATE dbo.[Task] SET Name=@Name, StartDate=@StartDate, EndDate=@EndDate" + 
+                ", Description=@Description, MinEstDuration=" + MinDuration + ", MaxEstDuration=" + MaxDuration + ", MostLikelyEstDuration=" +
+                mostLikelyDuration + " WHERE TaskId = " + Id + ";";                
             SqlCommand command = OpenConnection(query);
             command.Parameters.AddWithValue("@Name", Name);
             command.Parameters.AddWithValue("@Description", Description);
+            var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
+            sd.Value = StartDate;
+            var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
+            if (EndDate != null)
+                ed.Value = EndDate;
+            else
+                ed.Value = DBNull.Value;
             command.ExecuteNonQuery();
             CloseConnection();
+            Model.Instance.OnModelUpdate(this.project);
         }
 
         /// <summary>
@@ -158,13 +166,17 @@ namespace SmartPert.Model
         /// <throws>Exception on error (task name is already taken in project or project does not exist)</throws>
         protected override int Insert()
         {
-            string query = "EXEC dbo.CreateTask @Name, @Description, " + MinDuration + ", " + MaxDuration + ", " + StartDate + ", " + EndDate + ", " +
-                "@ProjectId, @Creator, @CreationDate out, @Result out, @ResultId out";
+            string query = "EXEC dbo.CreateTask @Name, @Description, " + MinDuration + ", " + mostLikelyDuration + ", " + MaxDuration + 
+                ", @StartDate, @EndDate, @ProjectId, @Creator, @CreationDate out, @Result out, @ResultId out";
             SqlCommand command = OpenConnection(query);
             command.Parameters.AddWithValue("@Name", Name);
             command.Parameters.AddWithValue("@Description", Description);
             command.Parameters.AddWithValue("@ProjectId", Proj.Id);
             command.Parameters.AddWithValue("@Creator", creator.Name);
+            var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
+            sd.Value = StartDate;
+            var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
+            ed.Value = EndDate;
             var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
             createDate.Direction = System.Data.ParameterDirection.Output;
             var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
@@ -196,6 +208,7 @@ namespace SmartPert.Model
         /// <returns>Task</returns>
         static public Task Parse(SqlDataReader reader, List<User> users, Project project)
         {
+            User user = users.Find(x => x.Username == (string)reader["CreatorUsername"]);
             return new Task(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
@@ -204,7 +217,7 @@ namespace SmartPert.Model
                 (int)reader["MaxEstDuration"],
                 (int)reader["MinEstDuration"],
                 DBFunctions.StringCast(reader, "Description"),
-                users.Find(x => x.Name == (string) reader["CreatorUsername"]),
+                user,
                 DBFunctions.DateCast(reader, "CreationDate"),
                 project,
                 (int)reader["TaskId"]);

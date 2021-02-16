@@ -43,6 +43,10 @@ namespace SmartPert.Model
                 if(endDate != value)
                 {
                     endDate = value;
+                    if (endDate == null)
+                        isComplete = false;
+                    else
+                        isComplete = true;
                     Update();
                 }
             }

@@ -4,8 +4,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SmartPert.View.Windows" xmlns:controls="clr-namespace:SmartPert.View.Controls"
+        xmlns:local="clr-namespace:SmartPert.View.Windows" xmlns:controls="clr-namespace:SmartPert.View.Controls" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Closing="Window_Closing"
         Height="650" Width="350">
     <Grid Margin="10">
         <Grid.Resources>
@@ -15,8 +23,10 @@
             <Style TargetType="{x:Type Label}">
                 <Setter Property="HorizontalAlignment" Value="Right"/>
                 <Setter Property="Margin" Value="10"/>
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
             </Style>
         </Grid.Resources>
+        <!--#region Definitions-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -32,19 +42,23 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <!--#endregion-->
         <Label Content="Name:"/>
         <TextBox x:Name="TaskName" Grid.Column="2" Width="100" Height="30" LostFocus="TaskName_LostFocus"/>
 
         <Label x:Name="CreatedLabel" Content="(Not created)" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2"/>
-        <CheckBox x:Name="Complete" Content="Complete" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="Complete_Checked" />
-        <TextBox x:Name="TaskDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Width="250" Margin="0,0,0,10" Grid.ColumnSpan="2" Grid.Row="3" LostFocus="TaskDescription_LostFocus"/>
-        
+        <CheckBox x:Name="Complete" Content="Complete" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Checked="Complete_Checked" Unchecked="Complete_Checked"/>
+        <Border Grid.Row="3" Grid.ColumnSpan="2">
+            <TextBox x:Name="TaskDescription" HorizontalAlignment="Center" TextWrapping="Wrap" Width="250" Margin="5" LostFocus="TaskDescription_LostFocus"/>
+        </Border>
+
         <Label Content="Start Date:" HorizontalAlignment="Right" Grid.Row="4"/>
         <DatePicker x:Name="StartDate" Grid.Column="2"  Grid.Row="4" SelectedDateChanged="StartDate_SelectedDateChanged"/>
 
         <Label Content="Completed Date:" Grid.Row="5"/>
         <DatePicker x:Name="EndDate" Grid.Row="5" Grid.Column="2" SelectedDateChanged="EndDate_SelectedDateChanged"/>
 
+        <!--#region Durations-->
         <Border Grid.Row="6" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -68,10 +82,30 @@
                 <controls:IntegerEdit x:Name="MaxDuration"  Grid.Row="4" Grid.Column="2" IntegerChange="On_Max_Change"/>
             </Grid>
         </Border>
-
+        <!--#endregion-->
+            
+        <!--#region Assignees-->
         <Label Content="Assignees:" Grid.Row="7"/>
-        <Button x:Name="AssignBtn" Content="->" Grid.Column="2" Grid.Row="7" Foreground="Blue" Background="Transparent" BorderThickness="0" MouseEnter="AssignBtn_MouseEnter"/>
+        <Button x:Name="AssignBtn" Grid.Column="2" Grid.Row="7" Foreground="Blue" Background="Transparent" BorderThickness="0" Width="80" MouseEnter="AssignBtn_MouseEnter" MouseLeave="AssignBtn_MouseLeave">
+            <StackPanel>
+                <materialDesign:PackIcon Kind="ArrowDownDropCircleOutline" Width="30" Height="25"/>
+                <Popup x:Name="AssigneePopup" MouseLeave="AssigneePopup_LostFocus">
+                    <StackPanel>
+                        <ListBox ItemsSource="{Binding Assignees}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Content="Add..." Click="AddAssignee_Click"/>
+                    </StackPanel>
+                </Popup>
+            </StackPanel>
+        </Button>
+        <!--#endregion-->
 
         <Label x:Name="ValidateLabel" Content="" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Red"/>
     </Grid>
+
 </Window>
