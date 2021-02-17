@@ -12,7 +12,7 @@ namespace SmartPert.Command
     /// </summary>
     public class EditTaskCmd : ICmd
     {
-        private readonly Task toEdit;
+        private Task toEdit;
         private readonly string name;
         private readonly DateTime start;
         private readonly DateTime? end;
@@ -58,6 +58,18 @@ namespace SmartPert.Command
             toEdit.MinDuration = oldTask.MinDuration;
             toEdit.Description = oldTask.Description;
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if(old == toEdit)
+                toEdit = (Task) newItem;
+
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTask(ref toEdit);
         }
     }
 }

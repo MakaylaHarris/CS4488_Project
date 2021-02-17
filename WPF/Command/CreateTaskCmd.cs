@@ -34,10 +34,14 @@ namespace SmartPert.Command
             this.maxDuration = maxDuration;
             this.minDuration = minDuration;
             this.description = description;
+            task = null;
         }
         protected override bool Execute()
         {
+            Model.Task prev = task;
             task = model.CreateTask(name, start, end, description, duration, maxDuration, minDuration);
+            if (prev != null)
+                CommandStack.Instance.UpdateIds(prev, task);
             return task != null;
         }
 
@@ -45,6 +49,17 @@ namespace SmartPert.Command
         {
             model.DeleteTask(task);
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == task)
+                task = (Model.Task) newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTask(ref task);
         }
     }
 }

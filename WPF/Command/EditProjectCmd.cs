@@ -9,7 +9,7 @@ namespace SmartPert.Command
 {
     public class EditProjectCmd : ICmd
     {
-        private readonly Project toEdit;
+        private Project toEdit;
         private readonly string name;
         private readonly DateTime start;
         private readonly DateTime? end;
@@ -42,6 +42,17 @@ namespace SmartPert.Command
             toEdit.EndDate = old.EndDate;
             toEdit.Description = old.Description;
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (toEdit == old)
+                toEdit = (Project)newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateProject(ref toEdit);
         }
     }
 }

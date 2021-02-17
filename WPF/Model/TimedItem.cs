@@ -7,7 +7,7 @@ namespace SmartPert.Model
     /// A named item with a start and end date, not used directly (abstract).
     /// Robert Nelson 1/28/2021
     /// </summary>
-    public abstract class TimedItem : IDBItem
+    public abstract class TimedItem : IDBItem, IEquatable<TimedItem>
     {
         private DateTime startDate;
         private DateTime? endDate;
@@ -111,6 +111,47 @@ namespace SmartPert.Model
             isComplete = EndDate != null && EndDate < DateTime.Now;
             workers = new List<User>();
         }
+
+        public TimedItem(TimedItem item, int id = -1)
+        {
+            name = item.Name;
+            startDate = item.startDate;
+            endDate = item.endDate;
+            description = item.description;
+            creator = item.creator;
+            creationDate = item.creationDate;
+            id = (id == -1) ? item.Id : id;
+            isComplete = EndDate != null && EndDate < DateTime.Now;
+            workers = new List<User>();
+        }
+        #endregion
+
+        #region ID stuff
+        public void UpdateId(int id) => this.id = id;
+
+        /// <summary>
+        /// Equals override that uses ids
+        /// </summary>
+        /// <param name="obj">object</param>
+        /// <returns>true if same type and ids equal</returns>
+        public bool Equals(TimedItem obj)
+        {
+            return obj != null && id == obj.Id;
+        }
+
+        /// <summary>
+        /// Equals override that uses ids
+        ///  Created 2/16/2021 by Robert Nelson
+        /// </summary>
+        /// <param name="obj">object</param>
+        /// <returns>true if same type and ids equal</returns>
+        public override bool Equals(object obj) => obj.GetType().Equals(GetType()) && Equals((TimedItem) obj);
+
+        /// <summary>
+        /// Gets the id
+        /// </summary>
+        /// <returns>id</returns>
+        public override int GetHashCode() => id;
         #endregion
 
         #region Worker Methods

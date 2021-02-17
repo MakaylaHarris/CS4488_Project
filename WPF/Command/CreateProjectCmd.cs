@@ -27,10 +27,14 @@ namespace SmartPert.Command
             this.start = start;
             this.end = end;
             this.description = description;
+            project = null;
         }
         protected override bool Execute()
         {
+            Project prev = project;
             project = model.CreateProject(name, start, end, description);
+            if (prev != null)
+                CommandStack.Instance.UpdateIds(prev, project);
             return project != null;
         }
 
@@ -38,6 +42,17 @@ namespace SmartPert.Command
         {
             model.DeleteProject(project);
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == project)
+                project = (Project) newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateProject(ref project);
         }
     }
 }

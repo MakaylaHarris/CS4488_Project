@@ -12,8 +12,8 @@ namespace SmartPert.Command
     /// </summary>
     public class RemoveDependencyCmd : ICmd
     {
-        private readonly Task parent;
-        private readonly Task dependent;
+        private Task parent;
+        private Task dependent;
 
         public RemoveDependencyCmd(Task parent, Task dependent)
         {
@@ -31,6 +31,20 @@ namespace SmartPert.Command
         {
             parent.AddDependency(dependent);
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == parent)
+                parent = (Task) newItem;
+            if (old == dependent)
+                dependent = (Task)newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTask(ref parent);
+            UpdateTask(ref dependent);
         }
     }
 }

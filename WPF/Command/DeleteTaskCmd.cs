@@ -42,5 +42,16 @@ namespace SmartPert.Command
             }
             return false;
         }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (task == old)
+                task = (Model.Task)newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTask(ref task);
+        }
     }
 }

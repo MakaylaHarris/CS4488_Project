@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SmartPert.Command;
 using SmartPert.Model;
 using SmartPert.View.Controls;
 using SmartPert.View.Windows;
@@ -428,7 +429,7 @@ namespace SmartPert.View.Pages
 
         public void DeleteTask(Task task)
         {
-            model.DeleteTask(task);
+            new DeleteTaskCmd(Model, task).Run();
         }
 
         public void AddTask(Task task)

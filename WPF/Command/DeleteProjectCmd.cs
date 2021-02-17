@@ -57,10 +57,22 @@ namespace SmartPert.Command
                 {
                     newProject.AddWorker(worker);
                 }
+                CommandStack.Instance.UpdateIds(project, newProject);
                 project = newProject;
                 return true;
             }
             return false;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == project)
+                project = (Project)newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateProject(ref project);
         }
     }
 }

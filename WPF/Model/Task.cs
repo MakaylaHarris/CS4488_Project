@@ -63,6 +63,7 @@ namespace SmartPert.Model
         public List<Task> Dependencies { get => dependencies; }
         #endregion
 
+        #region Constructor
         public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, 
             string description = "", User creator = null, DateTime? creationTime = null, Project project=null, int id = -1) 
             : base(name, start, end, description, creator, creationTime, id)
@@ -85,6 +86,15 @@ namespace SmartPert.Model
             if (id == -1)
                 this.id = Insert();
         }
+
+        public Task(Task task, int id = -1) : base(task, id)
+        {
+            mostLikelyDuration = task.LikelyDuration;
+            minDuration = task.MinDuration;
+            maxDuration = task.MaxDuration;
+            project = task.Proj;
+        }
+        #endregion
 
         #region Workers
         public override void AddWorker(User worker, bool updateDB=true)
@@ -163,7 +173,7 @@ namespace SmartPert.Model
 
         /// <summary>
         /// Inserts a task into the database
-        /// 2/13//2021 by Robert Nelson
+        /// 2/13/2021 by Robert Nelson
         /// </summary>
         /// <returns>Task id</returns>
         /// <throws>Exception on error (task name is already taken in project or project does not exist)</throws>
@@ -206,6 +216,7 @@ namespace SmartPert.Model
         {
             string query = "EXEC dbo.TaskDelete " + Id + ";";
             ExecuteSql(query);
+            project.RemoveTask(this);
         }
 
         /// <summary>

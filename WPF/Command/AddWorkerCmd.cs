@@ -13,8 +13,8 @@ namespace SmartPert.Command
     /// </summary>
     public class AddWorkerCmd : ICmd
     {
-        private readonly TimedItem item;
-        private readonly User worker;
+        private TimedItem item;
+        private User worker;
 
         public AddWorkerCmd(TimedItem item, User worker)
         {
@@ -32,6 +32,18 @@ namespace SmartPert.Command
         {
             item.RemoveWorker(worker);
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == this.item)
+                item = newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTimedItem(ref item);
+            UpdateUser(ref worker);
         }
     }
 }

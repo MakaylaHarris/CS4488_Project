@@ -14,6 +14,7 @@ namespace SmartPert.Model
 
         public List<Task> Tasks { get => tasks; }
 
+        #region Project
         public Project(string name, DateTime start, DateTime? end, string description = "", 
             User creator = null, DateTime? creationTime = null, int id = -1) 
             : base(name, start, end, description, creator, creationTime, id)
@@ -22,17 +23,22 @@ namespace SmartPert.Model
             if (id == -1)
                 id = Insert();
         }
+        public Project(Project project, int id = -1) : base(project, id)
+        {
+            tasks = new List<Task>();
+            foreach (Task t in project.tasks)
+                tasks.Add(t);
+        }
+        #endregion
 
         #region Task Methods
         public void AddTask(Task t)
         {
-            tasks.Add(t);
+            if(!tasks.Contains(t))
+                tasks.Add(t);
         }
 
-        public void RemoveTask(Task t)
-        {
-            tasks.Remove(t);
-        }
+        public void RemoveTask(Task t) => tasks.Remove(t);
         #endregion
 
         #region Workers

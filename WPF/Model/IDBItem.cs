@@ -37,6 +37,7 @@ namespace SmartPert.Model
         abstract protected void Update();
         abstract protected int Insert();
         abstract public void Delete();
+
         #endregion
     }
 }

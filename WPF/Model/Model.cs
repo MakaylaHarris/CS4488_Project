@@ -98,13 +98,19 @@ namespace SmartPert.Model
             {
                 task = new Task(name, start, end, duration, maxDuration, minDuration, description, reader.CurrentUser, project: project);
                 project.AddTask(task);
+                OnModelUpdate();
             } catch (Exception) { }
             return task;
         }
 
         public void DeleteTask(Task t)
         {
-            throw new NotImplementedException();
+            Task task = GetTaskById(t.Id);
+            if (task != null)
+            {
+                task.Delete();
+                OnModelUpdate();
+            }
         }
 
         public List<Task> GetTasks()
@@ -125,7 +131,13 @@ namespace SmartPert.Model
         /// </summary>
         /// <param name="name">name</param>
         /// <returns>null if it failed, user on success</returns>
-        public User CreateUser(string name) => reader.CreateUser(name);
+        public User CreateUser(string name)
+        {
+            User user = reader.CreateUser(name);
+            if (user != null)
+                OnModelUpdate();
+            return user;
+        }
 
         /// <summary>
         /// Gets all users
@@ -225,6 +237,45 @@ namespace SmartPert.Model
             return this.reader.TestNewConnection(connectString);
         }
 
+        #endregion
+
+        #region Get Updated Version of objects
+        public void UpdateProject(ref Project project, bool updateIfNull=true)
+        {
+            List<Project> projects = GetProjectList();
+            int id = project.Id;
+            Project ret = projects.Find(x => x.Id == id);
+            if (ret == null)
+            {
+                string name = project.Name;
+                ret = projects.Find(x => x.Name == name);
+            }
+            if (ret != null || updateIfNull)
+                project = ret;
+        }
+
+        public void UpdateUser(ref User user, bool updateIfNull=true)
+        {
+            string uname = user.Username;
+            User ret = GetUsers().Find(x => x.Username == uname);
+            if (ret != null || updateIfNull)
+                user = ret;
+        }
+
+        public void UpdateTask(ref Task t, bool updateIfNull=true)
+        {
+            List<Task> tasks = GetTasks();
+            int id = t.Id;
+            Task updated = tasks.Find(x => x.Id == id);
+            if (updated == null)
+            {
+                // Find by name
+                string name = t.Name;
+                updated = tasks.Find(x => x.Name == name);
+            }
+            if (updated != null || updateIfNull)
+                t = updated;
+        }
         #endregion
     }
 }

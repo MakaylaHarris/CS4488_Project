@@ -79,6 +79,7 @@ namespace SmartPert.Model
         private void UpdateProject()
         {
             projects.Clear();
+            Dictionary<Project, bool> found = new Dictionary<Project, bool>();
             SqlDataReader reader = ReadTable("Project");
             string name = Properties.Settings.Default.LastProject;
             while (reader.Read())
@@ -137,7 +138,6 @@ namespace SmartPert.Model
             }
             reader.Close();
         }
-
 
         private void UpdateWorkers(Dictionary<int, Task> idToTask)
         {
