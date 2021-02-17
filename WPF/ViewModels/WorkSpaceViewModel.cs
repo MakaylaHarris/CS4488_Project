@@ -1,0 +1,125 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using SmartPert.Annotations;
+using SmartPert.Model;
+using SmartPert.View.ViewClasses;
+
+namespace SmartPert.ViewModels
+{
+    class WorkSpaceViewModel : INotifyPropertyChanged
+    {
+        private string name = "Makayla";
+        private DateTime start = new System.DateTime(2021, 2, 11, 0, 0, 0, 0);
+        private DateTime end = new System.DateTime(2021, 3, 13, 0, 0, 0, 0);
+        private string description = "This is a test with hard-coded values";
+        private int id = 001;
+        private int date = (new System.DateTime(2021, 3, 13, 0, 0, 0, 0) - DateTime.Today.Date).Days;
+
+        private ObservableCollection<RowData> _rowData;
+        private Project _Project;
+        private int _gridOffset;
+        private List<string> _headers = new List<string>();
+        private String[] _weekDayAbbrev = { "S", "M", "T", "W", "T", "F", "S" };
+        private bool doesTodayFallWithinProject;
+
+        /// <summary>
+        /// Initializes an instance of the WorkSpaceViewModel class
+        /// </summary>
+        public WorkSpaceViewModel()
+        {
+            this._rowData = new ObservableCollection<RowData>();
+            _Project = new Project(name, start, end, description, id);
+            _Project.AddTask(new SmartPert.Model.Task("Test1", new DateTime(2021, 2, 12, 0, 0, 0, 0), new DateTime(2021, 2, 15, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
+            _Project.AddTask(new SmartPert.Model.Task("Test2", new DateTime(2021, 2, 18, 0, 0, 0, 0), new DateTime(2021, 2, 22, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
+            _Project.AddTask(new SmartPert.Model.Task("Test3", new DateTime(2021, 2, 25, 0, 0, 0, 0), new DateTime(2021, 2, 28, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
+            _Project.AddTask(new SmartPert.Model.Task("Test4", new DateTime(2021, 2, 28, 0, 0, 0, 0), new DateTime(2021, 3, 13, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
+            _headers = GetWeekHeader();
+            LoadData();
+        }
+
+        public Project Project
+        {
+            get { return _Project; }
+        }
+
+        public int DaySpan
+        {
+            get { return (((DateTime)this.Project.EndDate).Date - this.Project.StartDate.Date).Days; }
+        }
+
+        public int GridOffset
+        {
+            get { return 8 - (int)Project.StartDate.DayOfWeek; }
+        }
+
+        public String[] weekDayAbbrev
+        {
+            get { return _weekDayAbbrev; }
+        }
+
+        public ObservableCollection<RowData> RowData
+        {
+            get { return _rowData; }
+            set
+            {
+                this._rowData = value;
+                OnPropertyChanged("RowData");
+                
+            }
+        }
+
+        public List<string> Headers
+        {
+            get { return _headers; }
+        }
+
+        public void LoadData()
+        {
+            RowData num1 = new RowData(Project.Name, GridOffset + 1, DaySpan, true);
+            this.RowData.Add(num1);
+            for (int i = 0; i < Project.Tasks.Count; i++)
+            {
+                RowData num2 = new RowData(Project.Tasks[i].Name, (((DateTime)this.Project.Tasks[i].StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, (((DateTime)this.Project.Tasks[i].EndDate).Date - ((DateTime)this.Project.Tasks[i].StartDate).Date).Days, false);
+                this.RowData.Add(num2);
+            }
+        }
+
+        /// <summary>
+        /// Stores a list of 
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetWeekHeader()
+        {
+            List<String> weekHeaders = new List<string>();
+            DateTime headerStore = this.Project.StartDate;
+            while ((((DateTime)this.Project.EndDate)-headerStore).Days > 0 )
+            {
+                if (headerStore == Project.StartDate)
+                {
+                    headerStore = Project.StartDate.AddDays(-(this.GridOffset));
+                }
+                weekHeaders.Add(String.Format("{0} {1}", headerStore.ToString("MMM"), headerStore.ToString("dd")));
+                headerStore = headerStore.AddDays(7);
+            }
+            return weekHeaders;
+        }
+
+        #region INotifyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion 
+    }
+}

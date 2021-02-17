@@ -29,7 +29,8 @@ namespace SmartPert
     {
         static private Random random = new Random();
         private IModel model;
-        private Chart chart;
+        //private Chart chart;
+        private WorkSpace workSpace;
         private ObservableCollection<MenuItemViewModel> items;
         public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }
         
@@ -41,8 +42,10 @@ namespace SmartPert
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
             InitModel();
-            chart = new Chart(model);
-            this.MainContent.Content = chart;
+            //chart = new Chart(model);
+            workSpace = new WorkSpace();
+            this.MainContent.Content = workSpace;
+            //this.MainContent.Content = chart;
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
@@ -56,7 +59,8 @@ namespace SmartPert
 
         void ErrorCatchBackToApp()
         {
-            this.MainContent.Content = chart;
+            //this.MainContent.Content = chart;
+            this.MainContent.Content = workSpace;
         }
 
         private void InitModel()

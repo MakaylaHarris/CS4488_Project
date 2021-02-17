@@ -1,0 +1,72 @@
+﻿<Page x:Class="SmartPert.View.Pages.WorkSpace"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SmartPert.View.Pages"
+      xmlns:model="clr-namespace:SmartPert.Model"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="WorkSpace">
+
+    <Page.Resources>
+        <Style x:Key="hover" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent" ></Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Green"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Blue"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+    
+    <Grid x:Name="workSpace">
+        <ScrollViewer x:Name="ScrollViewer" 
+                      HorizontalContentAlignment="Left" 
+                      VerticalContentAlignment="top" 
+                      VerticalScrollBarVisibility="Visible" 
+                      HorizontalScrollBarVisibility="Visible">
+            <Grid x:Name="mainGrid">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" MinWidth="100" MaxWidth="300"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.Children>
+                    <Label 
+                    Grid.Row="2"
+                    Content="{Binding Path=Project.Name, Mode=OneWay}"/>
+                    <!--<GridSplitter
+                    Grid.Column="0" Grid.RowSpan="2147483647"
+                    Width="3" 
+                    Background="{DynamicResource PrimaryHueMidBrush}"
+                    VerticalAlignment="Stretch" 
+                    HorizontalAlignment="Right" />-->
+                    
+                    <!-- 2147483647 is the highest int, basically saying border spans all columns -->
+                    <Border 
+                    Grid.Column="0" Grid.ColumnSpan="2147483647" 
+                    Grid.Row="0" Grid.RowSpan="2" 
+                    BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2">
+                    </Border>
+                    <Border 
+                    Grid.Column="1" Grid.ColumnSpan="2147483647" 
+                    Grid.Row="0" Grid.RowSpan="1" 
+                    BorderBrush="{DynamicResource PrimaryHueLightBrush}" BorderThickness="1">
+                    </Border>
+                    <Border 
+                    Grid.Column="0" Grid.ColumnSpan="2147483647" 
+                    Grid.Row="0" Grid.RowSpan="2147483647" 
+                    BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">
+                    </Border>
+                </Grid.Children>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>
