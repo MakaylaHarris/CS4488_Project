@@ -8,6 +8,8 @@
 	[MaxEstDuration] [int] NULL,
 	[MostLikelyEstDuration] [int] NOT NULL,
 	[ProjectId] [int] NOT NULL,
+	[CreationDate] [datetime] NOT NULL,
+	[CreatorUsername] VARCHAR(50) NULL
  CONSTRAINT [PK_Task] PRIMARY KEY CLUSTERED 
 (
 	[TaskId] ASC
@@ -21,6 +23,11 @@ REFERENCES [dbo].[Project] ([ProjectId])
 GO
 ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [FK_Project]
 GO
+ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [FK_User] FOREIGN KEY([CreatorUsername])
+REFERENCES [dbo].[User] ([UserName])
+GO
+ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [FK_User]
+GO
 ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [CK_Task_End_After_Start] CHECK  (([EndDate]>=[StartDate]))
 GO
 ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [CK_Task_End_After_Start]
@@ -32,4 +39,8 @@ GO
 ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [CK_Task_Min] CHECK  (([MinEstDuration]<=[MostLikelyEstDuration]))
 GO
 ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [CK_Task_Min]
+GO
+ALTER TABLE [dbo].[Task] WITH CHECK ADD CONSTRAINT [CK_Task_Start_Before_End] CHECK ((StartDate<=EndDate))
+GO
+ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [CK_Task_Start_Before_End]
 GO

@@ -14,7 +14,7 @@ namespace PertTest.Model
         private SmartPert.Model.IModel model;
         public ModelTest()
         {
-            model = new SmartPert.Model.Model(this);
+            model = SmartPert.Model.Model.GetInstance(this);
         }
 
         #region Interface Methods

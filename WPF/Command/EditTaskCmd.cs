@@ -10,9 +10,9 @@ namespace SmartPert.Command
     /// Command to edit task
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class EditTaskCmd : ICmd
+    public class EditTaskCmd : ICmd
     {
-        private readonly Task toEdit;
+        private Task toEdit;
         private readonly string name;
         private readonly DateTime start;
         private readonly DateTime? end;
@@ -33,10 +33,10 @@ namespace SmartPert.Command
             this.minDuration = minDuration;
             this.description = description;
             oldTask = new Task(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.LikelyDuration, toEdit.MaxDuration,
-                toEdit.MinDuration, toEdit.Description, toEdit.Id);
+                toEdit.MinDuration, toEdit.Description, toEdit.Creator, toEdit.CreationDate, toEdit.Proj, toEdit.Id);
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
             toEdit.Name = name;
             toEdit.StartDate = start;
@@ -48,7 +48,7 @@ namespace SmartPert.Command
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             toEdit.Name = oldTask.Name;
             toEdit.StartDate = oldTask.StartDate;
@@ -58,6 +58,18 @@ namespace SmartPert.Command
             toEdit.MinDuration = oldTask.MinDuration;
             toEdit.Description = oldTask.Description;
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if(old == toEdit)
+                toEdit = (Task) newItem;
+
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTask(ref toEdit);
         }
     }
 }

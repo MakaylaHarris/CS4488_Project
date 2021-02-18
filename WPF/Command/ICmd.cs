@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SmartPert.Model;
+using SmartPert.View;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,97 +12,67 @@ namespace SmartPert.Command
     /// Command pattern interface, any command that can be undone should implement
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    public interface ICmd
+    public abstract class ICmd : IViewModel
     {
-        bool Execute();
-        bool Undo();
-    }
-
-    /// <summary>
-    /// Command Stack singleton that maintains the Stack of commands executed
-    /// Created 2/2/2021 by Robert Nelson
-    /// </summary>
-    class CommandStack
-    {
-        private static readonly CommandStack instance = new CommandStack();
-        private Stack<ICmd> cmds;
-        private Stack<ICmd> redoStack;
-
-        static CommandStack() { }
-        private CommandStack() 
+        /// <summary>
+        /// Runs the command and adds it to the stack if successful
+        /// </summary>
+        /// <returns>True on success</returns>
+        public bool Run(bool isRedo=false)
         {
-            cmds = new Stack<ICmd>();
-            redoStack = new Stack<ICmd>();
+            if(Execute())
+            {
+                CommandStack.Instance.PushCommand(this, isRedo);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
-        /// Get the singleton instance
+        ///  Undo the command
         /// </summary>
-        public static CommandStack Instance
-        {
-            get { return instance; }
-        }
+        /// <returns>true on success</returns>
+        public abstract bool Undo();
 
-        #region Public methods
+        /// <summary>
+        /// Updates id, used when creating deleted objects (on undo/redo)
+        /// </summary>
+        /// <param name="old">old object</param>
+        /// <param name="newItem">new object</param>
+        public abstract void OnIdUpdate(TimedItem old, TimedItem newItem);
+        public abstract void OnModelUpdate(Project p);
 
-        public void Clear()
-        {
-            cmds.Clear();
-            redoStack.Clear();
-        }
+        #region Protected Methods
+        /// <summary>
+        /// Called by run to execute command
+        /// </summary>
+        /// <returns>true on success</returns>
+        protected abstract bool Execute();
 
-        public bool Execute(ICmd cmd)
+        protected void UpdateTask(ref Model.Task t) => Model.Model.Instance.UpdateTask(ref t, false);
+
+        protected void UpdateProject(ref Project p) => Model.Model.Instance.UpdateProject(ref p, false);
+
+        protected void UpdateUser(ref User u) => Model.Model.Instance.UpdateUser(ref u);
+
+        protected void UpdateTimedItem(ref TimedItem item)
         {
-            bool result = cmd.Execute();
-            if (result)
+            if (item.GetType() == typeof(Model.Task))
             {
-                cmds.Push(cmd);
-                redoStack.Clear();
+                Model.Task t = (Model.Task)item;
+                UpdateTask(ref t);
+                item = t;
             }
-            return result;
-        }
-
-        public bool CanUndo()
-        {
-            return cmds.Count > 0;
-        }
-
-        public bool Undo()
-        {
-            if(CanUndo())
+            else if (item.GetType() == typeof(Model.Project))
             {
-                ICmd cmd = cmds.Pop();
-                if(cmd.Undo())
-                {
-                    redoStack.Push(cmd);
-                    return true;
-                } else   // uh oh! something went wrong so we're in a volatile state... don't do anything else
-                {
-                    cmds.Clear();
-                    redoStack.Clear();
-                }
+                Project p = (Project)item;
+                UpdateProject(ref p);
+                item = p;
             }
-            return false;
-        }
 
-        public bool CanRedo()
-        {
-            return redoStack.Count > 0;
-        }
-
-        public bool Redo()
-        {
-            if(CanRedo())
-            {
-                ICmd cmd = redoStack.Pop();
-                if (cmd.Execute())
-                {
-                    cmds.Push(cmd);
-                    return true;
-                }
-            }
-            return false;
         }
         #endregion
+
     }
+
 }

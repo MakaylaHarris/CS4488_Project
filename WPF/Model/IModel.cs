@@ -19,9 +19,12 @@ namespace SmartPert.Model
         #endregion
 
         #region Task Methods
+        Task GetTaskById(int id);
         List<Task> GetTasks();
         Task CreateTask(string name, DateTime start, DateTime? end, string description = "", int duration = 1, int maxDuration = 0, int minDuration = 0);
         void DeleteTask(Task task);
+
+        bool IsValidTaskName(string name);
         #endregion
 
         #region User Methods

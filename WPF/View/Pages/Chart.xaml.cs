@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Collections;
-using System.Collections.ObjectModel;
+using SmartPert.Command;
 using SmartPert.Model;
 using SmartPert.View.Controls;
+using SmartPert.View.Windows;
 
 namespace SmartPert.View.Pages
 {
@@ -49,6 +44,8 @@ namespace SmartPert.View.Pages
         private Brush taskBrush;
         LinearGradientBrush taskGradient = new LinearGradientBrush();
         WindowState prevWindowState = new WindowState();
+
+        public IModel Model { get => model; }
 
         public Chart(IModel model)
         {
@@ -306,7 +303,7 @@ namespace SmartPert.View.Pages
         private TaskToolTip createToolTip(Task task)
         {
             TaskToolTip ttp = new TaskToolTip(task);
-            ttp.Style = (Style)FindResource("AppToolTip");
+            //ttp.Style = (Style)FindResource("AppToolTip");
             return ttp;
         }
 
@@ -366,7 +363,7 @@ namespace SmartPert.View.Pages
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            //new frmTask(this).ShowDialog();
+            new TaskEditor(model).ShowDialog();
             DrawGraph(Project.Tasks);
         }
 
@@ -432,7 +429,7 @@ namespace SmartPert.View.Pages
 
         public void DeleteTask(Task task)
         {
-            model.DeleteTask(task);
+            new DeleteTaskCmd(task).Run();
         }
 
         public void AddTask(Task task)

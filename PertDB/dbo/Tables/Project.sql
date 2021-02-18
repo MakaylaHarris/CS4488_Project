@@ -4,7 +4,9 @@
 	[StartDate] [datetime] NOT NULL,
 	[EndDate] [datetime] NULL,
 	[Description] [varchar](max) NULL,
- CONSTRAINT [PK_Project] PRIMARY KEY CLUSTERED 
+ [Creator] VARCHAR(50) NULL, 
+    [CreationDate] DATETIME NOT NULL, 
+    CONSTRAINT [PK_Project] PRIMARY KEY CLUSTERED 
 (
 	[ProjectId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
@@ -19,4 +21,9 @@ GO
 ALTER TABLE [dbo].[Project]  WITH CHECK ADD  CONSTRAINT [CK_Project_End_After_Start] CHECK  (([EndDate]>=[StartDate]))
 GO
 ALTER TABLE [dbo].[Project] CHECK CONSTRAINT [CK_Project_End_After_Start]
+GO
+ALTER TABLE [dbo].[Project] WITH CHECK ADD CONSTRAINT [FK_Project_Creator] FOREIGN KEY ([Creator])
+REFERENCES [dbo].[User] ([UserName])
+GO
+ALTER TABLE [dbo].[Project] CHECK CONSTRAINT [FK_Project_Creator]
 GO

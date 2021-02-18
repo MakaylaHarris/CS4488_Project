@@ -5,27 +5,39 @@ using SmartPert.View;
 namespace SmartPert.Model
 {
     /// <summary>
-    /// The model is the pipeline between the view and the database
+    /// The model is a singleton pipeline between the view and the database
     /// Created 1/28/2021 by Robert Nelson
     /// </summary>
     public class Model : IModel, DBUpdateReceiver
     {
+        private static readonly Model instance = new Model();
         private List<IViewModel> viewModels;
         private DBReader reader;
-        private User currentUser;
 
-        #region Constructor
-        public Model(IViewModel viewModel)
+        #region Model Instance
+        /// <summary>
+        /// Gets the instance and registers the view model
+        /// </summary>
+        /// <param name="viewModel">view model to register</param>
+        /// <returns>Model instance</returns>
+        static public Model GetInstance(IViewModel viewModel)
         {
-            viewModels = new List<IViewModel>();
-            Subscribe(viewModel);
-            reader = DBReader.Instantiate(this);
+            instance.Subscribe(viewModel);
+            if (instance.reader == null)
+                instance.reader = DBReader.Instantiate(instance);
+            return instance;
         }
 
-        public Model()
+        /// <summary>
+        /// Gets the model instance
+        /// </summary>
+        /// <returns>model</returns>
+        static public Model Instance { get => instance; }
+
+        private Model()
         {
             viewModels = new List<IViewModel>();
-            reader = DBReader.Instantiate(this);
+            reader = null;
         }
         #endregion
 
@@ -55,19 +67,62 @@ namespace SmartPert.Model
         #endregion
 
         #region Task Methods
+        /// <summary>
+        /// Gets the task by id
+        ///   Date: 02/13/2021
+        ///   Author: Robert Nelson
+        /// </summary>
+        /// <param name="id">task id</param>
+        /// <returns>Task or null</returns>
+        public Task GetTaskById(int id)
+        {
+            return GetTasks().Find(x => x.Id == id);
+        }
+
+        /// <summary>
+        /// Creates the task
+        ///   Date: 02/16/2021
+        ///   Author: Robert Nelson
+        /// </summary>
+        /// <param name="name">Task name</param>
+        /// <param name="start">start date</param>
+        /// <param name="end">end date</param>
+        /// <param name="description">task description</param>
+        /// <param name="duration">likely duration estimate</param>
+        /// <param name="maxDuration">maximum duration estimate</param>
+        /// <param name="minDuration">minimum duration estimate</param>
+        /// <returns>newly created task on success or null on failure</returns>
         public Task CreateTask(string name, DateTime start, DateTime? end, string description = "", int duration = 1, int maxDuration = 0, int minDuration = 0)
         {
-            throw new NotImplementedException();
+            Project project = GetProject();
+            Task task = null;
+            try
+            {
+                task = new Task(name, start, end, duration, maxDuration, minDuration, description, reader.CurrentUser, project: project);
+                project.AddTask(task);
+                OnModelUpdate();
+            } catch (Exception) { }
+            return task;
         }
 
         public void DeleteTask(Task t)
         {
-            throw new NotImplementedException();
+            Task task = GetTaskById(t.Id);
+            if (task != null)
+            {
+                task.Delete();
+                OnModelUpdate();
+            }
         }
 
         public List<Task> GetTasks()
         {
             return GetProject().Tasks;
+        }
+
+        public bool IsValidTaskName(string name)
+        {
+            return name != "" && GetTasks().Find(x => x.Name == name) == null;
         }
 
         #endregion
@@ -78,7 +133,13 @@ namespace SmartPert.Model
         /// </summary>
         /// <param name="name">name</param>
         /// <returns>null if it failed, user on success</returns>
-        public User CreateUser(string name) => reader.CreateUser(name);
+        public User CreateUser(string name)
+        {
+            User user = reader.CreateUser(name);
+            if (user != null)
+                OnModelUpdate();
+            return user;
+        }
 
         /// <summary>
         /// Gets all users
@@ -141,11 +202,18 @@ namespace SmartPert.Model
         #endregion
 
         #region Database Methods
-        public void OnDBUpdate(Project p)
+        public void OnModelUpdate(Project p = null)
         {
-            foreach(IViewModel viewModel in viewModels)
-                viewModel.OnModelUpdate(p);
+            if(reader != null && !reader.IsUpdating)  // Don't send updates if we're in the middle of updating
+            {
+                if (p == null)
+                    p = GetProject();
+                foreach (IViewModel viewModel in viewModels)
+                    viewModel.OnModelUpdate(p);
+            }
         }
+
+        public void OnDBUpdate(Project p = null) => OnModelUpdate(p);
 
         /// <summary>
         /// Refreshes the model
@@ -174,6 +242,45 @@ namespace SmartPert.Model
             return this.reader.TestNewConnection(connectString);
         }
 
+        #endregion
+
+        #region Get Updated Version of objects
+        public void UpdateProject(ref Project project, bool updateIfNull=true)
+        {
+            List<Project> projects = GetProjectList();
+            int id = project.Id;
+            Project ret = projects.Find(x => x.Id == id);
+            if (ret == null)
+            {
+                string name = project.Name;
+                ret = projects.Find(x => x.Name == name);
+            }
+            if (ret != null || updateIfNull)
+                project = ret;
+        }
+
+        public void UpdateUser(ref User user, bool updateIfNull=true)
+        {
+            string uname = user.Username;
+            User ret = GetUsers().Find(x => x.Username == uname);
+            if (ret != null || updateIfNull)
+                user = ret;
+        }
+
+        public void UpdateTask(ref Task t, bool updateIfNull=true)
+        {
+            List<Task> tasks = GetTasks();
+            int id = t.Id;
+            Task updated = tasks.Find(x => x.Id == id);
+            if (updated == null)
+            {
+                // Find by name
+                string name = t.Name;
+                updated = tasks.Find(x => x.Name == name);
+            }
+            if (updated != null || updateIfNull)
+                t = updated;
+        }
         #endregion
     }
 }

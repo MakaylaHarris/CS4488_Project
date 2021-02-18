@@ -7,5 +7,5 @@
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize"
-        Title="Login/Register" Height="350" Width="300" Background="AliceBlue">
+        Title="Login/Register" Height="350" Width="300">
 </Window>
