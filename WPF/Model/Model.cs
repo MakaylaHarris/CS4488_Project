@@ -23,6 +23,8 @@ namespace SmartPert.Model
         static public Model GetInstance(IViewModel viewModel)
         {
             instance.Subscribe(viewModel);
+            if (instance.reader == null)
+                instance.reader = DBReader.Instantiate(instance);
             return instance;
         }
 
@@ -35,7 +37,7 @@ namespace SmartPert.Model
         private Model()
         {
             viewModels = new List<IViewModel>();
-            reader = DBReader.Instantiate(this);
+            reader = null;
         }
         #endregion
 
@@ -202,10 +204,13 @@ namespace SmartPert.Model
         #region Database Methods
         public void OnModelUpdate(Project p = null)
         {
-            if (p == null)
-                p = GetProject();
-            foreach (IViewModel viewModel in viewModels)
-                viewModel.OnModelUpdate(p);
+            if(reader != null && !reader.IsUpdating)  // Don't send updates if we're in the middle of updating
+            {
+                if (p == null)
+                    p = GetProject();
+                foreach (IViewModel viewModel in viewModels)
+                    viewModel.OnModelUpdate(p);
+            }
         }
 
         public void OnDBUpdate(Project p = null) => OnModelUpdate(p);

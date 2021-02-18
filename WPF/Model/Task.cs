@@ -97,36 +97,65 @@ namespace SmartPert.Model
         #endregion
 
         #region Workers
-        public override void AddWorker(User worker, bool updateDB=true)
+        /// <summary>
+        /// Adds worker to task
+        /// </summary>
+        /// <param name="worker">user</param>
+        /// <param name="updateDB">Update the database</param>
+        /// <returns>true if it was added</returns>
+        public override bool AddWorker(User worker, bool updateDB=true)
         {
+            bool added = false;
             if (!workers.Contains(worker))
             {
-                workers.Add(worker);
-                if (updateDB)
+                // Attempt to add...
+                try
                 {
-                    SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.Parameters.AddWithValue("@taskId", this.Id);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
+                    if (updateDB)
+                    {
+                        Proj.AddWorker(worker);  // Add to project too
+                        SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
+                        command.Parameters.AddWithValue("@username", worker.Username);
+                        command.Parameters.AddWithValue("@taskId", this.Id);
+                        command.ExecuteNonQuery();
+                        CloseConnection();
+                    }
+                    workers.Add(worker);
+                    added = true;
+                    Model.Instance.OnModelUpdate(this.Proj);
                 }
+                catch (SqlException) { }
             }
+            return added;
         }
 
-        public override void RemoveWorker(User worker, bool updateDB=true)
+        /// <summary>
+        /// Removes the worker from the task
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="updateDB"></param>
+        /// <returns></returns>
+        public override bool RemoveWorker(User worker, bool updateDB=true)
         {
+            bool removed = false;
             if (workers.Contains(worker))
             {
-                workers.Remove(worker);
-                if(updateDB)
+                try
                 {
-                    SqlCommand command = OpenConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username");
-                    command.Parameters.AddWithValue("@taskId", this.Id);
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
-                }
+                    if (updateDB)
+                    {
+                        SqlCommand command = OpenConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username");
+                        command.Parameters.AddWithValue("@taskId", this.Id);
+                        command.Parameters.AddWithValue("@username", worker.Username);
+                        command.ExecuteNonQuery();
+                        CloseConnection();
+                    }
+                    workers.Remove(worker);
+                    removed = true;
+                    Model.Instance.OnModelUpdate(this.Proj);
+                } catch(SqlException) { }
             }
+            return removed;
         }
         #endregion
 

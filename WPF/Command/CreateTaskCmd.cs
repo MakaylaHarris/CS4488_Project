@@ -9,7 +9,6 @@ namespace SmartPert.Command
 {
     public class CreateTaskCmd : ICmd
     {
-        private readonly IModel model;
         private readonly string name;
         private readonly DateTime start;
         private readonly DateTime? end;
@@ -24,9 +23,8 @@ namespace SmartPert.Command
         /// </summary>
         public Model.Task Task { get => task; }
 
-        public CreateTaskCmd(IModel model, string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "")
+        public CreateTaskCmd(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "")
         {
-            this.model = model;
             this.name = name;
             this.start = start;
             this.end = end;
@@ -39,7 +37,7 @@ namespace SmartPert.Command
         protected override bool Execute()
         {
             Model.Task prev = task;
-            task = model.CreateTask(name, start, end, description, duration, maxDuration, minDuration);
+            task = Model.Model.Instance.CreateTask(name, start, end, description, duration, maxDuration, minDuration);
             if (prev != null)
                 CommandStack.Instance.UpdateIds(prev, task);
             return task != null;
@@ -47,7 +45,7 @@ namespace SmartPert.Command
 
         public override bool Undo()
         {
-            model.DeleteTask(task);
+            Model.Model.Instance.DeleteTask(task);
             return true;
         }
 

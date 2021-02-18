@@ -20,6 +20,7 @@ namespace SmartPert.Model
         private List<User> users;
         private DBPoller polling;
         private SqlConnection connection;
+        private bool isUpdating;
         #endregion
 
         #region Properties
@@ -28,6 +29,11 @@ namespace SmartPert.Model
         /// </summary>
         public bool Connected { get => instance.polling.Running;  }
         static public DBReader Instance { get => instance; }
+
+        /// <summary>
+        /// Is db reader updating model?
+        /// </summary>
+        public bool IsUpdating { get => isUpdating; }
 
 
         internal Project CurrentProject { get => currentProject; }
@@ -55,6 +61,7 @@ namespace SmartPert.Model
             polling = new DBPoller(this);
             users = new List<User>();
             projects = new List<Project>();
+            isUpdating = false;
         }
         #endregion
 
@@ -361,6 +368,7 @@ namespace SmartPert.Model
         /// </summary>
         public void OnDBUpdate()
         {
+            isUpdating = true;
             connection.Open();
             UpdateUsers();
             UpdateProject();
@@ -371,6 +379,7 @@ namespace SmartPert.Model
                 UpdateWorkers(idToTask);
             }
             connection.Close();
+            isUpdating = false;
             if(receiver != null)
                 receiver.OnDBUpdate(CurrentProject);
         }

@@ -429,7 +429,7 @@ namespace SmartPert.View.Pages
 
         public void DeleteTask(Task task)
         {
-            new DeleteTaskCmd(Model, task).Run();
+            new DeleteTaskCmd(task).Run();
         }
 
         public void AddTask(Task task)

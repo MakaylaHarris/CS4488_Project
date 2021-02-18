@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[User](
 	[UserName] [varchar](50) NOT NULL UNIQUE,
 	[Name] [varchar](50) NULL,
-	[Email] [varchar](50) NULL UNIQUE,
+	[Email] [varchar](50) NULL,
 	[Password] [varchar](60) NULL,
  CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
 ([UserName])WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]

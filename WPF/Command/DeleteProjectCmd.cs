@@ -13,24 +13,23 @@ namespace SmartPert.Command
     /// </summary>
     public class DeleteProjectCmd : ICmd
     {
-        private readonly IModel model;
         private Project project;
 
-        public DeleteProjectCmd(IModel model, Project project)
+        public DeleteProjectCmd(Project project)
         {
-            this.model = model;
             this.project = project;
         }
 
         protected override bool Execute()
         {
-            this.model.DeleteProject(project);
+            Model.Model.Instance.DeleteProject(project);
             return true;
         }
 
         public override bool Undo()
         {
-            Project newProject = this.model.CreateProject(project.Name, project.StartDate, project.EndDate, project.Description);
+            IModel model = Model.Model.Instance;
+            Project newProject = model.CreateProject(project.Name, project.StartDate, project.EndDate, project.Description);
             if(newProject != null) {
                 List<Model.Task> tasks = project.Tasks; 
                 // Re-add tasks

@@ -87,7 +87,7 @@
             
         <!--#region Assignees-->
         <Label Content="Assignees:" Grid.Row="7"/>
-        <Button x:Name="AssignBtn" Grid.Column="2" Grid.Row="7" Foreground="Blue" Background="Transparent" BorderThickness="0" Width="80" MouseEnter="AssignBtn_MouseEnter" MouseLeave="AssignBtn_MouseLeave">
+        <Button x:Name="AssignBtn" Grid.Column="2" Grid.Row="7" Foreground="Blue" Background="Transparent" BorderThickness="0" Width="80" MouseEnter="AssignBtn_MouseEnter" >
             <StackPanel>
                 <materialDesign:PackIcon Kind="ArrowDownDropCircleOutline" Width="30" Height="25"/>
                 <Popup x:Name="AssigneePopup" MouseLeave="AssigneePopup_LostFocus">
@@ -95,11 +95,15 @@
                         <ListBox ItemsSource="{Binding Assignees}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Content="{Binding Name}"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding Name}"/>
+                                        <Button Content="x" Foreground="Red" Background="Transparent" BorderThickness="0" Click="RM_Assignee"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <Button Content="Add..." Click="AddAssignee_Click"/>
+                        <controls:FilteredComboBox x:Name="cb_assign" SelectionChanged="Assign_to"></controls:FilteredComboBox>
+                        <!--<Button Content="Add..." Click="AddAssignee_Click"/>-->
                     </StackPanel>
                 </Popup>
             </StackPanel>

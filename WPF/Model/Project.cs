@@ -48,41 +48,59 @@ namespace SmartPert.Model
         /// </summary>
         /// <param name="worker">User on project to add</param>
         /// <param name="updateDB">Also adds the user to the database</param>
-        public override void AddWorker(User worker, bool updateDB=true)
+        /// <returns>true if added</returns>
+        public override bool AddWorker(User worker, bool updateDB=true)
         {
+            bool added = false;
             if(!workers.Contains(worker))
             {
-                workers.Add(worker);
-                if(updateDB)
+                try
                 {
-                    SqlCommand command = OpenConnection("INSERT INTO UserProject (UserName, ProjectId) VALUES(@username, @projectId);");
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.Parameters.AddWithValue("@projectId", this.Id);
-                    command.ExecuteNonQuery();      // Todo: If error is thrown and it's because the primary key exists then ignore (stored procedure?)
-                    CloseConnection();
+                    if (updateDB)
+                    {
+                        SqlCommand command = OpenConnection("INSERT INTO UserProject (UserName, ProjectId) VALUES(@username, @projectId);");
+                        command.Parameters.AddWithValue("@username", worker.Username);
+                        command.Parameters.AddWithValue("@projectId", this.Id);
+                        command.ExecuteNonQuery();
+                        CloseConnection();
+                    }
+                    workers.Add(worker);
+                    added = true;
+                    Model.Instance.OnModelUpdate(this);
                 }
+                catch (SqlException) { }
             }
+            return added;
         }
 
         /// <summary>
-        /// Removes the worker from the project
+        /// Removes the worker from the project (todo, remove from all tasks on project?)
         /// Implemented 2/9/2021 by Robert Nelson
         /// </summary>
         /// <param name="worker">User to remove</param>
         /// <param name="updateDB">Update the database</param>
-        public override void RemoveWorker(User worker, bool updateDB=true)
+        /// <returns>true if removed successfully</returns>
+        public override bool RemoveWorker(User worker, bool updateDB=true)
         {
-            if(workers.Remove(worker))
+            bool removed = false;
+            if(workers.Contains(worker))
             {
-                if(updateDB)
+                try
                 {
-                    SqlCommand command = OpenConnection("DELETE FROM UserProject WHERE ProjectId = @projectId AND UserName = @username);");
-                    command.Parameters.AddWithValue("@projectId", Id);
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.ExecuteNonQuery();      // Todo: ignore if the user is already removed
-                    CloseConnection();
-                }
+                    if (updateDB)
+                    {
+                        SqlCommand command = OpenConnection("DELETE FROM UserProject WHERE ProjectId = @projectId AND UserName = @username);");
+                        command.Parameters.AddWithValue("@projectId", Id);
+                        command.Parameters.AddWithValue("@username", worker.Username);
+                        command.ExecuteNonQuery();
+                        CloseConnection();
+                    }
+                    workers.Remove(worker);
+                    removed = true;
+                    Model.Instance.OnModelUpdate(this);
+                } catch (SqlException) { }
             }
+            return removed;
         }
 
         #endregion

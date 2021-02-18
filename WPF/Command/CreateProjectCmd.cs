@@ -13,16 +13,14 @@ namespace SmartPert.Command
     /// </summary>
     public class CreateProjectCmd : ICmd
     {
-        private IModel model;
         private readonly string name;
         private readonly DateTime start;
         private readonly DateTime end;
         private readonly string description;
         private Project project;
 
-        public CreateProjectCmd(IModel model, string name, DateTime start, DateTime end, string description = "")
+        public CreateProjectCmd(string name, DateTime start, DateTime end, string description = "")
         {
-            this.model = model;
             this.name = name;
             this.start = start;
             this.end = end;
@@ -32,7 +30,7 @@ namespace SmartPert.Command
         protected override bool Execute()
         {
             Project prev = project;
-            project = model.CreateProject(name, start, end, description);
+            project = Model.Model.Instance.CreateProject(name, start, end, description);
             if (prev != null)
                 CommandStack.Instance.UpdateIds(prev, project);
             return project != null;
@@ -40,7 +38,7 @@ namespace SmartPert.Command
 
         public override bool Undo()
         {
-            model.DeleteProject(project);
+            Model.Model.Instance.DeleteProject(project);
             return true;
         }
 

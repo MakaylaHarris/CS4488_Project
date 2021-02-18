@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using SmartPert.Command;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -26,10 +27,17 @@ namespace SmartPert.View.Windows
         private IModel model;
         private bool isLoading;
 
+        private Task Task { 
+            get => task;
+            set {
+                task = value;
+                LoadTaskData(task);
+            }
+        }
         /// <summary>
         /// Users assigned to task
         /// </summary>
-        public List<User> Assignees { get; set; }
+        public ObservableCollection<User> Assignees { get; set; }
 
         #region Constructor
         /// <summary>
@@ -47,15 +55,15 @@ namespace SmartPert.View.Windows
             model.Subscribe(this);
             isLoading = false;
             Owner = Application.Current.MainWindow;
-            if(task != null)
+            Assignees = new ObservableCollection<User>();
+            if (task != null)
             {
-                this.task = task;
+                this.Task = task;
                 LoadTaskData(task);
             } else      // Set a default start that makes sense (now)
             {
                 DateTime projectStart = model.GetProject().StartDate;
                 StartDate.SelectedDate = DateTime.Now > projectStart ? DateTime.Now : projectStart;
-                Assignees = new List<User>();
             }
         }
 
@@ -73,21 +81,19 @@ namespace SmartPert.View.Windows
             if(t.Creator != null)
                 CreatedLabel.Content += " by " + t.Creator.Name;
             Complete.IsChecked = t.IsComplete;
-            Assignees = t.Workers;
-            //foreach(User user in t.Workers)
-            //    Assignees.Add(user.Username);
             isLoading = false;
+            UpdatePopup();
         }
         #endregion
 
         #region Commands
         private void createTask()
         {
-            CreateTaskCmd cmd = new CreateTaskCmd(model, TaskName.Text, (DateTime)StartDate.SelectedDate, EndDate.SelectedDate,
+            CreateTaskCmd cmd = new CreateTaskCmd(TaskName.Text, (DateTime)StartDate.SelectedDate, EndDate.SelectedDate,
                 MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text);
             if(cmd.Run())
             {
-                task = cmd.Task;
+                Task = cmd.Task;
                 LoadTaskData(task);
             }
         }
@@ -227,26 +233,52 @@ namespace SmartPert.View.Windows
             model.Unsubscribe(this);
         }
 
+        private void UpdatePopup()
+        {
+            Assignees.Clear();
+            foreach(User user in task.Workers)
+                Assignees.Add(user);
+            ObservableCollection<object> items = cb_assign.Items;
+            items.Clear();
+            foreach (object o in task.Proj.Workers)
+                items.Add(o);
+        }
+
         private void AssignBtn_MouseEnter(object sender, MouseEventArgs e)
         {
-            AssigneePopup.IsOpen = true;
-        }
-        private void AssignBtn_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (!AssigneePopup.IsMouseOver)
-                AssigneePopup.IsOpen = false;
+            if (task != null)
+            {
+                AssigneePopup.IsOpen = true;
+            }
+            else
+                MessageBox.Show("Please give task a name first");
         }
         private void AssigneePopup_LostFocus(object sender, RoutedEventArgs e)
         {
-            AssigneePopup.IsOpen = false;
+            if (!cb_assign.IsFocused && !AssigneePopup.IsFocused && !AssignBtn.IsMouseOver && !AssigneePopup.IsMouseOver)
+                AssigneePopup.IsOpen = false;
         }
 
-        private void AddAssignee_Click(object sender, RoutedEventArgs e)
+        public void Assign_to(object selected, string text)
         {
-            if(task != null)
+            User u = null;
+            if (selected != null)
+                u = (User)selected;
+            else if (text != "")
+                u = model.CreateUser(text);
+            if(u != null)
             {
-                throw new NotImplementedException();
+                if (!(new AddWorkerCmd(task, u).Run()))
+                {
+                    ValidateLabel.Content = "User " + u + " is assigned";
+                }
             }
+        }
+
+        private void RM_Assignee(object sender, RoutedEventArgs e)
+        {
+            // Find user and remove from task assignees
+            new RemoveWorkerCmd(Task, (User)((Button)sender).DataContext).Run();
         }
         #endregion
 
@@ -260,15 +292,14 @@ namespace SmartPert.View.Windows
         {
             if(task != null)
             {
-                task = model.GetTaskById(task.Id);
-                LoadTaskData(task);
+                Task = model.GetTaskById(task.Id);
             }
         }
         #endregion
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            if(IsLoaded)
+            if(!AssigneePopup.IsOpen)
             {
                 // Todo: Known issue when creating task and pressing tab this throws null exception
                 try

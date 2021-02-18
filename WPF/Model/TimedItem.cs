@@ -155,9 +155,9 @@ namespace SmartPert.Model
         #endregion
 
         #region Worker Methods
-        abstract public void AddWorker(User worker, bool UpdateDB=true);
+        abstract public bool AddWorker(User worker, bool UpdateDB=true);
 
-        abstract public void RemoveWorker(User worker, bool UpdateDB=true);
+        abstract public bool RemoveWorker(User worker, bool UpdateDB=true);
         #endregion
     }
 }
