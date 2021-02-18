@@ -200,6 +200,7 @@ namespace SmartPert.View.Windows
         private void On_Max_Change(object sender, int val)
         {
             // Ensure Max >= most likely
+            Console.WriteLine(val);
             if (val < MostLikelyDuration.Value)
                 MostLikelyDuration.Value = val;
             else
@@ -250,8 +251,6 @@ namespace SmartPert.View.Windows
             {
                 AssigneePopup.IsOpen = true;
             }
-            else
-                MessageBox.Show("Please give task a name first");
         }
         private void AssigneePopup_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -299,7 +298,7 @@ namespace SmartPert.View.Windows
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            if(!AssigneePopup.IsOpen)
+            if(!AssigneePopup.IsFocused && !cb_assign.IsMouseOver && !IsMouseOver)
             {
                 // Todo: Known issue when creating task and pressing tab this throws null exception
                 try

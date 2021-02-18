@@ -34,6 +34,10 @@ namespace SmartPert.Model
             {
                 if(mostLikelyDuration != value)
                 {
+                    if (value < minDuration)
+                        minDuration = value;
+                    else if (value > MaxDuration)
+                        maxDuration = value;
                     mostLikelyDuration = value;
                     Update();
                 }
@@ -43,6 +47,8 @@ namespace SmartPert.Model
             set {
                 if(maxDuration != value)
                 {
+                    if (value < mostLikelyDuration)
+                        LikelyDuration = value;
                     maxDuration = value;
                     Update();
                 }
@@ -55,6 +61,8 @@ namespace SmartPert.Model
             {
                 if (minDuration != value)
                 {
+                    if (value > LikelyDuration)
+                        LikelyDuration = value;
                     minDuration = value;
                     Update();
                 }

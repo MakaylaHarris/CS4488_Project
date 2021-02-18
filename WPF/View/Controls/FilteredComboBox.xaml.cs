@@ -94,37 +94,33 @@ namespace SmartPert.View.Controls
             {
                 String str = item.ToString();
                 if (str.StartsWith(input))
-                    filtered.Add(str);
+                    filtered.Add(item);
             }
         }
 
         private void cb_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            input = e.Text;
-            Console.WriteLine(input);
-            filter(allItems, input, FilteredItems);
-            cb.ItemsSource = FilteredItems;
+            input = cb.Text + e.Text;
+            if (input.Length > 0)
+            {
+                if (input.Length == 1)
+                    cb.IsDropDownOpen = true;
+                filter(allItems, input, FilteredItems);
+                cb.ItemsSource = FilteredItems;
+            }
         }
 
         private void cb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string selected = cb.SelectedItem.ToString();
-            object found = null;
-            foreach(object item in allItems)
-            {
-                if(item.ToString() == selected)
-                {
-                    found = item;
-                    break;
-                }
-            }
-            SelectionChanged(found, input);
+            SelectionChanged(cb.SelectedItem, input);
         }
-        #endregion
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             SelectionChanged(null, cb.Text);
         }
+
+        #endregion
+
     }
 }
