@@ -7,9 +7,9 @@ using SmartPert.Model;
 
 namespace SmartPert.Command
 {
-    class EditProjectCmd : ICmd
+    public class EditProjectCmd : ICmd
     {
-        private readonly Project toEdit;
+        private Project toEdit;
         private readonly string name;
         private readonly DateTime start;
         private readonly DateTime? end;
@@ -23,10 +23,10 @@ namespace SmartPert.Command
             this.start = start;
             this.end = end;
             this.description = description;
-            old = new Project(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.Description, toEdit.Id);
+            old = new Project(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.Description, toEdit.Creator, toEdit.CreationDate, toEdit.Id);
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
             toEdit.Name = name;
             toEdit.StartDate = start;
@@ -35,13 +35,24 @@ namespace SmartPert.Command
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             toEdit.Name = old.Name;
             toEdit.StartDate = old.StartDate;
             toEdit.EndDate = old.EndDate;
             toEdit.Description = old.Description;
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (toEdit == old)
+                toEdit = (Project)newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateProject(ref toEdit);
         }
     }
 }

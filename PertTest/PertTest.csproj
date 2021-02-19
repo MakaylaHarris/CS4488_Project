@@ -101,6 +101,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\DBReaderTest.cs" />
@@ -108,7 +109,6 @@
     <Compile Include="Model\ProjectTest.cs" />
     <Compile Include="Model\TaskTest.cs" />
     <Compile Include="Model\UserTest.cs" />
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

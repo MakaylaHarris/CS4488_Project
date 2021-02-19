@@ -65,7 +65,7 @@ namespace SmartPert
 
         private void InitModel()
         {
-            model = new Model.Model(this);
+            model = Model.Model.GetInstance(this);
             // Check for database connection
             if (!model.IsConnected())
             {
@@ -133,22 +133,22 @@ namespace SmartPert
 
         private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = false;
+            e.CanExecute = Command.CommandStack.Instance.CanUndo();
         }
 
         private void Undo_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Command.CommandStack.Instance.Undo();
         }
 
         private void Redo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = false;
+            e.CanExecute = Command.CommandStack.Instance.CanRedo();
         }
 
         private void Redo_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Command.CommandStack.Instance.Redo();
         }
 
         private void Cut_CanExecute(object sender, CanExecuteRoutedEventArgs e)

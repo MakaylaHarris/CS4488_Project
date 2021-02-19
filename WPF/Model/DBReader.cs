@@ -20,6 +20,7 @@ namespace SmartPert.Model
         private List<User> users;
         private DBPoller polling;
         private SqlConnection connection;
+        private bool isUpdating;
         #endregion
 
         #region Properties
@@ -28,6 +29,11 @@ namespace SmartPert.Model
         /// </summary>
         public bool Connected { get => instance.polling.Running;  }
         static public DBReader Instance { get => instance; }
+
+        /// <summary>
+        /// Is db reader updating model?
+        /// </summary>
+        public bool IsUpdating { get => isUpdating; }
 
 
         internal Project CurrentProject { get => currentProject; }
@@ -55,6 +61,7 @@ namespace SmartPert.Model
             polling = new DBPoller(this);
             users = new List<User>();
             projects = new List<Project>();
+            isUpdating = false;
         }
         #endregion
 
@@ -79,11 +86,12 @@ namespace SmartPert.Model
         private void UpdateProject()
         {
             projects.Clear();
+            Dictionary<Project, bool> found = new Dictionary<Project, bool>();
             SqlDataReader reader = ReadTable("Project");
             string name = Properties.Settings.Default.LastProject;
             while (reader.Read())
             {
-                Project p = Project.Parse(reader);
+                Project p = Project.Parse(reader, users);
                 projects.Add(p);
                 if (currentProject != null)
                 {
@@ -106,7 +114,7 @@ namespace SmartPert.Model
             SqlDataReader reader = OpenReader("Select * from Task Where ProjectId=" + CurrentProject.Id + ";");
             while (reader.Read())
             {
-                Task t = Task.Parse(reader);
+                Task t = Task.Parse(reader, users, CurrentProject);
                 idToTask[t.Id] = t;
                 CurrentProject.AddTask(t);
             }
@@ -137,7 +145,6 @@ namespace SmartPert.Model
             }
             reader.Close();
         }
-
 
         private void UpdateWorkers(Dictionary<int, Task> idToTask)
         {
@@ -361,9 +368,10 @@ namespace SmartPert.Model
         /// </summary>
         public void OnDBUpdate()
         {
+            isUpdating = true;
             connection.Open();
-            UpdateProject();
             UpdateUsers();
+            UpdateProject();
             if (CurrentProject != null)
             {
                 Dictionary<int, Task> idToTask = UpdateTasks();
@@ -371,6 +379,7 @@ namespace SmartPert.Model
                 UpdateWorkers(idToTask);
             }
             connection.Close();
+            isUpdating = false;
             if(receiver != null)
                 receiver.OnDBUpdate(CurrentProject);
         }

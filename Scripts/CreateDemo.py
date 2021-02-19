@@ -19,21 +19,11 @@ def genString():
         f':: Auto-Generated Script to create database on {server} and run SmartPert\n'
         f'@echo off\n'
         f'echo Trying to connect to server...\n'
-        f'sqlcmd -b -S {server} -i {demo_folder}/Create.sql\n'
-        f'IF ERRORLEVEL 1 goto errHandler\n'
+        f'sqlcmd -b -S {server} -i {demo_folder}/Create.sql -l 30\n'
+        f'IF NOT ERRORLEVEL 0'
+        f' sqlcmd -b -S {server} -i {demo_folder}/Create.sql\n'
         f'sqlcmd -S {server} -i {demo_folder}/Insert.sql\n'
         f'{exe_path}\n'
-        f'goto done\n\n'
-        ':errHandler\n'
-        'IF %CLICK_ME_FIRST_RAN%==1(\n'
-        'echo Failed to connect to database!\n'
-        f'{exe_path}\n'
-        ') ELSE (\n'
-        'SET /A CLICK_ME_FIRST_RAN = 1\n'
-        f'{startup}\n'
-        ')\n\n'
-
-        ':done\n'
     )
 
 

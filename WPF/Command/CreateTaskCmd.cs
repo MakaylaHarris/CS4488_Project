@@ -7,9 +7,8 @@ using SmartPert.Model;
 
 namespace SmartPert.Command
 {
-    class CreateTaskCmd : ICmd
+    public class CreateTaskCmd : ICmd
     {
-        private readonly IModel model;
         private readonly string name;
         private readonly DateTime start;
         private readonly DateTime? end;
@@ -19,9 +18,13 @@ namespace SmartPert.Command
         private readonly string description;
         private Model.Task task;
 
-        public CreateTaskCmd(IModel model, string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "")
+        /// <summary>
+        /// Gets the created task
+        /// </summary>
+        public Model.Task Task { get => task; }
+
+        public CreateTaskCmd(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, string description = "")
         {
-            this.model = model;
             this.name = name;
             this.start = start;
             this.end = end;
@@ -29,17 +32,32 @@ namespace SmartPert.Command
             this.maxDuration = maxDuration;
             this.minDuration = minDuration;
             this.description = description;
+            task = null;
         }
-        public bool Execute()
+        protected override bool Execute()
         {
-            task = model.CreateTask(name, start, end, description, duration, maxDuration, minDuration);
+            Model.Task prev = task;
+            task = Model.Model.Instance.CreateTask(name, start, end, description, duration, maxDuration, minDuration);
+            if (prev != null)
+                CommandStack.Instance.UpdateIds(prev, task);
             return task != null;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
-            model.DeleteTask(task);
+            Model.Model.Instance.DeleteTask(task);
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == task)
+                task = (Model.Task) newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTask(ref task);
         }
     }
 }

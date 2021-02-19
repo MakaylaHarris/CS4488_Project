@@ -178,6 +178,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
     <Compile Include="View\Controls\TaskControl.xaml.cs">
       <DependentUpon>TaskControl.xaml</DependentUpon>

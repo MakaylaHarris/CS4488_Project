@@ -67,16 +67,22 @@ namespace SmartPert.Model
         /// <returns>true on success</returns>
         public bool Register()
         {
-            SqlCommand command = OpenConnection("Exec dbo.Register @username, @password, @email, @name, @result out");
-            command.Parameters.AddWithValue("@username", username);
-            command.Parameters.AddWithValue("@password", password);
-            command.Parameters.AddWithValue("@email", email);
-            command.Parameters.AddWithValue("@name", name);
-            var result = command.Parameters.Add("@result", System.Data.SqlDbType.Bit);
-            result.Direction = System.Data.ParameterDirection.Output;
-            command.ExecuteNonQuery();
-            CloseConnection();
-            return (bool) result.Value;
+            bool isRegistered = false;
+            try
+            {
+                SqlCommand command = OpenConnection("Exec dbo.Register @username, @password, @email, @name, @result out");
+                command.Parameters.AddWithValue("@username", username);
+                command.Parameters.AddWithValue("@password", password);
+                command.Parameters.AddWithValue("@email", email);
+                command.Parameters.AddWithValue("@name", name);
+                var result = command.Parameters.Add("@result", System.Data.SqlDbType.Bit);
+                result.Direction = System.Data.ParameterDirection.Output;
+                command.ExecuteNonQuery();
+                isRegistered = (bool) result.Value;
+                CloseConnection();
+            }
+            catch (SqlException) { }
+            return isRegistered;
         }
 
         
@@ -112,6 +118,7 @@ namespace SmartPert.Model
             command.Parameters.AddWithValue("@username", username);
             command.ExecuteNonQuery();
             CloseConnection();
+            Model.Instance.OnModelUpdate();
         }
 
         static public User Parse(SqlDataReader reader)
