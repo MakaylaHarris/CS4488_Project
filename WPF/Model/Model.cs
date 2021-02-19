@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using SmartPert.View;
 
 namespace SmartPert.Model
@@ -42,9 +43,25 @@ namespace SmartPert.Model
         #endregion
 
         #region Project Methods
+        /// <summary>
+        /// Creates the project, if possible
+        /// </summary>
+        /// <param name="name">project name</param>
+        /// <param name="start">start date</param>
+        /// <param name="end">end date (optionally null)</param>
+        /// <param name="description">project description</param>
+        /// <returns>the project or null if creation failed</returns>
         public Project CreateProject(string name, DateTime start, DateTime? end, string description = "")
         {
-            throw new NotImplementedException();
+            // Try to create
+            //try
+            //{
+                Project project = new Project(name, start, end, description);
+                reader.SetProject(project);
+                return project;
+            //}
+            //catch (Exception) {}
+            return null;
         }
 
         public void DeleteProject(Project p)
@@ -63,6 +80,17 @@ namespace SmartPert.Model
         public void SetProject(Project project)
         {
             reader.SetProject(project);
+        }
+
+        /// <summary>
+        /// Checks if name is a valid project name
+        /// </summary>
+        /// <param name="name">the name to check</param>
+        /// <returns>true if valid</returns>
+        public bool IsValidProjectName(string name)
+        {
+            Project p = GetProjectList().Find(x => x.Name == name);
+            return p == null;
         }
         #endregion
 
@@ -185,6 +213,11 @@ namespace SmartPert.Model
         /// <returns>True if valid</returns>
         public bool IsValidNewEmail(string email) => reader.IsValidEmail(email);
 
+        /// <summary>
+        /// Gets the current user that is logged in
+        /// </summary>
+        /// <returns>User or null</returns>
+        public User GetCurrentUser() => reader.CurrentUser;
         #endregion
 
         #region Subscriber Methods

@@ -36,7 +36,7 @@ BEGIN
 	/* Notify User and end procedure with result=0 */
 	RETURN;
 
- SET @CreationDate = GETDATE()
+ SET @CreationDate = GETDATE();
  /* Task is created referencing the current project (have project ID) */
  INSERT INTO dbo.[Task] (Name, Description, MinEstDuration, MostLikelyEstDuration, MaxEstDuration, StartDate, EndDate, ProjectID, CreatorUsername, CreationDate) 
 	Values(@TaskName, @Description, @MinEstDuration, @LikelyEstDuration, @MaxEstDuration, @StartDate, @EndDate, @ProjectID, @Creator, @CreationDate);

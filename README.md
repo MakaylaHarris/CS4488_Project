@@ -29,7 +29,7 @@ Building the project is done using visual studio. The solution contains the foll
 * SmartPert: The main project for building the client interface in WPF.
 * SmartPertDB: Project for editing and creating the database.
 * PertTest: Unit test project.
-* Sandcastle: Builds the code documentation, found in the folder WPF/Help.
+* Sandcastle: Builds the code documentation, found in the folder WPF/Sandcastle. Documentation is found under WPF/Help.
 
 ## Build Configurations
 * Debug: For regular debugging and testing, does not build Sandcastle documentation.
