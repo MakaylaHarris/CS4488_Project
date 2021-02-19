@@ -29,10 +29,9 @@
                       VerticalContentAlignment="top" 
                       VerticalScrollBarVisibility="Visible" 
                       HorizontalScrollBarVisibility="Visible">
-            <Grid x:Name="mainGrid">
+            <Grid x:Name="mainGrid" ShowGridLines="False">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" MinWidth="100" MaxWidth="300"></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20"></RowDefinition>

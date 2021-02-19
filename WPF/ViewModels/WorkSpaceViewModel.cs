@@ -27,13 +27,15 @@ namespace SmartPert.ViewModels
         private int _gridOffset;
         private List<string> _headers = new List<string>();
         private String[] _weekDayAbbrev = { "S", "M", "T", "W", "T", "F", "S" };
-        private bool doesTodayFallWithinProject;
+        private bool _todayInProject;
+        private int _todayCol;
 
         /// <summary>
         /// Initializes an instance of the WorkSpaceViewModel class
         /// </summary>
         public WorkSpaceViewModel()
         {
+            //Would get the Project we are working with
             this._rowData = new ObservableCollection<RowData>();
             _Project = new Project(name, start, end, description, id);
             _Project.AddTask(new SmartPert.Model.Task("Test1", new DateTime(2021, 2, 12, 0, 0, 0, 0), new DateTime(2021, 2, 15, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
@@ -44,6 +46,7 @@ namespace SmartPert.ViewModels
             LoadData();
         }
 
+        #region Properties
         public Project Project
         {
             get { return _Project; }
@@ -80,6 +83,27 @@ namespace SmartPert.ViewModels
             get { return _headers; }
         }
 
+        public bool TodayInProject
+        {
+            get
+            {
+                return ( this.Project.StartDate.Date.AddDays(-GridOffset).CompareTo(DateTime.Now) <= 0 && ((DateTime)this.Project.EndDate).CompareTo(DateTime.Now) >= 0 );
+            }
+        }
+
+        public int TodayCol
+        {
+            get { if (TodayInProject) { return (DateTime.Now - this.Project.StartDate.AddDays(-GridOffset)).Days + 1; } 
+                else { return 0; }
+            }
+        }
+
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// This is the method that creates RowData objects from the Project
+        /// </summary>
         public void LoadData()
         {
             RowData num1 = new RowData(Project.Name, GridOffset + 1, DaySpan, true);
@@ -92,7 +116,7 @@ namespace SmartPert.ViewModels
         }
 
         /// <summary>
-        /// Stores a list of 
+        /// Stores a list of Headers for the Dates for the in the format "MMM dd" i.e. Feb 04
         /// </summary>
         /// <returns></returns>
         public List<string> GetWeekHeader()
@@ -110,6 +134,7 @@ namespace SmartPert.ViewModels
             }
             return weekHeaders;
         }
+        #endregion
 
         #region INotifyChanged Members
 
