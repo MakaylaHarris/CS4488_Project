@@ -263,11 +263,12 @@ namespace SmartPert.Model
         /// <param name="users">list of all users</param>
         /// <param name="project">project that task is on</param>
         /// <returns>Task</returns>
-        static public Task Parse(SqlDataReader reader, List<User> users, Project project)
+        static public Task Parse(SqlDataReader reader, Dictionary<string, User> users, Dictionary<int, Project> projects)
         {
             string creator = DBFunctions.StringCast(reader, "CreatorUsername");
-            User user = users != null && creator != "" ? users.Find(x => x.Username == creator) : null;
-            return new Task(
+            Project proj = projects[(int)reader["ProjectId"]];
+            User user = users != null && creator != "" ? users[creator] : null;
+            Task t = new Task(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
                 DBFunctions.DateCast(reader, "EndDate"),
@@ -277,8 +278,10 @@ namespace SmartPert.Model
                 DBFunctions.StringCast(reader, "Description"),
                 user,
                 DBFunctions.DateCast(reader, "CreationDate"),
-                project,
+                proj,
                 (int)reader["TaskId"]);
+            proj.AddTask(t);
+            return t;
         }
 
         #endregion

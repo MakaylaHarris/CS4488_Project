@@ -111,12 +111,38 @@ namespace SmartPert.Model
             ExecuteSql("Delete from Project Where ProjectId= " + Id + ";");
         }
 
+        /// <summary>
+        /// Inserts the project into the database
+        /// </summary>
+        /// <throws>Exception if the call was unsuccessful</throws>
+        /// <returns>the inserted id on success</returns>
         protected override int Insert()
         {
-            // todo: fix this hot mess
-            int id = ExecuteSql("insert into Project(Name, Description, StartDate, WorkingHours, ProjectOwner) output INSERTED.ProjectId values('"
-                   + Name + "', '" + Description + "', '" + StartDate + "', '" + EndDate + "');");
-            return id;
+            string query = "EXEC CreateProject @ProjectName, @StartDate, @EndDate, @Description, @Creator, @CreationDate OUT, @Result OUT, @ResultId OUT";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@ProjectName", Name);
+            command.Parameters.AddWithValue("@StartDate", StartDate);
+            if (EndDate != null)
+                command.Parameters.AddWithValue("@EndDate", EndDate);
+            else
+                command.Parameters.AddWithValue("@EndDate", DBNull.Value);
+            command.Parameters.AddWithValue("@Description", Description);
+            creator = Model.Instance.GetCurrentUser();
+            if (creator != null)
+                command.Parameters.AddWithValue("@Creator", creator);
+            else
+                command.Parameters.AddWithValue("@Creator", DBNull.Value);
+            var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
+            createDate.Direction = System.Data.ParameterDirection.Output;
+            var insertedId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
+            insertedId.Direction = System.Data.ParameterDirection.Output;
+            var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
+            result.Direction = System.Data.ParameterDirection.Output;
+            command.ExecuteNonQuery();
+            if (!(bool)result.Value)
+                throw new Exception("Failed to insert project " + Name + " into database!");
+            creationDate = (DateTime) createDate.Value;
+            return (int) insertedId.Value;
         }
 
         protected override void Update()
@@ -130,10 +156,10 @@ namespace SmartPert.Model
             Model.Instance.OnModelUpdate(this);
         }
 
-        static public Project Parse(SqlDataReader reader, List<User> users)
+        static public Project Parse(SqlDataReader reader, Dictionary<string, User> users)
         {
             string creator = DBFunctions.StringCast(reader, "Creator");
-            User user = users != null && creator != "" ? users.Find(x => x.Username == creator) : null;
+            User user = users != null && creator != "" ? users[creator] : null;
             return new Project(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],

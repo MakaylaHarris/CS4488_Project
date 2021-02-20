@@ -15,9 +15,10 @@ namespace SmartPert.Model
         private static readonly DBReader instance = new DBReader();
         private Project currentProject;
         private DBUpdateReceiver receiver;
-        private List<Project> projects;
+        private Dictionary<int, Project> projects;
         private User currentUser;
-        private List<User> users;
+        private Dictionary<string, User> users;
+        private Dictionary<int, Task> tasks;
         private DBPoller polling;
         private SqlConnection connection;
         private bool isUpdating;
@@ -37,8 +38,10 @@ namespace SmartPert.Model
 
 
         internal Project CurrentProject { get => currentProject; }
-        internal List<Project> Projects { get => projects; }
-        internal List<User> Users { get => users; }
+        internal Dictionary<int, Project> Projects { get => projects; }
+        internal Dictionary<string, User> Users { get => users; }
+
+        internal Dictionary<int, Task> Tasks { get => tasks; }
 
         public User CurrentUser {get => currentUser; }
         #endregion
@@ -59,8 +62,9 @@ namespace SmartPert.Model
         private DBReader()
         {
             polling = new DBPoller(this);
-            users = new List<User>();
-            projects = new List<Project>();
+            users = new Dictionary<string, User>();
+            projects = new Dictionary<int, Project>();
+            tasks = new Dictionary<int, Task>();
             isUpdating = false;
         }
         #endregion
@@ -86,13 +90,12 @@ namespace SmartPert.Model
         private void UpdateProject()
         {
             projects.Clear();
-            Dictionary<Project, bool> found = new Dictionary<Project, bool>();
             SqlDataReader reader = ReadTable("Project");
             string name = Properties.Settings.Default.LastProject;
             while (reader.Read())
             {
                 Project p = Project.Parse(reader, users);
-                projects.Add(p);
+                projects.Add(p.Id, p);
                 if (currentProject != null)
                 {
                     if (p.Id == currentProject.Id)
@@ -105,21 +108,20 @@ namespace SmartPert.Model
         }
 
         /// <summary>
-        /// Gets all the tasks on the current project
+        /// Gets all the tasks
         /// </summary>
         /// <returns>Dictionary of task id to tasks</returns>
         private Dictionary<int, Task> UpdateTasks()
         {
-            Dictionary<int, Task> idToTask = new Dictionary<int, Task>();
-            SqlDataReader reader = OpenReader("Select * from Task Where ProjectId=" + CurrentProject.Id + ";");
+            tasks.Clear();
+            SqlDataReader reader = OpenReader("Select * from Task;");
             while (reader.Read())
             {
-                Task t = Task.Parse(reader, users, CurrentProject);
-                idToTask[t.Id] = t;
-                CurrentProject.AddTask(t);
+                Task t = Task.Parse(reader, users, projects);
+                tasks.Add(t.Id, t);
             }
             reader.Close();
-            return idToTask;
+            return tasks;
         }
 
         private void UpdateUsers()
@@ -127,7 +129,10 @@ namespace SmartPert.Model
             users.Clear();
             SqlDataReader reader = ReadTable("[User]");
             while (reader.Read())
-                users.Add(User.Parse(reader));
+            {
+                User u = User.Parse(reader);
+                users.Add(u.Username, u);
+            }
             reader.Close();
         }
 
@@ -147,16 +152,8 @@ namespace SmartPert.Model
         }
 
         private void UpdateWorkers(Dictionary<int, Task> idToTask)
-        {
-            // First, Create dictionaries to access everything by id
-            Dictionary<int, Project> idToProject = new Dictionary<int, Project>();
-            Dictionary<string, User> idToUser = new Dictionary<string, User>();
-            foreach (Project p in projects)
-                idToProject[p.Id] = p;
-            foreach (User user in users)
-                idToUser[user.Username] = user;
-            
-            // Next, Read and update task workers
+        {            
+            // Read and update task workers
             SqlDataReader reader = ReadTable("UserTask");
             Task t;
             while(reader.Read())
@@ -164,7 +161,7 @@ namespace SmartPert.Model
                 int taskId = (int)reader["TaskId"];
                 string username = (string)reader["UserName"];
                 if (idToTask.TryGetValue(taskId, out t))
-                    t.AddWorker(idToUser[username], false);
+                    t.AddWorker(users[username], false);
             }
             reader.Close();
 
@@ -172,7 +169,7 @@ namespace SmartPert.Model
             reader = OpenReader("Select * From UserProject Where ProjectId=" + currentProject.Id + ";");
             while(reader.Read())
             {
-                currentProject.AddWorker(idToUser[(string)reader["UserName"]], false);
+                currentProject.AddWorker(users[(string)reader["UserName"]], false);
             }
             reader.Close();
         }
@@ -239,15 +236,14 @@ namespace SmartPert.Model
             if (result)
             {
                 bool isUserName = false;
-                foreach (User user in users)
-                    if (user.Username == userId)
-                    {
-                        isUserName = true;
-                        currentUser = user;
-                        break;
-                    }
+                User u;
+                if(users.TryGetValue(userId, out u))
+                {
+                    isUserName = true;
+                    currentUser = u;
+                }
                 if(!isUserName)
-                    foreach(User user in users)
+                    foreach(User user in users.Values)
                         if(user.Email == userId)
                         {
                             currentUser = user;
@@ -278,7 +274,8 @@ namespace SmartPert.Model
                 currentUser = user;
                 Properties.Settings.Default.UserName = currentUser.Username;
                 Properties.Settings.Default.Save();
-                users.Add(user);
+                if(!users.ContainsKey(user.Username))
+                    users.Add(user.Username, user);
                 return true;
             }
             return false;
@@ -294,7 +291,7 @@ namespace SmartPert.Model
             User user = new User(name);
             if (!user.Register())
                 return null;
-            users.Add(user);
+            users.Add(user.Username, user);
             return user;
         }
 
@@ -305,12 +302,13 @@ namespace SmartPert.Model
         /// <returns>true on success</returns>
         public bool DeleteUser(string username)
         {
-            User user = users.Find(x => x.Username == username);
-            if(user != null)
+            User user;
+            if(users.TryGetValue(username, out user))
             {
                 if(user == currentUser || user.Password == "" || user.Password == null)
                 {
                     user.Delete();
+                    users.Remove(user.Username);
                     return true;
                 }
             }
@@ -355,11 +353,11 @@ namespace SmartPert.Model
         /// Gets all the projects
         /// </summary>
         /// <returns>list of projects</returns>
-        public List<Project> GetUserProjects()
+        public Dictionary<int, Project> GetUserProjects()
         {
             // Currently, this only returns all projects and not those the user is member to
             // future todo is to let users be invited to project and only get those the user is a part of
-            return Projects;
+            return projects;
         }
 
 

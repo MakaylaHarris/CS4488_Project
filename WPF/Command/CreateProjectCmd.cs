@@ -15,11 +15,11 @@ namespace SmartPert.Command
     {
         private readonly string name;
         private readonly DateTime start;
-        private readonly DateTime end;
+        private readonly DateTime? end;
         private readonly string description;
         private Project project;
 
-        public CreateProjectCmd(string name, DateTime start, DateTime end, string description = "")
+        public CreateProjectCmd(string name, DateTime start, DateTime? end, string description = "")
         {
             this.name = name;
             this.start = start;
