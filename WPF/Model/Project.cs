@@ -156,10 +156,10 @@ namespace SmartPert.Model
             Model.Instance.OnModelUpdate(this);
         }
 
-        static public Project Parse(SqlDataReader reader, List<User> users)
+        static public Project Parse(SqlDataReader reader, Dictionary<string, User> users)
         {
             string creator = DBFunctions.StringCast(reader, "Creator");
-            User user = users != null && creator != "" ? users.Find(x => x.Username == creator) : null;
+            User user = users != null && creator != "" ? users[creator] : null;
             return new Project(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],

@@ -128,6 +128,11 @@ namespace SmartPert
             }
         }
 
+        private void Exit_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Close();
+        }
+
         private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Command.CommandStack.Instance.CanUndo();
