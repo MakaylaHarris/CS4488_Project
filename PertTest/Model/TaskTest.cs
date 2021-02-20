@@ -26,8 +26,10 @@ namespace PertTest.Model
             command.Parameters.AddWithValue("@Name", taskName);
             SqlDataReader reader = command.ExecuteReader();
             Task ret = null;
+            Dictionary<int, Project> keyValuePairs = new Dictionary<int, Project>();
+            keyValuePairs.Add(p.Id, p);
             if (reader.Read())
-                ret = Task.Parse(reader, null, p);
+                ret = Task.Parse(reader, null, keyValuePairs);
             CloseConnection();
             return ret;
         }

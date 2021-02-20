@@ -274,7 +274,8 @@ namespace SmartPert.Model
                 currentUser = user;
                 Properties.Settings.Default.UserName = currentUser.Username;
                 Properties.Settings.Default.Save();
-                users.Add(user.Username, user);
+                if(!users.ContainsKey(user.Username))
+                    users.Add(user.Username, user);
                 return true;
             }
             return false;
@@ -307,6 +308,7 @@ namespace SmartPert.Model
                 if(user == currentUser || user.Password == "" || user.Password == null)
                 {
                     user.Delete();
+                    users.Remove(user.Username);
                     return true;
                 }
             }
