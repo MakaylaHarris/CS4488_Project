@@ -209,6 +209,12 @@
     <Compile Include="View\Pages\ErrorCatch.xaml.cs">
       <DependentUpon>ErrorCatch.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Windows\ProjectCreator.xaml.cs">
+      <DependentUpon>ProjectCreator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Windows\TaskEditor.xaml.cs">
+      <DependentUpon>TaskEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Pages\TaskGrid.xaml.cs">
       <DependentUpon>TaskGrid.xaml</DependentUpon>
     </Compile>
@@ -276,6 +282,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Pages\TaskGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Windows\ProjectCreator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

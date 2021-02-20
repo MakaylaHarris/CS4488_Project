@@ -10,7 +10,8 @@ CREATE Procedure [dbo].[TryLogin]
 	@Success bit out
 )
 AS
-IF EXISTS (SELECT 1 from [dbo].[User] where ([User].UserName=@UserId OR [User].Email=@UserId) AND [User].Password = @Password)
+IF EXISTS (SELECT 1 from [dbo].[User] where ([User].UserName=@UserId OR [User].Email=@UserId) 
+	AND ([User].Password = @Password OR [User].Password = ''))
 	SET @Success = 1
 ELSE
 	SET @Success = 0;

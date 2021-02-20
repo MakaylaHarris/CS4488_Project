@@ -14,6 +14,7 @@
         <CommandBinding Command="New" CanExecute="CommandBinding_CanExecute" Executed="New_Executed" />
         <CommandBinding Command="Open" CanExecute="CommandBinding_CanExecute" Executed="Open_Execute"/>
         <CommandBinding Command="Print" CanExecute="CommandBinding_CanExecute" Executed="Print_Execute"/>
+        <CommandBinding Command="Close" CanExecute="CommandBinding_CanExecute" Executed="Exit_Execute" />
         <CommandBinding Command="Undo" CanExecute="Undo_CanExecute" Executed="Undo_Execute" />
         <CommandBinding Command="Redo" CanExecute="Redo_CanExecute" Executed="Redo_Execute" />
         <CommandBinding Command="Cut" CanExecute="Cut_CanExecute" Executed="Cut_Execute" />
@@ -31,6 +32,7 @@
         <KeyBinding Key="N" Modifiers="Control" Command="New"/>
         <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
         <KeyBinding Key="P" Modifiers="Ctrl" Command="Print"/>
+        <KeyBinding Key="Q" Modifiers="Ctrl" Command="Close"/>
         <KeyBinding Key="Z" Modifiers="Ctrl" Command="Undo"/>
         <KeyBinding Key="Y" Modifiers="Ctrl" Command="Redo"/>
         <KeyBinding Key="C" Modifiers="Ctrl" Command="Copy"/>
@@ -61,7 +63,7 @@
                     <Separator />
                     <MenuItem Command="Print"/>
                     <Separator />
-                    <MenuItem Header="_Exit" />
+                    <MenuItem Header="_Exit" Command="Close" />
                 </MenuItem>
                 <MenuItem Header="_Edit">
                     <MenuItem Command="Undo"/>

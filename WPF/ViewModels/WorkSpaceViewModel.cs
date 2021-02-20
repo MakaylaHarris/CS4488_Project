@@ -50,7 +50,7 @@ namespace SmartPert.ViewModels
 
         public int GridOffset
         {
-            get { return 8 - (int)Project.StartDate.DayOfWeek; }
+            get { return (int)Project.StartDate.DayOfWeek; }
         }
 
         public String[] weekDayAbbrev

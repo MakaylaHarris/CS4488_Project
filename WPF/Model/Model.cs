@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
 using SmartPert.View;
 
 namespace SmartPert.Model
@@ -42,9 +44,25 @@ namespace SmartPert.Model
         #endregion
 
         #region Project Methods
+        /// <summary>
+        /// Creates the project, if possible
+        /// </summary>
+        /// <param name="name">project name</param>
+        /// <param name="start">start date</param>
+        /// <param name="end">end date (optionally null)</param>
+        /// <param name="description">project description</param>
+        /// <returns>the project or null if creation failed</returns>
         public Project CreateProject(string name, DateTime start, DateTime? end, string description = "")
         {
-            throw new NotImplementedException();
+            // Try to create
+            try
+            {
+                Project project = new Project(name, start, end, description);
+                reader.SetProject(project);
+                return project;
+            }
+            catch (Exception) {}
+            return null;
         }
 
         public void DeleteProject(Project p)
@@ -57,12 +75,23 @@ namespace SmartPert.Model
         }
         public List<Project> GetProjectList()
         {
-            return reader.Projects;
+            return reader.Projects.Values.ToList();
         }
 
         public void SetProject(Project project)
         {
             reader.SetProject(project);
+        }
+
+        /// <summary>
+        /// Checks if name is a valid project name
+        /// </summary>
+        /// <param name="name">the name to check</param>
+        /// <returns>true if valid</returns>
+        public bool IsValidProjectName(string name)
+        {
+            Project p = GetProjectList().Find(x => x.Name == name);
+            return p == null;
         }
         #endregion
 
@@ -145,7 +174,7 @@ namespace SmartPert.Model
         /// Gets all users
         /// </summary>
         /// <returns>user list</returns>
-        public List<User> GetUsers() => reader.Users;
+        public List<User> GetUsers() => reader.Users.Values.ToList();
 
         /// <summary>
         /// Logs the user in
@@ -185,6 +214,11 @@ namespace SmartPert.Model
         /// <returns>True if valid</returns>
         public bool IsValidNewEmail(string email) => reader.IsValidEmail(email);
 
+        /// <summary>
+        /// Gets the current user that is logged in
+        /// </summary>
+        /// <returns>User or null</returns>
+        public User GetCurrentUser() => reader.CurrentUser;
         #endregion
 
         #region Subscriber Methods
@@ -247,36 +281,43 @@ namespace SmartPert.Model
         #region Get Updated Version of objects
         public void UpdateProject(ref Project project, bool updateIfNull=true)
         {
-            List<Project> projects = GetProjectList();
-            int id = project.Id;
-            Project ret = projects.Find(x => x.Id == id);
-            if (ret == null)
-            {
-                string name = project.Name;
-                ret = projects.Find(x => x.Name == name);
-            }
-            if (ret != null || updateIfNull)
+            Project ret;
+            if (reader.Projects.TryGetValue(project.Id, out ret))
                 project = ret;
+            else
+            {
+                foreach(Project p in reader.Projects.Values)
+                    if(p.Name == project.Name)
+                    {
+                        project = p;
+                        return;
+                    }
+                if (updateIfNull)
+                    project = null;
+            }
         }
 
         public void UpdateUser(ref User user, bool updateIfNull=true)
         {
             string uname = user.Username;
-            User ret = GetUsers().Find(x => x.Username == uname);
-            if (ret != null || updateIfNull)
+            User ret;
+            if (reader.Users.TryGetValue(uname, out ret))
                 user = ret;
+            else if (updateIfNull)
+                user = null;
         }
 
         public void UpdateTask(ref Task t, bool updateIfNull=true)
         {
-            List<Task> tasks = GetTasks();
             int id = t.Id;
-            Task updated = tasks.Find(x => x.Id == id);
-            if (updated == null)
+            Task updated;
+            if(!reader.Tasks.TryGetValue(id, out updated))
             {
                 // Find by name
                 string name = t.Name;
-                updated = tasks.Find(x => x.Name == name);
+                foreach (Task task in reader.Tasks.Values)
+                    if (task.Name == name)
+                        updated = task;
             }
             if (updated != null || updateIfNull)
                 t = updated;

@@ -16,6 +16,7 @@ using SmartPert.Model;
 using SmartPert.View.Login;
 using SmartPert.View.Pages;
 using System.Windows.Threading;
+using SmartPert.View.Windows;
 
 /// <summary>
 /// Name space for the SmartPert Pert Application
@@ -82,7 +83,7 @@ namespace SmartPert
 #region Menu bar
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            new ProjectCreator().ShowDialog();
         }
 
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -129,6 +130,11 @@ namespace SmartPert
             {
                 pdialog.PrintVisual(vis, "My Image");
             }
+        }
+
+        private void Exit_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Close();
         }
 
         private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
