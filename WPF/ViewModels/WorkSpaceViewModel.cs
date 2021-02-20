@@ -15,20 +15,10 @@ namespace SmartPert.ViewModels
 {
     class WorkSpaceViewModel : INotifyPropertyChanged
     {
-        private string name = "Makayla";
-        private DateTime start = new System.DateTime(2021, 2, 11, 0, 0, 0, 0);
-        private DateTime end = new System.DateTime(2021, 3, 13, 0, 0, 0, 0);
-        private string description = "This is a test with hard-coded values";
-        private int id = 001;
-        private int date = (new System.DateTime(2021, 3, 13, 0, 0, 0, 0) - DateTime.Today.Date).Days;
-
         private ObservableCollection<RowData> _rowData;
         private Project _Project;
-        private int _gridOffset;
         private List<string> _headers = new List<string>();
         private String[] _weekDayAbbrev = { "S", "M", "T", "W", "T", "F", "S" };
-        private bool _todayInProject;
-        private int _todayCol;
 
         /// <summary>
         /// Initializes an instance of the WorkSpaceViewModel class
