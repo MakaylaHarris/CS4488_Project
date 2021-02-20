@@ -177,9 +177,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command\CommandStack.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
+    <Compile Include="View\Controls\FilteredComboBox.xaml.cs">
+      <DependentUpon>FilteredComboBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\IntegerEdit.xaml.cs">
+      <DependentUpon>IntegerEdit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Controls\TaskControl.xaml.cs">
       <DependentUpon>TaskControl.xaml</DependentUpon>
     </Compile>
@@ -209,6 +216,9 @@
       <DependentUpon>WorkSpace.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ViewClasses\RowData.cs" />
+    <Compile Include="View\Windows\TaskEditor.xaml.cs">
+      <DependentUpon>TaskEditor.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -233,6 +243,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Controls\FilteredComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Controls\IntegerEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Controls\TaskControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -264,6 +282,10 @@
     <Page Include="View\Pages\WorkSpace.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Windows\TaskEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -339,6 +361,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModelCommands\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="database\AttachPert.sql" />
+    <Content Include="database\SQL\Register.sql" />
+    <Content Include="database\SQL\TestData.sql" />
+    <Content Include="database\SQL\TryLogin.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

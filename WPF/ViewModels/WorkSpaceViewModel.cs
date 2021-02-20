@@ -37,11 +37,12 @@ namespace SmartPert.ViewModels
         {
             //Would get the Project we are working with
             this._rowData = new ObservableCollection<RowData>();
-            _Project = new Project(name, start, end, description, id);
-            _Project.AddTask(new SmartPert.Model.Task("Test1", new DateTime(2021, 2, 12, 0, 0, 0, 0), new DateTime(2021, 2, 15, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
-            _Project.AddTask(new SmartPert.Model.Task("Test2", new DateTime(2021, 2, 18, 0, 0, 0, 0), new DateTime(2021, 2, 22, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
-            _Project.AddTask(new SmartPert.Model.Task("Test3", new DateTime(2021, 2, 25, 0, 0, 0, 0), new DateTime(2021, 2, 28, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
-            _Project.AddTask(new SmartPert.Model.Task("Test4", new DateTime(2021, 2, 28, 0, 0, 0, 0), new DateTime(2021, 3, 13, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", 3));
+            Project p1 = new Project("Makayla", new DateTime(2021, 2, 12, 0, 0, 0, 0), new DateTime(2021, 3, 13, 0, 0, 0, 0), "This is a test project.", new User("Makayla","thommaka@isu.edu", "Pass", "TestUserMakayla"), DateTime.Today, 123);
+            _Project = p1;
+            _Project.AddTask(new SmartPert.Model.Task("Test1", new DateTime(2021, 2, 12, 0, 0, 0, 0), new DateTime(2021, 2, 15, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", new User("Makayla", "thommaka@isu.edu", "Pass", "TestUserMakayla"), DateTime.Now, p1, 3));
+            _Project.AddTask(new SmartPert.Model.Task("Test2", new DateTime(2021, 2, 18, 0, 0, 0, 0), new DateTime(2021, 2, 22, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", new User("Makayla", "thommaka@isu.edu", "Pass", "TestUserMakayla"), DateTime.Now, p1, 3));
+            _Project.AddTask(new SmartPert.Model.Task("Test3", new DateTime(2021, 2, 25, 0, 0, 0, 0), new DateTime(2021, 2, 28, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", new User("Makayla", "thommaka@isu.edu", "Pass", "TestUserMakayla"), DateTime.Now, p1, 3));
+            _Project.AddTask(new SmartPert.Model.Task("Test4", new DateTime(2021, 2, 28, 0, 0, 0, 0), new DateTime(2021, 3, 13, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", new User("Makayla", "thommaka@isu.edu", "Pass", "TestUserMakayla"), DateTime.Now, p1, 3));
             _headers = GetWeekHeader();
             LoadData();
         }
