@@ -21,7 +21,7 @@ namespace SmartPert.Model
         {
             tasks = new List<Task>();
             if (id == -1)
-                id = Insert();
+                this.id = Insert();
         }
         public Project(Project project, int id = -1) : base(project, id)
         {
@@ -106,9 +106,15 @@ namespace SmartPert.Model
         #endregion
 
         #region Database
+        /// <summary>
+        /// Deletes the project from the database
+        /// </summary>
         public override void Delete()
         {
-            ExecuteSql("Delete from Project Where ProjectId= " + Id + ";");
+            SqlCommand command = OpenConnection("EXEC ProjectDelete @ProjectID");
+            command.Parameters.AddWithValue("@ProjectID", Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
         }
 
         /// <summary>

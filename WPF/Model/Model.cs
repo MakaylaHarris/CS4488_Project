@@ -218,7 +218,7 @@ namespace SmartPert.Model
         /// Gets the current user that is logged in
         /// </summary>
         /// <returns>User or null</returns>
-        public User GetCurrentUser() => reader.CurrentUser;
+        public User GetCurrentUser() => reader == null ? null : reader.CurrentUser;
         #endregion
 
         #region Subscriber Methods
