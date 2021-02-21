@@ -39,7 +39,7 @@
             <TextBox x:Name="PrjName" Grid.Column="1" Height="30" TextChanged="PrjName_TextChanged"/>
 
             <Label Content="Description (optional)" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBlock x:Name="PrjDescription" Grid.Row="1" Grid.Column="1" Margin="10"/>
+            <TextBox x:Name="PrjDescription" Grid.Row="1" Grid.Column="1" Margin="10"/>
 
             <Label Content="Start Date" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2"/>
             <DatePicker x:Name="StartDatePicker" Grid.Column="1" Grid.Row="2" SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
