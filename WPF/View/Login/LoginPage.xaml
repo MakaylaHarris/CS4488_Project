@@ -52,7 +52,7 @@
                          materialDesign:HintAssist.Hint="Username"
                          materialDesign:TextFieldAssist.HasClearButton="True"
                          Grid.Row="0" Grid.Column="1" />
-                <!--Row 1-->
+                    <!--Row 1-->
                 <materialDesign:PackIcon
                     Grid.Row="1"
                     Grid.Column="0"

@@ -29,6 +29,31 @@ namespace SmartPert.Model
             foreach (Task t in project.tasks)
                 tasks.Add(t);
         }
+
+        /// <summary>
+        /// Calculates a last date if none exists for project
+        /// Implemented by : Makayla Linnastruth and Robert Nelson
+        /// </summary>
+        /// <returns></returns>
+        public DateTime CalculateLastProjectDate()
+        {
+            if (this.EndDate != null)
+            {
+                return (DateTime)this.EndDate;
+            }
+
+            DateTime latestDate = this.StartDate;
+            foreach (Task task in this.Tasks)
+            {
+                DateTime temp = task.CalculateLastTaskDate();
+                if (temp.CompareTo(latestDate) > 0)
+                {
+                    latestDate = temp;
+                }
+            }
+
+            return latestDate;
+        }
         #endregion
 
         #region Task Methods
@@ -169,7 +194,6 @@ namespace SmartPert.Model
                 DBFunctions.DateCast(reader, "CreationDate"),
                 (int)reader["ProjectId"]); ;
         }
-
         #endregion
     }
 }
