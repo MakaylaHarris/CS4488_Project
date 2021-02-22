@@ -29,8 +29,6 @@ namespace PertTest.Model
         public void TestNewConnectionTest()
         {
             Assert.IsTrue(reader.Connected);
-            string cantConnect = @"BadConnect";
-            Assert.IsFalse(reader.TestNewConnection(cantConnect));
         }
 
         [TestMethod]
@@ -55,14 +53,6 @@ namespace PertTest.Model
             // Register Test
             Assert.IsTrue(reader.Register(name, pass, name, email));
             reader.DeleteUser(name);
-        }
-
-        [TestMethod]
-        public void TestAlreadyRegistered()
-        {
-            // Already registered test
-            reader.Register(name, pass, name, email);
-            Assert.IsFalse(reader.Register(name, "Pass", "Mischievious OR SELECT 1;", "email"));
         }
 
         [TestMethod]

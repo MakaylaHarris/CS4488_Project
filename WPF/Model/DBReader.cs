@@ -22,9 +22,14 @@ namespace SmartPert.Model
         private DBPoller polling;
         private SqlConnection connection;
         private bool isUpdating;
+        private int updateCount;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the number of updates sent to the receiver
+        /// </summary>
+        public int UpdateCount { get => updateCount; }
         /// <summary>
         /// Determines if connected to database
         /// </summary>
@@ -54,8 +59,8 @@ namespace SmartPert.Model
         /// <returns>DBReader instance</returns>
         public static DBReader Instantiate(DBUpdateReceiver receiver)
         {
-            instance.TestNewConnection(Properties.Settings.Default.ConnectionString);
             instance.receiver = receiver;
+            instance.TestNewConnection(Properties.Settings.Default.ConnectionString);
             return instance;
         }
 
@@ -377,6 +382,8 @@ namespace SmartPert.Model
                 UpdateWorkers(idToTask);
             }
             connection.Close();
+            updateCount++;
+            Console.WriteLine("Sent " + updateCount + " Updates so far");
             isUpdating = false;
             if(receiver != null)
                 receiver.OnDBUpdate(CurrentProject);

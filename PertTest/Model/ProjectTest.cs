@@ -15,7 +15,10 @@ namespace PertTest.Model
         string description;
         DateTime start;
         DateTime end;
+        private bool isCreated;
+        private Project project;
 
+        #region Constructor
         public ProjectTest()
         {
             name = "Project 1123462123";
@@ -23,7 +26,34 @@ namespace PertTest.Model
             start = DateTime.Now;
             end = start.AddDays(30);
         }
+        ~ProjectTest()
+        {
+            if (isCreated)
+            {
+                DeleteProjectByName(name);
+                isCreated = false;
+            }
+        }
+        #endregion
 
+        #region Public Methods
+        /// <summary>
+        /// Use this to create a test project
+        /// </summary>
+        public Project Create()
+        {
+            if(!isCreated)
+            {
+                project = GetProjectByName(name);
+                if(project == null)
+                    project = new Project(name, start, end, description);
+                isCreated = true;
+            }
+            return project;
+        }
+        #endregion
+
+        #region Private Methods
         private Project GetProjectByName(string name)
         {
             SqlCommand command = OpenConnection("SELECT * FROM Project WHERE Name=@Name");
@@ -65,6 +95,7 @@ namespace PertTest.Model
             p.Delete();
             Assert.IsNull(GetProjectByName(name));
         }
+        #endregion
 
         #region Interface Methods
         public override void Delete()

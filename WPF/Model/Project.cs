@@ -135,7 +135,7 @@ namespace SmartPert.Model
             command.Parameters.AddWithValue("@Description", Description);
             creator = Model.Instance.GetCurrentUser();
             if (creator != null)
-                command.Parameters.AddWithValue("@Creator", creator);
+                command.Parameters.AddWithValue("@Creator", creator.Username);
             else
                 command.Parameters.AddWithValue("@Creator", DBNull.Value);
             var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);

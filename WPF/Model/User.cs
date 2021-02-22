@@ -48,6 +48,7 @@ namespace SmartPert.Model
         #endregion
 
 
+        #region Constructor
         public User(string name, string email = "", string password = "", string username = "")
         {
             this.name = name;
@@ -58,9 +59,11 @@ namespace SmartPert.Model
             else
                 this.username = username;
         }
+        #endregion
 
         public override string ToString() => username;
 
+        #region Database Methods
         /// <summary>
         /// Attempts to register user
         /// </summary>
@@ -78,15 +81,13 @@ namespace SmartPert.Model
                 var result = command.Parameters.Add("@result", System.Data.SqlDbType.Bit);
                 result.Direction = System.Data.ParameterDirection.Output;
                 command.ExecuteNonQuery();
-                isRegistered = (bool) result.Value;
+                isRegistered = (bool)result.Value;
                 CloseConnection();
             }
             catch (SqlException) { }
             return isRegistered;
         }
 
-        
-        #region Database Methods
         /// <summary>
         /// Deletes user from database
         /// </summary>

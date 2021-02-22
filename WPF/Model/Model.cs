@@ -13,6 +13,8 @@ namespace SmartPert.Model
     public class Model : IModel, DBUpdateReceiver
     {
         private static readonly Model instance = new Model();
+        // This initializes DBReader, which must be done after the instance is defined since updates are immediately sent to model
+        private static readonly bool initialized = StartInstance();  
         private List<IViewModel> viewModels;
         private DBReader reader;
 
@@ -25,8 +27,6 @@ namespace SmartPert.Model
         static public Model GetInstance(IViewModel viewModel)
         {
             instance.Subscribe(viewModel);
-            if (instance.reader == null)
-                instance.reader = DBReader.Instantiate(instance);
             return instance;
         }
 
@@ -39,7 +39,11 @@ namespace SmartPert.Model
         private Model()
         {
             viewModels = new List<IViewModel>();
-            reader = null;
+        }
+        static private bool StartInstance()
+        {
+            instance.reader = DBReader.Instantiate(instance);
+            return true;
         }
         #endregion
 
