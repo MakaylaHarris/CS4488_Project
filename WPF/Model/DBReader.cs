@@ -182,6 +182,17 @@ namespace SmartPert.Model
 
         #region Public Methods
         /// <summary>
+        /// Removes the project
+        /// </summary>
+        /// <param name="p">project</param>
+        public void RemoveProject(Project p)
+        {
+            projects.Remove(p.Id);
+            if (p == currentProject)
+                currentProject = null;
+        }
+
+        /// <summary>
         /// Determines if name is a valid username, must not be empty, contain an @, or be already used
         /// </summary>
         /// <param name="name">the name to test</param>

@@ -69,9 +69,14 @@ namespace SmartPert.Model
             return null;
         }
 
+        /// <summary>
+        /// Deletes the project from the model
+        /// </summary>
+        /// <param name="p">project to delete</param>
         public void DeleteProject(Project p)
         {
-            throw new NotImplementedException();
+            reader.RemoveProject(p);
+            p.Delete();
         }
         public Project GetProject()
         {
