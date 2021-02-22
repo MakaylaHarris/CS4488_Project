@@ -151,14 +151,22 @@ namespace SmartPert.Model
             return (int) insertedId.Value;
         }
 
+        /// <summary>
+        /// Updates the project properties in the database
+        /// </summary>
         protected override void Update()
         {
-            // todo: fix this hot mess
-            ExecuteSql("update Project set Name = '" + Name
-                + "', Description = '" + Description +
-                "', StartDate='" + StartDate +
-                "', EndDate='" + EndDate +
-                "'Where ProjectId=" + Id + ";");
+            SqlCommand command = OpenConnection("UPDATE Project SET Name=@Name, Description=@Description, StartDate=@StartDate, EndDate=@EndDate WHERE ProjectId=@Id;");
+            command.Parameters.AddWithValue("@Name", Name);
+            command.Parameters.AddWithValue("@Description", Description);
+            command.Parameters.AddWithValue("@StartDate", StartDate);
+            if (EndDate == null)
+                command.Parameters.AddWithValue("@EndDate", DBNull.Value);
+            else
+                command.Parameters.AddWithValue("@EndDate", EndDate);
+            command.Parameters.AddWithValue("@Id", Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
             Model.Instance.OnModelUpdate(this);
         }
 

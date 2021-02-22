@@ -36,10 +36,10 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Content="Project Name" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox x:Name="PrjName" Grid.Column="1" Height="30" TextChanged="PrjName_TextChanged"/>
+            <TextBox x:Name="PrjName" Grid.Column="1" Height="30" TextChanged="PrjName_LostFocus"/>
 
             <Label Content="Description (optional)" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <TextBox x:Name="PrjDescription" Grid.Row="1" Grid.Column="1" Margin="10"/>
+            <TextBox x:Name="PrjDescription" Grid.Row="1" Grid.Column="1" Margin="10" LostFocus="PrjDescription_LostFocus"/>
 
             <Label Content="Start Date" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2"/>
             <DatePicker x:Name="StartDatePicker" Grid.Column="1" Grid.Row="2" SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
@@ -48,7 +48,7 @@
             <DatePicker x:Name="EndDatePicker" Grid.Column="1" Grid.Row="3" SelectedDateChanged="EndDatePicker_SelectedDateChanged"/>
         </Grid>
         <Label x:Name="ValidateLbl" Foreground="Red" Content="" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-        <Button Grid.Row="2" Content="Cancel" Margin="10" Click="Cancel_Click"/>
-        <Button Grid.Row="2" Grid.Column="1" Content="Create" Click="Create_Click"/>
+        <Button x:Name="CancelBtn" Grid.Row="2" Content="Cancel" Margin="10" Click="Cancel_Click"/>
+        <Button x:Name="SubmitBtn" Grid.Row="2" Grid.Column="1" Content="Create" Click="Create_Click"/>
     </Grid>
 </Window>

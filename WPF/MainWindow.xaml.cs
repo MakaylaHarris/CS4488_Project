@@ -298,6 +298,15 @@ namespace SmartPert
         {
             model.Refresh();
         }
+
+        private void Settings_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ProjectCreator pc = new ProjectCreator();
+            Project p = model.GetProject();
+            if (p != null)
+                pc.Project = p;
+            pc.ShowDialog();
+        }
 #endregion
 
 #region Model Update
