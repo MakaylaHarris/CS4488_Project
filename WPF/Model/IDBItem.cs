@@ -152,6 +152,7 @@ namespace SmartPert.Model
         {
             foreach (IItemObserver observer in observers)
                 observer.OnDeleted(this);
+            observers.Clear();      // No more updates
         }
 
         private void NotifyUpdate()
@@ -169,6 +170,8 @@ namespace SmartPert.Model
         /// <param name="observer">observer</param>
         public void Subscribe(IItemObserver observer)
         {
+            if (isDeleted || isOutdated)
+                throw new ItemDeletedException("Can't subscribe to deleted item!");
             if (!observers.Contains(observer))
                 observers.Add(observer);
         }
