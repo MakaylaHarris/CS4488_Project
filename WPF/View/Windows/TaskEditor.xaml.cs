@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using SmartPert.Command;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -166,7 +165,7 @@ namespace SmartPert.View.Windows
         /// <summary>
         /// Call this every time an update occurs to a task field
         /// </summary>
-        private void On_Update()
+        private void On_Input()
         {
             if (!isLoading && isValidInput())
             {
@@ -196,7 +195,7 @@ namespace SmartPert.View.Windows
             if (val > MostLikelyDuration.Value)
                 MostLikelyDuration.Value = val;
             else
-                On_Update();
+                On_Input();
         }
 
         private void On_Likely_Change(object sender, int val)
@@ -207,7 +206,7 @@ namespace SmartPert.View.Windows
             else if (val > MaxDuration.Value)
                 MaxDuration.Value = val;
             else
-                On_Update();
+                On_Input();
         }
 
         private void On_Max_Change(object sender, int val)
@@ -217,30 +216,30 @@ namespace SmartPert.View.Windows
             if (val < MostLikelyDuration.Value)
                 MostLikelyDuration.Value = val;
             else
-                On_Update();
+                On_Input();
         }
         private void EndDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (task == null || EndDate.SelectedDate != task.EndDate)
-                On_Update();
+                On_Input();
         }
 
         private void StartDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (task == null || StartDate.SelectedDate != task.StartDate)
-                On_Update();
+                On_Input();
         }
 
         private void TaskDescription_LostFocus(object sender, RoutedEventArgs e)
         {
             if (task == null || TaskDescription.Text != task.Description)
-                On_Update();
+                On_Input();
         }
 
         private void TaskName_LostFocus(object sender, RoutedEventArgs e)
         {
             if (task == null || TaskName.Text != task.Name)
-                On_Update();
+                On_Input();
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -296,7 +295,10 @@ namespace SmartPert.View.Windows
             }
         }
 
-
+        /// <summary>
+        /// When the task has been updated
+        /// </summary>
+        /// <param name="item">task</param>
         public void OnUpdate(IDBItem item)
         {
             LoadTaskData((Task)item);

@@ -21,12 +21,6 @@ namespace SmartPert.Model
             tasks = new List<Task>();
             PostInit(insert, track);
         }
-        public Project(Project project, int id = -1) : base(project, id)
-        {
-            tasks = new List<Task>();
-            foreach (Task t in project.tasks)
-                tasks.Add(t);
-        }
         #endregion
 
         #region Task Methods

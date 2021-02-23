@@ -222,9 +222,6 @@
       <DependentUpon>WorkSpace.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ViewClasses\RowData.cs" />
-    <Compile Include="View\Windows\TaskEditor.xaml.cs">
-      <DependentUpon>TaskEditor.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

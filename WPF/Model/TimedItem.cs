@@ -109,19 +109,6 @@ namespace SmartPert.Model
             creator = Model.Instance.GetCurrentUser();
             workers = new HashSet<User>();
         }
-
-        public TimedItem(TimedItem item, int id = -1)
-        {
-            name = item.Name;
-            startDate = item.startDate;
-            endDate = item.endDate;
-            description = item.description;
-            creator = item.creator;
-            creationDate = item.creationDate;
-            id = (id == -1) ? item.Id : id;
-            isComplete = EndDate != null && EndDate < DateTime.Now;
-            workers = new HashSet<User>();
-        }
         #endregion
 
         #region ID stuff
