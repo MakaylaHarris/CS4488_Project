@@ -13,6 +13,10 @@ using SmartPert.View.ViewClasses;
 
 namespace SmartPert.ViewModels
 {
+    /// <summary>
+    /// The interaction logic for the workspace view
+    /// Implemented by: Makayla Linnastruth
+    /// </summary>
     class WorkSpaceViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<RowData> _rowData;
@@ -27,11 +31,7 @@ namespace SmartPert.ViewModels
         {
             //Would get the Project we are working with
             this._rowData = new ObservableCollection<RowData>();
-            _Project = new Project("Makayla", DateTime.Now, null, description: "Test", insert: false);
-            _Project.AddTask(new SmartPert.Model.Task("Test1", new DateTime(2021, 2, 12, 0, 0, 0, 0), new DateTime(2021, 2, 15, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", _Project, 3));
-            _Project.AddTask(new SmartPert.Model.Task("Test2", new DateTime(2021, 2, 18, 0, 0, 0, 0), new DateTime(2021, 2, 22, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", _Project, 3));
-            _Project.AddTask(new SmartPert.Model.Task("Test3", new DateTime(2021, 2, 25, 0, 0, 0, 0), new DateTime(2021, 2, 28, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", _Project, 3));
-            _Project.AddTask(new SmartPert.Model.Task("Test4", new DateTime(2021, 2, 28, 0, 0, 0, 0), new DateTime(2021, 3, 13, 0, 0, 0, 0), 0, 0, 0, "This task is cool.", _Project, 3));
+            _Project = Model.Model.Instance.GetProject();
             _headers = GetWeekHeader();
             LoadData();
         }
@@ -44,7 +44,7 @@ namespace SmartPert.ViewModels
 
         public int DaySpan
         {
-            get { return (((DateTime)this.Project.EndDate).Date - this.Project.StartDate.Date).Days; }
+            get { return (((DateTime)this.Project.CalculateLastProjectDate()).Date - this.Project.StartDate.Date).Days; }
         }
 
         public int GridOffset
@@ -64,7 +64,7 @@ namespace SmartPert.ViewModels
             {
                 this._rowData = value;
                 OnPropertyChanged("RowData");
-                
+
             }
         }
 
@@ -77,13 +77,13 @@ namespace SmartPert.ViewModels
         {
             get
             {
-                return ( this.Project.StartDate.Date.AddDays(-GridOffset).CompareTo(DateTime.Now) <= 0 && ((DateTime)this.Project.EndDate).CompareTo(DateTime.Now) >= 0 );
+                return ( this.Project.StartDate.Date.AddDays(-GridOffset).CompareTo(DateTime.Now) <= 0 && ((DateTime)this.Project.CalculateLastProjectDate()).CompareTo(DateTime.Now) >= 0 );
             }
         }
 
         public int TodayCol
         {
-            get { if (TodayInProject) { return (DateTime.Now - this.Project.StartDate.AddDays(-GridOffset)).Days + 1; } 
+            get { if (TodayInProject) { return (DateTime.Now - this.Project.StartDate.AddDays(-GridOffset)).Days + 1; }
                 else { return 0; }
             }
         }
@@ -100,7 +100,7 @@ namespace SmartPert.ViewModels
             this.RowData.Add(num1);
             for (int i = 0; i < Project.Tasks.Count; i++)
             {
-                RowData num2 = new RowData(Project.Tasks[i].Name, (((DateTime)this.Project.Tasks[i].StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, (((DateTime)this.Project.Tasks[i].EndDate).Date - ((DateTime)this.Project.Tasks[i].StartDate).Date).Days, false);
+                RowData num2 = new RowData(Project.Tasks[i].Name, (((DateTime)this.Project.Tasks[i].StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, (((DateTime)this.Project.Tasks[i].CalculateLastTaskDate()).Date - ((DateTime)this.Project.Tasks[i].StartDate).Date).Days, false);
                 this.RowData.Add(num2);
             }
         }
@@ -113,7 +113,7 @@ namespace SmartPert.ViewModels
         {
             List<String> weekHeaders = new List<string>();
             DateTime headerStore = this.Project.StartDate;
-            while ((((DateTime)this.Project.EndDate)-headerStore).Days > 0 )
+            while ((((DateTime)this.Project.CalculateLastProjectDate())-headerStore).Days > 0 )
             {
                 if (headerStore == Project.StartDate)
                 {
@@ -135,6 +135,6 @@ namespace SmartPert.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion 
+        #endregion
     }
 }

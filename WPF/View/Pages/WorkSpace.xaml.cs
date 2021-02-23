@@ -20,11 +20,19 @@ namespace SmartPert.View.Pages
 {
     /// <summary>
     /// Interaction logic for WorkSpace.xaml
+    /// Implemented by: Makayla Linnastruth
     /// </summary>
     public partial class WorkSpace : Page
     {
         WorkSpaceViewModel viewModel;
         private List<string> test = new List<string>();
+        //starts the grid content rows at 2 since the headers take up two rows
+        //starts the grid content columns at 1 since the Project/task column is the first
+        private const int rowStart = 2;
+        private const int colStart = 1;
+        //This is the max integer number used to mean span all
+        private const int maxInt = 2147483647;
+        private List<int> weekendCols = new List<int>();
 
         public WorkSpace()
         {
@@ -35,25 +43,20 @@ namespace SmartPert.View.Pages
         }
         private void BuildGrid()
         {
-            //starts the grid content rows at 2 since the headers take up two rows
-            //starts the grid content columns at 1 since the Project/task column is the first
-            int rowStart = 2;
-            int colStart = 1;
-            AddRows(rowStart);
-            AddHeaders(colStart);
+            AddRows();
+            AddHeaders();
             AddGridSplitter();
-            AddTaskControls();
             AddTodayBorder();
+            AddTaskControls();
+            AddGridBorders();
         }
 
         /// <summary>
-        /// 
+        /// Adds Column headers into grid
         /// </summary>
-        /// <param name="colStart"></param>
-        private void AddHeaders(int colStart)
+        private void AddHeaders()
         {
             int colPosition = colStart;
-            List<int> weekendCols = new List<int>();
             //outer loop adds the Date (i.e. "Feb 04") column headers
             for (int i = 0; i < viewModel.Headers.Count; i++)
             {
@@ -62,6 +65,7 @@ namespace SmartPert.View.Pages
                 colDef.MinWidth = 15;
                 TextBlock txt1 = new TextBlock();
                 txt1.Text = viewModel.Headers[i];
+                txt1.FontSize = 16;
                 txt1.Margin = new Thickness(0, 0, 0, 0);
                 Grid.SetRow(txt1, 0);
                 Grid.SetColumn(txt1, colPosition);
@@ -80,7 +84,7 @@ namespace SmartPert.View.Pages
                     txt2.Text = viewModel.weekDayAbbrev[j];
                     if (viewModel.weekDayAbbrev[j] == "S")
                     {
-                        weekendCols.Add(j + colStart);
+                        weekendCols.Add(j + colPosition);
                     }
                     txt2.Margin = new Thickness(0, 0, 0, 0);
                     txt2.HorizontalAlignment = HorizontalAlignment.Center;
@@ -95,21 +99,6 @@ namespace SmartPert.View.Pages
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="weekendCols"></param>
-        private void colorGrid(List<int> weekendCols)
-        {
-            for (int i = 0; i < mainGrid.RowDefinitions.Count; i++)
-            {
-                for (int j = 0; j < mainGrid.RowDefinitions.Count; j++)
-                {
-                    //TODO: add panels inside cells to display background for weekends, add border for today's date
-                }
-            }
-        }
-
-        /// <summary>
         /// Adds Buttons to Grid for now from start to end date for project and tasks
         /// </summary>
         private void AddTaskControls()
@@ -118,21 +107,23 @@ namespace SmartPert.View.Pages
             {
                 //TODO: add different time case scenarios
                 Button MyControl = new Button();
-                MyControl.Margin = new Thickness(0, 2, 0, 2);
+                MyControl.Margin = new Thickness(0, 10, 0, 10);
 
                 Grid.SetRow(MyControl, i + 2);
                 Grid.SetColumn(MyControl, viewModel.RowData[i].StartDateCol);
                 Grid.SetColumnSpan(MyControl, viewModel.RowData[i].ColSpan);
+                Grid.SetZIndex(MyControl, 100);
                 mainGrid.Children.Add(MyControl);
+                
             }
         }
 
         /// <summary>
         /// Adds Project/task rows to grid with project names and task names
         /// </summary>
-        /// <param name="rowStart"></param>
-        private void AddRows(int rowStart)
+        private void AddRows()
         {
+            int rowChange = rowStart;
             for (int i = 0; i < viewModel.RowData.Count; i++)
             {
                 RowDefinition rowDef = new RowDefinition();
@@ -147,10 +138,12 @@ namespace SmartPert.View.Pages
                     txt1.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
                 }
                 txt1.Margin = new Thickness(10,0,0,0);
-                Grid.SetRow(txt1, rowStart);
+                txt1.FontSize = 16;
+                txt1.VerticalAlignment = VerticalAlignment.Center;
+                Grid.SetRow(txt1, rowChange);
                 Grid.SetColumn(txt1, 0);
                 mainGrid.Children.Add(txt1);
-                rowStart += 1;
+                rowChange += 1;
                 
             }
         }
@@ -170,12 +163,13 @@ namespace SmartPert.View.Pages
                 HorizontalAlignment = HorizontalAlignment.Right,
                 Background = MyBrush,
                 Width = 4,
-                Margin = new Thickness(10, 0, 10, 0)
+                Margin = new Thickness(10,0, 0, 0)
             };
-
-            mainGrid.Children.Add(splitter);
+            Grid.SetZIndex(splitter, 90);
             Grid.SetColumn(splitter, 0);
-            Grid.SetRowSpan(splitter, 2147483647);
+            Grid.SetRowSpan(splitter, maxInt);
+            mainGrid.Children.Add(splitter);
+
         }
 
         /// <summary>
@@ -196,8 +190,51 @@ namespace SmartPert.View.Pages
             if (viewModel.TodayCol != 0)
             {
                 Grid.SetColumn(today, viewModel.TodayCol);
-                Grid.SetRowSpan(today, 2147483647);
+                Grid.SetRowSpan(today, maxInt);
                 mainGrid.Children.Add(today);
+            }
+        }
+
+        /// <summary>
+        /// Adds primary light hue grid borders to main workspace
+        /// </summary>
+        private void AddGridBorders()
+        {
+            for (int i = rowStart; i < mainGrid.RowDefinitions.Count; i++)
+            {
+                Border border = new Border();
+
+                // Create a primary hue light Brush  
+                SolidColorBrush primaryLight = (SolidColorBrush)Application.Current.Resources["PrimaryHueLightBrush"];
+                border.BorderThickness = new Thickness(0.3);
+                border.Opacity = 0.5;
+                border.BorderBrush = primaryLight;
+
+                Grid.SetRow(border, i);
+                Grid.SetColumnSpan(border, maxInt);
+                mainGrid.Children.Add(border);
+            }
+
+            for (int i = colStart; i < mainGrid.ColumnDefinitions.Count; i++)
+            {
+                Border border = new Border();
+
+                // Create a primary hue light Brush  
+                SolidColorBrush primaryLight = (SolidColorBrush)Application.Current.Resources["PrimaryHueLightBrush"];
+                border.BorderThickness = new Thickness(0.3);
+                border.Opacity = 0.5;
+                if (weekendCols.Contains(i))
+                {
+                    border.Background = (SolidColorBrush)Application.Current.Resources["PrimaryHueDarkBrush"];
+                    border.Opacity = 0.25;
+                }
+
+                border.BorderBrush = primaryLight;
+                Grid.SetZIndex(border, 0);
+                Grid.SetColumn(border, i);
+                Grid.SetRow(border, 1);
+                Grid.SetRowSpan(border, maxInt);
+                mainGrid.Children.Add(border);
             }
         }
     }

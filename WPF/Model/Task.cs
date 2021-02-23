@@ -341,5 +341,22 @@ namespace SmartPert.Model
         }
 
         #endregion
+
+        /// <summary>
+        /// Calculates the last date for the task if none exists
+        /// Implemented by: Makayla Linnastruth and Robert Nelson
+        /// </summary>
+        /// <returns></returns>
+        public DateTime CalculateLastTaskDate()
+        {
+            if (this.EndDate != null)
+            {
+                return (DateTime)this.EndDate;
+            }
+            else
+            {
+                return this.StartDate.AddDays(maxDuration);
+            }
+        }
     }
 }
