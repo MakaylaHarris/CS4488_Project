@@ -364,7 +364,7 @@ namespace SmartPert.View.Pages
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            new TaskEditor(model).ShowDialog();
+            new TaskEditor().ShowDialog();
             DrawGraph(Project.Tasks);
         }
 

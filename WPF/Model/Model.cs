@@ -181,6 +181,19 @@ namespace SmartPert.Model
         }
 
         /// <summary>
+        /// Gets the user by name (if they exist) otherwise creates
+        /// </summary>
+        /// <param name="name">username</param>
+        /// <returns>user</returns>
+        public User CreateOrGetUser(string name)
+        {
+            User u = GetUsers().Find(x => x.Username == name);
+            if (u == null)
+                u = CreateUser(name);
+            return u;
+        }
+
+        /// <summary>
         /// Gets all users
         /// </summary>
         /// <returns>user list</returns>

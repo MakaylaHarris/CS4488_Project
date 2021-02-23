@@ -44,14 +44,11 @@ namespace SmartPert.View.Windows
         /// <summary>
         /// Constructor for Task Editor, task is required for editing
         /// </summary>
-        /// <param name="model">The underlying model</param>
         /// <param name="task">The underlying task</param>
-        public TaskEditor(IModel model, Task task = null)
+        public TaskEditor(Task task = null)
         {
             InitializeComponent();
             DataContext = this;
-            if (model == null)
-                throw new ArgumentNullException("task", "Task Editor requires model!");
             isLoading = false;
             Owner = Application.Current.MainWindow;
             Assignees = new ObservableCollection<User>();
@@ -61,7 +58,7 @@ namespace SmartPert.View.Windows
                 LoadTaskData(task);
             } else      // Set a default start that makes sense (now)
             {
-                DateTime projectStart = model.GetProject().StartDate;
+                DateTime projectStart = Model.Model.Instance.GetProject().StartDate;
                 StartDate.SelectedDate = DateTime.Now > projectStart ? DateTime.Now : projectStart;
             }
         }
@@ -285,7 +282,7 @@ namespace SmartPert.View.Windows
             if (selected != null)
                 u = (User)selected;
             else if (text != "")
-                u = Model.Model.Instance.CreateUser(text);
+                u = Model.Model.Instance.CreateOrGetUser(text);
             if (u != null)
             {
                 if (!(new AddWorkerCmd(task, u).Run()))

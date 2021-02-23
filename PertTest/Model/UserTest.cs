@@ -42,7 +42,8 @@ namespace PertTest.Model
         {
             if(!isCreated)
             {
-                Assert.IsTrue(SmartPert.Model.Model.Instance.Register(name, email, pass, name));
+                if (!SmartPert.Model.Model.Instance.Register(name, email, pass, name))
+                    SmartPert.Model.Model.Instance.Login(email, pass);
                 user = SmartPert.Model.Model.Instance.GetCurrentUser();
                 isCreated = true;
             }

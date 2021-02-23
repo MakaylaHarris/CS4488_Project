@@ -201,12 +201,12 @@ namespace SmartPert
 
         private void AddTask_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = false;
+            e.CanExecute = MainContent.Content != null && MainContent.Content.GetType() == typeof(WorkSpace);
         }
 
         private void AddTask_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            new TaskEditor().ShowDialog();
         }
 
         public void ShowDBConnectionSettings()
