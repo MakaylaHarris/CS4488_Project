@@ -131,11 +131,12 @@ namespace SmartPert.View.Pages
 
             // Day Width Calculations
             int subtaskCount = 0;
-            for (int i = 0; i < parent.Dependencies.Count; i++)
+            int i = 0;
+            foreach (Task dependency in parent.Dependencies)
             {
-                subtaskCount += DrawSubTasks(parent.Dependencies[i], newTopMargin);
+                subtaskCount += DrawSubTasks(dependency, newTopMargin);
                 Point start = new Point(((DateTime)parent.StartDate - _project.StartDate).TotalDays * dayWidth + tempDuration * dayWidth - dayWidth / 4, topMargin + buttonHeight / 2);
-                Point end = new Point(((DateTime)parent.Dependencies[i].StartDate - _project.StartDate).TotalDays * dayWidth, newTopMargin + buttonHeight / 2);
+                Point end = new Point(((DateTime)dependency.StartDate - _project.StartDate).TotalDays * dayWidth, newTopMargin + buttonHeight / 2);
 
                 double width = start.X + (end.X - start.X) / 2;
                 minWidth = (width < minWidth) ? width : minWidth;
@@ -151,7 +152,7 @@ namespace SmartPert.View.Pages
 
                 Path p = getPath(points);
 
-                KeyValuePair<Task, Task> pair = new KeyValuePair<Task, Task>(parent, parent.Dependencies[i]);
+                KeyValuePair<Task, Task> pair = new KeyValuePair<Task, Task>(parent, dependency);
                 p.DataContext = pair;
 
                 Button button = new Button();
@@ -159,7 +160,7 @@ namespace SmartPert.View.Pages
                 Canvas.SetZIndex(p, 99);
                 mainCanvas.Children.Add(p);
 
-                newTopMargin = topMargin + (i + 1) * (buttonHeight + buttonSpacing);
+                newTopMargin = topMargin + (i++ + 1) * (buttonHeight + buttonSpacing);
                 newTopMargin += subtaskCount * (buttonHeight + buttonSpacing);
             }
 

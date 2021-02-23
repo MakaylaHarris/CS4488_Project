@@ -21,16 +21,17 @@ namespace SmartPert.View.Windows
     /// Task Editor
     /// Created 2/11/2021 by Robert Nelson
     /// </summary>
-    public partial class TaskEditor : Window, IViewModel
+    public partial class TaskEditor : Window, IItemObserver
     {
         private Task task;
-        private IModel model;
         private bool isLoading;
 
+        #region Properties
         private Task Task { 
             get => task;
             set {
                 task = value;
+                task.Subscribe(this);
                 LoadTaskData(task);
             }
         }
@@ -38,6 +39,7 @@ namespace SmartPert.View.Windows
         /// Users assigned to task
         /// </summary>
         public ObservableCollection<User> Assignees { get; set; }
+        #endregion
 
         #region Constructor
         /// <summary>
@@ -51,8 +53,6 @@ namespace SmartPert.View.Windows
             DataContext = this;
             if (model == null)
                 throw new ArgumentNullException("task", "Task Editor requires model!");
-            this.model = model;
-            model.Subscribe(this);
             isLoading = false;
             Owner = Application.Current.MainWindow;
             Assignees = new ObservableCollection<User>();
@@ -121,7 +121,7 @@ namespace SmartPert.View.Windows
             bool result = false;
             if (TaskName.Text == "")
                 ValidateLabel.Content = "Task name is required!";
-            else if ((task == null || TaskName.Text != task.Name) && !model.IsValidTaskName(TaskName.Text))
+            else if ((task == null || TaskName.Text != task.Name) && !Model.Model.Instance.IsValidTaskName(TaskName.Text))
                 ValidateLabel.Content = "Task name " + TaskName.Text + " is not valid";
             else
                 result = true;
@@ -139,7 +139,7 @@ namespace SmartPert.View.Windows
             }
 
             // Check if it's within project time frame
-            if (StartDate.SelectedDate < model.GetProject().StartDate)
+            if (StartDate.SelectedDate < Model.Model.Instance.GetProject().StartDate)
             {
                 ValidateLabel.Content = "Task start date must be after project start date.";
                 result = false;
@@ -149,6 +149,19 @@ namespace SmartPert.View.Windows
         #endregion
 
         #region Event Handlers
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            if (!AssigneePopup.IsFocused && !cb_assign.IsMouseOver && !IsMouseOver)
+            {
+                // Todo: Known issue when creating task and pressing tab this throws null exception
+                try
+                {
+                    Close();
+                }
+                catch (InvalidOperationException) { }
+            }
+        }
+
 
         /// <summary>
         /// Call this every time an update occurs to a task field
@@ -231,7 +244,8 @@ namespace SmartPert.View.Windows
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            model.Unsubscribe(this);
+            if (task != null)
+                task.UnSubscribe(this);
         }
 
         private void UpdatePopup()
@@ -258,22 +272,6 @@ namespace SmartPert.View.Windows
                 AssigneePopup.IsOpen = false;
         }
 
-        public void Assign_to(object selected, string text)
-        {
-            User u = null;
-            if (selected != null)
-                u = (User)selected;
-            else if (text != "")
-                u = model.CreateUser(text);
-            if(u != null)
-            {
-                if (!(new AddWorkerCmd(task, u).Run()))
-                {
-                    ValidateLabel.Content = "User " + u + " is assigned";
-                }
-            }
-        }
-
         private void RM_Assignee(object sender, RoutedEventArgs e)
         {
             // Find user and remove from task assignees
@@ -282,31 +280,37 @@ namespace SmartPert.View.Windows
         #endregion
 
         #region Public methods
+        public void Assign_to(object selected, string text)
+        {
+            User u = null;
+            if (selected != null)
+                u = (User)selected;
+            else if (text != "")
+                u = Model.Model.Instance.CreateUser(text);
+            if (u != null)
+            {
+                if (!(new AddWorkerCmd(task, u).Run()))
+                {
+                    ValidateLabel.Content = "User " + u + " is assigned";
+                }
+            }
+        }
+
+
+        public void OnUpdate(IDBItem item)
+        {
+            LoadTaskData((Task)item);
+        }
 
         /// <summary>
-        /// Receives updates from the model and updates the task
+        /// IItemObserver interface: Close the window if task has been deleted
         /// </summary>
-        /// <param name="p">project</param>
-        public void OnModelUpdate(Project p)
+        /// <param name="item"></param>
+        public void OnDeleted(IDBItem item)
         {
-            if(task != null)
-            {
-                Task = model.GetTaskById(task.Id);
-            }
+            Close();
         }
         #endregion
 
-        private void Window_Deactivated(object sender, EventArgs e)
-        {
-            if(!AssigneePopup.IsFocused && !cb_assign.IsMouseOver && !IsMouseOver)
-            {
-                // Todo: Known issue when creating task and pressing tab this throws null exception
-                try
-                {
-                    Close();
-                }
-                catch (InvalidOperationException) { }
-            }
-        }
     }
 }

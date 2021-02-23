@@ -49,7 +49,7 @@ namespace PertTest.Model
         public void TestCreateUserRegister()
         {
             Unregister();
-            Assert.IsTrue(reader.CreateUser(name) != null);
+            Assert.IsTrue(SmartPert.Model.Model.Instance.CreateUser(name) != null);
             // Register Test
             Assert.IsTrue(reader.Register(name, pass, name, email));
             reader.DeleteUser(name);

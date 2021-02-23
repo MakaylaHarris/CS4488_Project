@@ -59,13 +59,13 @@ namespace PertTest.Model
             SqlCommand command = OpenConnection("SELECT * FROM Project WHERE Name=@Name");
             command.Parameters.AddWithValue("@Name", name);
             SqlDataReader reader = command.ExecuteReader();
-            Project p = null;
+            project = null;
             while(reader.Read())
             {
-                p = Project.Parse(reader, null);
+                project = Project.Parse(reader, null);
             }
             CloseConnection();
-            return p;
+            return project;
         }
 
         private void DeleteProjectByName(string name)
@@ -89,26 +89,31 @@ namespace PertTest.Model
             // Setup
             DeleteProjectByName(name);
             // Test it creates
-            Project p = new Project(name, start, end, description);
+            project = new Project(name, start, end, description);
             Assert.IsNotNull(GetProjectByName(name));
             // Test delete
-            p.Delete();
+            project.Delete();
             Assert.IsNull(GetProjectByName(name));
         }
         #endregion
 
         #region Interface Methods
-        public override void Delete()
+        protected override void PerformDelete()
         {
             throw new NotImplementedException();
         }
 
-        protected override int Insert()
+        protected override int PerformInsert()
         {
             throw new NotImplementedException();
         }
 
-        protected override void Update()
+        protected override void PerformUpdate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool PerformParse(SqlDataReader reader)
         {
             throw new NotImplementedException();
         }

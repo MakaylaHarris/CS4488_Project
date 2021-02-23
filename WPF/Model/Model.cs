@@ -136,9 +136,8 @@ namespace SmartPert.Model
             Task task = null;
             try
             {
-                task = new Task(name, start, end, duration, maxDuration, minDuration, description, reader.CurrentUser, project: project);
+                task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
                 project.AddTask(task);
-                OnModelUpdate();
             } catch (Exception) { }
             return task;
         }
@@ -149,7 +148,6 @@ namespace SmartPert.Model
             if (task != null)
             {
                 task.Delete();
-                OnModelUpdate();
             }
         }
 
@@ -173,10 +171,13 @@ namespace SmartPert.Model
         /// <returns>null if it failed, user on success</returns>
         public User CreateUser(string name)
         {
-            User user = reader.CreateUser(name);
-            if (user != null)
-                OnModelUpdate();
-            return user;
+            try
+            {
+                User user = new User(name);
+                return user;
+            } catch(IDBItem.DuplicateKeyError)
+            { }
+            return null;
         }
 
         /// <summary>
@@ -237,7 +238,7 @@ namespace SmartPert.Model
                 viewModels.Add(viewModel);
         }
 
-        public void Unsubscribe(IViewModel viewModel)
+        public void UnSubscribe(IViewModel viewModel)
         {
             if (viewModels.Contains(viewModel))
                 viewModels.Remove(viewModel);

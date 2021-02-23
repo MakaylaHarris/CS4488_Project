@@ -9,16 +9,21 @@ namespace SmartPert.Model
     /// Can be used to check database connection with DBReader.Connected
     /// Robert Nelson 1/28/2021
     /// </summary>
-    public class DBReader
+    public class DBReader : IItemObserver
     {
         #region private fields
         private static readonly DBReader instance = new DBReader();
         private Project currentProject;
         private DBUpdateReceiver receiver;
-        private Dictionary<int, Project> projects;
         private User currentUser;
+        // Current copy of the data
+        private Dictionary<int, Project> projects;
         private Dictionary<string, User> users;
         private Dictionary<int, Task> tasks;
+        private Dictionary<int, HashSet<User>> projectWorkers;
+        private Dictionary<int, HashSet<User>> taskWorkers;
+        private Dictionary<int, HashSet<Task>> dependencies;
+
         private DBPoller polling;
         private SqlConnection connection;
         private bool isUpdating;
@@ -70,6 +75,9 @@ namespace SmartPert.Model
             users = new Dictionary<string, User>();
             projects = new Dictionary<int, Project>();
             tasks = new Dictionary<int, Task>();
+            projectWorkers = new Dictionary<int, HashSet<User>>();
+            taskWorkers = new Dictionary<int, HashSet<User>>();
+            dependencies = new Dictionary<int, HashSet<Task>>();
             isUpdating = false;
         }
         #endregion
@@ -77,6 +85,8 @@ namespace SmartPert.Model
         #region Private Methods
         private SqlDataReader OpenReader(string query)
         {
+            if (connection.State == System.Data.ConnectionState.Closed)
+                connection.Open();
             SqlCommand command = new SqlCommand(query, connection);
             return command.ExecuteReader();
         }
@@ -94,13 +104,23 @@ namespace SmartPert.Model
 
         private void UpdateProject()
         {
-            projects.Clear();
+            Project p;
+            Dictionary<int, bool> found = new Dictionary<int, bool>();
+            foreach(Project proj in projects.Values)
+                found[proj.Id] = false;
             SqlDataReader reader = ReadTable("Project");
             string name = Properties.Settings.Default.LastProject;
             while (reader.Read())
             {
-                Project p = Project.Parse(reader, users);
-                projects.Add(p.Id, p);
+                if (projects.TryGetValue((int)reader["ProjectId"], out p))
+                {
+                    p.ParseUpdate(reader);
+                    found[p.Id] = true;
+                }
+                else
+                {
+                    p = Project.Parse(reader, users);
+                }
                 if (currentProject != null)
                 {
                     if (p.Id == currentProject.Id)
@@ -110,6 +130,9 @@ namespace SmartPert.Model
                     currentProject = p;
             }
             reader.Close();
+            foreach (KeyValuePair<int, bool> keyVal in found)
+                if (!keyVal.Value)
+                    projects[keyVal.Key].IsDeleted = true;
         }
 
         /// <summary>
@@ -118,69 +141,203 @@ namespace SmartPert.Model
         /// <returns>Dictionary of task id to tasks</returns>
         private Dictionary<int, Task> UpdateTasks()
         {
-            tasks.Clear();
+            Task t;
+            Dictionary<int, bool> found = new Dictionary<int, bool>();
+            foreach (Task task in tasks.Values)
+                found[task.Id] = false;
             SqlDataReader reader = OpenReader("Select * from Task;");
             while (reader.Read())
             {
-                Task t = Task.Parse(reader, users, projects);
-                tasks.Add(t.Id, t);
+                if(tasks.TryGetValue((int) reader["TaskId"], out t))
+                {
+                    t.ParseUpdate(reader);
+                    found[t.Id] = true;
+                } else
+                {
+                    t = Task.Parse(reader, users, projects);
+                }
             }
             reader.Close();
+            foreach(KeyValuePair<int, bool> keyValue in found)
+                if(!keyValue.Value)
+                    tasks[keyValue.Key].IsDeleted = true;
             return tasks;
         }
 
         private void UpdateUsers()
         {
-            users.Clear();
+            User u;
+            Dictionary<string, bool> found = new Dictionary<string, bool>();
+            foreach (string s in users.Keys)
+                found[s] = false;
             SqlDataReader reader = ReadTable("[User]");
             while (reader.Read())
             {
-                User u = User.Parse(reader);
-                users.Add(u.Username, u);
+                string username = (string)reader["UserName"];
+                if (users.TryGetValue(username, out u))
+                {
+                    u.ParseUpdate(reader);
+                    found[username] = true;
+                }
+                else
+                {
+                    u = User.Parse(reader);
+                }
             }
             reader.Close();
+            foreach (KeyValuePair<string, bool> keyValue in found)
+                if (!keyValue.Value)
+                    users[keyValue.Key].IsDeleted = true;
         }
 
         /// <summary>
         /// Implemented 2/4/2021 by Robert Nelson
-        /// </summary>s
+        /// </summary>
         private void UpdateDependencies(Dictionary<int, Task> idToTask)
         {
+            // Grab the new data
+            Dictionary<int, HashSet<Task>> newDepend = new Dictionary<int, HashSet<Task>>();
+            HashSet<Task> tmp;
             SqlDataReader reader = ReadTable("Dependency");
             while(reader.Read())
             {
                 int rootId = (int) reader["RootId"];
-                int dependentId = (int)reader["DependentId"];
-                idToTask[rootId].AddDependency(idToTask[dependentId]);
+                if (!newDepend.TryGetValue(rootId, out tmp))
+                    newDepend[rootId] = tmp = new HashSet<Task>();
+                tmp.Add(idToTask[(int)reader["DependentId"]]);
             }
             reader.Close();
+
+            // Now update any removed dependencies
+            foreach(int key in dependencies.Keys)
+            {
+                if (!newDepend.ContainsKey(key))
+                    idToTask[key].DB_UpdateDependencies(null);
+            }
+            Task task;
+            // And update new task dependencies
+            foreach(KeyValuePair<int, HashSet<Task>> keyValue in newDepend)
+            {
+                task = idToTask[keyValue.Key];
+                task.DB_UpdateDependencies(keyValue.Value);
+            }
+            dependencies = newDepend;
         }
 
-        private void UpdateWorkers(Dictionary<int, Task> idToTask)
-        {            
-            // Read and update task workers
-            SqlDataReader reader = ReadTable("UserTask");
-            Task t;
-            while(reader.Read())
+        private Dictionary<int, HashSet<User>> ReadWorkerData(string table, string id)
+        {
+            // Read in task workers
+            Dictionary<int, HashSet<User>> newWorkers = new Dictionary<int, HashSet<User>>();
+            HashSet<User> tmp;
+            SqlDataReader reader = ReadTable(table);
+            while (reader.Read())
             {
-                int taskId = (int)reader["TaskId"];
-                string username = (string)reader["UserName"];
-                if (idToTask.TryGetValue(taskId, out t))
-                    t.AddWorker(users[username], false);
+                int id_val = (int)reader[id];
+                if (!newWorkers.TryGetValue(id_val, out tmp))
+                    newWorkers[id_val] = tmp = new HashSet<User>();
+                tmp.Add(users[(string)reader["UserName"]]);
             }
             reader.Close();
+            return newWorkers;
+        }
 
-            // Finally, Read and update project workers (current project only)
-            reader = OpenReader("Select * From UserProject Where ProjectId=" + currentProject.Id + ";");
-            while(reader.Read())
-            {
-                currentProject.AddWorker(users[(string)reader["UserName"]], false);
-            }
-            reader.Close();
+        private void UpdateTaskWorkers()
+        {
+            Dictionary<int, HashSet<User>> newWorkers = ReadWorkerData("UserTask", "TaskId");
+            foreach (int key in taskWorkers.Keys)
+                if (!newWorkers.ContainsKey(key))
+                    tasks[key].DB_UpdateWorkers(null);
+            foreach (KeyValuePair<int, HashSet<User>> keyValue in newWorkers)
+                tasks[keyValue.Key].DB_UpdateWorkers(keyValue.Value);
+        }
+
+        private void UpdateProjectWorkers()
+        {
+            Dictionary<int, HashSet<User>> newWorkers = ReadWorkerData("UserProject", "ProjectId");
+            foreach (int key in projectWorkers.Keys)
+                if (!newWorkers.ContainsKey(key))
+                    projects[key].DB_UpdateWorkers(null);
+            foreach (KeyValuePair<int, HashSet<User>> keyValue in newWorkers)
+                projects[keyValue.Key].DB_UpdateWorkers(keyValue.Value);
         }
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Adds a new item for tracking
+        /// </summary>
+        /// <param name="item">newly created item</param>
+        public void TrackItem(IDBItem item)
+        {
+            if (item.GetType() == typeof(Task))
+            {
+                Task task;
+                Task t = (Task)item;
+                if(tasks.TryGetValue(t.Id, out task))
+                    if(!ReferenceEquals(task, t))
+                        task.IsOutdated = true;
+                tasks[t.Id] = t;
+            }
+            else if (item.GetType() == typeof(Project))
+            {
+                Project project;
+                Project p = (Project)item;
+                if (projects.TryGetValue(p.Id, out project))
+                    if (!ReferenceEquals(project, p))
+                        project.IsOutdated = true;
+                projects[p.Id] = p;
+            }  else if(item.GetType() == typeof(User))
+            {
+                User user;
+                User u = (User)item;
+                if (users.TryGetValue(u.Username, out user))
+                    if (!ReferenceEquals(u, user))
+                        user.IsOutdated = true;
+                users[u.Username] = u;
+            }
+            item.Subscribe(this);
+            if(receiver != null)
+                receiver.OnDBUpdate(CurrentProject);
+        }
+
+        /// <summary>
+        /// Update event of IDBItem
+        /// </summary>
+        /// <param name="item">an updated item</param>
+        public void OnUpdate(IDBItem item)
+        {
+            if (!isUpdating)
+                receiver.OnDBUpdate(currentProject); // Send the update up
+        }
+
+        /// <summary>
+        /// Delete event that removes item
+        /// </summary>
+        /// <param name="item">IDBItem</param>
+        public void OnDeleted(IDBItem item)
+        {
+            if (item.GetType() == typeof(Task))
+            {
+                Task t = (Task)item;
+                tasks.Remove(t.Id);
+            }
+            else if (item.GetType() == typeof(Project))
+            {
+                Project p = (Project)item;
+                if (projects.Remove(p.Id) && p == currentProject)
+                    currentProject = null;
+            }
+            else if (item.GetType() == typeof(User))
+            {
+                User u = (User)item;
+                users.Remove(u.Username);
+                if (u == currentUser)
+                    currentUser = null;
+            }
+            if(!isUpdating)
+                receiver.OnDBUpdate(CurrentProject);
+        }
+
         /// <summary>
         /// Removes the project
         /// </summary>
@@ -284,31 +441,19 @@ namespace SmartPert.Model
         /// <returns>true on success</returns>
         public bool Register(string username, string password, string name, string email)
         {
-            User user = new User(name, email, password, username);
-            if(user.Register())
+            try
             {
+                User user = new User(name, email, password, username);
                 currentUser = user;
                 Properties.Settings.Default.UserName = currentUser.Username;
                 Properties.Settings.Default.Save();
-                if(!users.ContainsKey(user.Username))
+                if (!users.ContainsKey(user.Username))
                     users.Add(user.Username, user);
                 return true;
             }
+            catch(IDBItem.DuplicateKeyError) { }
+            catch(IDBItem.InsertionError) { }
             return false;
-        }
-
-        /// <summary>
-        /// Used to create a user with just a name (unregistered)
-        /// </summary>
-        /// <param name="name">name</param>
-        /// <returns>null if it failed, user on success</returns>
-        public User CreateUser(string name)
-        {
-            User user = new User(name);
-            if (!user.Register())
-                return null;
-            users.Add(user.Username, user);
-            return user;
         }
 
         /// <summary>
@@ -386,18 +531,30 @@ namespace SmartPert.Model
             connection.Open();
             UpdateUsers();
             UpdateProject();
-            if (CurrentProject != null)
-            {
-                Dictionary<int, Task> idToTask = UpdateTasks();
-                UpdateDependencies(idToTask);
-                UpdateWorkers(idToTask);
-            }
+            Dictionary<int, Task> idToTask = UpdateTasks();
+            UpdateDependencies(idToTask);
+            UpdateProjectWorkers();
+            UpdateTaskWorkers();
             connection.Close();
+
+            PostUpdate();
             updateCount++;
-            Console.WriteLine("Sent " + updateCount + " Updates so far");
             isUpdating = false;
             if(receiver != null)
                 receiver.OnDBUpdate(CurrentProject);
+        }
+
+        /// <summary>
+        /// After an update is finished, send out notifications
+        /// </summary>
+        public void PostUpdate()
+        {
+            foreach (Project item in projects.Values)
+                item.PostUpdate();
+            foreach (Task t in tasks.Values)
+                t.PostUpdate();
+            foreach (User u in users.Values)
+                u.PostUpdate();
         }
 
         public void OnDBDisconnect()
@@ -419,6 +576,7 @@ namespace SmartPert.Model
             }
             OnDBUpdate();
         }
+
         #endregion
     }
 }

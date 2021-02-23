@@ -20,9 +20,8 @@ namespace SmartPert.View.Windows
     /// Interaction logic for ProjectCreator.xaml
     /// Created 2/19/2021 by Robert Nelson
     /// </summary>
-    public partial class ProjectCreator : Window, IViewModel
+    public partial class ProjectCreator : Window, IItemObserver
     {
-        private readonly Model.Model model;
         private Project project;
         private bool isEditMode;
         private bool isLoading;
@@ -51,14 +50,14 @@ namespace SmartPert.View.Windows
                     Title = "Project Editor";
                     SubmitBtn.Visibility = Visibility.Hidden;
                     CancelBtn.Visibility = Visibility.Hidden;
-                    model.Subscribe(this);
+                    project.Subscribe(this);
                 }
                 else
                 {
                     Title = "Project Creator";
                     SubmitBtn.Visibility = Visibility.Visible;
                     CancelBtn.Visibility = Visibility.Visible;
-                    model.Unsubscribe(this);
+                    project.UnSubscribe(this);
                 }
 
             }
@@ -72,7 +71,6 @@ namespace SmartPert.View.Windows
         public ProjectCreator()
         {
             InitializeComponent();
-            model = Model.Model.Instance;
             StartDatePicker.SelectedDate = DateTime.Now;
         }
 
@@ -83,24 +81,29 @@ namespace SmartPert.View.Windows
         ~ProjectCreator()
         {
             if (isEditMode)
-                model.Unsubscribe(this);
+                project.UnSubscribe(this);
         }
         #endregion
 
         #region Public Methods
         /// <summary>
-        /// Updates the project
+        /// When the project is updated load data
         /// </summary>
-        /// <param name="p">N/A</param>
-        public void OnModelUpdate(Project p)
+        /// <param name="item">project</param>
+        public void OnUpdate(IDBItem item)
         {
-            model.UpdateProject(ref project);
-            if(project == null)
-            {
-                ValidateLbl.Content = "Project no longer exists!";
-                IsEditMode = false;
-            }
+            Load_Project((Project)item);
         }
+
+        /// <summary>
+        /// When the project has been deleted, close window
+        /// </summary>
+        /// <param name="item">project</param>
+        public void OnDeleted(IDBItem item)
+        {
+            Close();
+        }
+
         #endregion
 
         #region Private Methods
@@ -168,7 +171,7 @@ namespace SmartPert.View.Windows
                     return false;
                 }
             }
-            else if ((!IsEditMode || Project.Name != PrjName.Text) && !model.IsValidProjectName(PrjName.Text))
+            else if ((!IsEditMode || Project.Name != PrjName.Text) && !Model.Model.Instance.IsValidProjectName(PrjName.Text))
             {
                 ValidateLbl.Content = "A project with that name already exists";
                 return false;
@@ -176,7 +179,6 @@ namespace SmartPert.View.Windows
             ValidateLbl.Content = "";
             return true;
         }
-
         #endregion
 
     }

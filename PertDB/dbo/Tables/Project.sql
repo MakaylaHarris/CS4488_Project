@@ -4,7 +4,7 @@
 	[StartDate] [datetime] NOT NULL,
 	[EndDate] [datetime] NULL,
 	[Description] [varchar](max) NULL,
- [Creator] VARCHAR(50) NULL, 
+	[Creator] VARCHAR(50) NULL, 
     [CreationDate] DATETIME NOT NULL, 
     CONSTRAINT [PK_Project] PRIMARY KEY CLUSTERED 
 (

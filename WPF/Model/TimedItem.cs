@@ -7,7 +7,7 @@ namespace SmartPert.Model
     /// A named item with a start and end date, not used directly (abstract).
     /// Robert Nelson 1/28/2021
     /// </summary>
-    public abstract class TimedItem : IDBItem, IEquatable<TimedItem>
+    public abstract class TimedItem : IDBItem
     {
         private DateTime startDate;
         private DateTime? endDate;
@@ -15,7 +15,7 @@ namespace SmartPert.Model
         private string description;
         protected int id;
         private bool isComplete;
-        protected List<User> workers;
+        protected HashSet<User> workers;
         protected User creator;
         protected DateTime creationDate;
 
@@ -30,7 +30,7 @@ namespace SmartPert.Model
                 if(startDate != value)
                 {
                     startDate = value;
-                    Update();
+                    PerformUpdate();
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace SmartPert.Model
                         isComplete = false;
                     else
                         isComplete = true;
-                    Update();
+                    PerformUpdate();
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace SmartPert.Model
                 if(name != value)
                 {
                     name = value;
-                    Update();
+                    PerformUpdate();
                 }
             }
         }
@@ -73,12 +73,12 @@ namespace SmartPert.Model
                 if(description != value)
                 {
                     description = value;
-                    Update();
+                    PerformUpdate();
                 }
             }
         }
 
-        public List<User> Workers { get => workers; }
+        public HashSet<User> Workers { get => workers; }
         public int Id { get => id; }
         public bool IsComplete
         {
@@ -98,18 +98,16 @@ namespace SmartPert.Model
         #endregion
 
         #region Constructor
-        public TimedItem(string name, DateTime start, DateTime? end, string description = "", 
-            User creator = null, DateTime? creationTime = null, int id = -1)
+        public TimedItem(string name, DateTime start, DateTime? end, string description = "", int id = -1, IItemObserver observer=null) :base(observer)
         {
             this.name = name;
             startDate = start;
             endDate = end;
             this.description = description;
-            this.creator = creator;
-            this.creationDate = creationTime != null ? (DateTime) creationTime : DateTime.Now;
             this.id = id;
             isComplete = EndDate != null && EndDate < DateTime.Now;
-            workers = new List<User>();
+            creator = Model.Instance.GetCurrentUser();
+            workers = new HashSet<User>();
         }
 
         public TimedItem(TimedItem item, int id = -1)
@@ -122,31 +120,11 @@ namespace SmartPert.Model
             creationDate = item.creationDate;
             id = (id == -1) ? item.Id : id;
             isComplete = EndDate != null && EndDate < DateTime.Now;
-            workers = new List<User>();
+            workers = new HashSet<User>();
         }
         #endregion
 
         #region ID stuff
-        public void UpdateId(int id) => this.id = id;
-
-        /// <summary>
-        /// Equals override that uses ids
-        /// </summary>
-        /// <param name="obj">object</param>
-        /// <returns>true if same type and ids equal</returns>
-        public bool Equals(TimedItem obj)
-        {
-            return obj != null && id == obj.Id;
-        }
-
-        /// <summary>
-        /// Equals override that uses ids
-        ///  Created 2/16/2021 by Robert Nelson
-        /// </summary>
-        /// <param name="obj">object</param>
-        /// <returns>true if same type and ids equal</returns>
-        public override bool Equals(object obj) => obj.GetType().Equals(GetType()) && Equals((TimedItem) obj);
-
         /// <summary>
         /// Gets the id
         /// </summary>
@@ -154,10 +132,35 @@ namespace SmartPert.Model
         public override int GetHashCode() => id;
         #endregion
 
-        #region Worker Methods
-        abstract public bool AddWorker(User worker, bool UpdateDB=true);
+        /// <summary>
+        /// To string
+        /// </summary>
+        /// <returns>Name</returns>
+        public override string ToString() => Name;
 
-        abstract public bool RemoveWorker(User worker, bool UpdateDB=true);
+        #region Worker Methods
+        abstract public bool AddWorker(User worker);
+
+        abstract public bool RemoveWorker(User worker);
+
+
+        /// <summary>
+        /// Used by DBReader to update workers
+        /// </summary>
+        /// <param name="updatedWorkers">the updated set</param>
+        public void DB_UpdateWorkers(HashSet<User> updatedWorkers)
+        {
+            if(updatedWorkers == null)
+            {
+                workers.Clear();
+                isUpdated = true;
+            }
+            else if(!workers.SetEquals(updatedWorkers))
+            {
+                workers = updatedWorkers;
+                isUpdated = true;
+            }
+        }
         #endregion
     }
 }

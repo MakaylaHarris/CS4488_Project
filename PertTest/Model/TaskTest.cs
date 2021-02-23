@@ -118,7 +118,7 @@ namespace PertTest.Model
             string name = "Test32312213";
             Project project = projectTest.Create();
             // Ensure task isn't in database
-            Task task = DB_ReadTask(name, project);
+            task = DB_ReadTask(name, project);
             if (task != null)
                 task.Delete();
 
@@ -133,23 +133,28 @@ namespace PertTest.Model
             Assert.IsTrue(task.Description == updated.Description);
 
             // Delete Task
-            task.Delete();
+            updated.Delete();
             Assert.IsFalse(DB_HasTask(name));
         }
         #endregion
 
         #region Interface Methods
-        public override void Delete()
+        protected override void PerformDelete()
         {
             throw new NotImplementedException();
         }
 
-        protected override int Insert()
+        protected override int PerformInsert()
         {
             throw new NotImplementedException();
         }
 
-        protected override void Update()
+        protected override void PerformUpdate()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool PerformParse(SqlDataReader reader)
         {
             throw new NotImplementedException();
         }
