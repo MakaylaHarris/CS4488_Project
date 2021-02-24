@@ -79,7 +79,7 @@ namespace SmartPert.Model
                     CloseConnection();
                     workers.Add(worker);
                     added = true;
-                    Model.Instance.OnModelUpdate(this);
+                    NotifyUpdate();
                 }
                 catch (SqlException) { }
             }
@@ -106,7 +106,7 @@ namespace SmartPert.Model
                     CloseConnection();
                     workers.Remove(worker);
                     removed = true;
-                    Model.Instance.OnModelUpdate(this);
+                    NotifyUpdate();
                 } catch (SqlException) { }
             }
             return removed;
