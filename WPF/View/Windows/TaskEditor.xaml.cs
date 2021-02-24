@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using SmartPert.Command;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,16 +20,17 @@ namespace SmartPert.View.Windows
     /// Task Editor
     /// Created 2/11/2021 by Robert Nelson
     /// </summary>
-    public partial class TaskEditor : Window, IViewModel
+    public partial class TaskEditor : Window, IItemObserver
     {
         private Task task;
-        private IModel model;
         private bool isLoading;
 
+        #region Properties
         private Task Task { 
             get => task;
             set {
                 task = value;
+                task.Subscribe(this);
                 LoadTaskData(task);
             }
         }
@@ -38,21 +38,17 @@ namespace SmartPert.View.Windows
         /// Users assigned to task
         /// </summary>
         public ObservableCollection<User> Assignees { get; set; }
+        #endregion
 
         #region Constructor
         /// <summary>
         /// Constructor for Task Editor, task is required for editing
         /// </summary>
-        /// <param name="model">The underlying model</param>
         /// <param name="task">The underlying task</param>
-        public TaskEditor(IModel model, Task task = null)
+        public TaskEditor(Task task = null)
         {
             InitializeComponent();
             DataContext = this;
-            if (model == null)
-                throw new ArgumentNullException("task", "Task Editor requires model!");
-            this.model = model;
-            model.Subscribe(this);
             isLoading = false;
             Owner = Application.Current.MainWindow;
             Assignees = new ObservableCollection<User>();
@@ -62,7 +58,7 @@ namespace SmartPert.View.Windows
                 LoadTaskData(task);
             } else      // Set a default start that makes sense (now)
             {
-                DateTime projectStart = model.GetProject().StartDate;
+                DateTime projectStart = Model.Model.Instance.GetProject().StartDate;
                 StartDate.SelectedDate = DateTime.Now > projectStart ? DateTime.Now : projectStart;
             }
         }
@@ -121,7 +117,7 @@ namespace SmartPert.View.Windows
             bool result = false;
             if (TaskName.Text == "")
                 ValidateLabel.Content = "Task name is required!";
-            else if ((task == null || TaskName.Text != task.Name) && !model.IsValidTaskName(TaskName.Text))
+            else if ((task == null || TaskName.Text != task.Name) && !Model.Model.Instance.IsValidTaskName(TaskName.Text))
                 ValidateLabel.Content = "Task name " + TaskName.Text + " is not valid";
             else
                 result = true;
@@ -139,7 +135,7 @@ namespace SmartPert.View.Windows
             }
 
             // Check if it's within project time frame
-            if (StartDate.SelectedDate < model.GetProject().StartDate)
+            if (StartDate.SelectedDate < Model.Model.Instance.GetProject().StartDate)
             {
                 ValidateLabel.Content = "Task start date must be after project start date.";
                 result = false;
@@ -149,11 +145,24 @@ namespace SmartPert.View.Windows
         #endregion
 
         #region Event Handlers
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            if (!AssigneePopup.IsFocused && !cb_assign.IsMouseOver && !IsMouseOver)
+            {
+                // Todo: Known issue when creating task and pressing tab this throws null exception
+                try
+                {
+                    Close();
+                }
+                catch (InvalidOperationException) { }
+            }
+        }
+
 
         /// <summary>
         /// Call this every time an update occurs to a task field
         /// </summary>
-        private void On_Update()
+        private void On_Input()
         {
             if (!isLoading && isValidInput())
             {
@@ -183,7 +192,7 @@ namespace SmartPert.View.Windows
             if (val > MostLikelyDuration.Value)
                 MostLikelyDuration.Value = val;
             else
-                On_Update();
+                On_Input();
         }
 
         private void On_Likely_Change(object sender, int val)
@@ -194,7 +203,7 @@ namespace SmartPert.View.Windows
             else if (val > MaxDuration.Value)
                 MaxDuration.Value = val;
             else
-                On_Update();
+                On_Input();
         }
 
         private void On_Max_Change(object sender, int val)
@@ -204,34 +213,35 @@ namespace SmartPert.View.Windows
             if (val < MostLikelyDuration.Value)
                 MostLikelyDuration.Value = val;
             else
-                On_Update();
+                On_Input();
         }
         private void EndDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (task == null || EndDate.SelectedDate != task.EndDate)
-                On_Update();
+                On_Input();
         }
 
         private void StartDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (task == null || StartDate.SelectedDate != task.StartDate)
-                On_Update();
+                On_Input();
         }
 
         private void TaskDescription_LostFocus(object sender, RoutedEventArgs e)
         {
             if (task == null || TaskDescription.Text != task.Description)
-                On_Update();
+                On_Input();
         }
 
         private void TaskName_LostFocus(object sender, RoutedEventArgs e)
         {
             if (task == null || TaskName.Text != task.Name)
-                On_Update();
+                On_Input();
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            model.Unsubscribe(this);
+            if (task != null)
+                task.UnSubscribe(this);
         }
 
         private void UpdatePopup()
@@ -258,22 +268,6 @@ namespace SmartPert.View.Windows
                 AssigneePopup.IsOpen = false;
         }
 
-        public void Assign_to(object selected, string text)
-        {
-            User u = null;
-            if (selected != null)
-                u = (User)selected;
-            else if (text != "")
-                u = model.CreateUser(text);
-            if(u != null)
-            {
-                if (!(new AddWorkerCmd(task, u).Run()))
-                {
-                    ValidateLabel.Content = "User " + u + " is assigned";
-                }
-            }
-        }
-
         private void RM_Assignee(object sender, RoutedEventArgs e)
         {
             // Find user and remove from task assignees
@@ -282,31 +276,40 @@ namespace SmartPert.View.Windows
         #endregion
 
         #region Public methods
+        public void Assign_to(object selected, string text)
+        {
+            User u = null;
+            if (selected != null)
+                u = (User)selected;
+            else if (text != "")
+                u = Model.Model.Instance.CreateOrGetUser(text);
+            if (u != null)
+            {
+                if (!(new AddWorkerCmd(task, u).Run()))
+                {
+                    ValidateLabel.Content = "User " + u + " is assigned";
+                }
+            }
+        }
 
         /// <summary>
-        /// Receives updates from the model and updates the task
+        /// When the task has been updated
         /// </summary>
-        /// <param name="p">project</param>
-        public void OnModelUpdate(Project p)
+        /// <param name="item">task</param>
+        public void OnUpdate(IDBItem item)
         {
-            if(task != null)
-            {
-                Task = model.GetTaskById(task.Id);
-            }
+            LoadTaskData((Task)item);
+        }
+
+        /// <summary>
+        /// IItemObserver interface: Close the window if task has been deleted
+        /// </summary>
+        /// <param name="item"></param>
+        public void OnDeleted(IDBItem item)
+        {
+            Close();
         }
         #endregion
 
-        private void Window_Deactivated(object sender, EventArgs e)
-        {
-            if(!AssigneePopup.IsFocused && !cb_assign.IsMouseOver && !IsMouseOver)
-            {
-                // Todo: Known issue when creating task and pressing tab this throws null exception
-                try
-                {
-                    Close();
-                }
-                catch (InvalidOperationException) { }
-            }
-        }
     }
 }

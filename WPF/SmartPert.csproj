@@ -15,8 +15,6 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -34,6 +32,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -178,6 +178,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\CommandStack.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
     <Compile Include="View\Controls\FilteredComboBox.xaml.cs">
       <DependentUpon>FilteredComboBox.xaml</DependentUpon>
     </Compile>
@@ -215,6 +218,10 @@
     <Compile Include="View\Pages\TaskGrid.xaml.cs">
       <DependentUpon>TaskGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Pages\WorkSpace.xaml.cs">
+      <DependentUpon>WorkSpace.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewClasses\RowData.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -240,12 +247,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\Controls\FilteredComboBox.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Controls\IntegerEdit.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Controls\TaskControl.xaml">
       <SubType>Designer</SubType>
@@ -271,17 +278,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Pages\TaskGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Windows\ProjectCreator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Windows\TaskEditor.xaml">
+    <Page Include="View\Pages\WorkSpace.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Pages\TaskGrid.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="View\Windows\TaskEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -354,6 +365,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\broke_cow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModelCommands\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="database\AttachPert.sql" />
+    <Content Include="database\SQL\Register.sql" />
+    <Content Include="database\SQL\TestData.sql" />
+    <Content Include="database\SQL\TryLogin.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

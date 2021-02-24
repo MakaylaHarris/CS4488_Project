@@ -35,7 +35,7 @@ namespace SmartPert.Command
         public abstract bool Undo();
 
         /// <summary>
-        /// Updates id, used when creating deleted objects (on undo/redo)
+        /// Get updates for new objects, used when creating deleted objects (on undo/redo)
         /// </summary>
         /// <param name="old">old object</param>
         /// <param name="newItem">new object</param>

@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:SmartPert"
         mc:Ignorable="d"
         Title="SmartPert" Height="500" Width="900"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
@@ -32,6 +31,7 @@
         <CommandBinding Command="{x:Static local:CustomCommands.DocsCommand}" CanExecute="CommandBinding_CanExecute" Executed="Docs_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AboutCommand}" CanExecute="CommandBinding_CanExecute" Executed="About_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AddHelpCommand}" Executed="Additional_Help"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.SettingsCommand}" Executed="Settings_Execute"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Control" Command="New"/>
@@ -68,6 +68,8 @@
                     <Separator />
                     <MenuItem Command="Print"/>
                     <Separator />
+                    <MenuItem Command="{x:Static local:CustomCommands.SettingsCommand}"/>
+                    <Separator />
                     <MenuItem Header="_Exit" Command="Close" />
                 </MenuItem>
                 <MenuItem Header="_Edit">
@@ -99,7 +101,7 @@
 
         <!--#region  Main Content-->
         <Border>
-            <Frame x:Name="MainContent" Margin="10,48,10,10" NavigationUIVisibility="Hidden"/>
+            <Frame x:Name="MainContent" Margin="10,54,10,10" NavigationUIVisibility="Hidden"/>
         </Border>
         <!--#endregion-->
         

@@ -20,7 +20,7 @@ namespace SmartPert.Model
             set
             {
                 name = value;
-                Update();
+                PerformUpdate();
             }
         }
 
@@ -30,7 +30,7 @@ namespace SmartPert.Model
             set
             {
                 email = value;
-                Update();
+                PerformUpdate();
             }
         }
 
@@ -40,7 +40,7 @@ namespace SmartPert.Model
             set
             {
                 password = value;
-                Update();
+                PerformUpdate();
             }
         }
 
@@ -48,7 +48,18 @@ namespace SmartPert.Model
         #endregion
 
 
-        public User(string name, string email = "", string password = "", string username = "")
+        #region Constructor
+        /// <summary>
+        /// Creates new user
+        /// </summary>
+        /// <param name="name">Name</param>
+        /// <param name="email">Email</param>
+        /// <param name="password">Password</param>
+        /// <param name="username">Username (uses name if empty)</param>
+        /// <param name="register">Registers the user</param>
+        /// <param name="track">Track user (must be enabled for updates)</param>
+        /// <param name="observer">Observer</param>
+        public User(string name, string email = "", string password = "", string username = "", bool register=true, bool track=true, IItemObserver observer=null) : base(observer)
         {
             this.name = name;
             this.email = email;
@@ -57,17 +68,31 @@ namespace SmartPert.Model
                 this.username = name;
             else
                 this.username = username;
+            PostInit(register, track);
         }
+        #endregion
 
         public override string ToString() => username;
+
+        #region Database Methods
+        /// <summary>
+        /// Deletes user from database
+        /// </summary>
+        protected override void PerformDelete()
+        {
+            SqlCommand command = OpenConnection("Delete from [User] Where [User].[UserName]=@username;");
+            command.Parameters.AddWithValue("@username", username);
+            command.ExecuteNonQuery();
+            CloseConnection();
+        }
 
         /// <summary>
         /// Attempts to register user
         /// </summary>
-        /// <returns>true on success</returns>
-        public bool Register()
+        /// <throws>InsertionError if registration failed</throws>
+        protected override int PerformInsert()
         {
-            bool isRegistered = false;
+            bool registered = false;
             try
             {
                 SqlCommand command = OpenConnection("Exec dbo.Register @username, @password, @email, @name, @result out");
@@ -78,38 +103,19 @@ namespace SmartPert.Model
                 var result = command.Parameters.Add("@result", System.Data.SqlDbType.Bit);
                 result.Direction = System.Data.ParameterDirection.Output;
                 command.ExecuteNonQuery();
-                isRegistered = (bool) result.Value;
+                registered = (bool)result.Value;
                 CloseConnection();
             }
             catch (SqlException) { }
-            return isRegistered;
-        }
-
-        
-        #region Database Methods
-        /// <summary>
-        /// Deletes user from database
-        /// </summary>
-        public override void Delete()
-        {
-            SqlCommand command = OpenConnection("Delete from [User] Where [User].[UserName]=@username;");
-            command.Parameters.AddWithValue("@username", username);
-            command.ExecuteNonQuery();
-            CloseConnection();
-        }
-
-        /// <summary>
-        /// Not used, use register instead.
-        /// </summary>
-        protected override int Insert()
-        {
-            throw new System.NotImplementedException();
+            if (!registered)
+                throw new InsertionError("Failed to register " + username);
+            return 0;
         }
 
         /// <summary>
         /// Updates the user's name email and password
         /// </summary>
-        protected override void Update()
+        protected override void PerformUpdate()
         {
             SqlCommand command = OpenConnection("Update [User] set [Name]=@name, Email=@email, [Password]=@password WHERE UserName=@username");
             command.Parameters.AddWithValue("@name", name);
@@ -118,7 +124,6 @@ namespace SmartPert.Model
             command.Parameters.AddWithValue("@username", username);
             command.ExecuteNonQuery();
             CloseConnection();
-            Model.Instance.OnModelUpdate();
         }
 
         static public User Parse(SqlDataReader reader)
@@ -126,7 +131,27 @@ namespace SmartPert.Model
             return new User((string)reader["Name"],
                 (string)reader["Email"],
                 (string)reader["Password"],
-                (string)reader["UserName"]);
+                (string)reader["UserName"], register: false);
+        }
+
+        /// <summary>
+        /// Parses in the data from database
+        /// </summary>
+        /// <param name="reader">reader</param>
+        /// <returns>true if updated</returns>
+        public override bool PerformParse(SqlDataReader reader)
+        {
+            string name = (string)reader["Name"];
+            string email = (string)reader["Email"];
+            string pass = (string)reader["Password"];
+            if(name != this.name || email != this.email || pass != this.password)
+            {
+                this.name = name;
+                this.email = email;
+                this.password = pass;
+                return true;
+            }
+            return false;
         }
 
         #endregion

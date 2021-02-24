@@ -9,7 +9,7 @@
       <Value Profile="(Default)">10000</Value>
     </Setting>
     <Setting Name="LastProject" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Test</Value>
     </Setting>
     <Setting Name="UserName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

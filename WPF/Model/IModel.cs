@@ -45,7 +45,7 @@ namespace SmartPert.Model
         #region Observer Methods
         void Subscribe(IViewModel viewModel);
 
-        void Unsubscribe(IViewModel viewModel);
+        void UnSubscribe(IViewModel viewModel);
         #endregion
 
         #region Database Methods

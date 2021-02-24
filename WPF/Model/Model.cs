@@ -13,6 +13,8 @@ namespace SmartPert.Model
     public class Model : IModel, DBUpdateReceiver
     {
         private static readonly Model instance = new Model();
+        // This initializes DBReader, which must be done after the instance is defined since updates are immediately sent to model
+        private static readonly bool initialized = StartInstance();  
         private List<IViewModel> viewModels;
         private DBReader reader;
 
@@ -25,8 +27,6 @@ namespace SmartPert.Model
         static public Model GetInstance(IViewModel viewModel)
         {
             instance.Subscribe(viewModel);
-            if (instance.reader == null)
-                instance.reader = DBReader.Instantiate(instance);
             return instance;
         }
 
@@ -39,7 +39,11 @@ namespace SmartPert.Model
         private Model()
         {
             viewModels = new List<IViewModel>();
-            reader = null;
+        }
+        static private bool StartInstance()
+        {
+            instance.reader = DBReader.Instantiate(instance);
+            return true;
         }
         #endregion
 
@@ -55,19 +59,24 @@ namespace SmartPert.Model
         public Project CreateProject(string name, DateTime start, DateTime? end, string description = "")
         {
             // Try to create
-            try
-            {
+            //try
+            //{
                 Project project = new Project(name, start, end, description);
                 reader.SetProject(project);
                 return project;
-            }
-            catch (Exception) {}
+            //}
+            //catch (Exception) {}
             return null;
         }
 
+        /// <summary>
+        /// Deletes the project from the model
+        /// </summary>
+        /// <param name="p">project to delete</param>
         public void DeleteProject(Project p)
         {
-            throw new NotImplementedException();
+            reader.RemoveProject(p);
+            p.Delete();
         }
         public Project GetProject()
         {
@@ -127,9 +136,8 @@ namespace SmartPert.Model
             Task task = null;
             try
             {
-                task = new Task(name, start, end, duration, maxDuration, minDuration, description, reader.CurrentUser, project: project);
+                task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
                 project.AddTask(task);
-                OnModelUpdate();
             } catch (Exception) { }
             return task;
         }
@@ -140,7 +148,6 @@ namespace SmartPert.Model
             if (task != null)
             {
                 task.Delete();
-                OnModelUpdate();
             }
         }
 
@@ -164,10 +171,26 @@ namespace SmartPert.Model
         /// <returns>null if it failed, user on success</returns>
         public User CreateUser(string name)
         {
-            User user = reader.CreateUser(name);
-            if (user != null)
-                OnModelUpdate();
-            return user;
+            try
+            {
+                User user = new User(name);
+                return user;
+            } catch(IDBItem.DuplicateKeyError)
+            { }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the user by name (if they exist) otherwise creates
+        /// </summary>
+        /// <param name="name">username</param>
+        /// <returns>user</returns>
+        public User CreateOrGetUser(string name)
+        {
+            User u = GetUsers().Find(x => x.Username == name);
+            if (u == null)
+                u = CreateUser(name);
+            return u;
         }
 
         /// <summary>
@@ -218,7 +241,7 @@ namespace SmartPert.Model
         /// Gets the current user that is logged in
         /// </summary>
         /// <returns>User or null</returns>
-        public User GetCurrentUser() => reader.CurrentUser;
+        public User GetCurrentUser() => reader == null ? null : reader.CurrentUser;
         #endregion
 
         #region Subscriber Methods
@@ -228,7 +251,7 @@ namespace SmartPert.Model
                 viewModels.Add(viewModel);
         }
 
-        public void Unsubscribe(IViewModel viewModel)
+        public void UnSubscribe(IViewModel viewModel)
         {
             if (viewModels.Contains(viewModel))
                 viewModels.Remove(viewModel);

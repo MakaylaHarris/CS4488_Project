@@ -7,10 +7,42 @@ using System.Text;
 
 namespace PertTest.Model
 {
+    /// <summary>
+    /// Tests for tasks
+    /// Created 2/19/2021 by Robert Nelson
+    /// </summary>
     [TestClass]
     public class TaskTest : IDBItem
     {
+        private string name;
+        private DateTime start;
+        private int estimatedDuration;
+        private Task task;
+        private bool isCreated;
+        private Project project;
+        private ProjectTest projectTest;
 
+        #region Constructor
+        public TaskTest()
+        {
+            name = "TASK_3361234";
+            start = DateTime.Now;
+            estimatedDuration = 5;
+            isCreated = false;
+            projectTest = new ProjectTest();
+            project = null;
+        }
+
+        ~TaskTest()
+        {
+            if(isCreated)
+            {
+                task.Delete();
+            }
+        }
+        #endregion
+
+        #region Private Methods
         private bool DB_HasTask(string taskname)
         {
             SqlCommand command = OpenConnection("SELECT COUNT(*) FROM dbo.[Task] WHERE Name=@Name");
@@ -43,16 +75,50 @@ namespace PertTest.Model
             Project ret = Project.Parse(reader, null);
             return ret;
         }
+        #endregion
 
+        #region Public Methods
+        public Task Create(Project project = null)
+        {
+            if (project == null)
+                project = projectTest.Create();
+            this.project = project;
+            if (!isCreated)
+            {
+                task = DB_ReadTask(name, project);
+                if(task == null)
+                    task = new Task(name, DateTime.Now, null, estimatedDuration, project: project);
+                isCreated = true;
+                this.project = project;
+            }
+            else // Better be on the same project
+                Assert.IsTrue(project == task.Proj);
+            return task;
+        }
+
+        [TestMethod]
+        public void TestAddRemoveWorker()
+        {
+            // SETUP
+            Create();
+            UserTest test = new UserTest();
+            User worker = test.Create();
+
+            // TEST
+            task.AddWorker(worker);
+            Assert.IsTrue(task.Workers.Contains(worker));
+            task.RemoveWorker(worker);
+            Assert.IsFalse(task.Workers.Contains(worker));
+        }
 
         [TestMethod]
         public void TestAddUpdateDelete()
         {
             // SETUP
             string name = "Test32312213";
-            Project project = DB_GetProject();
+            Project project = projectTest.Create();
             // Ensure task isn't in database
-            Task task = DB_ReadTask(name, project);
+            task = DB_ReadTask(name, project);
             if (task != null)
                 task.Delete();
 
@@ -67,23 +133,31 @@ namespace PertTest.Model
             Assert.IsTrue(task.Description == updated.Description);
 
             // Delete Task
-            task.Delete();
+            updated.Delete();
             Assert.IsFalse(DB_HasTask(name));
         }
+        #endregion
 
-        public override void Delete()
+        #region Interface Methods
+        protected override void PerformDelete()
         {
             throw new NotImplementedException();
         }
 
-        protected override int Insert()
+        protected override int PerformInsert()
         {
             throw new NotImplementedException();
         }
 
-        protected override void Update()
+        protected override void PerformUpdate()
         {
             throw new NotImplementedException();
         }
+
+        public override bool PerformParse(SqlDataReader reader)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
