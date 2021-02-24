@@ -45,6 +45,7 @@ namespace SmartPert
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
             InitModel();
+            StateSwitcher();
         }
 
         public void StateSwitcher()
