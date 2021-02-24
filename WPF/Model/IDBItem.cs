@@ -155,12 +155,6 @@ namespace SmartPert.Model
             observers.Clear();      // No more updates
         }
 
-        private void NotifyUpdate()
-        {
-            foreach (IItemObserver observer in observers)
-                observer.OnUpdate(this);
-        }
-
         #endregion
 
         #region Public Methods
@@ -224,6 +218,16 @@ namespace SmartPert.Model
         #endregion
 
         #region Protected Methods
+        /// <summary>
+        /// Notify an update occurred
+        /// </summary>
+        protected void NotifyUpdate()
+        {
+            foreach (IItemObserver observer in observers)
+                observer.OnUpdate(this);
+        }
+
+
         /// <summary>
         /// Attempts to Insert item in database
         /// </summary>
