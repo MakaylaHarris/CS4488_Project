@@ -11,6 +11,7 @@ namespace SmartPert.Model
     public class Project : TimedItem
     {
         private List<Task> tasks;
+        private const int addDays = 7;
 
         public List<Task> Tasks { get => tasks; }
 
@@ -31,25 +32,31 @@ namespace SmartPert.Model
         {
             if (this.EndDate != null)
             {
-                return (DateTime)this.EndDate;
+                return (DateTime) this.EndDate;
             }
 
             DateTime latestDate = this.StartDate;
-            foreach (Task task in this.Tasks)
+            if (this.Tasks.Count != 0)
             {
-                DateTime temp = task.CalculateLastTaskDate();
-                if (temp.CompareTo(latestDate) > 0)
+                foreach (Task task in this.Tasks)
                 {
-                    latestDate = temp;
+                    DateTime temp = task.CalculateLastTaskDate();
+                    if (temp.CompareTo(latestDate) > 0)
+                    {
+                        latestDate = temp;
+                    }
                 }
+
+                return latestDate;
             }
 
-            return latestDate;
+            return this.StartDate.AddDays(addDays);
         }
+
         #endregion
 
-        #region Task Methods
-        public void AddTask(Task t)
+            #region Task Methods
+            public void AddTask(Task t)
         {
             if(!tasks.Contains(t))
                 tasks.Add(t);
