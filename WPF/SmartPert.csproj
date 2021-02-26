@@ -179,6 +179,7 @@
     </ApplicationDefinition>
     <Compile Include="Command\CommandStack.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModelCommands\AccountUpdateCommand.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
     <Compile Include="View\Controls\FilteredComboBox.xaml.cs">
@@ -374,9 +375,7 @@
   <ItemGroup>
     <Resource Include="images\broke_cow.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModelCommands\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="database\AttachPert.sql" />
     <Content Include="database\SQL\Register.sql" />
