@@ -32,9 +32,11 @@ namespace SmartPert.ViewModels
         {
             //Would get the Project we are working with
             this._rowData = new ObservableCollection<RowData>();
+            this._tooltipData = new ObservableCollection<ToolTipData>();
             _Project = Model.Model.Instance.GetProject();
             _headers = GetWeekHeader();
             LoadData();
+            LoadToolTipData();
         }
 
         #region Properties
