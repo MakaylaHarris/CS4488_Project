@@ -42,13 +42,7 @@
                     <Label 
                     Grid.Row="2"
                     Content="{Binding Path=Project.Name, Mode=OneWay}"/>
-                    <!--<GridSplitter
-                    Grid.Column="0" Grid.RowSpan="2147483647"
-                    Width="3" 
-                    Background="{DynamicResource PrimaryHueMidBrush}"
-                    VerticalAlignment="Stretch" 
-                    HorizontalAlignment="Right" />-->
-                    
+
                     <!-- 2147483647 is the highest int, basically saying border spans all columns -->
                     <Border 
                     Grid.Column="0" Grid.ColumnSpan="2147483647" 

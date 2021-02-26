@@ -206,7 +206,7 @@ namespace SmartPert
 
         private void AddTask_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            new TaskEditor().ShowDialog();
+                new TaskEditor().ShowDialog();
         }
 
         public void ShowDBConnectionSettings()

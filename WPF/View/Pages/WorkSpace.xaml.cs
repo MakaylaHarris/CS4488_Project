@@ -46,9 +46,9 @@ namespace SmartPert.View.Pages
             AddRows();
             AddHeaders();
             AddGridSplitter();
-            AddTodayBorder();
             AddTaskControls();
             AddGridBorders();
+            AddTodayBorder();
         }
 
         /// <summary>
@@ -108,11 +108,15 @@ namespace SmartPert.View.Pages
                 //TODO: add different time case scenarios
                 Button MyControl = new Button();
                 MyControl.Margin = new Thickness(0, 10, 0, 10);
+                MyControl.MinWidth = 0;
 
-                Grid.SetRow(MyControl, i + 2);
+                Grid.SetRow(MyControl, i + rowStart);
                 Grid.SetColumn(MyControl, viewModel.RowData[i].StartDateCol);
-                Grid.SetColumnSpan(MyControl, viewModel.RowData[i].ColSpan);
-                Grid.SetZIndex(MyControl, 100);
+                if (viewModel.RowData[i].ColSpan != 1)
+                {
+                    Grid.SetColumnSpan(MyControl, viewModel.RowData[i].ColSpan);
+                }
+                //Grid.SetZIndex(MyControl, 100);
                 mainGrid.Children.Add(MyControl);
                 
             }

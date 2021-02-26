@@ -147,7 +147,7 @@ namespace SmartPert.View.Windows
         #region Event Handlers
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            if (!AssigneePopup.IsFocused && !cb_assign.IsMouseOver && !IsMouseOver)
+            if (/*!AssigneePopup.IsFocused && */!cb_assign.IsMouseOver && !IsMouseOver)
             {
                 // Todo: Known issue when creating task and pressing tab this throws null exception
                 try
@@ -255,18 +255,18 @@ namespace SmartPert.View.Windows
                 items.Add(o);
         }
 
-        private void AssignBtn_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (task != null)
-            {
-                AssigneePopup.IsOpen = true;
-            }
-        }
-        private void AssigneePopup_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (!cb_assign.IsFocused && !AssigneePopup.IsFocused && !AssignBtn.IsMouseOver && !AssigneePopup.IsMouseOver)
-                AssigneePopup.IsOpen = false;
-        }
+        //private void AssignBtn_MouseEnter(object sender, MouseEventArgs e)
+        //{
+        //    if (task != null)
+        //    {
+        //        AssigneePopup.IsOpen = true;
+        //    }
+        //}
+        //private void AssigneePopup_LostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    if (!cb_assign.IsFocused && !AssigneePopup.IsFocused && !AssignBtn.IsMouseOver && !AssigneePopup.IsMouseOver)
+        //        AssigneePopup.IsOpen = false;
+        //}
 
         private void RM_Assignee(object sender, RoutedEventArgs e)
         {
