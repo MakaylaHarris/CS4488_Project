@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using SmartPert.Model;
+using SmartPert.ViewModelCommands;
 
 namespace SmartPert.ViewModels
 {
@@ -15,7 +16,7 @@ namespace SmartPert.ViewModels
         public AccountViewModel()
         {
             _project = Model.Model.Instance.GetProject();
-            AccountUpdateCommand = new AccountUpdateCommand();
+            AccountUpdateCommand = new AccountUpdateCommand(this);
         }
 
         /// <summary>
