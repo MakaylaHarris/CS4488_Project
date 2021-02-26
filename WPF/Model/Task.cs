@@ -232,7 +232,7 @@ namespace SmartPert.Model
             if (creator == null)
                 command.Parameters.AddWithValue("@Creator", DBNull.Value);
             else
-                command.Parameters.AddWithValue("@Creator", creator.Name);
+                command.Parameters.AddWithValue("@Creator", creator.Username);
             var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
             sd.Value = StartDate;
             var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
