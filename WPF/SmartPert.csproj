@@ -179,7 +179,7 @@
     </ApplicationDefinition>
     <Compile Include="Command\CommandStack.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
     <Compile Include="View\Controls\FilteredComboBox.xaml.cs">
       <DependentUpon>FilteredComboBox.xaml</DependentUpon>
@@ -208,6 +208,10 @@
     <Compile Include="TaskToolTip.cs" />
     <Compile Include="View\Pages\ErrorCatch.xaml.cs">
       <DependentUpon>ErrorCatch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewClasses\ToolTipData.cs" />
+    <Compile Include="View\Windows\AccountEditor.xaml.cs">
+      <DependentUpon>AccountEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Windows\ProjectCreator.xaml.cs">
       <DependentUpon>ProjectCreator.xaml</DependentUpon>
@@ -281,6 +285,10 @@
     <Page Include="View\Pages\TaskGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Windows\AccountEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Windows\ProjectCreator.xaml">
       <SubType>Designer</SubType>

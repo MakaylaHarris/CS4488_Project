@@ -115,6 +115,7 @@ namespace SmartPert.View.Pages
                 if (viewModel.RowData[i].ColSpan != 1)
                 {
                     Grid.SetColumnSpan(MyControl, viewModel.RowData[i].ColSpan);
+                    MyControl.ToolTip = viewModel.TooltipData[i].OutputToolTip();
                 }
                 //Grid.SetZIndex(MyControl, 100);
                 mainGrid.Children.Add(MyControl);

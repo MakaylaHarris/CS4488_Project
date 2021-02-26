@@ -20,6 +20,7 @@ namespace SmartPert.ViewModels
     class WorkSpaceViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<RowData> _rowData;
+        private ObservableCollection<ToolTipData> _tooltipData;
         private Project _Project;
         private List<string> _headers = new List<string>();
         private String[] _weekDayAbbrev = { "S", "M", "T", "W", "T", "F", "S" };
@@ -68,6 +69,20 @@ namespace SmartPert.ViewModels
             }
         }
 
+        /// <summary>
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public ObservableCollection<ToolTipData> TooltipData
+        {
+            get { return _tooltipData; }
+            set
+            {
+                this._tooltipData = value;
+                OnPropertyChanged("TooltipData");
+
+            }
+        }
+
         public List<string> Headers
         {
             get { return _headers; }
@@ -102,6 +117,22 @@ namespace SmartPert.ViewModels
             {
                 RowData num2 = new RowData(Project.Tasks[i].Name, (((DateTime)this.Project.Tasks[i].StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, (((DateTime)this.Project.Tasks[i].CalculateLastTaskDate()).Date - ((DateTime)this.Project.Tasks[i].StartDate).Date).Days, false);
                 this.RowData.Add(num2);
+            }
+        }
+
+        /// <summary>
+        /// A method that created ToolTip data classes that hold data for each task and adds them to a collection. Collection indexes are the same for this and RowData starting at index 1.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public void LoadToolTipData()
+        {
+            for(int i = 0; i < Project.Tasks.Count; i++)
+            {
+                //Task could also have been a reference to System.Threading.Task, so below declaration was necessary.
+                SmartPert.Model.Task t = Project.Tasks[i];
+
+                ToolTipData data = new ToolTipData(t.Name, t.StartDate, t.EndDate, t.LikelyDuration, t.MaxDuration, t.MinDuration, t.Description);
+                this.TooltipData.Add(data);
             }
         }
 
