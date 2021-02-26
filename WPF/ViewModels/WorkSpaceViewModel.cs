@@ -21,6 +21,7 @@ namespace SmartPert.ViewModels
     {
         private ObservableCollection<RowData> _rowData;
         private ObservableCollection<ToolTipData> _tooltipData;
+        private ToolTipProjectData _projectTooltip;
         private Project _Project;
         private List<string> _headers = new List<string>();
         private String[] _weekDayAbbrev = { "S", "M", "T", "W", "T", "F", "S" };
@@ -37,6 +38,7 @@ namespace SmartPert.ViewModels
             _headers = GetWeekHeader();
             LoadData();
             LoadToolTipData();
+            LoadProjectData();
         }
 
         #region Properties
@@ -72,6 +74,7 @@ namespace SmartPert.ViewModels
         }
 
         /// <summary>
+        /// Property for Task Tooltip collection.
         /// Created 2/25/2021 by Tyler Kness-Miller
         /// </summary>
         public ObservableCollection<ToolTipData> TooltipData
@@ -83,6 +86,16 @@ namespace SmartPert.ViewModels
                 OnPropertyChanged("TooltipData");
 
             }
+        }
+
+        /// <summary>
+        /// Property for Project Tooltip.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public ToolTipProjectData ProjectTooltip
+        {
+            get { return _projectTooltip; }
+            set { this._projectTooltip = value; }
         }
 
         public List<string> Headers
@@ -136,6 +149,15 @@ namespace SmartPert.ViewModels
                 ToolTipData data = new ToolTipData(t.Name, t.StartDate, t.EndDate, t.LikelyDuration, t.MaxDuration, t.MinDuration, t.Description);
                 this.TooltipData.Add(data);
             }
+        }
+
+        /// <summary>
+        /// A method that sets the Project data for  its tooltip.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public void LoadProjectData()
+        {
+            ProjectTooltip = new ToolTipProjectData(Project.Name, Project.StartDate, Project.EndDate, Project.Description);
         }
 
         /// <summary>

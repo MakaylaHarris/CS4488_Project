@@ -116,11 +116,20 @@ namespace SmartPert.View.Pages
                 {
                     Grid.SetColumnSpan(MyControl, viewModel.RowData[i].ColSpan);
                 }
-                //Don't want tooltips on the title "button". 
+
+                //Tyler K.
+                //Don't want task tooltips on the project "button". 
                 if(i > 0)
                 {
                     MyControl.ToolTip = viewModel.TooltipData[i - 1].OutputToolTip();
                 }
+                //If we're at index 0, it'll populate the Project "button". Add a project tooltip. 
+                if(i == 0)
+                {
+                    MyControl.ToolTip = viewModel.ProjectTooltip.OutputToolTipProject();
+                }
+
+
                 //Grid.SetZIndex(MyControl, 100);
                 mainGrid.Children.Add(MyControl);
                 

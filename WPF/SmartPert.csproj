@@ -211,6 +211,7 @@
       <DependentUpon>ErrorCatch.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ViewClasses\ToolTipData.cs" />
+    <Compile Include="View\ViewClasses\ToolTipProjectData.cs" />
     <Compile Include="View\Windows\AccountEditor.xaml.cs">
       <DependentUpon>AccountEditor.xaml</DependentUpon>
     </Compile>
