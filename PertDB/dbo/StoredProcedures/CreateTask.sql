@@ -4,18 +4,22 @@
 	or if the task name given is not unique. 
 *	Result: True on success
 *	Created 2/8/2021 by Kaden Marchetti
+*	Edited 2/13/2021 by Robert Nelson to include creator, creation date, and returning task id, and match data types.
 */
 CREATE PROCEDURE [dbo].[CreateTask]
 (
 	@TaskName nvarchar(50),
 	@Description nvarchar(MAX),
-	@MinEstDuration float,
-	@MaxEstDuration float,
+	@MinEstDuration int,
+	@LikelyEstDuration int,		/* Added 2/13/2021 by Robert Nelson */
+	@MaxEstDuration int,
 	@StartDate datetime,
 	@EndDate datetime,
 	@ProjectID int,
-	@Result BIT OUTPUT
-	
+	@Creator varchar(50),		/* Added 2/13/2021 by Robert Nelson */
+	@CreationDate datetime OUTPUT,  /* Added 2/13/2021 by Robert Nelson */
+	@Result BIT OUTPUT,
+	@ResultId int OUTPUT		/* Added 2/13/2021 by Robert Nelson */
 )
 AS
 BEGIN
@@ -32,8 +36,11 @@ BEGIN
 	/* Notify User and end procedure with result=0 */
 	RETURN;
 
+ SET @CreationDate = GETDATE();
  /* Task is created referencing the current project (have project ID) */
- INSERT INTO dbo.[Task] (Name, Description, MinEstDuration, MaxEstDuration, StartDate, EndDate, ProjectID) Values(@TaskName, @Description, @MinEstDuration, @MaxEstDuration, @StartDate, @EndDate, @ProjectID);
+ INSERT INTO dbo.[Task] (Name, Description, MinEstDuration, MostLikelyEstDuration, MaxEstDuration, StartDate, EndDate, ProjectID, CreatorUsername, CreationDate) 
+	Values(@TaskName, @Description, @MinEstDuration, @LikelyEstDuration, @MaxEstDuration, @StartDate, @EndDate, @ProjectID, @Creator, @CreationDate);
+ SET @ResultId = SCOPE_IDENTITY();	/* Set the id to return */
 
 
  /* Add Task to task list */

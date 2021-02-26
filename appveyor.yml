@@ -8,6 +8,10 @@
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
     # create Pert database
     - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
+    - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\Scripts\Insert.sql
+
+  build:
+    project: SmartPert.sln
 
 
 # Release Configuration
@@ -33,6 +37,9 @@
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
     # create Pert database
     - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
+
+  build:
+    project: SmartPert.sln
 
   after_build:
     - Scripts\CreateDemo.py -zip

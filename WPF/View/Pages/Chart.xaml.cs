@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Collections;
-using System.Collections.ObjectModel;
+using SmartPert.Command;
 using SmartPert.Model;
 using SmartPert.View.Controls;
+using SmartPert.View.Windows;
 
 namespace SmartPert.View.Pages
 {
@@ -49,6 +44,8 @@ namespace SmartPert.View.Pages
         private Brush taskBrush;
         LinearGradientBrush taskGradient = new LinearGradientBrush();
         WindowState prevWindowState = new WindowState();
+
+        public IModel Model { get => model; }
 
         public Chart(IModel model)
         {
@@ -134,11 +131,12 @@ namespace SmartPert.View.Pages
 
             // Day Width Calculations
             int subtaskCount = 0;
-            for (int i = 0; i < parent.Dependencies.Count; i++)
+            int i = 0;
+            foreach (Task dependency in parent.Dependencies)
             {
-                subtaskCount += DrawSubTasks(parent.Dependencies[i], newTopMargin);
+                subtaskCount += DrawSubTasks(dependency, newTopMargin);
                 Point start = new Point(((DateTime)parent.StartDate - _project.StartDate).TotalDays * dayWidth + tempDuration * dayWidth - dayWidth / 4, topMargin + buttonHeight / 2);
-                Point end = new Point(((DateTime)parent.Dependencies[i].StartDate - _project.StartDate).TotalDays * dayWidth, newTopMargin + buttonHeight / 2);
+                Point end = new Point(((DateTime)dependency.StartDate - _project.StartDate).TotalDays * dayWidth, newTopMargin + buttonHeight / 2);
 
                 double width = start.X + (end.X - start.X) / 2;
                 minWidth = (width < minWidth) ? width : minWidth;
@@ -154,7 +152,7 @@ namespace SmartPert.View.Pages
 
                 Path p = getPath(points);
 
-                KeyValuePair<Task, Task> pair = new KeyValuePair<Task, Task>(parent, parent.Dependencies[i]);
+                KeyValuePair<Task, Task> pair = new KeyValuePair<Task, Task>(parent, dependency);
                 p.DataContext = pair;
 
                 Button button = new Button();
@@ -162,7 +160,7 @@ namespace SmartPert.View.Pages
                 Canvas.SetZIndex(p, 99);
                 mainCanvas.Children.Add(p);
 
-                newTopMargin = topMargin + (i + 1) * (buttonHeight + buttonSpacing);
+                newTopMargin = topMargin + (i++ + 1) * (buttonHeight + buttonSpacing);
                 newTopMargin += subtaskCount * (buttonHeight + buttonSpacing);
             }
 
@@ -306,7 +304,7 @@ namespace SmartPert.View.Pages
         private TaskToolTip createToolTip(Task task)
         {
             TaskToolTip ttp = new TaskToolTip(task);
-            ttp.Style = (Style)FindResource("AppToolTip");
+            //ttp.Style = (Style)FindResource("AppToolTip");
             return ttp;
         }
 
@@ -366,7 +364,7 @@ namespace SmartPert.View.Pages
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            //new frmTask(this).ShowDialog();
+            new TaskEditor().ShowDialog();
             DrawGraph(Project.Tasks);
         }
 
@@ -432,7 +430,7 @@ namespace SmartPert.View.Pages
 
         public void DeleteTask(Task task)
         {
-            model.DeleteTask(task);
+            new DeleteTaskCmd(task).Run();
         }
 
         public void AddTask(Task task)

@@ -1,6 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <HelpKI>
+  <HelpKINode Title="Access enumeration member" Url="html/6bc6e016-6665-766d-5f7d-bbf4b4e7c44b.htm" />
   <HelpKINode Title="AddDependency method" Url="html/c76801cf-8f7d-27f8-3c59-c2b95b3d36da.htm" />
+  <HelpKINode Title="AddDependencyCmd class">
+    <HelpKINode Title="AddDependencyCmd Class" Url="html/76828347-2301-193c-8e60-81ac2eba9a19.htm" />
+    <HelpKINode Title="constructor" Url="html/ae9c4263-b700-7f90-c358-503d8741b6b6.htm" />
+    <HelpKINode Title="methods" Url="html/78d17593-81e2-d4d9-33c4-c1de02823539.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AddDependencyCmd.AddDependencyCmd constructor" Url="html/ae9c4263-b700-7f90-c358-503d8741b6b6.htm" />
+  <HelpKINode Title="AddDependencyCmd.Execute method" Url="html/ee881833-b587-1f9c-b72e-908152d10f68.htm" />
+  <HelpKINode Title="AddDependencyCmd.OnIdUpdate method" Url="html/8ee7579f-16c5-bc68-436b-f129b41f5ab0.htm" />
+  <HelpKINode Title="AddDependencyCmd.OnModelUpdate method" Url="html/6c54047d-736f-2d96-2cd8-097c92007945.htm" />
+  <HelpKINode Title="AddDependencyCmd.Undo method" Url="html/6e11c195-f58e-a901-b4c5-02d9872c4473.htm" />
   <HelpKINode Title="AddTask method">
     <HelpKINode Title="Chart.AddTask Method " Url="html/332f592a-e812-bc55-3ddc-1f7bc367f9c6.htm" />
     <HelpKINode Title="Project.AddTask Method " Url="html/2f0fe016-350d-18ac-f677-8a406cc14b53.htm" />
@@ -9,6 +20,21 @@
     <HelpKINode Title="Project.AddWorker Method " Url="html/3b97bc8a-07ca-b731-385d-488c44cbfb8d.htm" />
     <HelpKINode Title="Task.AddWorker Method " Url="html/94d0fefe-60a9-b6af-3b20-828db47fe6b6.htm" />
     <HelpKINode Title="TimedItem.AddWorker Method " Url="html/e1b6dc29-b9f3-e0af-c726-482f73d9dd1f.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AddWorkerCmd class">
+    <HelpKINode Title="AddWorkerCmd Class" Url="html/f90f3295-e825-0dca-9737-83829629462a.htm" />
+    <HelpKINode Title="constructor" Url="html/b3910263-a39b-6132-350f-a596a8e78f87.htm" />
+    <HelpKINode Title="methods" Url="html/02b392ae-853d-8d50-e5a3-fe4d5a8d6ddf.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AddWorkerCmd.AddWorkerCmd constructor" Url="html/b3910263-a39b-6132-350f-a596a8e78f87.htm" />
+  <HelpKINode Title="AddWorkerCmd.Execute method" Url="html/e770217b-d589-2a26-3b18-ad57d4ca4346.htm" />
+  <HelpKINode Title="AddWorkerCmd.OnIdUpdate method" Url="html/ac2e29c8-d19b-55de-5c20-32ee88f04776.htm" />
+  <HelpKINode Title="AddWorkerCmd.OnModelUpdate method" Url="html/299a4bd9-cd8a-f655-432f-23bfb6bf6003.htm" />
+  <HelpKINode Title="AddWorkerCmd.Undo method" Url="html/6f521e85-9ef0-e8f8-2021-238f5bdf8cf7.htm" />
+  <HelpKINode Title="AnonymousProperty property">
+    <HelpKINode Title="AspMvcActionAttribute.AnonymousProperty Property " Url="html/96898a85-a991-fa4f-816f-8c4261a2a892.htm" />
+    <HelpKINode Title="AspMvcAreaAttribute.AnonymousProperty Property " Url="html/2566a58d-1eb5-51c5-57d0-97c9d4eb669d.htm" />
+    <HelpKINode Title="AspMvcControllerAttribute.AnonymousProperty Property " Url="html/6cf3807a-9a7a-7bf0-6b46-6d04fe37fbd4.htm" />
   </HelpKINode>
   <HelpKINode Title="App class">
     <HelpKINode Title="App Class" Url="html/a1ebdc58-f419-6d84-95ff-e0277c2b3dca.htm" />
@@ -20,7 +46,249 @@
   <HelpKINode Title="App.App constructor" Url="html/85f49835-0810-b47d-fc8d-81dbf5092919.htm" />
   <HelpKINode Title="App.InitializeComponent method" Url="html/bb89d841-9aac-926a-1d4f-bb964390b253.htm" />
   <HelpKINode Title="App.Main method" Url="html/395ce25c-0800-bea0-8cac-3521fa74955c.htm" />
+  <HelpKINode Title="AspChildControlTypeAttribute class">
+    <HelpKINode Title="AspChildControlTypeAttribute Class" Url="html/7a7da5fd-733a-1ec5-595d-687d4e241fc8.htm" />
+    <HelpKINode Title="constructor" Url="html/7a390b17-1321-0164-183e-c962d5528b95.htm" />
+    <HelpKINode Title="methods" Url="html/ff7f9dc0-f1d1-d3ce-13f7-3af6118765c8.htm" />
+    <HelpKINode Title="properties" Url="html/d9055903-8590-b67f-4d67-fd4cb7b79a08.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspChildControlTypeAttribute.AspChildControlTypeAttribute constructor" Url="html/7a390b17-1321-0164-183e-c962d5528b95.htm" />
+  <HelpKINode Title="AspChildControlTypeAttribute.ControlType property" Url="html/c567fe2f-c6f0-f818-ac75-c1196f37774b.htm" />
+  <HelpKINode Title="AspChildControlTypeAttribute.TagName property" Url="html/47fea032-4eee-6329-6939-efe9baa13e00.htm" />
+  <HelpKINode Title="AspDataFieldAttribute class">
+    <HelpKINode Title="AspDataFieldAttribute Class" Url="html/87dd4e8d-2b19-58f9-1699-58900096d72a.htm" />
+    <HelpKINode Title="constructor" Url="html/b074f72b-01ac-d34f-2de6-4ddcd7c9ac82.htm" />
+    <HelpKINode Title="methods" Url="html/2e8d25af-f96c-dea7-df67-3c3f3b5e3e4c.htm" />
+    <HelpKINode Title="properties" Url="html/3ac6cdf0-1536-7fff-18d9-e2efbee0b036.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspDataFieldAttribute.AspDataFieldAttribute constructor" Url="html/b074f72b-01ac-d34f-2de6-4ddcd7c9ac82.htm" />
+  <HelpKINode Title="AspDataFieldsAttribute class">
+    <HelpKINode Title="AspDataFieldsAttribute Class" Url="html/adc8a568-55ec-88be-d97e-259169a0cc0f.htm" />
+    <HelpKINode Title="constructor" Url="html/0045da65-8def-2dbe-5af1-9f5f715872b8.htm" />
+    <HelpKINode Title="methods" Url="html/e09d6bbc-b6ac-beb5-d6c9-c81bc6fbe775.htm" />
+    <HelpKINode Title="properties" Url="html/ab802cdd-be22-9993-4161-4f73bec91cb3.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspDataFieldsAttribute.AspDataFieldsAttribute constructor" Url="html/0045da65-8def-2dbe-5af1-9f5f715872b8.htm" />
+  <HelpKINode Title="AspMethodPropertyAttribute class">
+    <HelpKINode Title="AspMethodPropertyAttribute Class" Url="html/262331e0-ea3a-bc7f-5b3d-92a6ee4f5480.htm" />
+    <HelpKINode Title="constructor" Url="html/2c2fed73-8cf8-7863-a55a-169a6807ef61.htm" />
+    <HelpKINode Title="methods" Url="html/9f08db08-95d8-aef7-7d71-9b73ceee9ba0.htm" />
+    <HelpKINode Title="properties" Url="html/53ae35f0-c030-bdbe-0bf7-d81dfe7bcc86.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMethodPropertyAttribute.AspMethodPropertyAttribute constructor" Url="html/2c2fed73-8cf8-7863-a55a-169a6807ef61.htm" />
+  <HelpKINode Title="AspMvcActionAttribute class">
+    <HelpKINode Title="AspMvcActionAttribute Class" Url="html/28653128-ed81-2888-78d1-2f26a511abfd.htm" />
+    <HelpKINode Title="constructor" Url="html/fe5617ec-2aec-f8ed-e759-592a18ad699a.htm" />
+    <HelpKINode Title="methods" Url="html/922994d6-6346-2874-071b-29a47b73f5db.htm" />
+    <HelpKINode Title="properties" Url="html/30a0a510-887d-277b-3056-e542b14330c9.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcActionAttribute.AnonymousProperty property" Url="html/96898a85-a991-fa4f-816f-8c4261a2a892.htm" />
+  <HelpKINode Title="AspMvcActionAttribute.AspMvcActionAttribute constructor" Url="html/fe5617ec-2aec-f8ed-e759-592a18ad699a.htm" />
+  <HelpKINode Title="AspMvcActionSelectorAttribute class">
+    <HelpKINode Title="AspMvcActionSelectorAttribute Class" Url="html/c01243f1-2270-dce8-f63e-3c96bace96d5.htm" />
+    <HelpKINode Title="constructor" Url="html/b9480e34-664d-b34c-0ccf-46482301e22f.htm" />
+    <HelpKINode Title="methods" Url="html/88dc84d1-e683-71db-b2d8-832ef0ff2f14.htm" />
+    <HelpKINode Title="properties" Url="html/3b4b0c53-aaf6-6569-b684-bf2ad27b92ad.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcActionSelectorAttribute.AspMvcActionSelectorAttribute constructor" Url="html/b9480e34-664d-b34c-0ccf-46482301e22f.htm" />
+  <HelpKINode Title="AspMvcAreaAttribute class">
+    <HelpKINode Title="AspMvcAreaAttribute Class" Url="html/0775fe6c-76b0-e3dc-8bc6-8ee350a0a7d5.htm" />
+    <HelpKINode Title="constructor" Url="html/60dd5191-c654-9829-076a-03cb097253ef.htm" />
+    <HelpKINode Title="methods" Url="html/194955c8-dae6-6891-42a1-6a415a33fa84.htm" />
+    <HelpKINode Title="properties" Url="html/0dfa1f43-627b-6b1b-491a-39ce0e67a741.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcAreaAttribute.AnonymousProperty property" Url="html/2566a58d-1eb5-51c5-57d0-97c9d4eb669d.htm" />
+  <HelpKINode Title="AspMvcAreaAttribute.AspMvcAreaAttribute constructor" Url="html/60dd5191-c654-9829-076a-03cb097253ef.htm" />
+  <HelpKINode Title="AspMvcAreaMasterLocationFormatAttribute class">
+    <HelpKINode Title="AspMvcAreaMasterLocationFormatAttribute Class" Url="html/0a746c87-3010-d381-547e-0ae02771789e.htm" />
+    <HelpKINode Title="constructor" Url="html/13372ddf-7ee3-c87e-e75f-f4f4c18cba9f.htm" />
+    <HelpKINode Title="methods" Url="html/0ae645a2-0681-8028-51c2-8e814a0ca05d.htm" />
+    <HelpKINode Title="properties" Url="html/a653d36d-db25-7f67-0027-9499ff29213e.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcAreaMasterLocationFormatAttribute.AspMvcAreaMasterLocationFormatAttribute constructor" Url="html/13372ddf-7ee3-c87e-e75f-f4f4c18cba9f.htm" />
+  <HelpKINode Title="AspMvcAreaMasterLocationFormatAttribute.Format property" Url="html/e829ed97-7542-8c57-bb3b-a721cb940fc2.htm" />
+  <HelpKINode Title="AspMvcAreaPartialViewLocationFormatAttribute class">
+    <HelpKINode Title="AspMvcAreaPartialViewLocationFormatAttribute Class" Url="html/f784a792-d8dc-9ba3-3602-0498fd6e1a1d.htm" />
+    <HelpKINode Title="constructor" Url="html/797ffb3e-408a-7a3d-35de-f579dcc3d811.htm" />
+    <HelpKINode Title="methods" Url="html/09387ac5-b4ae-2ee8-417b-9d88e0adf20f.htm" />
+    <HelpKINode Title="properties" Url="html/14c965c2-137f-b3cb-4ef7-c2f7208e48f6.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcAreaPartialViewLocationFormatAttribute.AspMvcAreaPartialViewLocationFormatAttribute constructor" Url="html/797ffb3e-408a-7a3d-35de-f579dcc3d811.htm" />
+  <HelpKINode Title="AspMvcAreaPartialViewLocationFormatAttribute.Format property" Url="html/478c22b1-0d9b-91bd-b31a-29e0816fc640.htm" />
+  <HelpKINode Title="AspMvcAreaViewLocationFormatAttribute class">
+    <HelpKINode Title="AspMvcAreaViewLocationFormatAttribute Class" Url="html/ac6187eb-81c4-b0a7-9c79-2ac9657b6566.htm" />
+    <HelpKINode Title="constructor" Url="html/6849d387-90af-3cf1-1484-3e229718115c.htm" />
+    <HelpKINode Title="methods" Url="html/6ab2b02a-7667-21d6-f9bc-cb6e95374eb0.htm" />
+    <HelpKINode Title="properties" Url="html/4cac1fc1-e010-496d-6ce8-985842857599.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcAreaViewLocationFormatAttribute.AspMvcAreaViewLocationFormatAttribute constructor" Url="html/6849d387-90af-3cf1-1484-3e229718115c.htm" />
+  <HelpKINode Title="AspMvcAreaViewLocationFormatAttribute.Format property" Url="html/6dc88221-8a24-45fd-01ee-ce359313b73d.htm" />
+  <HelpKINode Title="AspMvcControllerAttribute class">
+    <HelpKINode Title="AspMvcControllerAttribute Class" Url="html/7a26949f-9b56-9834-7ab0-581f92b22b21.htm" />
+    <HelpKINode Title="constructor" Url="html/60012a1a-7341-6476-72ea-f93c9a061fa9.htm" />
+    <HelpKINode Title="methods" Url="html/a31fc58d-ed23-67bd-9115-e54d69fd5fd6.htm" />
+    <HelpKINode Title="properties" Url="html/0ef32af2-f732-8b16-9ec5-f85bcfa611f2.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcControllerAttribute.AnonymousProperty property" Url="html/6cf3807a-9a7a-7bf0-6b46-6d04fe37fbd4.htm" />
+  <HelpKINode Title="AspMvcControllerAttribute.AspMvcControllerAttribute constructor" Url="html/60012a1a-7341-6476-72ea-f93c9a061fa9.htm" />
+  <HelpKINode Title="AspMvcDisplayTemplateAttribute class">
+    <HelpKINode Title="AspMvcDisplayTemplateAttribute Class" Url="html/e9530270-e050-49c3-4cb1-e8337680086e.htm" />
+    <HelpKINode Title="constructor" Url="html/8617347c-2acd-1b4e-8da2-a297ef5e9766.htm" />
+    <HelpKINode Title="methods" Url="html/da879816-0a42-3db2-3417-148e48ef8555.htm" />
+    <HelpKINode Title="properties" Url="html/f5f168e9-2081-9d15-4580-22ebd96b9cc8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcDisplayTemplateAttribute.AspMvcDisplayTemplateAttribute constructor" Url="html/8617347c-2acd-1b4e-8da2-a297ef5e9766.htm" />
+  <HelpKINode Title="AspMvcEditorTemplateAttribute class">
+    <HelpKINode Title="AspMvcEditorTemplateAttribute Class" Url="html/3b0e72bb-c620-ffaf-9b32-b941f397cbea.htm" />
+    <HelpKINode Title="constructor" Url="html/0c5b41e5-6585-295d-7f53-d8b26321b110.htm" />
+    <HelpKINode Title="methods" Url="html/370c6f15-338e-fab4-3631-cf130436e320.htm" />
+    <HelpKINode Title="properties" Url="html/976f2088-63cc-befe-1155-a1f3212d0f35.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcEditorTemplateAttribute.AspMvcEditorTemplateAttribute constructor" Url="html/0c5b41e5-6585-295d-7f53-d8b26321b110.htm" />
+  <HelpKINode Title="AspMvcMasterAttribute class">
+    <HelpKINode Title="AspMvcMasterAttribute Class" Url="html/ec67b226-f45f-1379-e21b-0d6543892462.htm" />
+    <HelpKINode Title="constructor" Url="html/2a7a4461-6dcf-720a-cc8a-e799feaa22f1.htm" />
+    <HelpKINode Title="methods" Url="html/e87bac53-5334-dab1-8cff-1c46b29e193b.htm" />
+    <HelpKINode Title="properties" Url="html/fccc8c1b-a77b-8074-45e0-40fe55ef7f35.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcMasterAttribute.AspMvcMasterAttribute constructor" Url="html/2a7a4461-6dcf-720a-cc8a-e799feaa22f1.htm" />
+  <HelpKINode Title="AspMvcMasterLocationFormatAttribute class">
+    <HelpKINode Title="AspMvcMasterLocationFormatAttribute Class" Url="html/198ee279-a8a3-9ce2-9d0b-eefc06ad42e2.htm" />
+    <HelpKINode Title="constructor" Url="html/d13a7b6b-e28c-4ba4-a01c-f80bf4aee016.htm" />
+    <HelpKINode Title="methods" Url="html/1febb08d-cf11-c92d-cfdb-d3793a136c97.htm" />
+    <HelpKINode Title="properties" Url="html/013faf85-bd10-ef67-397c-0000c48191d8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcMasterLocationFormatAttribute.AspMvcMasterLocationFormatAttribute constructor" Url="html/d13a7b6b-e28c-4ba4-a01c-f80bf4aee016.htm" />
+  <HelpKINode Title="AspMvcMasterLocationFormatAttribute.Format property" Url="html/a1b39c80-c038-6546-75a7-e2eb968bf0e2.htm" />
+  <HelpKINode Title="AspMvcModelTypeAttribute class">
+    <HelpKINode Title="AspMvcModelTypeAttribute Class" Url="html/66c8a819-3a88-60c2-f45b-4033448d6c1c.htm" />
+    <HelpKINode Title="constructor" Url="html/da9a99c3-2c04-cf18-f6af-5ecbca0e83ac.htm" />
+    <HelpKINode Title="methods" Url="html/5863d857-6da6-f681-83be-0c0b673cf069.htm" />
+    <HelpKINode Title="properties" Url="html/af310139-3177-9445-75e5-0784e3b59032.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcModelTypeAttribute.AspMvcModelTypeAttribute constructor" Url="html/da9a99c3-2c04-cf18-f6af-5ecbca0e83ac.htm" />
+  <HelpKINode Title="AspMvcPartialViewAttribute class">
+    <HelpKINode Title="AspMvcPartialViewAttribute Class" Url="html/084067a5-e523-6a46-46c4-0ab847d6144e.htm" />
+    <HelpKINode Title="constructor" Url="html/00da0c97-fcb6-736d-e67a-9f968e410be5.htm" />
+    <HelpKINode Title="methods" Url="html/6ce05d17-92d5-824e-5419-45bbae4c3873.htm" />
+    <HelpKINode Title="properties" Url="html/def1577e-6a25-478b-932a-a3265fb24426.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcPartialViewAttribute.AspMvcPartialViewAttribute constructor" Url="html/00da0c97-fcb6-736d-e67a-9f968e410be5.htm" />
+  <HelpKINode Title="AspMvcPartialViewLocationFormatAttribute class">
+    <HelpKINode Title="AspMvcPartialViewLocationFormatAttribute Class" Url="html/737990ec-e832-13eb-909d-0c8689e531ce.htm" />
+    <HelpKINode Title="constructor" Url="html/c5871d43-aa1f-5686-dce1-c63d03008d9d.htm" />
+    <HelpKINode Title="methods" Url="html/ec3bb56b-b821-4f42-19fb-2e681d42b6d1.htm" />
+    <HelpKINode Title="properties" Url="html/01cc37e8-a693-d386-2413-e636b9c04b62.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcPartialViewLocationFormatAttribute.AspMvcPartialViewLocationFormatAttribute constructor" Url="html/c5871d43-aa1f-5686-dce1-c63d03008d9d.htm" />
+  <HelpKINode Title="AspMvcPartialViewLocationFormatAttribute.Format property" Url="html/ec2ce0a0-ff60-656d-196c-2aa3f1db98dd.htm" />
+  <HelpKINode Title="AspMvcSuppressViewErrorAttribute class">
+    <HelpKINode Title="AspMvcSuppressViewErrorAttribute Class" Url="html/3d401f96-e19b-2752-2889-4d99cc89eadc.htm" />
+    <HelpKINode Title="constructor" Url="html/86b292bb-4cb4-8a8c-e205-cd177166f44d.htm" />
+    <HelpKINode Title="methods" Url="html/b4450a82-2f77-139c-5833-3db76cedbd98.htm" />
+    <HelpKINode Title="properties" Url="html/09ec878a-f69a-d8b2-4663-47a54bd1eab3.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcSuppressViewErrorAttribute.AspMvcSuppressViewErrorAttribute constructor" Url="html/86b292bb-4cb4-8a8c-e205-cd177166f44d.htm" />
+  <HelpKINode Title="AspMvcTemplateAttribute class">
+    <HelpKINode Title="AspMvcTemplateAttribute Class" Url="html/12ab4a86-7363-0fa1-f367-60b6ace53edc.htm" />
+    <HelpKINode Title="constructor" Url="html/1933ffd9-6735-e71a-2f53-a96302218a65.htm" />
+    <HelpKINode Title="methods" Url="html/fd9d271d-435a-cdfc-9afd-09fb0c4186db.htm" />
+    <HelpKINode Title="properties" Url="html/1900d330-579b-5e2e-42ef-0500d95976c3.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcTemplateAttribute.AspMvcTemplateAttribute constructor" Url="html/1933ffd9-6735-e71a-2f53-a96302218a65.htm" />
+  <HelpKINode Title="AspMvcViewAttribute class">
+    <HelpKINode Title="AspMvcViewAttribute Class" Url="html/edc3fa0e-1306-4eec-6220-aeb9c314cc25.htm" />
+    <HelpKINode Title="constructor" Url="html/2a5e49ae-c163-870c-5308-587268615008.htm" />
+    <HelpKINode Title="methods" Url="html/8a5db020-89f7-6707-e54e-d8d111c1285e.htm" />
+    <HelpKINode Title="properties" Url="html/03dafbb9-c306-2924-8689-d9f0501dbb44.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcViewAttribute.AspMvcViewAttribute constructor" Url="html/2a5e49ae-c163-870c-5308-587268615008.htm" />
+  <HelpKINode Title="AspMvcViewComponentAttribute class">
+    <HelpKINode Title="AspMvcViewComponentAttribute Class" Url="html/4e4d0e82-d80c-b772-0fd8-cb748b140dc4.htm" />
+    <HelpKINode Title="constructor" Url="html/92e432a2-c3a2-3e58-444a-c6193a204e24.htm" />
+    <HelpKINode Title="methods" Url="html/ede9a3c3-d3e0-1721-9d00-e4c4d1f1a3f5.htm" />
+    <HelpKINode Title="properties" Url="html/7eb6cbba-c0e2-7b2b-fde2-cb33d76f158b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcViewComponentAttribute.AspMvcViewComponentAttribute constructor" Url="html/92e432a2-c3a2-3e58-444a-c6193a204e24.htm" />
+  <HelpKINode Title="AspMvcViewComponentViewAttribute class">
+    <HelpKINode Title="AspMvcViewComponentViewAttribute Class" Url="html/405b1154-e41a-96a2-92a1-7b939850bc3b.htm" />
+    <HelpKINode Title="constructor" Url="html/15986c16-4e99-928e-d2a0-990e1a00a682.htm" />
+    <HelpKINode Title="methods" Url="html/0a2c793e-1bde-8ce6-6d95-7b784b28c7dd.htm" />
+    <HelpKINode Title="properties" Url="html/a9752798-e665-1374-69ba-90765d046492.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcViewComponentViewAttribute.AspMvcViewComponentViewAttribute constructor" Url="html/15986c16-4e99-928e-d2a0-990e1a00a682.htm" />
+  <HelpKINode Title="AspMvcViewLocationFormatAttribute class">
+    <HelpKINode Title="AspMvcViewLocationFormatAttribute Class" Url="html/7d2886f4-c3ad-320b-2d07-c6ad3dccc52e.htm" />
+    <HelpKINode Title="constructor" Url="html/9873046e-96fd-1e06-0886-538109da25dd.htm" />
+    <HelpKINode Title="methods" Url="html/0f95bb21-78e6-eb35-785b-4684de1d36ea.htm" />
+    <HelpKINode Title="properties" Url="html/76701d5d-d37a-8810-6d5e-42698421f566.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspMvcViewLocationFormatAttribute.AspMvcViewLocationFormatAttribute constructor" Url="html/9873046e-96fd-1e06-0886-538109da25dd.htm" />
+  <HelpKINode Title="AspMvcViewLocationFormatAttribute.Format property" Url="html/b426a215-ad22-05be-7bc3-f8401a99f5b6.htm" />
+  <HelpKINode Title="AspRequiredAttributeAttribute class">
+    <HelpKINode Title="AspRequiredAttributeAttribute Class" Url="html/29a29d75-94f7-7835-65e4-70d63a612aa0.htm" />
+    <HelpKINode Title="constructor" Url="html/823dbb15-9517-f653-c726-a70f70c750a7.htm" />
+    <HelpKINode Title="methods" Url="html/26f0d510-355d-f30b-38ca-4b2ec700260f.htm" />
+    <HelpKINode Title="properties" Url="html/e05bd0bf-e1c4-1424-dfa2-8f0cb2e1edf1.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspRequiredAttributeAttribute.AspRequiredAttributeAttribute constructor" Url="html/823dbb15-9517-f653-c726-a70f70c750a7.htm" />
+  <HelpKINode Title="AspRequiredAttributeAttribute.Attribute property" Url="html/9482c1e1-89c3-6563-266d-081e6bf3ccfd.htm" />
+  <HelpKINode Title="AspTypePropertyAttribute class">
+    <HelpKINode Title="AspTypePropertyAttribute Class" Url="html/ce22c34e-7424-5fe2-a0e4-9b2df93168e3.htm" />
+    <HelpKINode Title="constructor" Url="html/696e5ba7-1f46-c43e-2f52-2aba77aa312f.htm" />
+    <HelpKINode Title="methods" Url="html/1f686e6f-d768-cf38-1038-fb790625702c.htm" />
+    <HelpKINode Title="properties" Url="html/7280b1a0-9591-dda8-6ab1-9b984e72774c.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AspTypePropertyAttribute.AspTypePropertyAttribute constructor" Url="html/696e5ba7-1f46-c43e-2f52-2aba77aa312f.htm" />
+  <HelpKINode Title="AspTypePropertyAttribute.CreateConstructorReferences property" Url="html/cd6fcf3a-08f1-293b-b58c-3eea65223428.htm" />
+  <HelpKINode Title="AssertionConditionAttribute class">
+    <HelpKINode Title="AssertionConditionAttribute Class" Url="html/c90261d8-7cd6-2e88-fe91-3c7aff9ba5fb.htm" />
+    <HelpKINode Title="constructor" Url="html/e8cc474f-6a1d-3f92-c71a-2bcc17556b95.htm" />
+    <HelpKINode Title="methods" Url="html/492208ec-18de-da4d-58fa-93d96b712518.htm" />
+    <HelpKINode Title="properties" Url="html/da83075f-93dc-48cf-0594-c30a7fe372ab.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AssertionConditionAttribute.AssertionConditionAttribute constructor" Url="html/e8cc474f-6a1d-3f92-c71a-2bcc17556b95.htm" />
+  <HelpKINode Title="AssertionConditionAttribute.ConditionType property" Url="html/64247e87-946a-132e-68cc-defb2765d2f5.htm" />
+  <HelpKINode Title="AssertionConditionType enumeration" Url="html/9914bda3-a9f0-f622-4cfa-d61610c04481.htm" />
+  <HelpKINode Title="AssertionMethodAttribute class">
+    <HelpKINode Title="AssertionMethodAttribute Class" Url="html/c4d61301-4841-fa3d-c156-e2265fa29509.htm" />
+    <HelpKINode Title="constructor" Url="html/83c247a6-c75f-39a9-ba4d-08a77e0940fe.htm" />
+    <HelpKINode Title="methods" Url="html/64d94c48-9f94-b406-cd8a-e8e83057c17d.htm" />
+    <HelpKINode Title="properties" Url="html/e4d37957-3ef2-b258-7296-201c8da2b050.htm" />
+  </HelpKINode>
+  <HelpKINode Title="AssertionMethodAttribute.AssertionMethodAttribute constructor" Url="html/83c247a6-c75f-39a9-ba4d-08a77e0940fe.htm" />
+  <HelpKINode Title="Assign enumeration member" Url="html/6bc6e016-6665-766d-5f7d-bbf4b4e7c44b.htm" />
+  <HelpKINode Title="Assignees property" Url="html/fdc6f1c9-0826-c862-eecc-3026cb2d4eff.htm" />
+  <HelpKINode Title="Assign_to method" Url="html/6ba35861-3374-41a4-d415-e07f39feaa6e.htm" />
+  <HelpKINode Title="Attribute property" Url="html/9482c1e1-89c3-6563-266d-081e6bf3ccfd.htm" />
+  <HelpKINode Title="BasePath property" Url="html/ce369e42-0229-8c83-405d-736ab9946293.htm" />
+  <HelpKINode Title="BaseType property">
+    <HelpKINode Title="BaseTypeRequiredAttribute.BaseType Property " Url="html/a2d7575d-c083-886d-7292-cee74cf5094d.htm" />
+    <HelpKINode Title="RazorPageBaseTypeAttribute.BaseType Property " Url="html/ce1e189b-24b6-5d45-683a-a323d46e4d39.htm" />
+  </HelpKINode>
+  <HelpKINode Title="BaseTypeRequiredAttribute class">
+    <HelpKINode Title="BaseTypeRequiredAttribute Class" Url="html/acdba836-9e1a-e3b5-77f9-360bf39b09f5.htm" />
+    <HelpKINode Title="constructor" Url="html/e522c9e6-84f8-c422-288c-ad95f39adada.htm" />
+    <HelpKINode Title="methods" Url="html/1a7dfd57-aced-9078-faab-066f7bbddcd4.htm" />
+    <HelpKINode Title="properties" Url="html/7abe711d-6536-ad81-f74a-b1c26ec70974.htm" />
+  </HelpKINode>
+  <HelpKINode Title="BaseTypeRequiredAttribute.BaseType property" Url="html/a2d7575d-c083-886d-7292-cee74cf5094d.htm" />
+  <HelpKINode Title="BaseTypeRequiredAttribute.BaseTypeRequiredAttribute constructor" Url="html/e522c9e6-84f8-c422-288c-ad95f39adada.htm" />
+  <HelpKINode Title="CanBeNullAttribute class">
+    <HelpKINode Title="CanBeNullAttribute Class" Url="html/f145c9b2-4bdc-4678-661b-10c8284027ee.htm" />
+    <HelpKINode Title="constructor" Url="html/9ae41d67-2bd4-55b2-ce95-99c25c35aba8.htm" />
+    <HelpKINode Title="methods" Url="html/2b131926-3e74-ab4c-3ffc-f573b15e38e2.htm" />
+    <HelpKINode Title="properties" Url="html/f0a747ad-6864-c524-9050-752fc75d971d.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CanBeNullAttribute.CanBeNullAttribute constructor" Url="html/9ae41d67-2bd4-55b2-ce95-99c25c35aba8.htm" />
   <HelpKINode Title="Cancel method" Url="html/f806541a-fbae-b717-8714-58f1e906a49b.htm" />
+  <HelpKINode Title="CannotApplyEqualityOperatorAttribute class">
+    <HelpKINode Title="CannotApplyEqualityOperatorAttribute Class" Url="html/9e6c142d-6aa2-6c4b-00e7-fe406fcc8dcb.htm" />
+    <HelpKINode Title="constructor" Url="html/f29cc46c-3ea0-b0fb-f675-9633b2562eff.htm" />
+    <HelpKINode Title="methods" Url="html/c59045e0-286e-b5ba-57d7-27cc8b32b218.htm" />
+    <HelpKINode Title="properties" Url="html/f28dff95-6902-8ddf-0b4b-1c7e91700f32.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CannotApplyEqualityOperatorAttribute.CannotApplyEqualityOperatorAttribute constructor" Url="html/f29cc46c-3ea0-b0fb-f675-9633b2562eff.htm" />
   <HelpKINode Title="Chart class">
     <HelpKINode Title="Chart Class" Url="html/4201df6a-a5f4-758f-41f5-ddb1146f819b.htm" />
     <HelpKINode Title="constructor" Url="html/dc75e6d1-809f-cf2d-bb90-a770d1427170.htm" />
@@ -30,27 +298,79 @@
   </HelpKINode>
   <HelpKINode Title="Chart.AddTask method" Url="html/332f592a-e812-bc55-3ddc-1f7bc367f9c6.htm" />
   <HelpKINode Title="Chart.Chart constructor" Url="html/dc75e6d1-809f-cf2d-bb90-a770d1427170.htm" />
+  <HelpKINode Title="Chart.DeleteTask method" Url="html/d7f722cc-cca2-f961-39cf-2bfcf160a9c6.htm" />
   <HelpKINode Title="Chart.DrawGraph method" Url="html/469ae407-1c4d-be8d-a823-a47fbb040d59.htm" />
   <HelpKINode Title="Chart.InitializeComponent method" Url="html/28e3d68d-3ca0-e900-2990-5bae1cc37044.htm" />
+  <HelpKINode Title="Chart.Model property" Url="html/0194f70e-aae3-20e8-760f-2c7b77e72e5f.htm" />
   <HelpKINode Title="Chart.OnModelUpdate method" Url="html/10a6ec88-9bbc-4f85-8121-6be955aff243.htm" />
   <HelpKINode Title="Chart.Project property" Url="html/e845fd05-3ebd-0b8d-2ed6-fae58d0e714e.htm" />
   <HelpKINode Title="Chart.RefreshGraph method" Url="html/daab89e4-0c22-1330-2a68-13f327ee8b08.htm" />
   <HelpKINode Title="CloseConnection method" Url="html/78758916-ef02-dfdf-dd38-211bbec2d2ef.htm" />
+  <HelpKINode Title="CollectionAccessAttribute class">
+    <HelpKINode Title="CollectionAccessAttribute Class" Url="html/611748e4-5b7e-28f9-4c42-e5ec5a403fc8.htm" />
+    <HelpKINode Title="constructor" Url="html/558cac3c-72b6-1d2c-d57c-bc3ed9548f0e.htm" />
+    <HelpKINode Title="methods" Url="html/e1e87fce-a179-21a4-1095-e8dd73050286.htm" />
+    <HelpKINode Title="properties" Url="html/1d48530f-5f4f-9045-c9b6-9413a4caac6e.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CollectionAccessAttribute.CollectionAccessAttribute constructor" Url="html/558cac3c-72b6-1d2c-d57c-bc3ed9548f0e.htm" />
+  <HelpKINode Title="CollectionAccessAttribute.CollectionAccessType property" Url="html/452da65d-d24c-7d81-5607-c5c4031eb825.htm" />
+  <HelpKINode Title="CollectionAccessType enumeration" Url="html/4443b3a6-2e79-3711-5975-40f68b355ae0.htm" />
+  <HelpKINode Title="CollectionAccessType property" Url="html/452da65d-d24c-7d81-5607-c5c4031eb825.htm" />
   <HelpKINode Title="Command property" Url="html/c26666a0-e065-f8f8-2f35-aa354d9ad7e8.htm" />
+  <HelpKINode Title="Comment property" Url="html/a6894599-87da-858e-d146-c8793df6619f.htm" />
+  <HelpKINode Title="ConditionType property" Url="html/64247e87-946a-132e-68cc-defb2765d2f5.htm" />
   <HelpKINode Title="Connected property" Url="html/9c87b086-9ffc-4be1-af91-703fd6dcc62f.htm" />
+  <HelpKINode Title="Contract property" Url="html/ad92fd0c-7747-7b3e-5fc1-1f4b1d677d33.htm" />
+  <HelpKINode Title="ContractAnnotationAttribute class">
+    <HelpKINode Title="ContractAnnotationAttribute Class" Url="html/86e9dcb1-77d3-8ddd-4bb6-d72e25634d2c.htm" />
+    <HelpKINode Title="constructor" Url="html/1b1a4137-389c-e582-f509-f9257b30e668.htm" />
+    <HelpKINode Title="methods" Url="html/9bb43969-ef2b-b9a2-0bc3-101672a2ff25.htm" />
+    <HelpKINode Title="properties" Url="html/8f11e879-85d5-ae7f-804c-56cbc7e5e644.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ContractAnnotationAttribute.Contract property" Url="html/ad92fd0c-7747-7b3e-5fc1-1f4b1d677d33.htm" />
+  <HelpKINode Title="ContractAnnotationAttribute.ContractAnnotationAttribute constructor" Url="html/1b1a4137-389c-e582-f509-f9257b30e668.htm" />
+  <HelpKINode Title="ContractAnnotationAttribute.ForceFullStates property" Url="html/88dfdb47-84f0-ca97-d8c0-134e47853605.htm" />
+  <HelpKINode Title="ControlType property" Url="html/c567fe2f-c6f0-f818-ac75-c1196f37774b.htm" />
+  <HelpKINode Title="CreateConstructorReferences property" Url="html/cd6fcf3a-08f1-293b-b58c-3eea65223428.htm" />
   <HelpKINode Title="CreateProject method">
     <HelpKINode Title="IModel.CreateProject Method " Url="html/0c1b8f88-e7b0-9d22-9dcf-89108362f536.htm" />
     <HelpKINode Title="Model.CreateProject Method " Url="html/24cdda14-88cd-aa4a-b830-1131c51573a6.htm" />
   </HelpKINode>
+  <HelpKINode Title="CreateProjectCmd class">
+    <HelpKINode Title="CreateProjectCmd Class" Url="html/8455be9c-a967-babd-4772-51c19f213c67.htm" />
+    <HelpKINode Title="constructor" Url="html/8eedad38-6094-d2fa-df6a-3687fc3694ce.htm" />
+    <HelpKINode Title="methods" Url="html/331143be-ad53-e214-3bee-f320b37fcc54.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CreateProjectCmd.CreateProjectCmd constructor" Url="html/8eedad38-6094-d2fa-df6a-3687fc3694ce.htm" />
+  <HelpKINode Title="CreateProjectCmd.Execute method" Url="html/0aeca775-8f7c-36c2-a793-00e1e0e57d34.htm" />
+  <HelpKINode Title="CreateProjectCmd.OnIdUpdate method" Url="html/07ea404e-39d4-8606-af08-1e5c7b59a88e.htm" />
+  <HelpKINode Title="CreateProjectCmd.OnModelUpdate method" Url="html/d30ef15f-36c4-4ef9-e046-8e06d1c38143.htm" />
+  <HelpKINode Title="CreateProjectCmd.Undo method" Url="html/518333f4-d68a-1c23-53e8-9265d36d1e0c.htm" />
   <HelpKINode Title="CreateTask method">
     <HelpKINode Title="IModel.CreateTask Method " Url="html/0131c980-905c-5a79-ece6-ea9fc0f3a311.htm" />
     <HelpKINode Title="Model.CreateTask Method " Url="html/837d26e3-d6ed-ee41-f018-8d56b5cbba7f.htm" />
   </HelpKINode>
+  <HelpKINode Title="CreateTaskCmd class">
+    <HelpKINode Title="CreateTaskCmd Class" Url="html/27bceb7c-b8a5-eed3-cd3d-a7d66a4c3074.htm" />
+    <HelpKINode Title="constructor" Url="html/658d1e3e-f104-0a6d-a783-e756b8cf4b3b.htm" />
+    <HelpKINode Title="methods" Url="html/616b7003-a0fc-d604-a5c7-b5bf0e615a3d.htm" />
+    <HelpKINode Title="properties" Url="html/abe74af4-f5a8-ff30-bb95-4b7524ecb135.htm" />
+  </HelpKINode>
+  <HelpKINode Title="CreateTaskCmd.CreateTaskCmd constructor" Url="html/658d1e3e-f104-0a6d-a783-e756b8cf4b3b.htm" />
+  <HelpKINode Title="CreateTaskCmd.Execute method" Url="html/04bf282b-bacb-79c0-f428-86260fc25777.htm" />
+  <HelpKINode Title="CreateTaskCmd.OnIdUpdate method" Url="html/34b0887d-8d3b-2e6a-6ef4-2dfddd097aad.htm" />
+  <HelpKINode Title="CreateTaskCmd.OnModelUpdate method" Url="html/10001244-9baa-6157-0f89-9d9523ac60f9.htm" />
+  <HelpKINode Title="CreateTaskCmd.Task property" Url="html/a5fcc13f-638b-ae8d-7279-7113dea6b378.htm" />
+  <HelpKINode Title="CreateTaskCmd.Undo method" Url="html/c61f561b-ea5a-f1c0-1c4d-fc591ceb0bfd.htm" />
   <HelpKINode Title="CreateUser method">
     <HelpKINode Title="DBReader.CreateUser Method " Url="html/f1bac0fe-2610-09e1-2911-e07bbd13a0c9.htm" />
     <HelpKINode Title="IModel.CreateUser Method " Url="html/c5a47914-af36-fd8a-0b59-318bd020bfef.htm" />
     <HelpKINode Title="Model.CreateUser Method " Url="html/c5333d74-9116-d501-272f-6d4b9b6a6b7a.htm" />
   </HelpKINode>
+  <HelpKINode Title="creationDate field" Url="html/f69ebcd8-ee6a-7770-3821-ae8e6bd7dbeb.htm" />
+  <HelpKINode Title="CreationDate property" Url="html/6d2e8ee0-9455-174e-667c-632f26b1446d.htm" />
+  <HelpKINode Title="creator field" Url="html/5de2d132-a58a-f6bd-c7ed-4906ae0d644e.htm" />
+  <HelpKINode Title="Creator property" Url="html/d260f7d7-f47f-915a-d467-67b8f9ac1b79.htm" />
   <HelpKINode Title="CurrentUser property" Url="html/a300b45e-70a5-e8e6-350f-a787d6f20c5d.htm" />
   <HelpKINode Title="DBReader class">
     <HelpKINode Title="DBReader Class" Url="html/e0b24271-bc21-c846-ae32-db80aee8b847.htm" />
@@ -64,6 +384,7 @@
   <HelpKINode Title="DBReader.GetUserProjects method" Url="html/fb0e0eec-31f1-10c5-0512-21373f86211f.htm" />
   <HelpKINode Title="DBReader.Instance property" Url="html/ebcdef4c-a3da-dcca-a3ff-1201ce4bb60f.htm" />
   <HelpKINode Title="DBReader.Instantiate method" Url="html/e52a1fb9-5428-97bb-1321-1d8c52ce3597.htm" />
+  <HelpKINode Title="DBReader.IsUpdating property" Url="html/f444872c-eb43-58c2-893b-3ffb4894a0af.htm" />
   <HelpKINode Title="DBReader.IsValidEmail method" Url="html/707cf3db-e919-0253-9406-82412775227e.htm" />
   <HelpKINode Title="DBReader.IsValidUsername method" Url="html/73aedf43-4f68-aaba-6f6a-6030d5d926d0.htm" />
   <HelpKINode Title="DBReader.Login method" Url="html/33785fa2-6ba0-ce24-e3ed-505895fe65c4.htm" />
@@ -72,11 +393,16 @@
   <HelpKINode Title="DBReader.Register method" Url="html/d716fce5-6179-3260-8896-8376d45d500c.htm" />
   <HelpKINode Title="DBReader.SetProject method" Url="html/b4125b59-1994-0337-3fc1-b98bdcebff6c.htm" />
   <HelpKINode Title="DBReader.TestNewConnection method" Url="html/f08521e4-1965-4541-199f-13b9b98a32fb.htm" />
+  <HelpKINode Title="DBReader.UpdateCount property" Url="html/7686b58c-2e1f-a877-3aa3-70540a3088f8.htm" />
   <HelpKINode Title="DBUpdateReceiver interface">
     <HelpKINode Title="DBUpdateReceiver Interface" Url="html/f225343a-7c32-90f8-3e9e-0a8ec076bbc3.htm" />
     <HelpKINode Title="methods" Url="html/cefa1070-f0ba-4bcf-4558-c664904df14f.htm" />
   </HelpKINode>
   <HelpKINode Title="DBUpdateReceiver.OnDBUpdate method" Url="html/7e822111-11d1-6e6e-6ec6-f737a31f3fdc.htm" />
+  <HelpKINode Title="Default enumeration member">
+    <HelpKINode Title="ImplicitUseKindFlags Enumeration" Url="html/6bc6e016-6665-766d-5f7d-bbf4b4e7c44b.htm" />
+    <HelpKINode Title="ImplicitUseTargetFlags Enumeration" Url="html/00985550-e0cc-268c-8962-9d4b208b1d77.htm" />
+  </HelpKINode>
   <HelpKINode Title="Delete method">
     <HelpKINode Title="IDBItem.Delete Method " Url="html/0d22fa6b-8a94-dc17-d1c7-59c61d039f31.htm" />
     <HelpKINode Title="Project.Delete Method " Url="html/42575139-1dd0-8a92-4fa1-306840449274.htm" />
@@ -87,18 +413,116 @@
     <HelpKINode Title="IModel.DeleteProject Method " Url="html/c9041f8b-e857-50dc-9850-1431e7894d74.htm" />
     <HelpKINode Title="Model.DeleteProject Method " Url="html/f4d5e551-2e17-2577-bc47-e15033f72839.htm" />
   </HelpKINode>
+  <HelpKINode Title="DeleteProjectCmd class">
+    <HelpKINode Title="DeleteProjectCmd Class" Url="html/6bd54678-8f36-bb31-f02f-75df5b4b66cc.htm" />
+    <HelpKINode Title="constructor" Url="html/4278585d-5bc1-ee90-c2c9-912026ded7e7.htm" />
+    <HelpKINode Title="methods" Url="html/e8dfe0e4-c8ab-40b7-aff4-86cba44e55a9.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DeleteProjectCmd.DeleteProjectCmd constructor" Url="html/4278585d-5bc1-ee90-c2c9-912026ded7e7.htm" />
+  <HelpKINode Title="DeleteProjectCmd.Execute method" Url="html/4338e397-22f8-58e2-c129-1bbe4c78685a.htm" />
+  <HelpKINode Title="DeleteProjectCmd.OnIdUpdate method" Url="html/cda3554e-746c-931a-31ef-4bab27b7e5c4.htm" />
+  <HelpKINode Title="DeleteProjectCmd.OnModelUpdate method" Url="html/14a2a20d-80d6-9972-7bd4-f809eba56e55.htm" />
+  <HelpKINode Title="DeleteProjectCmd.Undo method" Url="html/a35f2e94-15ee-59e7-6399-97d029a254ca.htm" />
   <HelpKINode Title="DeleteTask method">
+    <HelpKINode Title="Chart.DeleteTask Method " Url="html/d7f722cc-cca2-f961-39cf-2bfcf160a9c6.htm" />
     <HelpKINode Title="IModel.DeleteTask Method " Url="html/9ea7183b-af87-243e-7438-b72dc340f7a6.htm" />
     <HelpKINode Title="Model.DeleteTask Method " Url="html/7d5d3d3a-a1f1-c81d-ebb0-a98e08b377b5.htm" />
   </HelpKINode>
+  <HelpKINode Title="DeleteTaskCmd class">
+    <HelpKINode Title="DeleteTaskCmd Class" Url="html/2ff3d6b4-9c62-e9bd-b0b6-e998a3a58ca5.htm" />
+    <HelpKINode Title="constructor" Url="html/c9727054-402c-3838-98ea-eee73a49c3fe.htm" />
+    <HelpKINode Title="methods" Url="html/7b15af3a-8f8b-2da5-66f5-1e656f310892.htm" />
+  </HelpKINode>
+  <HelpKINode Title="DeleteTaskCmd.DeleteTaskCmd constructor" Url="html/c9727054-402c-3838-98ea-eee73a49c3fe.htm" />
+  <HelpKINode Title="DeleteTaskCmd.Execute method" Url="html/35528cf8-46a8-eada-78d2-14cfe3721c3e.htm" />
+  <HelpKINode Title="DeleteTaskCmd.OnIdUpdate method" Url="html/d7497993-a9e3-96a2-0277-1c18778373bc.htm" />
+  <HelpKINode Title="DeleteTaskCmd.OnModelUpdate method" Url="html/646d0a7d-5dd5-9470-7b13-86c970644a51.htm" />
+  <HelpKINode Title="DeleteTaskCmd.Undo method" Url="html/9972484a-74a6-a57a-b2df-2da3a1454cb0.htm" />
   <HelpKINode Title="DeleteUser method" Url="html/9b87ef16-2942-3b57-7e88-dc861b59f510.htm" />
   <HelpKINode Title="Dependencies property" Url="html/64d12e40-c4d2-47cf-473c-711a7fdac3be.htm" />
   <HelpKINode Title="Description property" Url="html/68142dd9-3d5b-92d0-e68d-2838cb3e9762.htm" />
+  <HelpKINode Title="Directive property" Url="html/a1744e50-2293-3220-32b6-7bb4f9aaa360.htm" />
   <HelpKINode Title="DrawGraph method" Url="html/469ae407-1c4d-be8d-a823-a47fbb040d59.htm" />
+  <HelpKINode Title="Editable property" Url="html/2263725b-6d3b-f9b8-5d32-2ea4e13d8e90.htm" />
+  <HelpKINode Title="EditProjectCmd class">
+    <HelpKINode Title="EditProjectCmd Class" Url="html/3b7f750d-ba00-2300-ff0e-fb4b841f4896.htm" />
+    <HelpKINode Title="constructor" Url="html/91d14fc4-021a-0b3d-1f1b-da78fc0eccdc.htm" />
+    <HelpKINode Title="methods" Url="html/7742e99a-c465-2e60-3c24-4b363f07e938.htm" />
+  </HelpKINode>
+  <HelpKINode Title="EditProjectCmd.EditProjectCmd constructor" Url="html/91d14fc4-021a-0b3d-1f1b-da78fc0eccdc.htm" />
+  <HelpKINode Title="EditProjectCmd.Execute method" Url="html/1e9055c2-7713-8bf2-912e-4762c8b7108b.htm" />
+  <HelpKINode Title="EditProjectCmd.OnIdUpdate method" Url="html/76d61f27-af1d-8c47-1a67-5cc69cc79efb.htm" />
+  <HelpKINode Title="EditProjectCmd.OnModelUpdate method" Url="html/5e860a55-5bc2-4a98-280e-9cdfd13ca904.htm" />
+  <HelpKINode Title="EditProjectCmd.Undo method" Url="html/b600ace1-c8a4-5041-532c-20bae91f1e32.htm" />
+  <HelpKINode Title="EditTaskCmd class">
+    <HelpKINode Title="EditTaskCmd Class" Url="html/a0e20d3c-6b9a-e705-718b-7f5b8da428fa.htm" />
+    <HelpKINode Title="constructor" Url="html/86cbbc00-69b8-8bdd-d6a7-52b0676f3bce.htm" />
+    <HelpKINode Title="methods" Url="html/c0882794-9a48-d72b-3721-aa14c365ec88.htm" />
+  </HelpKINode>
+  <HelpKINode Title="EditTaskCmd.EditTaskCmd constructor" Url="html/86cbbc00-69b8-8bdd-d6a7-52b0676f3bce.htm" />
+  <HelpKINode Title="EditTaskCmd.Execute method" Url="html/96c704f6-db46-7a06-b44c-a2da9aa8a6fd.htm" />
+  <HelpKINode Title="EditTaskCmd.OnIdUpdate method" Url="html/7c5996ec-d8c2-3919-59cb-0823f06592c5.htm" />
+  <HelpKINode Title="EditTaskCmd.OnModelUpdate method" Url="html/75d6a7b5-06b0-35c3-1129-c6ceabfa47a5.htm" />
+  <HelpKINode Title="EditTaskCmd.Undo method" Url="html/6e9ae5a7-fc70-17ef-049e-207db840c5d5.htm" />
   <HelpKINode Title="Email property" Url="html/93ff2ca4-5f32-6216-06b1-ac0f294805a0.htm" />
   <HelpKINode Title="EndDate property" Url="html/53457065-402e-7df8-305c-c9ea3d118f24.htm" />
-  <HelpKINode Title="Execute method" Url="html/f052dd92-b943-14ba-920d-dda370160f4c.htm" />
+  <HelpKINode Title="Equals method" Url="html/4cb219ac-72f8-ddc7-37e3-e03da34bd4a8.htm" />
+  <HelpKINode Title="ErrBackHandler delegate" Url="html/24c7c83c-cb6d-846c-d330-456e0eab1f8f.htm" />
+  <HelpKINode Title="ErrorCatch class">
+    <HelpKINode Title="ErrorCatch Class" Url="html/e3dc48a5-7001-53ab-b3a6-b94ab17e6234.htm" />
+    <HelpKINode Title="constructor" Url="html/b444e43e-9f2e-1dec-8ed7-34c71f2051a9.htm" />
+    <HelpKINode Title="events" Url="html/97ca2e75-f394-f009-76aa-d286f8d31745.htm" />
+    <HelpKINode Title="methods" Url="html/7443c773-5280-2cfc-d3e1-9730e3f16485.htm" />
+    <HelpKINode Title="properties" Url="html/19b50a50-2803-f5fd-54ad-a4db027573cd.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ErrorCatch.ErrorCatch constructor" Url="html/b444e43e-9f2e-1dec-8ed7-34c71f2051a9.htm" />
+  <HelpKINode Title="ErrorCatch.InitializeComponent method" Url="html/07dd5fcf-a443-addf-f8d9-63fef8b81d27.htm" />
+  <HelpKINode Title="Execute method">
+    <HelpKINode Title="AddDependencyCmd.Execute Method " Url="html/ee881833-b587-1f9c-b72e-908152d10f68.htm" />
+    <HelpKINode Title="AddWorkerCmd.Execute Method " Url="html/e770217b-d589-2a26-3b18-ad57d4ca4346.htm" />
+    <HelpKINode Title="CreateProjectCmd.Execute Method " Url="html/0aeca775-8f7c-36c2-a793-00e1e0e57d34.htm" />
+    <HelpKINode Title="CreateTaskCmd.Execute Method " Url="html/04bf282b-bacb-79c0-f428-86260fc25777.htm" />
+    <HelpKINode Title="DeleteProjectCmd.Execute Method " Url="html/4338e397-22f8-58e2-c129-1bbe4c78685a.htm" />
+    <HelpKINode Title="DeleteTaskCmd.Execute Method " Url="html/35528cf8-46a8-eada-78d2-14cfe3721c3e.htm" />
+    <HelpKINode Title="EditProjectCmd.Execute Method " Url="html/1e9055c2-7713-8bf2-912e-4762c8b7108b.htm" />
+    <HelpKINode Title="EditTaskCmd.Execute Method " Url="html/96c704f6-db46-7a06-b44c-a2da9aa8a6fd.htm" />
+    <HelpKINode Title="ICmd.Execute Method " Url="html/f052dd92-b943-14ba-920d-dda370160f4c.htm" />
+    <HelpKINode Title="RemoveDependencyCmd.Execute Method " Url="html/9f04ba85-c833-8fce-91f4-879c797de2ff.htm" />
+    <HelpKINode Title="RemoveWorkerCmd.Execute Method " Url="html/45227db2-c633-72a2-fa79-352b6148968f.htm" />
+  </HelpKINode>
   <HelpKINode Title="ExecuteSql method" Url="html/2b89ac7d-4c73-a40b-158c-1261633f80c1.htm" />
+  <HelpKINode Title="Expression property" Url="html/8645461d-f171-978d-0189-08e19d8c57d6.htm" />
+  <HelpKINode Title="FieldName property" Url="html/1dd7853b-d4e6-f058-7d5b-87cc08e27644.htm" />
+  <HelpKINode Title="FilteredComboBox class">
+    <HelpKINode Title="FilteredComboBox Class" Url="html/2734e10a-cc42-e746-abd2-193f394f6637.htm" />
+    <HelpKINode Title="constructor" Url="html/d64785f4-2c8e-ed3f-35d3-dca4986f191b.htm" />
+    <HelpKINode Title="events" Url="html/5c7ac895-d61b-e40f-c5df-bf415edd951b.htm" />
+    <HelpKINode Title="methods" Url="html/c6b48698-f678-1f06-7c18-5a9674b1c5eb.htm" />
+    <HelpKINode Title="properties" Url="html/3da5f633-e48b-16e0-a6e4-a4ff2a8a9087.htm" />
+  </HelpKINode>
+  <HelpKINode Title="FilteredComboBox.FilteredComboBox constructor" Url="html/d64785f4-2c8e-ed3f-35d3-dca4986f191b.htm" />
+  <HelpKINode Title="FilteredComboBox.FilteredItems property" Url="html/e0e2a270-80bb-1f59-bf09-7d76d673a397.htm" />
+  <HelpKINode Title="FilteredComboBox.InitializeComponent method" Url="html/22d0fa01-2b71-d5dd-56a4-35c4d9bf76ee.htm" />
+  <HelpKINode Title="FilteredComboBox.Input property" Url="html/9c079662-b553-383c-ed79-6d8ca822e77a.htm" />
+  <HelpKINode Title="FilteredComboBox.Items property" Url="html/9db67cea-1817-146f-059b-c5a15cef832d.htm" />
+  <HelpKINode Title="FilteredComboBox.Selected property" Url="html/3c3e0139-3921-53d7-65e1-b9d5b8443419.htm" />
+  <HelpKINode Title="FilteredComboBox.SelectionChanged property" Url="html/a10a1988-ae4c-cf9e-9d0e-adccc45d20cc.htm" />
+  <HelpKINode Title="FilteredItems property" Url="html/e0e2a270-80bb-1f59-bf09-7d76d673a397.htm" />
+  <HelpKINode Title="Finalize method" Url="html/38f71784-bb4c-256a-c54a-2f2cd64d64a5.htm" />
+  <HelpKINode Title="ForceFullStates property" Url="html/88dfdb47-84f0-ca97-d8c0-134e47853605.htm" />
+  <HelpKINode Title="Format property">
+    <HelpKINode Title="AspMvcAreaMasterLocationFormatAttribute.Format Property " Url="html/e829ed97-7542-8c57-bb3b-a721cb940fc2.htm" />
+    <HelpKINode Title="AspMvcAreaPartialViewLocationFormatAttribute.Format Property " Url="html/478c22b1-0d9b-91bd-b31a-29e0816fc640.htm" />
+    <HelpKINode Title="AspMvcAreaViewLocationFormatAttribute.Format Property " Url="html/6dc88221-8a24-45fd-01ee-ce359313b73d.htm" />
+    <HelpKINode Title="AspMvcMasterLocationFormatAttribute.Format Property " Url="html/a1b39c80-c038-6546-75a7-e2eb968bf0e2.htm" />
+    <HelpKINode Title="AspMvcPartialViewLocationFormatAttribute.Format Property " Url="html/ec2ce0a0-ff60-656d-196c-2aa3f1db98dd.htm" />
+    <HelpKINode Title="AspMvcViewLocationFormatAttribute.Format Property " Url="html/b426a215-ad22-05be-7bc3-f8401a99f5b6.htm" />
+  </HelpKINode>
+  <HelpKINode Title="FormatParameterName property" Url="html/e863d6a9-030c-730d-7d3c-f8ffe1999564.htm" />
+  <HelpKINode Title="From property" Url="html/3e2d5b4b-5473-0284-5786-76f0a65a28a4.htm" />
+  <HelpKINode Title="GetCurrentUser method" Url="html/6b7eb73b-c586-1844-1646-0fe98972c713.htm" />
+  <HelpKINode Title="GetHashCode method" Url="html/dd1bc609-8fe6-c54c-6d42-8803ec36cc1e.htm" />
+  <HelpKINode Title="GetInstance method" Url="html/34764664-fdd4-f920-1bd2-edb8bbc13c32.htm" />
   <HelpKINode Title="GetProject method">
     <HelpKINode Title="IModel.GetProject Method " Url="html/0c3d1387-d70e-45b5-2d87-883eb9fbbfa3.htm" />
     <HelpKINode Title="Model.GetProject Method " Url="html/9d53a9d5-c9ed-1f75-b51c-efdbf706d1f7.htm" />
@@ -106,6 +530,10 @@
   <HelpKINode Title="GetProjectList method">
     <HelpKINode Title="IModel.GetProjectList Method " Url="html/5c75b7bb-28af-a9d8-4655-45586a9b4900.htm" />
     <HelpKINode Title="Model.GetProjectList Method " Url="html/93ec0c4d-d12a-6378-04ce-b0d68b62b1f9.htm" />
+  </HelpKINode>
+  <HelpKINode Title="GetTaskById method">
+    <HelpKINode Title="IModel.GetTaskById Method " Url="html/683a3deb-e71b-93a3-3360-62af4735ffae.htm" />
+    <HelpKINode Title="Model.GetTaskById Method " Url="html/dbb1dde6-d2fc-5f7d-ac0d-846039e151be.htm" />
   </HelpKINode>
   <HelpKINode Title="GetTasks method">
     <HelpKINode Title="IModel.GetTasks Method " Url="html/a48e05e6-276c-17ac-4e0c-90505c85a05e.htm" />
@@ -121,12 +549,38 @@
     <HelpKINode Title="TaskToolTip.Header Property " Url="html/611c9e88-f3bb-ac55-5764-a964e017daac.htm" />
   </HelpKINode>
   <HelpKINode Title="HeaderProperty field" Url="html/2b8254d8-4261-572d-8188-80775b95da21.htm" />
-  <HelpKINode Title="ICmd interface">
-    <HelpKINode Title="ICmd Interface" Url="html/7dbd5957-c75a-dbb6-ee34-9b82fec5fe56.htm" />
+  <HelpKINode Title="HtmlAttributeValueAttribute class">
+    <HelpKINode Title="HtmlAttributeValueAttribute Class" Url="html/cb629790-bf30-c0a0-16bd-591f1f8419c8.htm" />
+    <HelpKINode Title="constructor" Url="html/2c009106-adb7-1ff4-efb2-212115c88fce.htm" />
+    <HelpKINode Title="methods" Url="html/14cdc0fb-d01a-0a9f-e88d-11952372573a.htm" />
+    <HelpKINode Title="properties" Url="html/b0883935-a8b4-b8f8-5661-650f3e404e2b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="HtmlAttributeValueAttribute.HtmlAttributeValueAttribute constructor" Url="html/2c009106-adb7-1ff4-efb2-212115c88fce.htm" />
+  <HelpKINode Title="HtmlAttributeValueAttribute.Name property" Url="html/1dc6abdb-fe7f-b68d-ce79-ca6081f40ac6.htm" />
+  <HelpKINode Title="HtmlElementAttributesAttribute class">
+    <HelpKINode Title="HtmlElementAttributesAttribute Class" Url="html/0d08c893-ba4c-0c2d-3161-2311ef69d64d.htm" />
+    <HelpKINode Title="constructor" Url="html/feabddf4-dd04-b386-d1ee-808af76be2f5.htm" />
+    <HelpKINode Title="methods" Url="html/02f17b4c-e5ee-bc9e-3689-fcdffa61fe49.htm" />
+    <HelpKINode Title="properties" Url="html/a8615e7a-91d3-ac72-5473-1f964e2224a2.htm" />
+  </HelpKINode>
+  <HelpKINode Title="HtmlElementAttributesAttribute.HtmlElementAttributesAttribute constructor" Url="html/feabddf4-dd04-b386-d1ee-808af76be2f5.htm" />
+  <HelpKINode Title="HtmlElementAttributesAttribute.Name property" Url="html/8b69da89-91f1-0b43-791e-8bce4e79517c.htm" />
+  <HelpKINode Title="ICmd class">
+    <HelpKINode Title="ICmd Class" Url="html/7dbd5957-c75a-dbb6-ee34-9b82fec5fe56.htm" />
+    <HelpKINode Title="constructor" Url="html/e74fd6d1-bd34-54b9-7305-eb50abd5f32c.htm" />
     <HelpKINode Title="methods" Url="html/676bce13-4b62-a193-2e0a-5285769eedbb.htm" />
   </HelpKINode>
   <HelpKINode Title="ICmd.Execute method" Url="html/f052dd92-b943-14ba-920d-dda370160f4c.htm" />
+  <HelpKINode Title="ICmd.ICmd constructor" Url="html/e74fd6d1-bd34-54b9-7305-eb50abd5f32c.htm" />
+  <HelpKINode Title="ICmd.OnIdUpdate method" Url="html/948f6824-983d-a1b9-57be-e6fe8b7bfc9c.htm" />
+  <HelpKINode Title="ICmd.OnModelUpdate method" Url="html/a0213b54-460f-5d67-701c-c94b1b6f65bd.htm" />
+  <HelpKINode Title="ICmd.Run method" Url="html/9d98f298-04d0-ebf5-6421-b196cdf36ea3.htm" />
   <HelpKINode Title="ICmd.Undo method" Url="html/6104c24f-db33-be54-d6e7-9827d717031f.htm" />
+  <HelpKINode Title="ICmd.UpdateProject method" Url="html/ea91cbcd-465e-68f9-0b23-75370aa1ccbd.htm" />
+  <HelpKINode Title="ICmd.UpdateTask method" Url="html/c37df555-8e97-a099-ecaf-da12edbb40b1.htm" />
+  <HelpKINode Title="ICmd.UpdateTimedItem method" Url="html/8bb94c67-7eac-b556-7a18-09c42a9b1969.htm" />
+  <HelpKINode Title="ICmd.UpdateUser method" Url="html/8cd4097c-72bf-9b5d-4979-f78b79d1fbea.htm" />
+  <HelpKINode Title="id field" Url="html/6924973f-ca3b-271e-7db1-46fc02b7a450.htm" />
   <HelpKINode Title="Id property" Url="html/d54043af-c363-77a3-cf0c-43bf69d783e9.htm" />
   <HelpKINode Title="IDBItem class">
     <HelpKINode Title="IDBItem Class" Url="html/d7a9e109-ebe3-d55d-9241-1ea3085a7853.htm" />
@@ -151,12 +605,14 @@
   <HelpKINode Title="IModel.DeleteTask method" Url="html/9ea7183b-af87-243e-7438-b72dc340f7a6.htm" />
   <HelpKINode Title="IModel.GetProject method" Url="html/0c3d1387-d70e-45b5-2d87-883eb9fbbfa3.htm" />
   <HelpKINode Title="IModel.GetProjectList method" Url="html/5c75b7bb-28af-a9d8-4655-45586a9b4900.htm" />
+  <HelpKINode Title="IModel.GetTaskById method" Url="html/683a3deb-e71b-93a3-3360-62af4735ffae.htm" />
   <HelpKINode Title="IModel.GetTasks method" Url="html/a48e05e6-276c-17ac-4e0c-90505c85a05e.htm" />
   <HelpKINode Title="IModel.GetUsers method" Url="html/b712c1eb-5b3a-190b-f031-726856cac1b1.htm" />
   <HelpKINode Title="IModel.IsConnected method" Url="html/294a7db1-5229-5f5c-c827-7221bf33dcad.htm" />
   <HelpKINode Title="IModel.IsLoggedIn method" Url="html/a42f9781-bd81-9f90-641b-47f45afe5228.htm" />
   <HelpKINode Title="IModel.IsValidNewEmail method" Url="html/f00114f2-75b1-0215-4df6-a2332c039217.htm" />
   <HelpKINode Title="IModel.IsValidNewUsername method" Url="html/22a9c028-c818-a43e-8d14-66f63736bab8.htm" />
+  <HelpKINode Title="IModel.IsValidTaskName method" Url="html/315b71a6-3b12-a6b4-bec9-efa494b1a397.htm" />
   <HelpKINode Title="IModel.Login method" Url="html/e49fc156-aef3-06fa-8730-733488f5bc1a.htm" />
   <HelpKINode Title="IModel.Refresh method" Url="html/8b309c84-67b1-9e31-7a18-af50b1ab0146.htm" />
   <HelpKINode Title="IModel.Register method" Url="html/3543c9cf-8238-cc0f-e57c-40710a0eb54e.htm" />
@@ -164,24 +620,68 @@
   <HelpKINode Title="IModel.SetProject method" Url="html/8ee91bdc-138b-86f0-ce9b-10e4a27b3a3a.htm" />
   <HelpKINode Title="IModel.Subscribe method" Url="html/bf0f02cc-bb48-8ad1-31d5-b3468be1f31f.htm" />
   <HelpKINode Title="IModel.Unsubscribe method" Url="html/1753e084-158a-43dc-9646-767e585c6652.htm" />
+  <HelpKINode Title="ImplicitUseKindFlags enumeration" Url="html/6bc6e016-6665-766d-5f7d-bbf4b4e7c44b.htm" />
+  <HelpKINode Title="ImplicitUseTargetFlags enumeration" Url="html/00985550-e0cc-268c-8962-9d4b208b1d77.htm" />
   <HelpKINode Title="InitializeComponent method">
     <HelpKINode Title="App.InitializeComponent Method " Url="html/bb89d841-9aac-926a-1d4f-bb964390b253.htm" />
     <HelpKINode Title="Chart.InitializeComponent Method " Url="html/28e3d68d-3ca0-e900-2990-5bae1cc37044.htm" />
+    <HelpKINode Title="ErrorCatch.InitializeComponent Method " Url="html/07dd5fcf-a443-addf-f8d9-63fef8b81d27.htm" />
+    <HelpKINode Title="FilteredComboBox.InitializeComponent Method " Url="html/22d0fa01-2b71-d5dd-56a4-35c4d9bf76ee.htm" />
+    <HelpKINode Title="IntegerEdit.InitializeComponent Method " Url="html/e0b1a8be-bece-6745-b1a8-2ad9e3993c6e.htm" />
     <HelpKINode Title="LoginPage.InitializeComponent Method " Url="html/06e20e42-8852-b980-d896-34a7a09ba7a6.htm" />
     <HelpKINode Title="LoginWindow.InitializeComponent Method " Url="html/3653cc2d-e2b8-f8e7-2736-7417bde7f0e6.htm" />
     <HelpKINode Title="MainWindow.InitializeComponent Method " Url="html/683562c7-7b73-bba0-70b6-27be80c51350.htm" />
+    <HelpKINode Title="ProjectCreator.InitializeComponent Method " Url="html/1e4c7ce5-f0e8-1ef2-a196-1de9f0e7fc01.htm" />
     <HelpKINode Title="RegisterPage.InitializeComponent Method " Url="html/3892d5bd-05e4-1d7e-bfd3-fcf04c912406.htm" />
     <HelpKINode Title="TaskControl.InitializeComponent Method " Url="html/fe584a80-0505-63b5-0b55-d440d99d27c5.htm" />
+    <HelpKINode Title="TaskEditor.InitializeComponent Method " Url="html/44717974-f250-473c-cdd9-8bba997f22e4.htm" />
+    <HelpKINode Title="TaskGrid.InitializeComponent Method " Url="html/bc172c18-9c39-bae6-b039-cf649f0040c8.htm" />
+    <HelpKINode Title="WorkSpace.InitializeComponent Method " Url="html/0e1562e1-aa73-b7bb-dfc3-d153aa358ccb.htm" />
   </HelpKINode>
+  <HelpKINode Title="Input property" Url="html/9c079662-b553-383c-ed79-6d8ca822e77a.htm" />
   <HelpKINode Title="Insert method">
     <HelpKINode Title="IDBItem.Insert Method " Url="html/b94c15e1-4103-a75a-421b-ede1032bd1e8.htm" />
     <HelpKINode Title="Project.Insert Method " Url="html/d9fd566b-f04c-60b7-fe86-faebe17b70c6.htm" />
     <HelpKINode Title="Task.Insert Method " Url="html/75bf439d-f1e1-8a3a-06a3-1fceadbe7e32.htm" />
     <HelpKINode Title="User.Insert Method " Url="html/b0ed95ba-b5fb-b396-935e-1df682c35f07.htm" />
   </HelpKINode>
-  <HelpKINode Title="Instance property" Url="html/ebcdef4c-a3da-dcca-a3ff-1201ce4bb60f.htm" />
+  <HelpKINode Title="Instance property">
+    <HelpKINode Title="DBReader.Instance Property " Url="html/ebcdef4c-a3da-dcca-a3ff-1201ce4bb60f.htm" />
+    <HelpKINode Title="Model.Instance Property " Url="html/69149183-3d8a-7205-4d4f-c481cda46030.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InstantHandleAttribute class">
+    <HelpKINode Title="InstantHandleAttribute Class" Url="html/f82bbb10-f382-ed34-db20-5469a3136c7b.htm" />
+    <HelpKINode Title="constructor" Url="html/af1b09d2-a68e-d54b-961d-50f5ff8a7b29.htm" />
+    <HelpKINode Title="methods" Url="html/fc92f029-9d17-cadb-b7d0-5bc2abad6a85.htm" />
+    <HelpKINode Title="properties" Url="html/34d85ce9-65f1-767c-e221-5c6a64aaca17.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InstantHandleAttribute.InstantHandleAttribute constructor" Url="html/af1b09d2-a68e-d54b-961d-50f5ff8a7b29.htm" />
   <HelpKINode Title="Instantiate method" Url="html/e52a1fb9-5428-97bb-1321-1d8c52ce3597.htm" />
-  <HelpKINode Title="isComplete field" Url="html/cbf5bdbd-217e-1257-07e4-735bdc8f1643.htm" />
+  <HelpKINode Title="InstantiatedNoFixedConstructorSignature enumeration member" Url="html/6bc6e016-6665-766d-5f7d-bbf4b4e7c44b.htm" />
+  <HelpKINode Title="InstantiatedWithFixedConstructorSignature enumeration member" Url="html/6bc6e016-6665-766d-5f7d-bbf4b4e7c44b.htm" />
+  <HelpKINode Title="IntegerChange property" Url="html/70c069fc-dbe5-efc5-d9ef-940a4bb17cf0.htm" />
+  <HelpKINode Title="IntegerChangeDelegate delegate" Url="html/5f5825cc-3504-4b2a-9e3c-d1e024b1b353.htm" />
+  <HelpKINode Title="IntegerEdit class">
+    <HelpKINode Title="IntegerEdit Class" Url="html/8841fa01-5c55-0242-270d-644f5f2006c6.htm" />
+    <HelpKINode Title="constructor" Url="html/acfb8bdd-27b0-2782-6a38-af5a8959907d.htm" />
+    <HelpKINode Title="events" Url="html/c81e1369-c7ae-e6de-1b33-f5df913ddb8b.htm" />
+    <HelpKINode Title="methods" Url="html/9c797a1b-85a5-ddde-92d2-aa6fd2fa130e.htm" />
+    <HelpKINode Title="properties" Url="html/0c58a95d-9e2d-889d-0157-ae5b3c2f0d68.htm" />
+  </HelpKINode>
+  <HelpKINode Title="IntegerEdit.InitializeComponent method" Url="html/e0b1a8be-bece-6745-b1a8-2ad9e3993c6e.htm" />
+  <HelpKINode Title="IntegerEdit.IntegerChange property" Url="html/70c069fc-dbe5-efc5-d9ef-940a4bb17cf0.htm" />
+  <HelpKINode Title="IntegerEdit.IntegerEdit constructor" Url="html/acfb8bdd-27b0-2782-6a38-af5a8959907d.htm" />
+  <HelpKINode Title="IntegerEdit.Max property" Url="html/ef979584-fe2d-0df4-3fcf-a263c0f77f3e.htm" />
+  <HelpKINode Title="IntegerEdit.Min property" Url="html/5da2ed9d-b4b2-2d48-4f46-1de617a029c5.htm" />
+  <HelpKINode Title="IntegerEdit.Value property" Url="html/aa589389-1314-f05b-56ed-3258204b5fa6.htm" />
+  <HelpKINode Title="InvokerParameterNameAttribute class">
+    <HelpKINode Title="InvokerParameterNameAttribute Class" Url="html/dffaf6d6-052a-d3ae-3765-65ee9bc18e54.htm" />
+    <HelpKINode Title="constructor" Url="html/a339ff3f-5cc4-e7bb-fedd-d4bff4237fe0.htm" />
+    <HelpKINode Title="methods" Url="html/eb758967-7919-12f1-3185-1cd1860ba81f.htm" />
+    <HelpKINode Title="properties" Url="html/6c7fcbfc-9672-37df-7f9c-8501a1ddd095.htm" />
+  </HelpKINode>
+  <HelpKINode Title="InvokerParameterNameAttribute.InvokerParameterNameAttribute constructor" Url="html/a339ff3f-5cc4-e7bb-fedd-d4bff4237fe0.htm" />
+  <HelpKINode Title="IsComplete property" Url="html/2da8bf46-3990-2b40-4c67-dc5c80f0d3eb.htm" />
   <HelpKINode Title="IsConnected method">
     <HelpKINode Title="IModel.IsConnected Method " Url="html/294a7db1-5229-5f5c-c827-7221bf33dcad.htm" />
     <HelpKINode Title="Model.IsConnected Method " Url="html/2af99585-4d20-5d73-5f28-a46a7e09bde8.htm" />
@@ -190,6 +690,7 @@
     <HelpKINode Title="IModel.IsLoggedIn Method " Url="html/a42f9781-bd81-9f90-641b-47f45afe5228.htm" />
     <HelpKINode Title="Model.IsLoggedIn Method " Url="html/47aca9be-e2b4-4cf4-e0e5-11d61da7ec52.htm" />
   </HelpKINode>
+  <HelpKINode Title="IsUpdating property" Url="html/f444872c-eb43-58c2-893b-3ffb4894a0af.htm" />
   <HelpKINode Title="IsValidEmail method">
     <HelpKINode Title="DBReader.IsValidEmail Method " Url="html/707cf3db-e919-0253-9406-82412775227e.htm" />
     <HelpKINode Title="LoginWindow.IsValidEmail Method " Url="html/07b30c69-b1db-715b-a99c-ab429fde2f7c.htm" />
@@ -202,14 +703,56 @@
     <HelpKINode Title="IModel.IsValidNewUsername Method " Url="html/22a9c028-c818-a43e-8d14-66f63736bab8.htm" />
     <HelpKINode Title="Model.IsValidNewUsername Method " Url="html/e9d19ecf-9d3c-93de-291c-2d6ac8c0044d.htm" />
   </HelpKINode>
-  <HelpKINode Title="IsValidUsername method" Url="html/73aedf43-4f68-aaba-6f6a-6030d5d926d0.htm" />
+  <HelpKINode Title="IsValidProjectName method" Url="html/3ea115f2-6c92-e522-2ee5-062e4fb01b5c.htm" />
+  <HelpKINode Title="IsValidTaskName method">
+    <HelpKINode Title="IModel.IsValidTaskName Method " Url="html/315b71a6-3b12-a6b4-bec9-efa494b1a397.htm" />
+    <HelpKINode Title="Model.IsValidTaskName Method " Url="html/3e9ee4a6-3c67-dbcd-3583-addcc3efb6b3.htm" />
+  </HelpKINode>
   <HelpKINode Title="IsValidUserName method" Url="html/6ada0ce0-2f23-c552-4703-09db700dee77.htm" />
+  <HelpKINode Title="IsValidUsername method" Url="html/73aedf43-4f68-aaba-6f6a-6030d5d926d0.htm" />
+  <HelpKINode Title="IS_FALSE enumeration member" Url="html/9914bda3-a9f0-f622-4cfa-d61610c04481.htm" />
+  <HelpKINode Title="IS_NOT_NULL enumeration member" Url="html/9914bda3-a9f0-f622-4cfa-d61610c04481.htm" />
+  <HelpKINode Title="IS_NULL enumeration member" Url="html/9914bda3-a9f0-f622-4cfa-d61610c04481.htm" />
+  <HelpKINode Title="IS_TRUE enumeration member" Url="html/9914bda3-a9f0-f622-4cfa-d61610c04481.htm" />
+  <HelpKINode Title="ItemCanBeNullAttribute class">
+    <HelpKINode Title="ItemCanBeNullAttribute Class" Url="html/27e433c9-16f2-5360-1437-eca788be1e48.htm" />
+    <HelpKINode Title="constructor" Url="html/3ca61ec1-1f0e-645d-cf69-985fae751304.htm" />
+    <HelpKINode Title="methods" Url="html/d3c0d443-e9cf-bd65-da1b-8f4fceb2c548.htm" />
+    <HelpKINode Title="properties" Url="html/ece4950d-d5a5-95e3-b142-34575c7d8440.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ItemCanBeNullAttribute.ItemCanBeNullAttribute constructor" Url="html/3ca61ec1-1f0e-645d-cf69-985fae751304.htm" />
+  <HelpKINode Title="ItemFilter delegate" Url="html/3745b691-8608-77b9-5e64-4eb8e04e051b.htm" />
+  <HelpKINode Title="ItemNotNullAttribute class">
+    <HelpKINode Title="ItemNotNullAttribute Class" Url="html/67bbe0b7-76d0-7777-4cc1-3d22f06e299a.htm" />
+    <HelpKINode Title="constructor" Url="html/fb0e8aaa-fe69-d7fb-6757-4a0bde61f28e.htm" />
+    <HelpKINode Title="methods" Url="html/43a4eee5-d177-bc3e-a3b9-306ce971603b.htm" />
+    <HelpKINode Title="properties" Url="html/5ad2ceb0-638d-a28d-498c-7afb6775d056.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ItemNotNullAttribute.ItemNotNullAttribute constructor" Url="html/fb0e8aaa-fe69-d7fb-6757-4a0bde61f28e.htm" />
+  <HelpKINode Title="Items property" Url="html/9db67cea-1817-146f-059b-c5a15cef832d.htm" />
+  <HelpKINode Title="Itself enumeration member" Url="html/00985550-e0cc-268c-8962-9d4b208b1d77.htm" />
   <HelpKINode Title="IViewModel interface">
     <HelpKINode Title="IViewModel Interface" Url="html/8864a97e-a59e-5a44-fa52-3d906059f07e.htm" />
     <HelpKINode Title="methods" Url="html/e01d71e9-c84e-2aac-0b2e-d4659eb8e307.htm" />
   </HelpKINode>
   <HelpKINode Title="IViewModel.OnModelUpdate method" Url="html/f9cf99af-003d-a379-6c84-923469e7e718.htm" />
+  <HelpKINode Title="Justification property" Url="html/234350c5-0ec7-9508-6287-0e12d2277793.htm" />
   <HelpKINode Title="LikelyDuration property" Url="html/1a40f23a-8a8c-b8db-6368-73e098bab2d5.htm" />
+  <HelpKINode Title="LinqTunnelAttribute class">
+    <HelpKINode Title="LinqTunnelAttribute Class" Url="html/195a6baa-e879-9d95-d17d-7b2036dd2fe4.htm" />
+    <HelpKINode Title="constructor" Url="html/19578283-620f-9742-02b6-1bbea8662ffa.htm" />
+    <HelpKINode Title="methods" Url="html/21511030-e80a-53ed-5447-e8a47870cbd7.htm" />
+    <HelpKINode Title="properties" Url="html/d0d92102-4922-432b-2aa0-5d25291a2c1a.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LinqTunnelAttribute.LinqTunnelAttribute constructor" Url="html/19578283-620f-9742-02b6-1bbea8662ffa.htm" />
+  <HelpKINode Title="LocalizationRequiredAttribute class">
+    <HelpKINode Title="LocalizationRequiredAttribute Class" Url="html/8f875a6f-140e-a043-d84c-5ca209188e44.htm" />
+    <HelpKINode Title="constructor" Url="html/d77e9907-47f3-c9b4-425b-895569dac3e1.htm" />
+    <HelpKINode Title="methods" Url="html/490e5f7e-a62e-6e51-af44-3da308ae8a08.htm" />
+    <HelpKINode Title="properties" Url="html/b0f30ebf-90c3-f765-ff5c-820bb8275170.htm" />
+  </HelpKINode>
+  <HelpKINode Title="LocalizationRequiredAttribute.LocalizationRequiredAttribute constructor" Url="html/d77e9907-47f3-c9b4-425b-895569dac3e1.htm" />
+  <HelpKINode Title="LocalizationRequiredAttribute.Required property" Url="html/b9a32eb0-d2b7-5abb-7eec-9d779fcd6e14.htm" />
   <HelpKINode Title="Login method">
     <HelpKINode Title="DBReader.Login Method " Url="html/33785fa2-6ba0-ce24-e3ed-505895fe65c4.htm" />
     <HelpKINode Title="IModel.Login Method " Url="html/e49fc156-aef3-06fa-8730-733488f5bc1a.htm" />
@@ -241,6 +784,16 @@
   <HelpKINode Title="LoginWindow.Register method" Url="html/94f98835-aa4f-5883-5506-b1ad2284dae0.htm" />
   <HelpKINode Title="LoginWindow.SwitchToLogin method" Url="html/a7cf12b8-0d43-6a8d-db3c-7c734689bc79.htm" />
   <HelpKINode Title="LoginWindow.SwitchToRegister method" Url="html/3ebf82b6-4374-5c7d-464d-0266e7da335d.htm" />
+  <HelpKINode Title="MacroAttribute class">
+    <HelpKINode Title="MacroAttribute Class" Url="html/40fa94c2-6538-03a7-248e-ead2059eef8f.htm" />
+    <HelpKINode Title="constructor" Url="html/345cd861-24a8-c117-78f9-de4840fd4c63.htm" />
+    <HelpKINode Title="methods" Url="html/38090167-6c57-6e47-67af-b5ec73a5335d.htm" />
+    <HelpKINode Title="properties" Url="html/92f48395-bad1-7e82-51e8-3f26412f39a5.htm" />
+  </HelpKINode>
+  <HelpKINode Title="MacroAttribute.Editable property" Url="html/2263725b-6d3b-f9b8-5d32-2ea4e13d8e90.htm" />
+  <HelpKINode Title="MacroAttribute.Expression property" Url="html/8645461d-f171-978d-0189-08e19d8c57d6.htm" />
+  <HelpKINode Title="MacroAttribute.MacroAttribute constructor" Url="html/345cd861-24a8-c117-78f9-de4840fd4c63.htm" />
+  <HelpKINode Title="MacroAttribute.Target property" Url="html/500fbdfa-f043-17d4-9dc9-f7ea79a6dc2c.htm" />
   <HelpKINode Title="Main method" Url="html/395ce25c-0800-bea0-8cac-3521fa74955c.htm" />
   <HelpKINode Title="MainWindow class">
     <HelpKINode Title="MainWindow Class" Url="html/a14b2b7f-eb90-b025-a9f3-3442ca9e5a91.htm" />
@@ -254,7 +807,18 @@
   <HelpKINode Title="MainWindow.OnModelUpdate method" Url="html/e5d7f266-81c8-f784-f52e-2f0cae592082.htm" />
   <HelpKINode Title="MainWindow.OpenItems property" Url="html/6761ee66-70af-9406-9977-1b8136680dbf.htm" />
   <HelpKINode Title="MainWindow.ShowDBConnectionSettings method" Url="html/599c88bc-1467-09c9-d987-04fe8cc3c601.htm" />
+  <HelpKINode Title="Max property" Url="html/ef979584-fe2d-0df4-3fcf-a263c0f77f3e.htm" />
   <HelpKINode Title="MaxDuration property" Url="html/6ee76336-6542-c806-c5ae-e9bf91cb9203.htm" />
+  <HelpKINode Title="MeansImplicitUseAttribute class">
+    <HelpKINode Title="MeansImplicitUseAttribute Class" Url="html/e769cc76-6587-0e43-7cb2-b78c2f114885.htm" />
+    <HelpKINode Title="constructor" Url="html/dd16effd-4556-83ec-d5ae-621d31b0d3e4.htm" />
+    <HelpKINode Title="methods" Url="html/c5cc5e9e-6e4a-092d-2cb3-f2a3eed9b612.htm" />
+    <HelpKINode Title="properties" Url="html/9fa8bc85-5641-0e96-cdb3-8399c1d470a2.htm" />
+  </HelpKINode>
+  <HelpKINode Title="MeansImplicitUseAttribute.MeansImplicitUseAttribute constructor" Url="html/dd16effd-4556-83ec-d5ae-621d31b0d3e4.htm" />
+  <HelpKINode Title="MeansImplicitUseAttribute.TargetFlags property" Url="html/7fcbdb1f-19d7-ca12-f3a1-fc0a0ce720e2.htm" />
+  <HelpKINode Title="MeansImplicitUseAttribute.UseKindFlags property" Url="html/8613ff33-227e-1bfc-702e-8257f3bb1fe4.htm" />
+  <HelpKINode Title="Members enumeration member" Url="html/00985550-e0cc-268c-8962-9d4b208b1d77.htm" />
   <HelpKINode Title="MenuItems property" Url="html/dd4d8328-d8aa-14ba-67f2-b9c53ebd256f.htm" />
   <HelpKINode Title="MenuItemViewModel class">
     <HelpKINode Title="MenuItemViewModel Class" Url="html/020ba7f7-0567-c7ef-c1b2-ebc079191013.htm" />
@@ -266,80 +830,300 @@
   <HelpKINode Title="MenuItemViewModel.Header property" Url="html/d4d3a076-4041-3114-f8aa-eb6da4a9adeb.htm" />
   <HelpKINode Title="MenuItemViewModel.MenuItems property" Url="html/dd4d8328-d8aa-14ba-67f2-b9c53ebd256f.htm" />
   <HelpKINode Title="MenuItemViewModel.MenuItemViewModel constructor" Url="html/373ac936-e233-7c5a-083d-6b4cb6a5cbed.htm" />
+  <HelpKINode Title="Min property" Url="html/5da2ed9d-b4b2-2d48-4f46-1de617a029c5.htm" />
   <HelpKINode Title="MinDuration property" Url="html/d653709a-604d-cd5d-b70c-712d4ffe20dc.htm" />
   <HelpKINode Title="Model class">
     <HelpKINode Title="Model Class" Url="html/4656b1dc-ee76-aa0a-5045-9e92ca32eee3.htm" />
-    <HelpKINode Title="constructor" Url="html/59e215f0-3915-47e2-19d8-5f1be163b68d.htm" />
     <HelpKINode Title="methods" Url="html/8aaa0c58-ca92-9028-8ff1-059b05434e87.htm" />
+    <HelpKINode Title="properties" Url="html/3c2d1337-fa44-c13c-d3bd-836d17f5e5d4.htm" />
   </HelpKINode>
+  <HelpKINode Title="Model property" Url="html/0194f70e-aae3-20e8-760f-2c7b77e72e5f.htm" />
   <HelpKINode Title="Model.CreateProject method" Url="html/24cdda14-88cd-aa4a-b830-1131c51573a6.htm" />
   <HelpKINode Title="Model.CreateTask method" Url="html/837d26e3-d6ed-ee41-f018-8d56b5cbba7f.htm" />
   <HelpKINode Title="Model.CreateUser method" Url="html/c5333d74-9116-d501-272f-6d4b9b6a6b7a.htm" />
   <HelpKINode Title="Model.DeleteProject method" Url="html/f4d5e551-2e17-2577-bc47-e15033f72839.htm" />
   <HelpKINode Title="Model.DeleteTask method" Url="html/7d5d3d3a-a1f1-c81d-ebb0-a98e08b377b5.htm" />
+  <HelpKINode Title="Model.GetCurrentUser method" Url="html/6b7eb73b-c586-1844-1646-0fe98972c713.htm" />
+  <HelpKINode Title="Model.GetInstance method" Url="html/34764664-fdd4-f920-1bd2-edb8bbc13c32.htm" />
   <HelpKINode Title="Model.GetProject method" Url="html/9d53a9d5-c9ed-1f75-b51c-efdbf706d1f7.htm" />
   <HelpKINode Title="Model.GetProjectList method" Url="html/93ec0c4d-d12a-6378-04ce-b0d68b62b1f9.htm" />
+  <HelpKINode Title="Model.GetTaskById method" Url="html/dbb1dde6-d2fc-5f7d-ac0d-846039e151be.htm" />
   <HelpKINode Title="Model.GetTasks method" Url="html/b0ec4558-e2ee-c8d6-fdb3-7f6c441a1966.htm" />
   <HelpKINode Title="Model.GetUsers method" Url="html/f41fe45c-89ef-ade5-59be-1d8611ed081d.htm" />
+  <HelpKINode Title="Model.Instance property" Url="html/69149183-3d8a-7205-4d4f-c481cda46030.htm" />
   <HelpKINode Title="Model.IsConnected method" Url="html/2af99585-4d20-5d73-5f28-a46a7e09bde8.htm" />
   <HelpKINode Title="Model.IsLoggedIn method" Url="html/47aca9be-e2b4-4cf4-e0e5-11d61da7ec52.htm" />
   <HelpKINode Title="Model.IsValidNewEmail method" Url="html/e8f032b1-b0ad-414a-df5c-b732d3428349.htm" />
   <HelpKINode Title="Model.IsValidNewUsername method" Url="html/e9d19ecf-9d3c-93de-291c-2d6ac8c0044d.htm" />
+  <HelpKINode Title="Model.IsValidProjectName method" Url="html/3ea115f2-6c92-e522-2ee5-062e4fb01b5c.htm" />
+  <HelpKINode Title="Model.IsValidTaskName method" Url="html/3e9ee4a6-3c67-dbcd-3583-addcc3efb6b3.htm" />
   <HelpKINode Title="Model.Login method" Url="html/aaf3b238-aed6-00da-19d4-b69090570a97.htm" />
-  <HelpKINode Title="Model.Model constructor" Url="html/59e215f0-3915-47e2-19d8-5f1be163b68d.htm" />
   <HelpKINode Title="Model.OnDBUpdate method" Url="html/c6c50c20-5f16-af24-08ea-1c947e9d5af8.htm" />
+  <HelpKINode Title="Model.OnModelUpdate method" Url="html/f2774149-2a44-39d3-be92-1dc565475506.htm" />
   <HelpKINode Title="Model.Refresh method" Url="html/f271a7c5-13c2-4fc3-348d-6e27b84f4985.htm" />
   <HelpKINode Title="Model.Register method" Url="html/2d9d79b6-abe2-aff3-ff77-8542023b08f8.htm" />
   <HelpKINode Title="Model.SetConnectionString method" Url="html/bb25c5b3-190d-d412-31b3-b279597bf8a0.htm" />
   <HelpKINode Title="Model.SetProject method" Url="html/9f36d976-dbac-528d-2323-a96c24744256.htm" />
   <HelpKINode Title="Model.Subscribe method" Url="html/14fb9958-8c40-6577-58f1-47cd2ee96f43.htm" />
   <HelpKINode Title="Model.Unsubscribe method" Url="html/08076232-19a8-21bd-959a-83b87b6dce0a.htm" />
+  <HelpKINode Title="Model.UpdateProject method" Url="html/ae855ba5-78e5-001c-3c84-dde61b9b2cf9.htm" />
+  <HelpKINode Title="Model.UpdateTask method" Url="html/ecaae731-148e-8d18-ac07-9930961ee0b1.htm" />
+  <HelpKINode Title="Model.UpdateUser method" Url="html/3c2e521e-6f58-370d-bbb9-18b080c98193.htm" />
+  <HelpKINode Title="ModifyExistingContent enumeration member" Url="html/4443b3a6-2e79-3711-5975-40f68b355ae0.htm" />
+  <HelpKINode Title="MustUseReturnValueAttribute class">
+    <HelpKINode Title="MustUseReturnValueAttribute Class" Url="html/77a30385-26be-ce93-ef08-18f6e028a753.htm" />
+    <HelpKINode Title="constructor" Url="html/de633e0c-7da6-4f15-4286-5a949261dec9.htm" />
+    <HelpKINode Title="methods" Url="html/0aea9edd-fb13-6888-fcec-bbcaf0479615.htm" />
+    <HelpKINode Title="properties" Url="html/f98d6fe6-501e-03e6-b9ca-f955085e2225.htm" />
+  </HelpKINode>
+  <HelpKINode Title="MustUseReturnValueAttribute.Justification property" Url="html/234350c5-0ec7-9508-6287-0e12d2277793.htm" />
+  <HelpKINode Title="MustUseReturnValueAttribute.MustUseReturnValueAttribute constructor" Url="html/de633e0c-7da6-4f15-4286-5a949261dec9.htm" />
   <HelpKINode Title="Name property">
+    <HelpKINode Title="HtmlAttributeValueAttribute.Name Property " Url="html/1dc6abdb-fe7f-b68d-ce79-ca6081f40ac6.htm" />
+    <HelpKINode Title="HtmlElementAttributesAttribute.Name Property " Url="html/8b69da89-91f1-0b43-791e-8bce4e79517c.htm" />
+    <HelpKINode Title="RazorImportNamespaceAttribute.Name Property " Url="html/8a809bf6-d274-8451-9c4e-0d7c0a1632d5.htm" />
     <HelpKINode Title="TimedItem.Name Property " Url="html/113e87bc-1b58-3f79-327b-19bfdc64269d.htm" />
     <HelpKINode Title="User.Name Property " Url="html/9ad5f715-1820-505a-af60-cc7efad44aaf.htm" />
+    <HelpKINode Title="ValueProviderAttribute.Name Property " Url="html/e29d83a1-c42b-6aca-7d19-02bc8fbfeffe.htm" />
   </HelpKINode>
+  <HelpKINode Title="NoEnumerationAttribute class">
+    <HelpKINode Title="NoEnumerationAttribute Class" Url="html/ba6e72d8-debb-0d5f-a9bf-0e9f98a7438e.htm" />
+    <HelpKINode Title="constructor" Url="html/1718bebd-b666-d432-233e-41d58706860a.htm" />
+    <HelpKINode Title="methods" Url="html/74eee20e-12dc-1147-bd03-e31973d8c66a.htm" />
+    <HelpKINode Title="properties" Url="html/1ef83a7d-0ace-a33f-0af7-7167a3e586a5.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NoEnumerationAttribute.NoEnumerationAttribute constructor" Url="html/1718bebd-b666-d432-233e-41d58706860a.htm" />
+  <HelpKINode Title="None enumeration member" Url="html/4443b3a6-2e79-3711-5975-40f68b355ae0.htm" />
+  <HelpKINode Title="NonNegativeValueAttribute class">
+    <HelpKINode Title="NonNegativeValueAttribute Class" Url="html/43268a51-3ba7-5325-9464-b26aab0b62ac.htm" />
+    <HelpKINode Title="constructor" Url="html/11d80769-a994-9a48-09a2-1db991e2306d.htm" />
+    <HelpKINode Title="methods" Url="html/0537d12f-1121-d1e2-4104-75b0a1595220.htm" />
+    <HelpKINode Title="properties" Url="html/2e41faf9-6d40-59e2-c809-5236719ac0ff.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NonNegativeValueAttribute.NonNegativeValueAttribute constructor" Url="html/11d80769-a994-9a48-09a2-1db991e2306d.htm" />
+  <HelpKINode Title="NoReorderAttribute class">
+    <HelpKINode Title="NoReorderAttribute Class" Url="html/64d75ef2-fcae-9cd2-8beb-df9d64c1b5a1.htm" />
+    <HelpKINode Title="constructor" Url="html/f057de2b-04a9-8fd7-04a6-91a209c9818c.htm" />
+    <HelpKINode Title="methods" Url="html/8313ce44-659c-faae-88f6-ffb7eca21c30.htm" />
+    <HelpKINode Title="properties" Url="html/ef76b856-f971-5d59-1cb1-7133f299f9d9.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NoReorderAttribute.NoReorderAttribute constructor" Url="html/f057de2b-04a9-8fd7-04a6-91a209c9818c.htm" />
+  <HelpKINode Title="NotifyPropertyChangedInvocatorAttribute class">
+    <HelpKINode Title="NotifyPropertyChangedInvocatorAttribute Class" Url="html/d111635e-078e-8a52-10d9-825ceb67e2da.htm" />
+    <HelpKINode Title="constructor" Url="html/ffbb3917-f142-d777-c7bb-6583eddbb889.htm" />
+    <HelpKINode Title="methods" Url="html/3f9e0316-7f5b-4ff4-893a-fa516ae7ef6e.htm" />
+    <HelpKINode Title="properties" Url="html/5bace4c8-fb9a-22ed-e98b-cf9c6d9d9d82.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NotifyPropertyChangedInvocatorAttribute.NotifyPropertyChangedInvocatorAttribute constructor" Url="html/ffbb3917-f142-d777-c7bb-6583eddbb889.htm" />
+  <HelpKINode Title="NotifyPropertyChangedInvocatorAttribute.ParameterName property" Url="html/fe72cfa2-3876-f216-f290-70c415c33b4b.htm" />
+  <HelpKINode Title="NotNullAttribute class">
+    <HelpKINode Title="NotNullAttribute Class" Url="html/5dcf9db3-2368-1323-c491-87895390d20d.htm" />
+    <HelpKINode Title="constructor" Url="html/4508a361-8378-fedc-9f7e-4ed915facfd5.htm" />
+    <HelpKINode Title="methods" Url="html/4c81de5c-cec2-4003-02b3-e498e0cdf97b.htm" />
+    <HelpKINode Title="properties" Url="html/191f1dee-8259-f3c3-53d8-35d945b84f8a.htm" />
+  </HelpKINode>
+  <HelpKINode Title="NotNullAttribute.NotNullAttribute constructor" Url="html/4508a361-8378-fedc-9f7e-4ed915facfd5.htm" />
   <HelpKINode Title="OnDBDisconnect method" Url="html/7a30bf82-bac9-28b8-8e93-d53a2577bff6.htm" />
   <HelpKINode Title="OnDBUpdate method">
     <HelpKINode Title="DBReader.OnDBUpdate Method " Url="html/7463cbf8-da88-cb6e-cb58-1e1e47515961.htm" />
     <HelpKINode Title="DBUpdateReceiver.OnDBUpdate Method " Url="html/7e822111-11d1-6e6e-6ec6-f737a31f3fdc.htm" />
     <HelpKINode Title="Model.OnDBUpdate Method " Url="html/c6c50c20-5f16-af24-08ea-1c947e9d5af8.htm" />
   </HelpKINode>
+  <HelpKINode Title="OnIdUpdate method">
+    <HelpKINode Title="AddDependencyCmd.OnIdUpdate Method " Url="html/8ee7579f-16c5-bc68-436b-f129b41f5ab0.htm" />
+    <HelpKINode Title="AddWorkerCmd.OnIdUpdate Method " Url="html/ac2e29c8-d19b-55de-5c20-32ee88f04776.htm" />
+    <HelpKINode Title="CreateProjectCmd.OnIdUpdate Method " Url="html/07ea404e-39d4-8606-af08-1e5c7b59a88e.htm" />
+    <HelpKINode Title="CreateTaskCmd.OnIdUpdate Method " Url="html/34b0887d-8d3b-2e6a-6ef4-2dfddd097aad.htm" />
+    <HelpKINode Title="DeleteProjectCmd.OnIdUpdate Method " Url="html/cda3554e-746c-931a-31ef-4bab27b7e5c4.htm" />
+    <HelpKINode Title="DeleteTaskCmd.OnIdUpdate Method " Url="html/d7497993-a9e3-96a2-0277-1c18778373bc.htm" />
+    <HelpKINode Title="EditProjectCmd.OnIdUpdate Method " Url="html/76d61f27-af1d-8c47-1a67-5cc69cc79efb.htm" />
+    <HelpKINode Title="EditTaskCmd.OnIdUpdate Method " Url="html/7c5996ec-d8c2-3919-59cb-0823f06592c5.htm" />
+    <HelpKINode Title="ICmd.OnIdUpdate Method " Url="html/948f6824-983d-a1b9-57be-e6fe8b7bfc9c.htm" />
+    <HelpKINode Title="RemoveDependencyCmd.OnIdUpdate Method " Url="html/dcd37aae-407d-b8b8-19ca-37eb113541bc.htm" />
+    <HelpKINode Title="RemoveWorkerCmd.OnIdUpdate Method " Url="html/d63ea4ad-fd53-c183-7968-c9cb1c17c954.htm" />
+  </HelpKINode>
   <HelpKINode Title="OnModelUpdate method">
+    <HelpKINode Title="AddDependencyCmd.OnModelUpdate Method " Url="html/6c54047d-736f-2d96-2cd8-097c92007945.htm" />
+    <HelpKINode Title="AddWorkerCmd.OnModelUpdate Method " Url="html/299a4bd9-cd8a-f655-432f-23bfb6bf6003.htm" />
     <HelpKINode Title="Chart.OnModelUpdate Method " Url="html/10a6ec88-9bbc-4f85-8121-6be955aff243.htm" />
+    <HelpKINode Title="CreateProjectCmd.OnModelUpdate Method " Url="html/d30ef15f-36c4-4ef9-e046-8e06d1c38143.htm" />
+    <HelpKINode Title="CreateTaskCmd.OnModelUpdate Method " Url="html/10001244-9baa-6157-0f89-9d9523ac60f9.htm" />
+    <HelpKINode Title="DeleteProjectCmd.OnModelUpdate Method " Url="html/14a2a20d-80d6-9972-7bd4-f809eba56e55.htm" />
+    <HelpKINode Title="DeleteTaskCmd.OnModelUpdate Method " Url="html/646d0a7d-5dd5-9470-7b13-86c970644a51.htm" />
+    <HelpKINode Title="EditProjectCmd.OnModelUpdate Method " Url="html/5e860a55-5bc2-4a98-280e-9cdfd13ca904.htm" />
+    <HelpKINode Title="EditTaskCmd.OnModelUpdate Method " Url="html/75d6a7b5-06b0-35c3-1129-c6ceabfa47a5.htm" />
+    <HelpKINode Title="ICmd.OnModelUpdate Method " Url="html/a0213b54-460f-5d67-701c-c94b1b6f65bd.htm" />
     <HelpKINode Title="IViewModel.OnModelUpdate Method " Url="html/f9cf99af-003d-a379-6c84-923469e7e718.htm" />
     <HelpKINode Title="MainWindow.OnModelUpdate Method " Url="html/e5d7f266-81c8-f784-f52e-2f0cae592082.htm" />
+    <HelpKINode Title="Model.OnModelUpdate Method " Url="html/f2774149-2a44-39d3-be92-1dc565475506.htm" />
+    <HelpKINode Title="ProjectCreator.OnModelUpdate Method " Url="html/fa4deadc-cafb-b189-abf4-ac8c548e6427.htm" />
+    <HelpKINode Title="RemoveDependencyCmd.OnModelUpdate Method " Url="html/bc29d0fa-219d-ae32-2c1b-e557d8a057e0.htm" />
+    <HelpKINode Title="RemoveWorkerCmd.OnModelUpdate Method " Url="html/dd8e7b71-82b7-322f-4cd5-3f6f02a80ccc.htm" />
+    <HelpKINode Title="TaskEditor.OnModelUpdate Method " Url="html/b758efea-8814-264b-5d19-6b77ab6b6be5.htm" />
   </HelpKINode>
   <HelpKINode Title="OpenConnection method" Url="html/bd3d9924-cc90-b421-5f36-fd774891f9b4.htm" />
   <HelpKINode Title="OpenItems property" Url="html/6761ee66-70af-9406-9977-1b8136680dbf.htm" />
+  <HelpKINode Title="PageName property" Url="html/df3e9578-fc2f-621a-8e6e-9ad0731d2424.htm" />
+  <HelpKINode Title="ParameterName property" Url="html/fe72cfa2-3876-f216-f290-70c415c33b4b.htm" />
   <HelpKINode Title="Parse method">
-    <HelpKINode Title="Project.Parse Method " Url="html/66413e37-d53e-c056-2b72-4ae4415a1845.htm" />
-    <HelpKINode Title="Task.Parse Method " Url="html/2f5cda9b-2cfe-df9e-9ca2-2e2756fa1599.htm" />
+    <HelpKINode Title="Project.Parse Method " Url="html/015fd0e9-37f6-b2fb-ec24-dd866790b243.htm" />
+    <HelpKINode Title="Task.Parse Method " Url="html/a6882301-d508-2dc1-1ced-f3dbb2c59449.htm" />
     <HelpKINode Title="User.Parse Method " Url="html/41a08638-4a4f-f53f-6a79-af4f1d4b5f15.htm" />
   </HelpKINode>
   <HelpKINode Title="Password property" Url="html/7c21a546-d4c8-2176-07c7-6ed52bbda4e1.htm" />
+  <HelpKINode Title="PathReferenceAttribute class">
+    <HelpKINode Title="PathReferenceAttribute Class" Url="html/7953f006-d13b-ed97-49bd-3886e11a8b04.htm" />
+    <HelpKINode Title="constructor" Url="html/3c656aa7-db27-6060-cece-178549e92161.htm" />
+    <HelpKINode Title="methods" Url="html/aa3b5563-0545-e6cb-f06d-e5da1fed0881.htm" />
+    <HelpKINode Title="properties" Url="html/ec2d499b-9c2c-cf6b-55e7-417cbdd5a740.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PathReferenceAttribute.BasePath property" Url="html/ce369e42-0229-8c83-405d-736ab9946293.htm" />
+  <HelpKINode Title="PathReferenceAttribute.PathReferenceAttribute constructor" Url="html/3c656aa7-db27-6060-cece-178549e92161.htm" />
+  <HelpKINode Title="Proj property" Url="html/5b4d8311-0cc2-c835-e7ae-eba4314eb69d.htm" />
   <HelpKINode Title="Project class">
     <HelpKINode Title="Project Class" Url="html/46abffee-9d0d-88aa-d9e0-622619fd2862.htm" />
-    <HelpKINode Title="constructor" Url="html/b1d1304d-de51-704b-aed6-89bfe953003d.htm" />
+    <HelpKINode Title="constructor" Url="html/78275763-0409-aa45-d26d-ad851497f28b.htm" />
     <HelpKINode Title="fields" Url="html/0cf88529-9f89-4e50-3e82-a99f2343b6ba.htm" />
     <HelpKINode Title="methods" Url="html/1f358d05-becb-cac9-3e70-a79ec9d40356.htm" />
     <HelpKINode Title="properties" Url="html/86edcb98-b6d7-df38-af58-27f04a74e2a9.htm" />
   </HelpKINode>
-  <HelpKINode Title="Project property" Url="html/e845fd05-3ebd-0b8d-2ed6-fae58d0e714e.htm" />
+  <HelpKINode Title="Project property">
+    <HelpKINode Title="Chart.Project Property " Url="html/e845fd05-3ebd-0b8d-2ed6-fae58d0e714e.htm" />
+    <HelpKINode Title="ProjectCreator.Project Property " Url="html/655694ad-af8e-f810-100e-f47dacf39382.htm" />
+  </HelpKINode>
   <HelpKINode Title="Project.AddTask method" Url="html/2f0fe016-350d-18ac-f677-8a406cc14b53.htm" />
   <HelpKINode Title="Project.AddWorker method" Url="html/3b97bc8a-07ca-b731-385d-488c44cbfb8d.htm" />
   <HelpKINode Title="Project.Delete method" Url="html/42575139-1dd0-8a92-4fa1-306840449274.htm" />
   <HelpKINode Title="Project.Insert method" Url="html/d9fd566b-f04c-60b7-fe86-faebe17b70c6.htm" />
-  <HelpKINode Title="Project.Parse method" Url="html/66413e37-d53e-c056-2b72-4ae4415a1845.htm" />
-  <HelpKINode Title="Project.Project constructor" Url="html/b1d1304d-de51-704b-aed6-89bfe953003d.htm" />
+  <HelpKINode Title="Project.Parse method" Url="html/015fd0e9-37f6-b2fb-ec24-dd866790b243.htm" />
+  <HelpKINode Title="Project.Project constructor" Url="html/78275763-0409-aa45-d26d-ad851497f28b.htm" />
   <HelpKINode Title="Project.RemoveTask method" Url="html/d678a5f6-3822-dce2-fb5a-be06df6ee063.htm" />
   <HelpKINode Title="Project.RemoveWorker method" Url="html/198c08f2-4e2c-28df-c97b-50dc441e21a6.htm" />
   <HelpKINode Title="Project.Tasks property" Url="html/dcab3802-3d9d-6637-9fe7-f9b9ca9ce7fd.htm" />
   <HelpKINode Title="Project.Update method" Url="html/59dac836-cbde-e335-2598-b5471da16df2.htm" />
+  <HelpKINode Title="ProjectCreator class">
+    <HelpKINode Title="ProjectCreator Class" Url="html/6bc2ce3d-28b6-c173-efc4-cc68441c0099.htm" />
+    <HelpKINode Title="constructor" Url="html/db20cb10-ad51-68c9-f07f-8e1e690c4b97.htm" />
+    <HelpKINode Title="events" Url="html/17427e16-3d12-0852-d3c7-1c356e1cb22d.htm" />
+    <HelpKINode Title="methods" Url="html/5ea2ca6a-0f3b-5266-8f5b-a1ca6d67556c.htm" />
+    <HelpKINode Title="properties" Url="html/d778a3de-1e0a-44b0-46c5-e217ee37af69.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ProjectCreator.Finalize method" Url="html/38f71784-bb4c-256a-c54a-2f2cd64d64a5.htm" />
+  <HelpKINode Title="ProjectCreator.InitializeComponent method" Url="html/1e4c7ce5-f0e8-1ef2-a196-1de9f0e7fc01.htm" />
+  <HelpKINode Title="ProjectCreator.OnModelUpdate method" Url="html/fa4deadc-cafb-b189-abf4-ac8c548e6427.htm" />
+  <HelpKINode Title="ProjectCreator.Project property" Url="html/655694ad-af8e-f810-100e-f47dacf39382.htm" />
+  <HelpKINode Title="ProjectCreator.ProjectCreator constructor" Url="html/db20cb10-ad51-68c9-f07f-8e1e690c4b97.htm" />
+  <HelpKINode Title="ProvidesContextAttribute class">
+    <HelpKINode Title="ProvidesContextAttribute Class" Url="html/cacfece5-79f9-63ed-4ed7-e82333bc823c.htm" />
+    <HelpKINode Title="constructor" Url="html/28da984a-4de4-7c14-18a9-422766380b77.htm" />
+    <HelpKINode Title="methods" Url="html/3b466f5e-96d8-47ab-1d72-a6e7f178f342.htm" />
+    <HelpKINode Title="properties" Url="html/051a355d-3100-a50f-83a7-6ad1bd9a6d85.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ProvidesContextAttribute.ProvidesContextAttribute constructor" Url="html/28da984a-4de4-7c14-18a9-422766380b77.htm" />
+  <HelpKINode Title="PublicAPIAttribute class">
+    <HelpKINode Title="PublicAPIAttribute Class" Url="html/d3085492-f61d-d23f-2e19-6f23523a3f95.htm" />
+    <HelpKINode Title="constructor" Url="html/848bfc64-fe9c-94cc-84fc-586d96a22447.htm" />
+    <HelpKINode Title="methods" Url="html/3d66b266-efee-ece1-77f5-62ea32a18b7c.htm" />
+    <HelpKINode Title="properties" Url="html/0ed0a78a-e59f-de88-1475-2d99cb9c289d.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PublicAPIAttribute.Comment property" Url="html/a6894599-87da-858e-d146-c8793df6619f.htm" />
+  <HelpKINode Title="PublicAPIAttribute.PublicAPIAttribute constructor" Url="html/848bfc64-fe9c-94cc-84fc-586d96a22447.htm" />
+  <HelpKINode Title="PureAttribute class">
+    <HelpKINode Title="PureAttribute Class" Url="html/6618b0f4-f576-155f-0083-1e147bf627a8.htm" />
+    <HelpKINode Title="constructor" Url="html/0bafbf27-a616-8dac-83a6-2749db30fff0.htm" />
+    <HelpKINode Title="methods" Url="html/1eabff2c-3265-fe32-489f-2c45b0a04b9d.htm" />
+    <HelpKINode Title="properties" Url="html/86d903c5-9d27-b155-9e14-573283750422.htm" />
+  </HelpKINode>
+  <HelpKINode Title="PureAttribute.PureAttribute constructor" Url="html/0bafbf27-a616-8dac-83a6-2749db30fff0.htm" />
+  <HelpKINode Title="RazorDirectiveAttribute class">
+    <HelpKINode Title="RazorDirectiveAttribute Class" Url="html/06fa11dc-31d9-058d-66a0-441c6ab84af9.htm" />
+    <HelpKINode Title="constructor" Url="html/e1a3cbed-d4e1-652d-0ea3-99d879e8ec61.htm" />
+    <HelpKINode Title="methods" Url="html/f8e179be-bf72-03e7-6830-adaa575a972d.htm" />
+    <HelpKINode Title="properties" Url="html/75e5f230-0569-8e28-1b39-12722baf3245.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorDirectiveAttribute.Directive property" Url="html/a1744e50-2293-3220-32b6-7bb4f9aaa360.htm" />
+  <HelpKINode Title="RazorDirectiveAttribute.RazorDirectiveAttribute constructor" Url="html/e1a3cbed-d4e1-652d-0ea3-99d879e8ec61.htm" />
+  <HelpKINode Title="RazorHelperCommonAttribute class">
+    <HelpKINode Title="RazorHelperCommonAttribute Class" Url="html/49181fdd-e70b-4e88-f1df-21bbcb6e5565.htm" />
+    <HelpKINode Title="constructor" Url="html/16ad3e3d-8550-bf4b-3439-32a07d81d239.htm" />
+    <HelpKINode Title="methods" Url="html/5b201f4b-8229-475c-30c2-d77086140cd3.htm" />
+    <HelpKINode Title="properties" Url="html/1e5c55a0-0460-94d6-7c4d-a23ce632024b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorHelperCommonAttribute.RazorHelperCommonAttribute constructor" Url="html/16ad3e3d-8550-bf4b-3439-32a07d81d239.htm" />
+  <HelpKINode Title="RazorImportNamespaceAttribute class">
+    <HelpKINode Title="RazorImportNamespaceAttribute Class" Url="html/8f3b1668-dc08-c9e0-86d9-f2710f235384.htm" />
+    <HelpKINode Title="constructor" Url="html/18d8e4b1-60a3-f3fb-1d56-75183c085667.htm" />
+    <HelpKINode Title="methods" Url="html/78a5771d-a722-468b-b491-54cc202c01ae.htm" />
+    <HelpKINode Title="properties" Url="html/e085f50b-51d7-690c-f674-442ca0b4e8d9.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorImportNamespaceAttribute.Name property" Url="html/8a809bf6-d274-8451-9c4e-0d7c0a1632d5.htm" />
+  <HelpKINode Title="RazorImportNamespaceAttribute.RazorImportNamespaceAttribute constructor" Url="html/18d8e4b1-60a3-f3fb-1d56-75183c085667.htm" />
+  <HelpKINode Title="RazorInjectionAttribute class">
+    <HelpKINode Title="RazorInjectionAttribute Class" Url="html/e04d6314-804f-a7ca-f4e7-82eda8dd4c79.htm" />
+    <HelpKINode Title="constructor" Url="html/d1c9f195-b50d-cdcc-8f53-70de75cf75cb.htm" />
+    <HelpKINode Title="methods" Url="html/4672ea07-2dba-283a-c3c3-d57cd55e20df.htm" />
+    <HelpKINode Title="properties" Url="html/48ac9b60-5814-dfa1-b127-04de9341cd33.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorInjectionAttribute.FieldName property" Url="html/1dd7853b-d4e6-f058-7d5b-87cc08e27644.htm" />
+  <HelpKINode Title="RazorInjectionAttribute.RazorInjectionAttribute constructor" Url="html/d1c9f195-b50d-cdcc-8f53-70de75cf75cb.htm" />
+  <HelpKINode Title="RazorInjectionAttribute.Type property" Url="html/7893303e-0bbc-592d-a2d5-16af6685327e.htm" />
+  <HelpKINode Title="RazorLayoutAttribute class">
+    <HelpKINode Title="RazorLayoutAttribute Class" Url="html/5c0860fa-1019-4e58-c688-4b582bdf374f.htm" />
+    <HelpKINode Title="constructor" Url="html/21499ff7-2d2b-8636-8dc2-596c7ce61fef.htm" />
+    <HelpKINode Title="methods" Url="html/ee3e6ce5-66dd-ae3f-f7f9-5a17066cc35d.htm" />
+    <HelpKINode Title="properties" Url="html/feb4b981-1482-9769-32b3-839220031fa0.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorLayoutAttribute.RazorLayoutAttribute constructor" Url="html/21499ff7-2d2b-8636-8dc2-596c7ce61fef.htm" />
+  <HelpKINode Title="RazorPageBaseTypeAttribute class">
+    <HelpKINode Title="RazorPageBaseTypeAttribute Class" Url="html/1807c982-014e-63ac-c40c-6f06c0bdbb2c.htm" />
+    <HelpKINode Title="constructor" Url="html/6a8e4fff-b42e-9666-f489-c3b078c8abbc.htm" />
+    <HelpKINode Title="methods" Url="html/5d768cd3-c043-0487-ed6c-dbd37c3e917d.htm" />
+    <HelpKINode Title="properties" Url="html/2e6918e7-02ed-2b31-ee2f-56f9c5491d2a.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorPageBaseTypeAttribute.BaseType property" Url="html/ce1e189b-24b6-5d45-683a-a323d46e4d39.htm" />
+  <HelpKINode Title="RazorPageBaseTypeAttribute.PageName property" Url="html/df3e9578-fc2f-621a-8e6e-9ad0731d2424.htm" />
+  <HelpKINode Title="RazorPageBaseTypeAttribute.RazorPageBaseTypeAttribute constructor" Url="html/6a8e4fff-b42e-9666-f489-c3b078c8abbc.htm" />
+  <HelpKINode Title="RazorSectionAttribute class">
+    <HelpKINode Title="RazorSectionAttribute Class" Url="html/81c415f4-c0ab-837a-b203-6d1f602c5a0d.htm" />
+    <HelpKINode Title="constructor" Url="html/3f7a01e3-1bb2-d180-eb0a-4041c71a61e2.htm" />
+    <HelpKINode Title="methods" Url="html/1d57c17b-cea8-5777-23d4-74b53b451952.htm" />
+    <HelpKINode Title="properties" Url="html/5f28af87-e695-f58a-e17d-b6f40f109649.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorSectionAttribute.RazorSectionAttribute constructor" Url="html/3f7a01e3-1bb2-d180-eb0a-4041c71a61e2.htm" />
+  <HelpKINode Title="RazorWriteLiteralMethodAttribute class">
+    <HelpKINode Title="RazorWriteLiteralMethodAttribute Class" Url="html/2cb3c8dc-7b0f-1283-7c18-4972e4878f0c.htm" />
+    <HelpKINode Title="constructor" Url="html/27dc6ac4-ff75-9e9f-9530-9acbc5d8432d.htm" />
+    <HelpKINode Title="methods" Url="html/0bc266da-7618-8f12-852a-5eb12dc1ed7f.htm" />
+    <HelpKINode Title="properties" Url="html/768b3a8c-6395-ba05-3efd-d5d0e6488831.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorWriteLiteralMethodAttribute.RazorWriteLiteralMethodAttribute constructor" Url="html/27dc6ac4-ff75-9e9f-9530-9acbc5d8432d.htm" />
+  <HelpKINode Title="RazorWriteMethodAttribute class">
+    <HelpKINode Title="RazorWriteMethodAttribute Class" Url="html/b4cd3fb6-5cb7-fa5d-2deb-bbf126ef383a.htm" />
+    <HelpKINode Title="constructor" Url="html/a361912e-be82-9cf1-873d-be88b5fc1dd6.htm" />
+    <HelpKINode Title="methods" Url="html/ce43ba9c-97d2-f6aa-4af6-d49004f945b2.htm" />
+    <HelpKINode Title="properties" Url="html/8f99492c-f434-c018-0ac0-fd7ad5f7e3b9.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorWriteMethodAttribute.RazorWriteMethodAttribute constructor" Url="html/a361912e-be82-9cf1-873d-be88b5fc1dd6.htm" />
+  <HelpKINode Title="RazorWriteMethodParameterAttribute class">
+    <HelpKINode Title="RazorWriteMethodParameterAttribute Class" Url="html/fe57e503-8252-6a31-fc45-0ac746b44520.htm" />
+    <HelpKINode Title="constructor" Url="html/3b3f9801-01f4-79a7-fb8a-be6c0c32534e.htm" />
+    <HelpKINode Title="methods" Url="html/2dbd386b-ba22-d52b-dec8-79561be2cfe7.htm" />
+    <HelpKINode Title="properties" Url="html/b28586bb-2f3b-08ea-da10-9808925bbc98.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RazorWriteMethodParameterAttribute.RazorWriteMethodParameterAttribute constructor" Url="html/3b3f9801-01f4-79a7-fb8a-be6c0c32534e.htm" />
+  <HelpKINode Title="Read enumeration member" Url="html/4443b3a6-2e79-3711-5975-40f68b355ae0.htm" />
   <HelpKINode Title="Refresh method">
     <HelpKINode Title="IModel.Refresh Method " Url="html/8b309c84-67b1-9e31-7a18-af50b1ab0146.htm" />
     <HelpKINode Title="Model.Refresh Method " Url="html/f271a7c5-13c2-4fc3-348d-6e27b84f4985.htm" />
   </HelpKINode>
   <HelpKINode Title="RefreshGraph method" Url="html/daab89e4-0c22-1330-2a68-13f327ee8b08.htm" />
+  <HelpKINode Title="RegexPatternAttribute class">
+    <HelpKINode Title="RegexPatternAttribute Class" Url="html/9d1303e5-613c-1222-9888-d846f1171f4a.htm" />
+    <HelpKINode Title="constructor" Url="html/4aa9fc49-2f4b-f5df-f90c-05f0edc2f010.htm" />
+    <HelpKINode Title="methods" Url="html/54ba719f-3184-150c-67b8-7aed0fb1d15e.htm" />
+    <HelpKINode Title="properties" Url="html/5dc7cdc1-02ca-ad3f-9bc8-3199f6f48b8e.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RegexPatternAttribute.RegexPatternAttribute constructor" Url="html/4aa9fc49-2f4b-f5df-f90c-05f0edc2f010.htm" />
   <HelpKINode Title="Register method">
     <HelpKINode Title="DBReader.Register Method " Url="html/d716fce5-6179-3260-8896-8376d45d500c.htm" />
     <HelpKINode Title="IModel.Register Method " Url="html/3543c9cf-8238-cc0f-e57c-40710a0eb54e.htm" />
@@ -357,12 +1141,37 @@
   <HelpKINode Title="RegisterPage.InitializeComponent method" Url="html/3892d5bd-05e4-1d7e-bfd3-fcf04c912406.htm" />
   <HelpKINode Title="RegisterPage.RegisterPage constructor" Url="html/7a8916ad-55cf-cbb6-7a28-8444a54c7859.htm" />
   <HelpKINode Title="RemoveDependency method" Url="html/faa98a40-1e8f-098e-3c58-db43c3e3621f.htm" />
+  <HelpKINode Title="RemoveDependencyCmd class">
+    <HelpKINode Title="RemoveDependencyCmd Class" Url="html/bc2a21ee-beba-4d0b-a043-d5a069ffbcc5.htm" />
+    <HelpKINode Title="constructor" Url="html/3a005cd5-b501-fc58-ed3a-37855c007a70.htm" />
+    <HelpKINode Title="methods" Url="html/9dcf6da0-6d13-630f-f11e-29b62db89b73.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RemoveDependencyCmd.Execute method" Url="html/9f04ba85-c833-8fce-91f4-879c797de2ff.htm" />
+  <HelpKINode Title="RemoveDependencyCmd.OnIdUpdate method" Url="html/dcd37aae-407d-b8b8-19ca-37eb113541bc.htm" />
+  <HelpKINode Title="RemoveDependencyCmd.OnModelUpdate method" Url="html/bc29d0fa-219d-ae32-2c1b-e557d8a057e0.htm" />
+  <HelpKINode Title="RemoveDependencyCmd.RemoveDependencyCmd constructor" Url="html/3a005cd5-b501-fc58-ed3a-37855c007a70.htm" />
+  <HelpKINode Title="RemoveDependencyCmd.Undo method" Url="html/12ec7ff5-19b1-deed-67e4-1989cd7d9ca7.htm" />
   <HelpKINode Title="RemoveTask method" Url="html/d678a5f6-3822-dce2-fb5a-be06df6ee063.htm" />
   <HelpKINode Title="RemoveWorker method">
     <HelpKINode Title="Project.RemoveWorker Method " Url="html/198c08f2-4e2c-28df-c97b-50dc441e21a6.htm" />
     <HelpKINode Title="Task.RemoveWorker Method " Url="html/de887315-0b0c-4e8e-260a-fcddda9de781.htm" />
     <HelpKINode Title="TimedItem.RemoveWorker Method " Url="html/290986e9-cc02-c76c-7911-9793b9bd99dd.htm" />
   </HelpKINode>
+  <HelpKINode Title="RemoveWorkerCmd class">
+    <HelpKINode Title="RemoveWorkerCmd Class" Url="html/10ceb1a9-8756-c5b8-0f4d-5a33a395d5f3.htm" />
+    <HelpKINode Title="constructor" Url="html/a48386d5-7521-e612-f03d-68f633fda1c2.htm" />
+    <HelpKINode Title="methods" Url="html/dd5a00ee-b41b-1bc8-4e14-604130cc6d33.htm" />
+  </HelpKINode>
+  <HelpKINode Title="RemoveWorkerCmd.Execute method" Url="html/45227db2-c633-72a2-fa79-352b6148968f.htm" />
+  <HelpKINode Title="RemoveWorkerCmd.OnIdUpdate method" Url="html/d63ea4ad-fd53-c183-7968-c9cb1c17c954.htm" />
+  <HelpKINode Title="RemoveWorkerCmd.OnModelUpdate method" Url="html/dd8e7b71-82b7-322f-4cd5-3f6f02a80ccc.htm" />
+  <HelpKINode Title="RemoveWorkerCmd.RemoveWorkerCmd constructor" Url="html/a48386d5-7521-e612-f03d-68f633fda1c2.htm" />
+  <HelpKINode Title="RemoveWorkerCmd.Undo method" Url="html/c818571e-8d4c-d8fd-99cf-c48902af2b52.htm" />
+  <HelpKINode Title="Required property" Url="html/b9a32eb0-d2b7-5abb-7eec-9d779fcd6e14.htm" />
+  <HelpKINode Title="Run method" Url="html/9d98f298-04d0-ebf5-6421-b196cdf36ea3.htm" />
+  <HelpKINode Title="Selected property" Url="html/3c3e0139-3921-53d7-65e1-b9d5b8443419.htm" />
+  <HelpKINode Title="SelectionChanged delegate" Url="html/17637d8b-e993-76e1-6a5f-3f2702c53f70.htm" />
+  <HelpKINode Title="SelectionChanged property" Url="html/a10a1988-ae4c-cf9e-9d0e-adccc45d20cc.htm" />
   <HelpKINode Title="SetConnectionString method">
     <HelpKINode Title="IModel.SetConnectionString Method " Url="html/2b60c23c-d1a2-eccd-d63a-2acc756bbaa5.htm" />
     <HelpKINode Title="Model.SetConnectionString Method " Url="html/bb25c5b3-190d-d412-31b3-b279597bf8a0.htm" />
@@ -374,9 +1183,97 @@
   </HelpKINode>
   <HelpKINode Title="ShowDBConnectionSettings method" Url="html/599c88bc-1467-09c9-d987-04fe8cc3c601.htm" />
   <HelpKINode Title="SmartPert namespace" Url="html/f4dd2a57-53b1-fbbb-6162-c9ffca861ad7.htm" />
+  <HelpKINode Title="SmartPert.Annotations namespace" Url="html/244ed21d-5993-d802-b485-1dd9700434e6.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspChildControlTypeAttribute class" Url="html/7a7da5fd-733a-1ec5-595d-687d4e241fc8.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspDataFieldAttribute class" Url="html/87dd4e8d-2b19-58f9-1699-58900096d72a.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspDataFieldsAttribute class" Url="html/adc8a568-55ec-88be-d97e-259169a0cc0f.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMethodPropertyAttribute class" Url="html/262331e0-ea3a-bc7f-5b3d-92a6ee4f5480.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcActionAttribute class" Url="html/28653128-ed81-2888-78d1-2f26a511abfd.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcActionSelectorAttribute class" Url="html/c01243f1-2270-dce8-f63e-3c96bace96d5.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcAreaAttribute class" Url="html/0775fe6c-76b0-e3dc-8bc6-8ee350a0a7d5.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcAreaMasterLocationFormatAttribute class" Url="html/0a746c87-3010-d381-547e-0ae02771789e.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcAreaPartialViewLocationFormatAttribute class" Url="html/f784a792-d8dc-9ba3-3602-0498fd6e1a1d.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcAreaViewLocationFormatAttribute class" Url="html/ac6187eb-81c4-b0a7-9c79-2ac9657b6566.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcControllerAttribute class" Url="html/7a26949f-9b56-9834-7ab0-581f92b22b21.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcDisplayTemplateAttribute class" Url="html/e9530270-e050-49c3-4cb1-e8337680086e.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcEditorTemplateAttribute class" Url="html/3b0e72bb-c620-ffaf-9b32-b941f397cbea.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcMasterAttribute class" Url="html/ec67b226-f45f-1379-e21b-0d6543892462.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcMasterLocationFormatAttribute class" Url="html/198ee279-a8a3-9ce2-9d0b-eefc06ad42e2.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcModelTypeAttribute class" Url="html/66c8a819-3a88-60c2-f45b-4033448d6c1c.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcPartialViewAttribute class" Url="html/084067a5-e523-6a46-46c4-0ab847d6144e.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcPartialViewLocationFormatAttribute class" Url="html/737990ec-e832-13eb-909d-0c8689e531ce.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcSuppressViewErrorAttribute class" Url="html/3d401f96-e19b-2752-2889-4d99cc89eadc.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcTemplateAttribute class" Url="html/12ab4a86-7363-0fa1-f367-60b6ace53edc.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcViewAttribute class" Url="html/edc3fa0e-1306-4eec-6220-aeb9c314cc25.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcViewComponentAttribute class" Url="html/4e4d0e82-d80c-b772-0fd8-cb748b140dc4.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcViewComponentViewAttribute class" Url="html/405b1154-e41a-96a2-92a1-7b939850bc3b.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspMvcViewLocationFormatAttribute class" Url="html/7d2886f4-c3ad-320b-2d07-c6ad3dccc52e.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspRequiredAttributeAttribute class" Url="html/29a29d75-94f7-7835-65e4-70d63a612aa0.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AspTypePropertyAttribute class" Url="html/ce22c34e-7424-5fe2-a0e4-9b2df93168e3.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AssertionConditionAttribute class" Url="html/c90261d8-7cd6-2e88-fe91-3c7aff9ba5fb.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AssertionConditionType enumeration" Url="html/9914bda3-a9f0-f622-4cfa-d61610c04481.htm" />
+  <HelpKINode Title="SmartPert.Annotations.AssertionMethodAttribute class" Url="html/c4d61301-4841-fa3d-c156-e2265fa29509.htm" />
+  <HelpKINode Title="SmartPert.Annotations.BaseTypeRequiredAttribute class" Url="html/acdba836-9e1a-e3b5-77f9-360bf39b09f5.htm" />
+  <HelpKINode Title="SmartPert.Annotations.CanBeNullAttribute class" Url="html/f145c9b2-4bdc-4678-661b-10c8284027ee.htm" />
+  <HelpKINode Title="SmartPert.Annotations.CannotApplyEqualityOperatorAttribute class" Url="html/9e6c142d-6aa2-6c4b-00e7-fe406fcc8dcb.htm" />
+  <HelpKINode Title="SmartPert.Annotations.CollectionAccessAttribute class" Url="html/611748e4-5b7e-28f9-4c42-e5ec5a403fc8.htm" />
+  <HelpKINode Title="SmartPert.Annotations.CollectionAccessType enumeration" Url="html/4443b3a6-2e79-3711-5975-40f68b355ae0.htm" />
+  <HelpKINode Title="SmartPert.Annotations.ContractAnnotationAttribute class" Url="html/86e9dcb1-77d3-8ddd-4bb6-d72e25634d2c.htm" />
+  <HelpKINode Title="SmartPert.Annotations.HtmlAttributeValueAttribute class" Url="html/cb629790-bf30-c0a0-16bd-591f1f8419c8.htm" />
+  <HelpKINode Title="SmartPert.Annotations.HtmlElementAttributesAttribute class" Url="html/0d08c893-ba4c-0c2d-3161-2311ef69d64d.htm" />
+  <HelpKINode Title="SmartPert.Annotations.ImplicitUseKindFlags enumeration" Url="html/6bc6e016-6665-766d-5f7d-bbf4b4e7c44b.htm" />
+  <HelpKINode Title="SmartPert.Annotations.ImplicitUseTargetFlags enumeration" Url="html/00985550-e0cc-268c-8962-9d4b208b1d77.htm" />
+  <HelpKINode Title="SmartPert.Annotations.InstantHandleAttribute class" Url="html/f82bbb10-f382-ed34-db20-5469a3136c7b.htm" />
+  <HelpKINode Title="SmartPert.Annotations.InvokerParameterNameAttribute class" Url="html/dffaf6d6-052a-d3ae-3765-65ee9bc18e54.htm" />
+  <HelpKINode Title="SmartPert.Annotations.ItemCanBeNullAttribute class" Url="html/27e433c9-16f2-5360-1437-eca788be1e48.htm" />
+  <HelpKINode Title="SmartPert.Annotations.ItemNotNullAttribute class" Url="html/67bbe0b7-76d0-7777-4cc1-3d22f06e299a.htm" />
+  <HelpKINode Title="SmartPert.Annotations.LinqTunnelAttribute class" Url="html/195a6baa-e879-9d95-d17d-7b2036dd2fe4.htm" />
+  <HelpKINode Title="SmartPert.Annotations.LocalizationRequiredAttribute class" Url="html/8f875a6f-140e-a043-d84c-5ca209188e44.htm" />
+  <HelpKINode Title="SmartPert.Annotations.MacroAttribute class" Url="html/40fa94c2-6538-03a7-248e-ead2059eef8f.htm" />
+  <HelpKINode Title="SmartPert.Annotations.MeansImplicitUseAttribute class" Url="html/e769cc76-6587-0e43-7cb2-b78c2f114885.htm" />
+  <HelpKINode Title="SmartPert.Annotations.MustUseReturnValueAttribute class" Url="html/77a30385-26be-ce93-ef08-18f6e028a753.htm" />
+  <HelpKINode Title="SmartPert.Annotations.NoEnumerationAttribute class" Url="html/ba6e72d8-debb-0d5f-a9bf-0e9f98a7438e.htm" />
+  <HelpKINode Title="SmartPert.Annotations.NonNegativeValueAttribute class" Url="html/43268a51-3ba7-5325-9464-b26aab0b62ac.htm" />
+  <HelpKINode Title="SmartPert.Annotations.NoReorderAttribute class" Url="html/64d75ef2-fcae-9cd2-8beb-df9d64c1b5a1.htm" />
+  <HelpKINode Title="SmartPert.Annotations.NotifyPropertyChangedInvocatorAttribute class" Url="html/d111635e-078e-8a52-10d9-825ceb67e2da.htm" />
+  <HelpKINode Title="SmartPert.Annotations.NotNullAttribute class" Url="html/5dcf9db3-2368-1323-c491-87895390d20d.htm" />
+  <HelpKINode Title="SmartPert.Annotations.PathReferenceAttribute class" Url="html/7953f006-d13b-ed97-49bd-3886e11a8b04.htm" />
+  <HelpKINode Title="SmartPert.Annotations.ProvidesContextAttribute class" Url="html/cacfece5-79f9-63ed-4ed7-e82333bc823c.htm" />
+  <HelpKINode Title="SmartPert.Annotations.PublicAPIAttribute class" Url="html/d3085492-f61d-d23f-2e19-6f23523a3f95.htm" />
+  <HelpKINode Title="SmartPert.Annotations.PureAttribute class" Url="html/6618b0f4-f576-155f-0083-1e147bf627a8.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorDirectiveAttribute class" Url="html/06fa11dc-31d9-058d-66a0-441c6ab84af9.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorHelperCommonAttribute class" Url="html/49181fdd-e70b-4e88-f1df-21bbcb6e5565.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorImportNamespaceAttribute class" Url="html/8f3b1668-dc08-c9e0-86d9-f2710f235384.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorInjectionAttribute class" Url="html/e04d6314-804f-a7ca-f4e7-82eda8dd4c79.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorLayoutAttribute class" Url="html/5c0860fa-1019-4e58-c688-4b582bdf374f.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorPageBaseTypeAttribute class" Url="html/1807c982-014e-63ac-c40c-6f06c0bdbb2c.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorSectionAttribute class" Url="html/81c415f4-c0ab-837a-b203-6d1f602c5a0d.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorWriteLiteralMethodAttribute class" Url="html/2cb3c8dc-7b0f-1283-7c18-4972e4878f0c.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorWriteMethodAttribute class" Url="html/b4cd3fb6-5cb7-fa5d-2deb-bbf126ef383a.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RazorWriteMethodParameterAttribute class" Url="html/fe57e503-8252-6a31-fc45-0ac746b44520.htm" />
+  <HelpKINode Title="SmartPert.Annotations.RegexPatternAttribute class" Url="html/9d1303e5-613c-1222-9888-d846f1171f4a.htm" />
+  <HelpKINode Title="SmartPert.Annotations.SourceTemplateAttribute class" Url="html/8c17da2f-81f8-ae57-f7a9-7274f5ba57c5.htm" />
+  <HelpKINode Title="SmartPert.Annotations.StringFormatMethodAttribute class" Url="html/c76b4ca7-54a9-76a2-89e8-eba48654cb78.htm" />
+  <HelpKINode Title="SmartPert.Annotations.TerminatesProgramAttribute class" Url="html/80b87eb3-90b2-6716-bca6-e794924e595a.htm" />
+  <HelpKINode Title="SmartPert.Annotations.UsedImplicitlyAttribute class" Url="html/e1085219-fc2a-f29e-d633-225d4ede87a6.htm" />
+  <HelpKINode Title="SmartPert.Annotations.ValueProviderAttribute class" Url="html/841d7ae2-800d-3c0d-3ff1-aab8a1483725.htm" />
+  <HelpKINode Title="SmartPert.Annotations.ValueRangeAttribute class" Url="html/e8d47233-bef9-ed34-ca35-716b73417564.htm" />
+  <HelpKINode Title="SmartPert.Annotations.XamlItemBindingOfItemsControlAttribute class" Url="html/55940b48-2a8e-2a09-bf7f-87cceb5a1419.htm" />
+  <HelpKINode Title="SmartPert.Annotations.XamlItemsControlAttribute class" Url="html/ccc7e755-2d32-547a-522e-b0e739f271b5.htm" />
+  <HelpKINode Title="SmartPert.Annotations.XamlItemStyleOfItemsControlAttribute class" Url="html/160b61f2-38fd-f520-c86e-b40f715db654.htm" />
   <HelpKINode Title="SmartPert.App class" Url="html/a1ebdc58-f419-6d84-95ff-e0277c2b3dca.htm" />
   <HelpKINode Title="SmartPert.Command namespace" Url="html/23986159-1016-a097-6d60-d105514eaa5c.htm" />
-  <HelpKINode Title="SmartPert.Command.ICmd interface" Url="html/7dbd5957-c75a-dbb6-ee34-9b82fec5fe56.htm" />
+  <HelpKINode Title="SmartPert.Command.AddDependencyCmd class" Url="html/76828347-2301-193c-8e60-81ac2eba9a19.htm" />
+  <HelpKINode Title="SmartPert.Command.AddWorkerCmd class" Url="html/f90f3295-e825-0dca-9737-83829629462a.htm" />
+  <HelpKINode Title="SmartPert.Command.CreateProjectCmd class" Url="html/8455be9c-a967-babd-4772-51c19f213c67.htm" />
+  <HelpKINode Title="SmartPert.Command.CreateTaskCmd class" Url="html/27bceb7c-b8a5-eed3-cd3d-a7d66a4c3074.htm" />
+  <HelpKINode Title="SmartPert.Command.DeleteProjectCmd class" Url="html/6bd54678-8f36-bb31-f02f-75df5b4b66cc.htm" />
+  <HelpKINode Title="SmartPert.Command.DeleteTaskCmd class" Url="html/2ff3d6b4-9c62-e9bd-b0b6-e998a3a58ca5.htm" />
+  <HelpKINode Title="SmartPert.Command.EditProjectCmd class" Url="html/3b7f750d-ba00-2300-ff0e-fb4b841f4896.htm" />
+  <HelpKINode Title="SmartPert.Command.EditTaskCmd class" Url="html/a0e20d3c-6b9a-e705-718b-7f5b8da428fa.htm" />
+  <HelpKINode Title="SmartPert.Command.ICmd class" Url="html/7dbd5957-c75a-dbb6-ee34-9b82fec5fe56.htm" />
+  <HelpKINode Title="SmartPert.Command.RemoveDependencyCmd class" Url="html/bc2a21ee-beba-4d0b-a043-d5a069ffbcc5.htm" />
+  <HelpKINode Title="SmartPert.Command.RemoveWorkerCmd class" Url="html/10ceb1a9-8756-c5b8-0f4d-5a33a395d5f3.htm" />
   <HelpKINode Title="SmartPert.MainWindow class" Url="html/a14b2b7f-eb90-b025-a9f3-3442ca9e5a91.htm" />
   <HelpKINode Title="SmartPert.MenuItemViewModel class" Url="html/020ba7f7-0567-c7ef-c1b2-ebc079191013.htm" />
   <HelpKINode Title="SmartPert.Model namespace" Url="html/e79b5610-67d9-fa78-6f7b-762f764c37fe.htm" />
@@ -392,6 +1289,11 @@
   <HelpKINode Title="SmartPert.TaskToolTip class" Url="html/11da6ece-7cf5-b041-f60d-a2714d29a35a.htm" />
   <HelpKINode Title="SmartPert.View namespace" Url="html/29ca6f2c-032e-7e21-999c-81ed30a5d876.htm" />
   <HelpKINode Title="SmartPert.View.Controls namespace" Url="html/092f70bf-d9f3-1389-3015-1a31bed48357.htm" />
+  <HelpKINode Title="SmartPert.View.Controls.FilteredComboBox class" Url="html/2734e10a-cc42-e746-abd2-193f394f6637.htm" />
+  <HelpKINode Title="SmartPert.View.Controls.IntegerChangeDelegate delegate" Url="html/5f5825cc-3504-4b2a-9e3c-d1e024b1b353.htm" />
+  <HelpKINode Title="SmartPert.View.Controls.IntegerEdit class" Url="html/8841fa01-5c55-0242-270d-644f5f2006c6.htm" />
+  <HelpKINode Title="SmartPert.View.Controls.ItemFilter delegate" Url="html/3745b691-8608-77b9-5e64-4eb8e04e051b.htm" />
+  <HelpKINode Title="SmartPert.View.Controls.SelectionChanged delegate" Url="html/17637d8b-e993-76e1-6a5f-3f2702c53f70.htm" />
   <HelpKINode Title="SmartPert.View.Controls.TaskControl class" Url="html/e4ebe43c-8126-2f20-a0e7-860382afbddd.htm" />
   <HelpKINode Title="SmartPert.View.IViewModel interface" Url="html/8864a97e-a59e-5a44-fa52-3d906059f07e.htm" />
   <HelpKINode Title="SmartPert.View.Login namespace" Url="html/642b765c-e887-1de8-305e-65f6fcacfc4a.htm" />
@@ -400,21 +1302,52 @@
   <HelpKINode Title="SmartPert.View.Login.RegisterPage class" Url="html/4f350ef8-b710-e5ad-205e-96815f83e11d.htm" />
   <HelpKINode Title="SmartPert.View.Pages namespace" Url="html/be1a1414-3bf1-7852-dac7-a298498edce0.htm" />
   <HelpKINode Title="SmartPert.View.Pages.Chart class" Url="html/4201df6a-a5f4-758f-41f5-ddb1146f819b.htm" />
+  <HelpKINode Title="SmartPert.View.Pages.ErrBackHandler delegate" Url="html/24c7c83c-cb6d-846c-d330-456e0eab1f8f.htm" />
+  <HelpKINode Title="SmartPert.View.Pages.ErrorCatch class" Url="html/e3dc48a5-7001-53ab-b3a6-b94ab17e6234.htm" />
+  <HelpKINode Title="SmartPert.View.Pages.TaskGrid class" Url="html/231f8bb1-c701-e430-eb8c-33200d245ecd.htm" />
+  <HelpKINode Title="SmartPert.View.Pages.WorkSpace class" Url="html/abdf18d7-ee36-80b0-2779-6161e1759417.htm" />
+  <HelpKINode Title="SmartPert.View.Windows namespace" Url="html/5bea9c35-6df8-3ae1-93e0-820a10ab5e5d.htm" />
+  <HelpKINode Title="SmartPert.View.Windows.ProjectCreator class" Url="html/6bc2ce3d-28b6-c173-efc4-cc68441c0099.htm" />
+  <HelpKINode Title="SmartPert.View.Windows.TaskEditor class" Url="html/faf685c6-f3ed-a5ae-254f-9529e8d58c9d.htm" />
+  <HelpKINode Title="SourceTemplateAttribute class">
+    <HelpKINode Title="SourceTemplateAttribute Class" Url="html/8c17da2f-81f8-ae57-f7a9-7274f5ba57c5.htm" />
+    <HelpKINode Title="constructor" Url="html/8229fb35-3f13-d5cb-fe1c-69988e42203a.htm" />
+    <HelpKINode Title="methods" Url="html/eb608caf-fb43-6d04-6143-a499f51c96a1.htm" />
+    <HelpKINode Title="properties" Url="html/78bb9d0a-ce72-5089-6c9b-73ed1784a622.htm" />
+  </HelpKINode>
+  <HelpKINode Title="SourceTemplateAttribute.SourceTemplateAttribute constructor" Url="html/8229fb35-3f13-d5cb-fe1c-69988e42203a.htm" />
   <HelpKINode Title="StartDate property" Url="html/8c5ccfa0-ff67-0343-94af-412b5c3094d1.htm" />
+  <HelpKINode Title="StringFormatMethodAttribute class">
+    <HelpKINode Title="StringFormatMethodAttribute Class" Url="html/c76b4ca7-54a9-76a2-89e8-eba48654cb78.htm" />
+    <HelpKINode Title="constructor" Url="html/f168b215-7af0-3e51-95d8-434e7ca8d1c8.htm" />
+    <HelpKINode Title="methods" Url="html/c534b2cd-541f-40de-6b63-fbc37f4821df.htm" />
+    <HelpKINode Title="properties" Url="html/5e263fce-d953-df81-98b3-a87274b6c87f.htm" />
+  </HelpKINode>
+  <HelpKINode Title="StringFormatMethodAttribute.FormatParameterName property" Url="html/e863d6a9-030c-730d-7d3c-f8ffe1999564.htm" />
+  <HelpKINode Title="StringFormatMethodAttribute.StringFormatMethodAttribute constructor" Url="html/f168b215-7af0-3e51-95d8-434e7ca8d1c8.htm" />
   <HelpKINode Title="Subscribe method">
     <HelpKINode Title="IModel.Subscribe Method " Url="html/bf0f02cc-bb48-8ad1-31d5-b3468be1f31f.htm" />
     <HelpKINode Title="Model.Subscribe Method " Url="html/14fb9958-8c40-6577-58f1-47cd2ee96f43.htm" />
   </HelpKINode>
   <HelpKINode Title="SwitchToLogin method" Url="html/a7cf12b8-0d43-6a8d-db3c-7c734689bc79.htm" />
   <HelpKINode Title="SwitchToRegister method" Url="html/3ebf82b6-4374-5c7d-464d-0266e7da335d.htm" />
+  <HelpKINode Title="TagName property" Url="html/47fea032-4eee-6329-6939-efe9baa13e00.htm" />
+  <HelpKINode Title="Target property" Url="html/500fbdfa-f043-17d4-9dc9-f7ea79a6dc2c.htm" />
+  <HelpKINode Title="TargetFlags property">
+    <HelpKINode Title="MeansImplicitUseAttribute.TargetFlags Property " Url="html/7fcbdb1f-19d7-ca12-f3a1-fc0a0ce720e2.htm" />
+    <HelpKINode Title="UsedImplicitlyAttribute.TargetFlags Property " Url="html/ba76d229-7389-5101-51a6-22ee84c6b55b.htm" />
+  </HelpKINode>
   <HelpKINode Title="Task class">
     <HelpKINode Title="Task Class" Url="html/baa124dc-d362-0db3-0321-2e6ea6a0094e.htm" />
-    <HelpKINode Title="constructor" Url="html/2ffe4b71-fd25-4fcb-09c6-7c29faa8dbe5.htm" />
+    <HelpKINode Title="constructor" Url="html/a9c6a907-caec-6fb8-b126-04165f38d0ee.htm" />
     <HelpKINode Title="fields" Url="html/dbe6b6a3-fc11-38e6-4066-605df2cd86cd.htm" />
     <HelpKINode Title="methods" Url="html/c704c68b-df80-f8ab-3b61-5cdfad37239b.htm" />
     <HelpKINode Title="properties" Url="html/15367dae-4d08-fa44-bb2f-0f98a1f07c58.htm" />
   </HelpKINode>
-  <HelpKINode Title="Task property" Url="html/16753673-4a9f-3663-a1d5-ad070916c14b.htm" />
+  <HelpKINode Title="Task property">
+    <HelpKINode Title="CreateTaskCmd.Task Property " Url="html/a5fcc13f-638b-ae8d-7279-7113dea6b378.htm" />
+    <HelpKINode Title="TaskToolTip.Task Property " Url="html/16753673-4a9f-3663-a1d5-ad070916c14b.htm" />
+  </HelpKINode>
   <HelpKINode Title="Task.AddDependency method" Url="html/c76801cf-8f7d-27f8-3c59-c2b95b3d36da.htm" />
   <HelpKINode Title="Task.AddWorker method" Url="html/94d0fefe-60a9-b6af-3b20-828db47fe6b6.htm" />
   <HelpKINode Title="Task.Delete method" Url="html/1104d087-efd9-2abc-744f-49bc0761cd66.htm" />
@@ -423,10 +1356,11 @@
   <HelpKINode Title="Task.LikelyDuration property" Url="html/1a40f23a-8a8c-b8db-6368-73e098bab2d5.htm" />
   <HelpKINode Title="Task.MaxDuration property" Url="html/6ee76336-6542-c806-c5ae-e9bf91cb9203.htm" />
   <HelpKINode Title="Task.MinDuration property" Url="html/d653709a-604d-cd5d-b70c-712d4ffe20dc.htm" />
-  <HelpKINode Title="Task.Parse method" Url="html/2f5cda9b-2cfe-df9e-9ca2-2e2756fa1599.htm" />
+  <HelpKINode Title="Task.Parse method" Url="html/a6882301-d508-2dc1-1ced-f3dbb2c59449.htm" />
+  <HelpKINode Title="Task.Proj property" Url="html/5b4d8311-0cc2-c835-e7ae-eba4314eb69d.htm" />
   <HelpKINode Title="Task.RemoveDependency method" Url="html/faa98a40-1e8f-098e-3c58-db43c3e3621f.htm" />
   <HelpKINode Title="Task.RemoveWorker method" Url="html/de887315-0b0c-4e8e-260a-fcddda9de781.htm" />
-  <HelpKINode Title="Task.Task constructor" Url="html/2ffe4b71-fd25-4fcb-09c6-7c29faa8dbe5.htm" />
+  <HelpKINode Title="Task.Task constructor" Url="html/a9c6a907-caec-6fb8-b126-04165f38d0ee.htm" />
   <HelpKINode Title="Task.Update method" Url="html/c8eda8f4-2ed6-e89b-f479-60a267e77c2b.htm" />
   <HelpKINode Title="Task.UpdateDependencies method" Url="html/0b5da084-ab57-aaad-0003-5515e7132272.htm" />
   <HelpKINode Title="TaskControl class">
@@ -438,6 +1372,27 @@
   </HelpKINode>
   <HelpKINode Title="TaskControl.InitializeComponent method" Url="html/fe584a80-0505-63b5-0b55-d440d99d27c5.htm" />
   <HelpKINode Title="TaskControl.TaskControl constructor" Url="html/3f9496a6-4417-743d-959e-9538b22e1b52.htm" />
+  <HelpKINode Title="TaskEditor class">
+    <HelpKINode Title="TaskEditor Class" Url="html/faf685c6-f3ed-a5ae-254f-9529e8d58c9d.htm" />
+    <HelpKINode Title="constructor" Url="html/38469dbb-6871-8056-2d94-f2cca3e176ed.htm" />
+    <HelpKINode Title="events" Url="html/87491309-0224-5d1e-63bc-9ececf6dbec4.htm" />
+    <HelpKINode Title="methods" Url="html/af0d8201-3c7f-60d3-7795-dffd7b074587.htm" />
+    <HelpKINode Title="properties" Url="html/2b1edca0-757d-f187-adc0-98357ad9e8ad.htm" />
+  </HelpKINode>
+  <HelpKINode Title="TaskEditor.Assignees property" Url="html/fdc6f1c9-0826-c862-eecc-3026cb2d4eff.htm" />
+  <HelpKINode Title="TaskEditor.Assign_to method" Url="html/6ba35861-3374-41a4-d415-e07f39feaa6e.htm" />
+  <HelpKINode Title="TaskEditor.InitializeComponent method" Url="html/44717974-f250-473c-cdd9-8bba997f22e4.htm" />
+  <HelpKINode Title="TaskEditor.OnModelUpdate method" Url="html/b758efea-8814-264b-5d19-6b77ab6b6be5.htm" />
+  <HelpKINode Title="TaskEditor.TaskEditor constructor" Url="html/38469dbb-6871-8056-2d94-f2cca3e176ed.htm" />
+  <HelpKINode Title="TaskGrid class">
+    <HelpKINode Title="TaskGrid Class" Url="html/231f8bb1-c701-e430-eb8c-33200d245ecd.htm" />
+    <HelpKINode Title="constructor" Url="html/e38aaa1d-b922-9539-97d0-aea88e3d5716.htm" />
+    <HelpKINode Title="events" Url="html/7c82eaf1-deb5-c91f-b634-67a37eaedd60.htm" />
+    <HelpKINode Title="methods" Url="html/8cef34d2-19a6-c367-2090-9b528a309672.htm" />
+    <HelpKINode Title="properties" Url="html/8a485af4-0048-ae8f-989b-72a8fc2d2327.htm" />
+  </HelpKINode>
+  <HelpKINode Title="TaskGrid.InitializeComponent method" Url="html/bc172c18-9c39-bae6-b039-cf649f0040c8.htm" />
+  <HelpKINode Title="TaskGrid.TaskGrid constructor" Url="html/e38aaa1d-b922-9539-97d0-aea88e3d5716.htm" />
   <HelpKINode Title="Tasks property" Url="html/dcab3802-3d9d-6637-9fe7-f9b9ca9ce7fd.htm" />
   <HelpKINode Title="TaskToolTip class">
     <HelpKINode Title="TaskToolTip Class" Url="html/11da6ece-7cf5-b041-f60d-a2714d29a35a.htm" />
@@ -451,27 +1406,56 @@
   <HelpKINode Title="TaskToolTip.HeaderProperty field" Url="html/2b8254d8-4261-572d-8188-80775b95da21.htm" />
   <HelpKINode Title="TaskToolTip.Task property" Url="html/16753673-4a9f-3663-a1d5-ad070916c14b.htm" />
   <HelpKINode Title="TaskToolTip.TaskToolTip constructor" Url="html/92018b04-7d02-7032-6ef9-106862442f7a.htm" />
+  <HelpKINode Title="TerminatesProgramAttribute class">
+    <HelpKINode Title="TerminatesProgramAttribute Class" Url="html/80b87eb3-90b2-6716-bca6-e794924e595a.htm" />
+    <HelpKINode Title="constructor" Url="html/2f4fb8f6-b50f-3a34-7506-01d1add4e1db.htm" />
+    <HelpKINode Title="methods" Url="html/6c9e47da-5dfd-3f9e-0ec3-866feab1cf4a.htm" />
+    <HelpKINode Title="properties" Url="html/1bad5b11-217a-6cae-7987-27986682fc2c.htm" />
+  </HelpKINode>
+  <HelpKINode Title="TerminatesProgramAttribute.TerminatesProgramAttribute constructor" Url="html/2f4fb8f6-b50f-3a34-7506-01d1add4e1db.htm" />
   <HelpKINode Title="TestNewConnection method" Url="html/f08521e4-1965-4541-199f-13b9b98a32fb.htm" />
   <HelpKINode Title="TimedItem class">
     <HelpKINode Title="TimedItem Class" Url="html/b8be4100-7bbd-85c7-1caf-05c76ec1cd81.htm" />
-    <HelpKINode Title="constructor" Url="html/ac692d50-26dc-bf51-9719-07a2327c7648.htm" />
+    <HelpKINode Title="constructor" Url="html/7c93a330-abae-c685-39a8-97315434ffa9.htm" />
     <HelpKINode Title="fields" Url="html/9523db94-6625-b0f9-bd62-a84f04a13442.htm" />
     <HelpKINode Title="methods" Url="html/bc6a9ba3-48e2-c9aa-4e58-1839f2aa6432.htm" />
     <HelpKINode Title="properties" Url="html/b1c9febb-bd61-60ee-15de-2aa80adb266a.htm" />
   </HelpKINode>
   <HelpKINode Title="TimedItem.AddWorker method" Url="html/e1b6dc29-b9f3-e0af-c726-482f73d9dd1f.htm" />
+  <HelpKINode Title="TimedItem.creationDate field" Url="html/f69ebcd8-ee6a-7770-3821-ae8e6bd7dbeb.htm" />
+  <HelpKINode Title="TimedItem.CreationDate property" Url="html/6d2e8ee0-9455-174e-667c-632f26b1446d.htm" />
+  <HelpKINode Title="TimedItem.creator field" Url="html/5de2d132-a58a-f6bd-c7ed-4906ae0d644e.htm" />
+  <HelpKINode Title="TimedItem.Creator property" Url="html/d260f7d7-f47f-915a-d467-67b8f9ac1b79.htm" />
   <HelpKINode Title="TimedItem.Description property" Url="html/68142dd9-3d5b-92d0-e68d-2838cb3e9762.htm" />
   <HelpKINode Title="TimedItem.EndDate property" Url="html/53457065-402e-7df8-305c-c9ea3d118f24.htm" />
+  <HelpKINode Title="TimedItem.Equals method" Url="html/4cb219ac-72f8-ddc7-37e3-e03da34bd4a8.htm" />
+  <HelpKINode Title="TimedItem.GetHashCode method" Url="html/dd1bc609-8fe6-c54c-6d42-8803ec36cc1e.htm" />
+  <HelpKINode Title="TimedItem.id field" Url="html/6924973f-ca3b-271e-7db1-46fc02b7a450.htm" />
   <HelpKINode Title="TimedItem.Id property" Url="html/d54043af-c363-77a3-cf0c-43bf69d783e9.htm" />
-  <HelpKINode Title="TimedItem.isComplete field" Url="html/cbf5bdbd-217e-1257-07e4-735bdc8f1643.htm" />
+  <HelpKINode Title="TimedItem.IsComplete property" Url="html/2da8bf46-3990-2b40-4c67-dc5c80f0d3eb.htm" />
   <HelpKINode Title="TimedItem.Name property" Url="html/113e87bc-1b58-3f79-327b-19bfdc64269d.htm" />
   <HelpKINode Title="TimedItem.RemoveWorker method" Url="html/290986e9-cc02-c76c-7911-9793b9bd99dd.htm" />
   <HelpKINode Title="TimedItem.StartDate property" Url="html/8c5ccfa0-ff67-0343-94af-412b5c3094d1.htm" />
-  <HelpKINode Title="TimedItem.TimedItem constructor" Url="html/ac692d50-26dc-bf51-9719-07a2327c7648.htm" />
+  <HelpKINode Title="TimedItem.TimedItem constructor" Url="html/7c93a330-abae-c685-39a8-97315434ffa9.htm" />
+  <HelpKINode Title="TimedItem.UpdateId method" Url="html/ad16f39c-b53d-47a7-feec-7572e1f20fe6.htm" />
   <HelpKINode Title="TimedItem.workers field" Url="html/843835fa-e263-3cf0-d439-f317d61c3ef7.htm" />
   <HelpKINode Title="TimedItem.Workers property" Url="html/700dc5ec-3f56-298c-9414-2a4ea455fffe.htm" />
+  <HelpKINode Title="To property" Url="html/c059dddd-0434-e464-2776-4dea318b274f.htm" />
   <HelpKINode Title="ToString method" Url="html/212bc06d-bb47-de6b-db04-3ea79529e295.htm" />
-  <HelpKINode Title="Undo method" Url="html/6104c24f-db33-be54-d6e7-9827d717031f.htm" />
+  <HelpKINode Title="Type property" Url="html/7893303e-0bbc-592d-a2d5-16af6685327e.htm" />
+  <HelpKINode Title="Undo method">
+    <HelpKINode Title="AddDependencyCmd.Undo Method " Url="html/6e11c195-f58e-a901-b4c5-02d9872c4473.htm" />
+    <HelpKINode Title="AddWorkerCmd.Undo Method " Url="html/6f521e85-9ef0-e8f8-2021-238f5bdf8cf7.htm" />
+    <HelpKINode Title="CreateProjectCmd.Undo Method " Url="html/518333f4-d68a-1c23-53e8-9265d36d1e0c.htm" />
+    <HelpKINode Title="CreateTaskCmd.Undo Method " Url="html/c61f561b-ea5a-f1c0-1c4d-fc591ceb0bfd.htm" />
+    <HelpKINode Title="DeleteProjectCmd.Undo Method " Url="html/a35f2e94-15ee-59e7-6399-97d029a254ca.htm" />
+    <HelpKINode Title="DeleteTaskCmd.Undo Method " Url="html/9972484a-74a6-a57a-b2df-2da3a1454cb0.htm" />
+    <HelpKINode Title="EditProjectCmd.Undo Method " Url="html/b600ace1-c8a4-5041-532c-20bae91f1e32.htm" />
+    <HelpKINode Title="EditTaskCmd.Undo Method " Url="html/6e9ae5a7-fc70-17ef-049e-207db840c5d5.htm" />
+    <HelpKINode Title="ICmd.Undo Method " Url="html/6104c24f-db33-be54-d6e7-9827d717031f.htm" />
+    <HelpKINode Title="RemoveDependencyCmd.Undo Method " Url="html/12ec7ff5-19b1-deed-67e4-1989cd7d9ca7.htm" />
+    <HelpKINode Title="RemoveWorkerCmd.Undo Method " Url="html/c818571e-8d4c-d8fd-99cf-c48902af2b52.htm" />
+  </HelpKINode>
   <HelpKINode Title="Unsubscribe method">
     <HelpKINode Title="IModel.Unsubscribe Method " Url="html/1753e084-158a-43dc-9646-767e585c6652.htm" />
     <HelpKINode Title="Model.Unsubscribe Method " Url="html/08076232-19a8-21bd-959a-83b87b6dce0a.htm" />
@@ -482,7 +1466,36 @@
     <HelpKINode Title="Task.Update Method " Url="html/c8eda8f4-2ed6-e89b-f479-60a267e77c2b.htm" />
     <HelpKINode Title="User.Update Method " Url="html/1b9d9543-0b61-870e-0848-e0af01b7b726.htm" />
   </HelpKINode>
+  <HelpKINode Title="UpdateCount property" Url="html/7686b58c-2e1f-a877-3aa3-70540a3088f8.htm" />
+  <HelpKINode Title="UpdatedContent enumeration member" Url="html/4443b3a6-2e79-3711-5975-40f68b355ae0.htm" />
   <HelpKINode Title="UpdateDependencies method" Url="html/0b5da084-ab57-aaad-0003-5515e7132272.htm" />
+  <HelpKINode Title="UpdateId method" Url="html/ad16f39c-b53d-47a7-feec-7572e1f20fe6.htm" />
+  <HelpKINode Title="UpdateProject method">
+    <HelpKINode Title="ICmd.UpdateProject Method " Url="html/ea91cbcd-465e-68f9-0b23-75370aa1ccbd.htm" />
+    <HelpKINode Title="Model.UpdateProject Method " Url="html/ae855ba5-78e5-001c-3c84-dde61b9b2cf9.htm" />
+  </HelpKINode>
+  <HelpKINode Title="UpdateTask method">
+    <HelpKINode Title="ICmd.UpdateTask Method " Url="html/c37df555-8e97-a099-ecaf-da12edbb40b1.htm" />
+    <HelpKINode Title="Model.UpdateTask Method " Url="html/ecaae731-148e-8d18-ac07-9930961ee0b1.htm" />
+  </HelpKINode>
+  <HelpKINode Title="UpdateTimedItem method" Url="html/8bb94c67-7eac-b556-7a18-09c42a9b1969.htm" />
+  <HelpKINode Title="UpdateUser method">
+    <HelpKINode Title="ICmd.UpdateUser Method " Url="html/8cd4097c-72bf-9b5d-4979-f78b79d1fbea.htm" />
+    <HelpKINode Title="Model.UpdateUser Method " Url="html/3c2e521e-6f58-370d-bbb9-18b080c98193.htm" />
+  </HelpKINode>
+  <HelpKINode Title="UsedImplicitlyAttribute class">
+    <HelpKINode Title="UsedImplicitlyAttribute Class" Url="html/e1085219-fc2a-f29e-d633-225d4ede87a6.htm" />
+    <HelpKINode Title="constructor" Url="html/0d9064fc-02e3-c3f6-6493-72be7054a623.htm" />
+    <HelpKINode Title="methods" Url="html/3223eb9e-31ae-889b-8770-bb557a263ab6.htm" />
+    <HelpKINode Title="properties" Url="html/8a6cc989-93a4-65be-aeea-011a89f36ba8.htm" />
+  </HelpKINode>
+  <HelpKINode Title="UsedImplicitlyAttribute.TargetFlags property" Url="html/ba76d229-7389-5101-51a6-22ee84c6b55b.htm" />
+  <HelpKINode Title="UsedImplicitlyAttribute.UsedImplicitlyAttribute constructor" Url="html/0d9064fc-02e3-c3f6-6493-72be7054a623.htm" />
+  <HelpKINode Title="UsedImplicitlyAttribute.UseKindFlags property" Url="html/96a689b1-66cc-730d-45ce-c2fdaa0434b8.htm" />
+  <HelpKINode Title="UseKindFlags property">
+    <HelpKINode Title="MeansImplicitUseAttribute.UseKindFlags Property " Url="html/8613ff33-227e-1bfc-702e-8257f3bb1fe4.htm" />
+    <HelpKINode Title="UsedImplicitlyAttribute.UseKindFlags Property " Url="html/96a689b1-66cc-730d-45ce-c2fdaa0434b8.htm" />
+  </HelpKINode>
   <HelpKINode Title="User class">
     <HelpKINode Title="User Class" Url="html/744ccc63-1eec-7d39-1c63-491d03d0fcfd.htm" />
     <HelpKINode Title="constructor" Url="html/68f4ca3c-7199-5699-9568-779bd10aaa38.htm" />
@@ -501,6 +1514,56 @@
   <HelpKINode Title="User.User constructor" Url="html/68f4ca3c-7199-5699-9568-779bd10aaa38.htm" />
   <HelpKINode Title="User.Username property" Url="html/cc11270a-d55e-62a4-aecb-8f991b6d6c14.htm" />
   <HelpKINode Title="Username property" Url="html/cc11270a-d55e-62a4-aecb-8f991b6d6c14.htm" />
+  <HelpKINode Title="Value property" Url="html/aa589389-1314-f05b-56ed-3258204b5fa6.htm" />
+  <HelpKINode Title="ValueProviderAttribute class">
+    <HelpKINode Title="ValueProviderAttribute Class" Url="html/841d7ae2-800d-3c0d-3ff1-aab8a1483725.htm" />
+    <HelpKINode Title="constructor" Url="html/01e06f3b-7665-969a-7654-acb6cc56ae98.htm" />
+    <HelpKINode Title="methods" Url="html/a710492a-b3a6-be13-3025-86d9f7875cad.htm" />
+    <HelpKINode Title="properties" Url="html/79c9c9a8-67a9-e264-e710-f627c121bedc.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ValueProviderAttribute.Name property" Url="html/e29d83a1-c42b-6aca-7d19-02bc8fbfeffe.htm" />
+  <HelpKINode Title="ValueProviderAttribute.ValueProviderAttribute constructor" Url="html/01e06f3b-7665-969a-7654-acb6cc56ae98.htm" />
+  <HelpKINode Title="ValueRangeAttribute class">
+    <HelpKINode Title="ValueRangeAttribute Class" Url="html/e8d47233-bef9-ed34-ca35-716b73417564.htm" />
+    <HelpKINode Title="constructor" Url="html/4613aef0-8d7a-a895-e257-e0e29c7a40e1.htm" />
+    <HelpKINode Title="methods" Url="html/c9be4618-22af-2960-c427-9d10c68425bf.htm" />
+    <HelpKINode Title="properties" Url="html/a3c205dd-b658-26a1-ea20-a61353f4c9e2.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ValueRangeAttribute.From property" Url="html/3e2d5b4b-5473-0284-5786-76f0a65a28a4.htm" />
+  <HelpKINode Title="ValueRangeAttribute.To property" Url="html/c059dddd-0434-e464-2776-4dea318b274f.htm" />
+  <HelpKINode Title="ValueRangeAttribute.ValueRangeAttribute constructor" Url="html/4613aef0-8d7a-a895-e257-e0e29c7a40e1.htm" />
+  <HelpKINode Title="WithInheritors enumeration member" Url="html/00985550-e0cc-268c-8962-9d4b208b1d77.htm" />
+  <HelpKINode Title="WithMembers enumeration member" Url="html/00985550-e0cc-268c-8962-9d4b208b1d77.htm" />
   <HelpKINode Title="workers field" Url="html/843835fa-e263-3cf0-d439-f317d61c3ef7.htm" />
   <HelpKINode Title="Workers property" Url="html/700dc5ec-3f56-298c-9414-2a4ea455fffe.htm" />
+  <HelpKINode Title="WorkSpace class">
+    <HelpKINode Title="WorkSpace Class" Url="html/abdf18d7-ee36-80b0-2779-6161e1759417.htm" />
+    <HelpKINode Title="constructor" Url="html/679f235e-04aa-33b4-c3b4-211419ebc105.htm" />
+    <HelpKINode Title="events" Url="html/139565f1-eb47-b1a3-0375-855230587b13.htm" />
+    <HelpKINode Title="methods" Url="html/28e4678b-51ef-f76a-e1f1-5dddf728b82e.htm" />
+    <HelpKINode Title="properties" Url="html/b3dd02e3-0bcd-0f6f-3602-958125d7e350.htm" />
+  </HelpKINode>
+  <HelpKINode Title="WorkSpace.InitializeComponent method" Url="html/0e1562e1-aa73-b7bb-dfc3-d153aa358ccb.htm" />
+  <HelpKINode Title="WorkSpace.WorkSpace constructor" Url="html/679f235e-04aa-33b4-c3b4-211419ebc105.htm" />
+  <HelpKINode Title="XamlItemBindingOfItemsControlAttribute class">
+    <HelpKINode Title="XamlItemBindingOfItemsControlAttribute Class" Url="html/55940b48-2a8e-2a09-bf7f-87cceb5a1419.htm" />
+    <HelpKINode Title="constructor" Url="html/8ff566d1-68f3-b421-820b-ebdbe610f1f4.htm" />
+    <HelpKINode Title="methods" Url="html/abb7ffd9-de37-b828-0401-440c5396a23a.htm" />
+    <HelpKINode Title="properties" Url="html/1c8f620c-0cb9-11e9-02d7-5aa81cc58092.htm" />
+  </HelpKINode>
+  <HelpKINode Title="XamlItemBindingOfItemsControlAttribute.XamlItemBindingOfItemsControlAttribute constructor" Url="html/8ff566d1-68f3-b421-820b-ebdbe610f1f4.htm" />
+  <HelpKINode Title="XamlItemsControlAttribute class">
+    <HelpKINode Title="XamlItemsControlAttribute Class" Url="html/ccc7e755-2d32-547a-522e-b0e739f271b5.htm" />
+    <HelpKINode Title="constructor" Url="html/7d8ddcc7-f1ad-fcc2-2229-c90752bee028.htm" />
+    <HelpKINode Title="methods" Url="html/7a6506a0-7a6f-ba7a-0507-d78c685e48fe.htm" />
+    <HelpKINode Title="properties" Url="html/586b7343-0e21-a07e-fa41-b5811336fa97.htm" />
+  </HelpKINode>
+  <HelpKINode Title="XamlItemsControlAttribute.XamlItemsControlAttribute constructor" Url="html/7d8ddcc7-f1ad-fcc2-2229-c90752bee028.htm" />
+  <HelpKINode Title="XamlItemStyleOfItemsControlAttribute class">
+    <HelpKINode Title="XamlItemStyleOfItemsControlAttribute Class" Url="html/160b61f2-38fd-f520-c86e-b40f715db654.htm" />
+    <HelpKINode Title="constructor" Url="html/b482e792-a01c-7381-2d5f-582d3ab91e0a.htm" />
+    <HelpKINode Title="methods" Url="html/80511e69-a37a-dd85-8f11-7d1e80b04d8c.htm" />
+    <HelpKINode Title="properties" Url="html/c4970e77-0317-a166-e9bb-ee830db1d98b.htm" />
+  </HelpKINode>
+  <HelpKINode Title="XamlItemStyleOfItemsControlAttribute.XamlItemStyleOfItemsControlAttribute constructor" Url="html/b482e792-a01c-7381-2d5f-582d3ab91e0a.htm" />
 </HelpKI>

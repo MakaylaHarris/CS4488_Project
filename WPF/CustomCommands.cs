@@ -47,5 +47,10 @@ namespace SmartPert
         {
             new KeyGesture(Key.F5)
         }));
+
+        public static readonly RoutedCommand SettingsCommand = new RoutedUICommand("Settings", "Settings", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        {
+            new KeyGesture(Key.S, ModifierKeys.Control)
+        }));
     }
 }

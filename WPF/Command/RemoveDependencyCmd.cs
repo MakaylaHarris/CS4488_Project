@@ -10,10 +10,10 @@ namespace SmartPert.Command
     /// Removes Task Dependency
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class RemoveDependencyCmd : ICmd
+    public class RemoveDependencyCmd : ICmd
     {
-        private readonly Task parent;
-        private readonly Task dependent;
+        private Task parent;
+        private Task dependent;
 
         public RemoveDependencyCmd(Task parent, Task dependent)
         {
@@ -21,16 +21,30 @@ namespace SmartPert.Command
             this.dependent = dependent;
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
             parent.RemoveDependency(dependent);
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             parent.AddDependency(dependent);
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == parent)
+                parent = (Task) newItem;
+            if (old == dependent)
+                dependent = (Task)newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTask(ref parent);
+            UpdateTask(ref dependent);
         }
     }
 }

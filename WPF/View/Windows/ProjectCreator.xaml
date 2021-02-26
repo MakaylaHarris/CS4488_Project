@@ -1,0 +1,54 @@
+﻿<Window x:Class="SmartPert.View.Windows.ProjectCreator"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmartPert.View.Windows"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Create Project" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="10"  Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="3*" />
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="Project Name" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBox x:Name="PrjName" Grid.Column="1" Height="30" TextChanged="PrjName_LostFocus"/>
+
+            <Label Content="Description (optional)" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBox x:Name="PrjDescription" Grid.Row="1" Grid.Column="1" Margin="10" LostFocus="PrjDescription_LostFocus"/>
+
+            <Label Content="Start Date" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="2"/>
+            <DatePicker x:Name="StartDatePicker" Grid.Column="1" Grid.Row="2" SelectedDateChanged="StartDatePicker_SelectedDateChanged"/>
+
+            <Label Content="End Date (optional)" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Row="3"/>
+            <DatePicker x:Name="EndDatePicker" Grid.Column="1" Grid.Row="3" SelectedDateChanged="EndDatePicker_SelectedDateChanged"/>
+        </Grid>
+        <Label x:Name="ValidateLbl" Foreground="Red" Content="" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+        <Button x:Name="CancelBtn" Grid.Row="2" Content="Cancel" Margin="10" Click="Cancel_Click"/>
+        <Button x:Name="SubmitBtn" Grid.Row="2" Grid.Column="1" Content="Create" Click="Create_Click"/>
+    </Grid>
+</Window>

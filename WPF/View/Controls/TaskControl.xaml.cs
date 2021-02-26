@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 using SmartPert.Model;
 using SmartPert.View.Pages;
+using SmartPert.View.Windows;
 
 namespace SmartPert.View.Controls
 {
@@ -35,8 +25,7 @@ namespace SmartPert.View.Controls
         private void mi_editTask_Click(object sender, RoutedEventArgs e)
         {
             Task task = (Task)((MenuItem)sender).DataContext;
-            // new frmTask(_chart, task).ShowDialog();
-
+            new TaskEditor(task).ShowDialog();
             _chart.RefreshGraph();
             //_chart.DrawGraph(_chart.GetTasksAndDependanciesFromDatabase());
         }
@@ -44,7 +33,6 @@ namespace SmartPert.View.Controls
         private void mi_deleteTask_Click(object sender, RoutedEventArgs e)
         {
             Task task = (Task)((MenuItem)sender).DataContext;
-            _chart.DeleteTask(task);
             _chart.DeleteTask(task);
             _chart.RefreshGraph();
 

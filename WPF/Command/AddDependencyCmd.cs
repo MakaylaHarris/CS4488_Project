@@ -10,10 +10,10 @@ namespace SmartPert.Command
     /// Adds dependency to task
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class AddDependencyCmd : ICmd
+    public class AddDependencyCmd : ICmd
     {
-        private readonly Task parent;
-        private readonly Task dependent;
+        private Task parent;
+        private Task dependent;
 
         public AddDependencyCmd(Task parent, Task dependent)
         {
@@ -21,16 +21,30 @@ namespace SmartPert.Command
             this.dependent = dependent;
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
             parent.AddDependency(dependent);
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             parent.RemoveDependency(dependent);
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == this.parent)
+                parent = (Task) newItem;
+            else if (old == this.dependent)
+                dependent = (Task) newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTask(ref parent);
+            UpdateTask(ref dependent);
         }
     }
 }

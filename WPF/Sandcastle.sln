@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Sandcastle", "Sandcastle.shfbproj", "{AEDBEF07-B150-4541-9822-71464B957A85}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Appveyor|Any CPU = Appveyor|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Demo|Any CPU = Demo|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEDBEF07-B150-4541-9822-71464B957A85}.Appveyor|Any CPU.ActiveCfg = Appveyor|Any CPU
+		{AEDBEF07-B150-4541-9822-71464B957A85}.Appveyor|Any CPU.Build.0 = Appveyor|Any CPU
+		{AEDBEF07-B150-4541-9822-71464B957A85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEDBEF07-B150-4541-9822-71464B957A85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEDBEF07-B150-4541-9822-71464B957A85}.Demo|Any CPU.ActiveCfg = Demo|Any CPU
+		{AEDBEF07-B150-4541-9822-71464B957A85}.Demo|Any CPU.Build.0 = Demo|Any CPU
+		{AEDBEF07-B150-4541-9822-71464B957A85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEDBEF07-B150-4541-9822-71464B957A85}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8CE8F45-E144-4A75-89DC-E2BE5947D64B}
+	EndGlobalSection
+EndGlobal

@@ -11,26 +11,25 @@ namespace SmartPert.Command
     /// Delete Project command
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class DeleteProjectCmd : ICmd
+    public class DeleteProjectCmd : ICmd
     {
-        private readonly IModel model;
         private Project project;
 
-        public DeleteProjectCmd(IModel model, Project project)
+        public DeleteProjectCmd(Project project)
         {
-            this.model = model;
             this.project = project;
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
-            this.model.DeleteProject(project);
+            Model.Model.Instance.DeleteProject(project);
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
-            Project newProject = this.model.CreateProject(project.Name, project.StartDate, project.EndDate, project.Description);
+            IModel model = Model.Model.Instance;
+            Project newProject = model.CreateProject(project.Name, project.StartDate, project.EndDate, project.Description);
             if(newProject != null) {
                 List<Model.Task> tasks = project.Tasks; 
                 // Re-add tasks
@@ -57,10 +56,22 @@ namespace SmartPert.Command
                 {
                     newProject.AddWorker(worker);
                 }
+                CommandStack.Instance.UpdateIds(project, newProject);
                 project = newProject;
                 return true;
             }
             return false;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == project)
+                project = (Project)newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateProject(ref project);
         }
     }
 }

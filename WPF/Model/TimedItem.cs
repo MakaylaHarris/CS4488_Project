@@ -13,18 +13,25 @@ namespace SmartPert.Model
         private DateTime? endDate;
         private string name;
         private string description;
-        private int id;
+        protected int id;
         private bool isComplete;
-        protected List<User> workers;
+        protected HashSet<User> workers;
+        protected User creator;
+        protected DateTime creationDate;
 
         #region Properties
+        public User Creator { get => creator; }
+        public DateTime CreationDate { get => startDate; }
         public DateTime StartDate
         {
             get => startDate;
             set
             {
-                startDate = value;
-                Update();
+                if(startDate != value)
+                {
+                    startDate = value;
+                    PerformUpdate();
+                }
             }
         }
 
@@ -33,8 +40,15 @@ namespace SmartPert.Model
             get => endDate;
             set
             {
-                endDate = value;
-                Update();
+                if(endDate != value)
+                {
+                    endDate = value;
+                    if (endDate == null)
+                        isComplete = false;
+                    else
+                        isComplete = true;
+                    PerformUpdate();
+                }
             }
         }
 
@@ -43,8 +57,11 @@ namespace SmartPert.Model
             get => name;
             set
             {
-                name = value;
-                Update();
+                if(name != value)
+                {
+                    name = value;
+                    PerformUpdate();
+                }
             }
         }
 
@@ -53,12 +70,15 @@ namespace SmartPert.Model
             get => description;
             set
             {
-                description = value;
-                Update();
+                if(description != value)
+                {
+                    description = value;
+                    PerformUpdate();
+                }
             }
         }
 
-        public List<User> Workers { get => workers; }
+        public HashSet<User> Workers { get => workers; }
         public int Id { get => id; }
         public bool IsComplete
         {
@@ -78,29 +98,56 @@ namespace SmartPert.Model
         #endregion
 
         #region Constructor
-        public TimedItem(string name, DateTime start, DateTime? end, string description = "", int id = -1)
+        public TimedItem(string name, DateTime start, DateTime? end, string description = "", int id = -1, IItemObserver observer=null) :base(observer)
         {
             this.name = name;
             startDate = start;
             endDate = end;
             this.description = description;
-            if (id >= 0)
-            {
-                this.id = (int)id;
-            }
-            else
-            {
-                this.id = (int)Insert();
-            }
+            this.id = id;
             isComplete = EndDate != null && EndDate < DateTime.Now;
-            workers = new List<User>();
+            creator = Model.Instance.GetCurrentUser();
+            workers = new HashSet<User>();
         }
         #endregion
 
-        #region Worker Methods
-        abstract public void AddWorker(User worker, bool UpdateDB=true);
+        #region ID stuff
+        /// <summary>
+        /// Gets the id
+        /// </summary>
+        /// <returns>id</returns>
+        public override int GetHashCode() => id;
+        #endregion
 
-        abstract public void RemoveWorker(User worker, bool UpdateDB=true);
+        /// <summary>
+        /// To string
+        /// </summary>
+        /// <returns>Name</returns>
+        public override string ToString() => Name;
+
+        #region Worker Methods
+        abstract public bool AddWorker(User worker);
+
+        abstract public bool RemoveWorker(User worker);
+
+
+        /// <summary>
+        /// Used by DBReader to update workers
+        /// </summary>
+        /// <param name="updatedWorkers">the updated set</param>
+        public void DB_UpdateWorkers(HashSet<User> updatedWorkers)
+        {
+            if(updatedWorkers == null)
+            {
+                workers.Clear();
+                isUpdated = true;
+            }
+            else if(!workers.SetEquals(updatedWorkers))
+            {
+                workers = updatedWorkers;
+                isUpdated = true;
+            }
+        }
         #endregion
     }
 }

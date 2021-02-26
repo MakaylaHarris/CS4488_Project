@@ -11,24 +11,58 @@ namespace SmartPert.Model
     public class Project : TimedItem
     {
         private List<Task> tasks;
+        private const int addDays = 7;
 
         public List<Task> Tasks { get => tasks; }
 
-        public Project(string name, DateTime start, DateTime? end, string description = "", int id = -1) : base(name, start, end, description, id)
+        #region Project
+        public Project(string name, DateTime start, DateTime? end, string description = "", int id = -1, bool insert = true, bool track=true, IItemObserver observer=null) 
+            : base(name, start, end, description, id, observer)
         {
             tasks = new List<Task>();
+            PostInit(insert, track);
         }
 
-        #region Task Methods
-        public void AddTask(Task t)
+        /// <summary>
+        /// Calculates a last date if none exists for project
+        /// Implemented by : Makayla Linnastruth and Robert Nelson
+        /// </summary>
+        /// <returns></returns>
+        public DateTime CalculateLastProjectDate()
         {
-            tasks.Add(t);
+            if (this.EndDate != null)
+            {
+                return (DateTime) this.EndDate;
+            }
+
+            DateTime latestDate = this.StartDate;
+            if (this.Tasks.Count != 0)
+            {
+                foreach (Task task in this.Tasks)
+                {
+                    DateTime temp = task.CalculateLastTaskDate();
+                    if (temp.CompareTo(latestDate) > 0)
+                    {
+                        latestDate = temp;
+                    }
+                }
+
+                return latestDate;
+            }
+
+            return this.StartDate.AddDays(addDays);
         }
 
-        public void RemoveTask(Task t)
+        #endregion
+
+            #region Task Methods
+            public void AddTask(Task t)
         {
-            tasks.Remove(t);
+            if(!tasks.Contains(t))
+                tasks.Add(t);
         }
+
+        public void RemoveTask(Task t) => tasks.Remove(t);
         #endregion
 
         #region Workers
@@ -37,77 +71,157 @@ namespace SmartPert.Model
         /// Implemented 2/9/2021 by Robert Nelson
         /// </summary>
         /// <param name="worker">User on project to add</param>
-        /// <param name="updateDB">Also adds the user to the database</param>
-        public override void AddWorker(User worker, bool updateDB=true)
+        /// <returns>true if added</returns>
+        public override bool AddWorker(User worker)
         {
+            bool added = false;
             if(!workers.Contains(worker))
             {
-                workers.Add(worker);
-                if(updateDB)
+                try
                 {
                     SqlCommand command = OpenConnection("INSERT INTO UserProject (UserName, ProjectId) VALUES(@username, @projectId);");
                     command.Parameters.AddWithValue("@username", worker.Username);
                     command.Parameters.AddWithValue("@projectId", this.Id);
-                    command.ExecuteNonQuery();      // Todo: If error is thrown and it's because the primary key exists then ignore (stored procedure?)
+                    command.ExecuteNonQuery();
                     CloseConnection();
+                    workers.Add(worker);
+                    added = true;
+                    NotifyUpdate();
                 }
+                catch (SqlException) { }
             }
+            return added;
         }
 
         /// <summary>
-        /// Removes the worker from the project
+        /// Removes the worker from the project (todo, remove from all tasks on project?)
         /// Implemented 2/9/2021 by Robert Nelson
         /// </summary>
         /// <param name="worker">User to remove</param>
-        /// <param name="updateDB">Update the database</param>
-        public override void RemoveWorker(User worker, bool updateDB=true)
+        /// <returns>true if removed successfully</returns>
+        public override bool RemoveWorker(User worker)
         {
-            if(workers.Remove(worker))
+            bool removed = false;
+            if(workers.Contains(worker))
             {
-                if(updateDB)
+                try
                 {
                     SqlCommand command = OpenConnection("DELETE FROM UserProject WHERE ProjectId = @projectId AND UserName = @username);");
                     command.Parameters.AddWithValue("@projectId", Id);
                     command.Parameters.AddWithValue("@username", worker.Username);
-                    command.ExecuteNonQuery();      // Todo: ignore if the user is already removed
+                    command.ExecuteNonQuery();
                     CloseConnection();
-                }
+                    workers.Remove(worker);
+                    removed = true;
+                    NotifyUpdate();
+                } catch (SqlException) { }
             }
+            return removed;
         }
 
         #endregion
 
         #region Database
-        public override void Delete()
+        /// <summary>
+        /// Deletes the project from the database
+        /// </summary>
+        protected override void PerformDelete()
         {
-            ExecuteSql("Delete from Project Where ProjectId= " + Id + ";");
+            SqlCommand command = OpenConnection("EXEC ProjectDelete @ProjectID");
+            command.Parameters.AddWithValue("@ProjectID", Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
         }
 
-        protected override int Insert()
+        /// <summary>
+        /// Inserts the project into the database
+        /// </summary>
+        /// <throws>Exception if the call was unsuccessful</throws>
+        /// <returns>the inserted id on success</returns>
+        protected override int PerformInsert()
         {
-            return ExecuteSql("insert into Project(Name, Description, StartDate, WorkingHours, ProjectOwner) output INSERTED.ProjectId values('"
-                   + Name + "', '" + Description + "', '" + StartDate + "', '" + EndDate + "');");
+            string query = "EXEC CreateProject @ProjectName, @StartDate, @EndDate, @Description, @Creator, @CreationDate OUT, @Result OUT, @ResultId OUT";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@ProjectName", Name);
+            command.Parameters.AddWithValue("@StartDate", StartDate);
+            if (EndDate != null)
+                command.Parameters.AddWithValue("@EndDate", EndDate);
+            else
+                command.Parameters.AddWithValue("@EndDate", DBNull.Value);
+            command.Parameters.AddWithValue("@Description", Description);
+            creator = Model.Instance.GetCurrentUser();
+            if (creator != null)
+                command.Parameters.AddWithValue("@Creator", creator.Username);
+            else
+                command.Parameters.AddWithValue("@Creator", DBNull.Value);
+            var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
+            createDate.Direction = System.Data.ParameterDirection.Output;
+            var insertedId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
+            insertedId.Direction = System.Data.ParameterDirection.Output;
+            var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
+            result.Direction = System.Data.ParameterDirection.Output;
+            command.ExecuteNonQuery(); 
+            if (!(bool)result.Value)
+                throw new InsertionError("Failed to insert project " + Name + " into database!");
+            creationDate = (DateTime) createDate.Value;
+            id = (int) insertedId.Value;
+            return id;
         }
 
-        protected override void Update()
+        /// <summary>
+        /// Updates the project properties in the database
+        /// </summary>
+        protected override void PerformUpdate()
         {
-            ExecuteSql("update Project set Name = '" + Name
-                + "', Description = '" + Description +
-                "', StartDate='" + StartDate +
-                "', EndDate='" + EndDate +
-                "'Where ProjectId=" + Id + ";");
+            SqlCommand command = OpenConnection("UPDATE Project SET Name=@Name, Description=@Description, StartDate=@StartDate, EndDate=@EndDate WHERE ProjectId=@Id;");
+            command.Parameters.AddWithValue("@Name", Name);
+            command.Parameters.AddWithValue("@Description", Description);
+            command.Parameters.AddWithValue("@StartDate", StartDate);
+            if (EndDate == null)
+                command.Parameters.AddWithValue("@EndDate", DBNull.Value);
+            else
+                command.Parameters.AddWithValue("@EndDate", EndDate);
+            command.Parameters.AddWithValue("@Id", Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
         }
 
-        static public Project Parse(SqlDataReader reader)
+        static public Project Parse(SqlDataReader reader, Dictionary<string, User> users)
         {
-            return new Project(
+            string creator = DBFunctions.StringCast(reader, "Creator");
+            User user = users != null && creator != "" ? users[creator] : null;
+            Project p = new Project(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
                 DBFunctions.DateCast(reader, "EndDate"),
                 DBFunctions.StringCast(reader, "Description"),
-                (int)reader["ProjectId"]);
+                (int)reader["ProjectId"], insert: false);
+            p.creator = user;
+            p.creationDate = (DateTime)DBFunctions.DateCast(reader, "CreationDate");
+            return p;
         }
 
+        /// <summary>
+        /// Parses the project data
+        /// </summary>
+        /// <param name="reader">Sql data reader</param>
+        /// <returns>true if updated</returns>
+        public override bool PerformParse(SqlDataReader reader)
+        {
+            string name = (string)reader["Name"];
+            DateTime start = (DateTime)reader["StartDate"];
+            DateTime? end = DBFunctions.DateCast(reader, "EndDate");
+            string desc = DBFunctions.StringCast(reader, "Description");
+            if(name != Name || start != StartDate || end != EndDate || desc != Description)
+            {
+                Name = name;
+                StartDate = start;
+                EndDate = end;
+                Description = desc;
+                return true;
+            }
+            return false;
+        }
         #endregion
     }
 }

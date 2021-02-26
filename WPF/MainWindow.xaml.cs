@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,6 +16,9 @@ using SmartPert.Model;
 using SmartPert.View.Login;
 using SmartPert.View.Pages;
 using System.Windows.Threading;
+using SmartPert.View.Windows;
+using MessageBox = System.Windows.MessageBox;
+using PrintDialog = System.Windows.Controls.PrintDialog;
 
 /// <summary>
 /// Name space for the SmartPert Pert Application
@@ -29,7 +32,8 @@ namespace SmartPert
     {
         static private Random random = new Random();
         private IModel model;
-        private Chart chart;
+        //private Chart chart;
+        private WorkSpace workSpace;
         private ObservableCollection<MenuItemViewModel> items;
         public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }
         
@@ -41,8 +45,20 @@ namespace SmartPert
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
             InitModel();
-            chart = new Chart(model);
-            this.MainContent.Content = chart;
+        }
+
+        public void StateSwitcher()
+        {
+            Project project = Model.Model.Instance.GetProject();
+            if (project == null)
+            {
+                new ProjectCreator().ShowDialog();
+            }
+            else
+            {
+                workSpace = new WorkSpace();
+                this.MainContent.Content = workSpace;
+            }
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
@@ -56,12 +72,13 @@ namespace SmartPert
 
         void ErrorCatchBackToApp()
         {
-            this.MainContent.Content = chart;
+            //this.MainContent.Content = chart;
+            this.MainContent.Content = workSpace;
         }
 
         private void InitModel()
         {
-            model = new Model.Model(this);
+            model = Model.Model.GetInstance(this);
             // Check for database connection
             if (!model.IsConnected())
             {
@@ -73,12 +90,13 @@ namespace SmartPert
                 LoginWindow login = new LoginWindow(model);
                 login.ShowDialog();
             }
+            OnModelUpdate(model.GetProject());
         }
 
 #region Menu bar
         private void New_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            new ProjectCreator().ShowDialog();
         }
 
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -127,24 +145,29 @@ namespace SmartPert
             }
         }
 
+        private void Exit_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            Close();
+        }
+
         private void Undo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = false;
+            e.CanExecute = Command.CommandStack.Instance.CanUndo();
         }
 
         private void Undo_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Command.CommandStack.Instance.Undo();
         }
 
         private void Redo_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = false;
+            e.CanExecute = Command.CommandStack.Instance.CanRedo();
         }
 
         private void Redo_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Command.CommandStack.Instance.Redo();
         }
 
         private void Cut_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -179,12 +202,12 @@ namespace SmartPert
 
         private void AddTask_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = false;
+            e.CanExecute = MainContent.Content != null && MainContent.Content.GetType() == typeof(WorkSpace);
         }
 
         private void AddTask_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            new TaskEditor().ShowDialog();
         }
 
         public void ShowDBConnectionSettings()
@@ -288,13 +311,22 @@ namespace SmartPert
         {
             model.Refresh();
         }
+
+        private void Settings_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            ProjectCreator pc = new ProjectCreator();
+            Project p = model.GetProject();
+            if (p != null)
+                pc.Project = p;
+            pc.ShowDialog();
+        }
 #endregion
 
 #region Model Update
         public void OnModelUpdate(Project p)
         {
             PopulateProjects();
-            Console.WriteLine("Model Updated");
+            StateSwitcher();
         }
 
         private void PopulateProjects()

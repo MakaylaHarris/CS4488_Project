@@ -11,10 +11,10 @@ namespace SmartPert.Command
     /// Add worker to a item
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class AddWorkerCmd : ICmd
+    public class AddWorkerCmd : ICmd
     {
-        private readonly TimedItem item;
-        private readonly User worker;
+        private TimedItem item;
+        private User worker;
 
         public AddWorkerCmd(TimedItem item, User worker)
         {
@@ -22,16 +22,28 @@ namespace SmartPert.Command
             this.worker = worker;
         }
 
-        public bool Execute()
+        protected override bool Execute()
         {
             item.AddWorker(worker);
             return true;
         }
 
-        public bool Undo()
+        public override bool Undo()
         {
             item.RemoveWorker(worker);
             return true;
+        }
+
+        public override void OnIdUpdate(TimedItem old, TimedItem newItem)
+        {
+            if (old == this.item)
+                item = newItem;
+        }
+
+        public override void OnModelUpdate(Project p)
+        {
+            UpdateTimedItem(ref item);
+            UpdateUser(ref worker);
         }
     }
 }
