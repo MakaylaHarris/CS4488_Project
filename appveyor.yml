@@ -49,8 +49,8 @@
     release: SmartPert-v$(APPVEYOR_BUILD_VERSION)
     description: 'First prerelease'
     provider: GitHub
-#    auth_token:
-#      secure:
+    auth_token:
+      secure: F6rg8ubZFJRBECVNyEIIqA3PjO0s9Z3GK6TQdcRRy6sfgXgWJowyxn/tRNUFuDJP
     artifact: SmartPert.zip, DemoAndCode.zip
     draft: true
     prerelease: true
