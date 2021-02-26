@@ -45,7 +45,6 @@ namespace SmartPert
             items = new ObservableCollection<MenuItemViewModel>();
             DataContext = this;
             InitModel();
-            StateSwitcher();
         }
 
         public void StateSwitcher()
@@ -91,6 +90,7 @@ namespace SmartPert
                 LoginWindow login = new LoginWindow(model);
                 login.ShowDialog();
             }
+            OnModelUpdate(model.GetProject());
         }
 
 #region Menu bar
