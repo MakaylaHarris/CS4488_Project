@@ -36,7 +36,7 @@ namespace SmartPert
         private WorkSpace workSpace;
         private ObservableCollection<MenuItemViewModel> items;
         public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }
-        
+
 
         public MainWindow()
         {
