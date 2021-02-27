@@ -19,7 +19,7 @@ namespace SmartPert.View.Pages
     /// </summary>
 
     //By Levi Delezene
-    public partial class Chart : Page, IViewModel
+    public partial class Chart : Page
     {
 
         List<Task> taskList;
@@ -52,7 +52,6 @@ namespace SmartPert.View.Pages
             InitializeComponent();
 
             this.model = model;
-            model.Subscribe(this);
             _project = model.GetProject();
             this.PreviewMouseWheel += ZoomCanvas;
             this.MouseMove += DragCanvas;
@@ -364,7 +363,7 @@ namespace SmartPert.View.Pages
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            new TaskEditor().ShowDialog();
+            StateSwitcher.Instance.OnTaskCreateOrEdit();
             DrawGraph(Project.Tasks);
         }
 

@@ -76,5 +76,9 @@ namespace PertTest.Model
             Console.WriteLine("DBReader sent update");
         }
 
+        public void OnDBDisconnect()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

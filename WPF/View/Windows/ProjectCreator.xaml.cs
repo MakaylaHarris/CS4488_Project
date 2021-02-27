@@ -57,7 +57,8 @@ namespace SmartPert.View.Windows
                     Title = "Project Creator";
                     SubmitBtn.Visibility = Visibility.Visible;
                     CancelBtn.Visibility = Visibility.Visible;
-                    project.UnSubscribe(this);
+                    if(project != null)
+                        project.UnSubscribe(this);
                 }
 
             }
