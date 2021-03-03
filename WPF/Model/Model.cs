@@ -299,6 +299,16 @@ namespace SmartPert.Model
             return this.reader.TestNewConnection(connectString);
         }
 
+        /// <summary>
+        /// Disconnected event
+        /// </summary>
+        public void OnDBDisconnect()
+        {
+            foreach (IViewModel viewModel in viewModels)
+                viewModel.OnDisconnect();
+        }
+
+
         #endregion
 
         #region Get Updated Version of objects
@@ -345,6 +355,7 @@ namespace SmartPert.Model
             if (updated != null || updateIfNull)
                 t = updated;
         }
+
         #endregion
     }
 }

@@ -179,6 +179,7 @@
     </ApplicationDefinition>
     <Compile Include="Command\CommandStack.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="StateSwitcher.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
     <Compile Include="View\Controls\FilteredComboBox.xaml.cs">
@@ -208,6 +209,9 @@
     <Compile Include="TaskToolTip.cs" />
     <Compile Include="View\Pages\ErrorCatch.xaml.cs">
       <DependentUpon>ErrorCatch.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Pages\HintAndLink.xaml.cs">
+      <DependentUpon>HintAndLink.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Windows\ProjectCreator.xaml.cs">
       <DependentUpon>ProjectCreator.xaml</DependentUpon>
@@ -275,6 +279,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Pages\ErrorCatch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\HintAndLink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

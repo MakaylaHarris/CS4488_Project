@@ -25,7 +25,7 @@ namespace SmartPert.View.Controls
         private void mi_editTask_Click(object sender, RoutedEventArgs e)
         {
             Task task = (Task)((MenuItem)sender).DataContext;
-            new TaskEditor(task).ShowDialog();
+            StateSwitcher.Instance.OnTaskCreateOrEdit(task);
             _chart.RefreshGraph();
             //_chart.DrawGraph(_chart.GetTasksAndDependanciesFromDatabase());
         }
