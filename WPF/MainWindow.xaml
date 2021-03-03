@@ -52,6 +52,11 @@
         <!--#region Menus-->
         <DockPanel>
             <Menu DockPanel.Dock="Top" x:Name="TopMenu" IsMainMenu="True">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel HorizontalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
                 <MenuItem Header="_File" x:Name="FileMenu">
                     <MenuItem Command="New" >
                     </MenuItem>
@@ -96,7 +101,7 @@
                     <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.AboutCommand}" />
                 </MenuItem>
-                <MenuItem Header="Account">
+                <MenuItem Header="Account" HorizontalAlignment="Right">
                     <MenuItem Command="{x:Static local:CustomCommands.AcctSettings}"/>
                 </MenuItem>
             </Menu>

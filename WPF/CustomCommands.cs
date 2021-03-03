@@ -16,7 +16,7 @@ namespace SmartPert
         public static readonly RoutedCommand AddTaskCommand = new RoutedUICommand("Add Task", "AddTaskCommand", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
 {
             new KeyGesture(Key.T, ModifierKeys.Control)
-}));
+        }));
 
         public static readonly RoutedCommand DBConnectCommand = new RoutedUICommand("Database Connection", "DBConnect", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
         {
@@ -55,7 +55,7 @@ namespace SmartPert
 
         public static readonly RoutedCommand AcctSettings = new RoutedUICommand("Account", "Account", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
         {
-            new KeyGesture(Key.A)
+            new KeyGesture(Key.T,  ModifierKeys.Alt)
         }));
     }
 }
