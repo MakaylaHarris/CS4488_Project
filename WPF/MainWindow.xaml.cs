@@ -320,6 +320,11 @@ namespace SmartPert
                 pc.Project = p;
             pc.ShowDialog();
         }
+        
+        private void Account_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
 #endregion
 
 #region Model Update
