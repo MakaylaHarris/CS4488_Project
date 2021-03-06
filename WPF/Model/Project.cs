@@ -11,7 +11,6 @@ namespace SmartPert.Model
     public class Project : TimedItem
     {
         private List<Task> tasks;
-        private const int addDays = 7;
 
         public List<Task> Tasks { get => tasks; }
 
@@ -27,14 +26,10 @@ namespace SmartPert.Model
         /// Calculates a last date if none exists for project
         /// Implemented by : Makayla Linnastruth and Robert Nelson
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Latest date of a project</returns>
         public DateTime CalculateLastProjectDate()
         {
-            if (this.EndDate != null)
-            {
-                return (DateTime) this.EndDate;
-            }
-
+            // Find last task date
             DateTime latestDate = this.StartDate;
             if (this.Tasks.Count != 0)
             {
@@ -46,17 +41,17 @@ namespace SmartPert.Model
                         latestDate = temp;
                     }
                 }
-
-                return latestDate;
             }
-
-            return this.StartDate.AddDays(addDays);
+            // Check if end date is later than the latest
+            if (EndDate != null && latestDate.CompareTo((DateTime)EndDate) < 0)
+                latestDate = (DateTime)EndDate;
+            return latestDate;
         }
 
         #endregion
 
-            #region Task Methods
-            public void AddTask(Task t)
+        #region Task Methods
+        public void AddTask(Task t)
         {
             if(!tasks.Contains(t))
                 tasks.Add(t);

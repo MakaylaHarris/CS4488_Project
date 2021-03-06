@@ -349,13 +349,14 @@ namespace SmartPert.Model
         /// <returns></returns>
         public DateTime CalculateLastTaskDate()
         {
-            if (this.EndDate != null)
+            DateTime max = this.StartDate.AddDays(maxDuration);
+            if (this.EndDate != null && EndDate >= max)
             {
                 return (DateTime)this.EndDate;
             }
             else
             {
-                return this.StartDate.AddDays(maxDuration);
+                return max;
             }
         }
     }

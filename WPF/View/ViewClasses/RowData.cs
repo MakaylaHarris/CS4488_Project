@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartPert.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -13,6 +14,7 @@ namespace SmartPert.View.ViewClasses
         private int _StartDateCol;
         private int _ColSpan;
         private bool _isProject;
+        public TimedItem Item;
 
         public RowData(string name, int startDateCol, int endDateCol, bool isProject)
         {

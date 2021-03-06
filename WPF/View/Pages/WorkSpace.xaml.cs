@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SmartPert.ViewModels;
 using SmartPert.View.ViewClasses;
+using SmartPert.View.Controls;
 
 namespace SmartPert.View.Pages
 {
@@ -25,7 +26,6 @@ namespace SmartPert.View.Pages
     public partial class WorkSpace : Page
     {
         WorkSpaceViewModel viewModel;
-        private List<string> test = new List<string>();
         //starts the grid content rows at 2 since the headers take up two rows
         //starts the grid content columns at 1 since the Project/task column is the first
         private const int rowStart = 2;
@@ -103,15 +103,20 @@ namespace SmartPert.View.Pages
         /// </summary>
         private void AddTaskControls()
         {
+            Control MyControl;
+            RowData rowData;
             for (int i = 0; i < viewModel.RowData.Count; i++)
             {
-                //TODO: add different time case scenarios
-                Button MyControl = new Button();
+                rowData = viewModel.RowData[i];
+                if (rowData.IsProject)
+                    MyControl = new Button();
+                else
+                    MyControl = new TaskControl() { Task = (Model.Task) rowData.Item };
                 MyControl.Margin = new Thickness(0, 10, 0, 10);
 
                 Grid.SetRow(MyControl, i + 2);
-                Grid.SetColumn(MyControl, viewModel.RowData[i].StartDateCol);
-                Grid.SetColumnSpan(MyControl, viewModel.RowData[i].ColSpan);
+                Grid.SetColumn(MyControl, rowData.StartDateCol);
+                Grid.SetColumnSpan(MyControl, rowData.ColSpan);
                 Grid.SetZIndex(MyControl, 100);
                 mainGrid.Children.Add(MyControl);
                 

@@ -186,14 +186,12 @@ namespace SmartPert.View.Pages
             tempDuration = maxDuration + 1;
 
             //taskcontrol
-            TaskControl t = new TaskControl(parent, this);
+            TaskControl t = new TaskControl();
             t.taskBorder.Background = taskBrush;
             t.ToolTip = createToolTip(parent);
             t.MouseDown += resizeTask;
             if(parent.IsComplete)
             {
-                t.Completed.Visibility = Visibility.Visible;
-                t.Completed.Width = dayWidth * ((DateTime)parent.EndDate - parent.StartDate).TotalDays;
             }
             Canvas.SetLeft(t, ((DateTime)parent.StartDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(t, topMargin);
@@ -452,7 +450,7 @@ namespace SmartPert.View.Pages
             taskGrid.Children.Add(taskRect);
             taskGrid.Children.Add(taskTextBlock);
 
-            TaskControl taskControl = new TaskControl(task, this);
+            TaskControl taskControl = new TaskControl();
             taskControl.Width = rectVal.Width;
             taskControl.Height = 50;
 
