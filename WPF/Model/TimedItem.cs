@@ -30,7 +30,7 @@ namespace SmartPert.Model
                 if(startDate != value)
                 {
                     startDate = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace SmartPert.Model
                         isComplete = false;
                     else
                         isComplete = true;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -60,7 +60,7 @@ namespace SmartPert.Model
                 if(name != value)
                 {
                     name = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace SmartPert.Model
                 if(description != value)
                 {
                     description = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }

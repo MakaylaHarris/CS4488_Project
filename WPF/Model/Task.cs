@@ -39,7 +39,7 @@ namespace SmartPert.Model
                     else if (value > MaxDuration)
                         maxDuration = value;
                     mostLikelyDuration = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -50,7 +50,7 @@ namespace SmartPert.Model
                     if (value < mostLikelyDuration)
                         LikelyDuration = value;
                     maxDuration = value;
-                    PerformUpdate();
+                    Update();
                 }
             } 
         }
@@ -64,7 +64,7 @@ namespace SmartPert.Model
                     if (value > LikelyDuration)
                         LikelyDuration = value;
                     minDuration = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }

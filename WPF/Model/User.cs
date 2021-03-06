@@ -20,7 +20,7 @@ namespace SmartPert.Model
             set
             {
                 name = value;
-                PerformUpdate();
+                Update();
             }
         }
 
@@ -30,7 +30,7 @@ namespace SmartPert.Model
             set
             {
                 email = value;
-                PerformUpdate();
+                Update();
             }
         }
 
@@ -40,7 +40,7 @@ namespace SmartPert.Model
             set
             {
                 password = value;
-                PerformUpdate();
+                Update();
             }
         }
 
