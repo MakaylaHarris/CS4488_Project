@@ -83,7 +83,7 @@ namespace SmartPert.ViewModels
             get
             {
                 DateTime min = this.Project.StartDate.Date.AddDays(-GridOffset);
-                DateTime max = min.AddDays(DaySpan);
+                DateTime max = Project.StartDate.AddDays(DaySpan);
                 return (min.CompareTo(DateTime.Now) <= 0 && max.CompareTo(DateTime.Now) >= 0 );
             }
         }
@@ -125,7 +125,7 @@ namespace SmartPert.ViewModels
         {
             List<String> weekHeaders = new List<string>();
             DateTime headerStore = this.Project.StartDate.AddDays(-GridOffset);
-            for(int i = 0; i < (DaySpan + 7 - 1 + GridOffset) / 7; i++)
+            for(int i = 0, max = (DaySpan + 7 - 1 + GridOffset) / 7; i < max; i++)
             {
                 weekHeaders.Add(String.Format("{0} {1}", headerStore.ToString("MMM"), headerStore.ToString("dd")));
                 headerStore = headerStore.AddDays(7);
