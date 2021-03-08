@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,6 +15,7 @@ using System.Windows.Shapes;
 using SmartPert.ViewModels;
 using SmartPert.View.ViewClasses;
 using SmartPert.View.Controls;
+using SmartPert.Model;
 
 namespace SmartPert.View.Pages
 {
@@ -33,13 +33,27 @@ namespace SmartPert.View.Pages
         //This is the max integer number used to mean span all
         private const int maxInt = 2147483647;
         private List<int> weekendCols = new List<int>();
+        private Dictionary<Task, TaskControl> taskControls;
 
         public WorkSpace()
         {
             InitializeComponent();
             viewModel = new WorkSpaceViewModel();
+            taskControls = new Dictionary<Task, TaskControl>();
             DataContext = viewModel.RowData;
+            mainGrid.SizeChanged += MainGrid_SizeChanged;
             BuildGrid();
+        }
+
+        private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize.Width < ActualWidth)
+                mainGrid.Width = ActualWidth;
+            else
+            {
+                MainCanvas.Width = e.NewSize.Width;
+                MainCanvas.Height = e.NewSize.Height > Height ? e.NewSize.Height : Height;
+            }
         }
 
         /// <summary>
@@ -51,18 +65,18 @@ namespace SmartPert.View.Pages
         /// <returns>number of columns, negative if end is before start</returns>
         public int GetColumnShift(double start, double end)
         {
-            int startCol = 0, endCol = 0, currentCol = 0;
+            int startCol = -1, endCol = -1, currentCol = 0;
             double totalWidth = 0;
             foreach(var columnDef in mainGrid.ColumnDefinitions)
             {
                 totalWidth += columnDef.ActualWidth;
-                if (startCol == 0 && totalWidth > start)
+                if (startCol == -1 && totalWidth > start)
                 {
                     startCol = currentCol;
                     if (endCol > 0)     // Shortcut if we found columns
                         break;
                 }
-                if (endCol == 0 && totalWidth > end)
+                if (endCol == -1 && totalWidth > end)
                 {
                     endCol = currentCol;
                     if (startCol > 0)
@@ -70,7 +84,25 @@ namespace SmartPert.View.Pages
                 }
                 ++currentCol;
             }
+            if (endCol == -1)
+                endCol = currentCol;
             return endCol - startCol;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            AddDependencies();
+        }
+
+        // Added 3/8/2021 by Robert Nelson 
+        // Adds the task controls dependencies
+        private void AddDependencies()
+        {
+            foreach(KeyValuePair<Task, TaskControl> keyValue in taskControls)
+            {
+                foreach (Task t in keyValue.Key.Dependencies)
+                    keyValue.Value.ConnectDependentControl(taskControls[t]);
+            }
         }
 
         private void BuildGrid()
@@ -143,15 +175,19 @@ namespace SmartPert.View.Pages
                 if (rowData.IsProject)
                     MyControl = new Button();
                 else
-                    MyControl = new TaskControl(this, rowData);
-                MyControl.Margin = new Thickness(0, 10, 0, 10);
+                {
+                    TaskControl control = new TaskControl(this, rowData) { Canvas = MainCanvas };
+                    taskControls.Add(control.Task, control);
+                    MyControl = control;
+                }
+                MyControl.Margin = new Thickness(0, 4, 0, 4);
 
                 Grid.SetRow(MyControl, i + 2);
                 Grid.SetColumn(MyControl, rowData.StartDateCol);
                 Grid.SetColumnSpan(MyControl, rowData.ColSpan);
                 Grid.SetZIndex(MyControl, 100);
                 mainGrid.Children.Add(MyControl);
-                
+
             }
         }
 

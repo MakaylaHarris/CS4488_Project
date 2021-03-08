@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,6 +11,9 @@ using SmartPert.View.Windows;
 
 namespace SmartPert.View.Controls
 {
+    /// <summary>
+    /// Shifters control what to shift on the task when user clicks and drags
+    /// </summary>
     public enum Shifter
     {
         MinEstShifter = 1,
@@ -23,7 +27,7 @@ namespace SmartPert.View.Controls
     /// Interaction logic for TaskControl.xaml
     /// Redone 3/5/2021 by Robert Nelson
     /// </summary>
-    public partial class TaskControl : UserControl
+    public partial class TaskControl : Connectable
     {
         private RowData rowData;
         private Color completedColor;
@@ -34,6 +38,7 @@ namespace SmartPert.View.Controls
         private Brush likelyColor;
         private Point dragStartPoint;
         private Shifter shifter;
+        private Task task;
 
         #region Properties
         /// <summary>
@@ -92,7 +97,7 @@ namespace SmartPert.View.Controls
             }
         }
 
-        private Task Task { get => (Task)rowData.TimedItem; }
+        public Task Task { get => task; }
         #endregion
 
         #region Constructor
@@ -104,9 +109,12 @@ namespace SmartPert.View.Controls
             InitializeComponent();
             DataContext = this;
             WorkSpace = workSpace;
+            task = (Task)rowData.TimedItem;
             this.RowData = rowData;
             CompletedColor = ((SolidColorBrush)FindResource("SecondaryHueMidBrush")).Color;
             IncompleteColor = ((SolidColorBrush) FindResource("PrimaryHueMidBrush")).Color;
+            AddAnchor(LeftAnchor);
+            AddAnchor(RightAnchor);
         }
 
         #endregion
@@ -242,7 +250,31 @@ namespace SmartPert.View.Controls
         {
             new TaskEditor(Task).ShowDialog();
         }
+
         #endregion
 
+        #region Public Methods
+        /// <summary>
+        /// Connect dependencies
+        /// </summary>
+        /// <param name="control">the task control that is a dependent</param>
+        public void ConnectDependentControl(TaskControl control)
+        {
+                RightAnchor.Connect(control.LeftAnchor);
+        }
+
+        public override void OnConnect(Anchor sender, Connectable target, bool isReceiver)
+        {
+            if (!isReceiver)
+                Task.AddDependency(((TaskControl)target).Task);
+        }
+
+        public override void OnDisconnect(Anchor sender, Connectable target, bool isReceiver)
+        {
+            if (!isReceiver)
+                Task.RemoveDependency(((TaskControl)target).Task);
+        }
+
+        #endregion
     }
 }

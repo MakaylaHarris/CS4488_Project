@@ -183,6 +183,9 @@
     <Compile Include="StateSwitcher.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
+    <Compile Include="View\ViewClasses\Anchor.cs" />
+    <Compile Include="View\ViewClasses\Connectable.cs" />
+    <Compile Include="View\ViewClasses\Connector.cs" />
     <Compile Include="View\Controls\FilteredComboBox.xaml.cs">
       <DependentUpon>FilteredComboBox.xaml</DependentUpon>
     </Compile>
@@ -214,6 +217,7 @@
     <Compile Include="View\Pages\HintAndLink.xaml.cs">
       <DependentUpon>HintAndLink.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ViewClasses\CtrlHitTest.cs" />
     <Compile Include="View\Windows\ProjectCreator.xaml.cs">
       <DependentUpon>ProjectCreator.xaml</DependentUpon>
     </Compile>
