@@ -167,6 +167,9 @@
     <Build Include="dbo\StoredProcedures\TaskDelete.sql" />
     <None Include="Scripts\ClearProjects.sql" />
     <None Include="Scripts\ClearUsers.sql" />
+    <None Include="Scripts\DeleteData.sql">
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PertDB.refactorlog" />
