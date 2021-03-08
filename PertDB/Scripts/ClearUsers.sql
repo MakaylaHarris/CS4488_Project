@@ -1,1 +1,4 @@
-﻿Delete from [User]
+﻿USE SmartPertDB;
+GO
+
+Delete from [User];

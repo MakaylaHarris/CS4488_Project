@@ -1,1 +1,4 @@
-﻿DELETE FROM dbo.Project;
+﻿USE SmartPertDB;
+GO
+
+DELETE FROM dbo.Project;
