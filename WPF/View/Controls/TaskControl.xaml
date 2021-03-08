@@ -4,7 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SmartPert.View.Controls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             MouseDown="UserControl_MouseDown"
+             MouseUp="UserControl_MouseUp"
+             MouseDoubleClick="UserControl_MouseDoubleClick"
              d:DesignHeight="100" d:DesignWidth="100">
     <Grid>
         <Border x:Name="taskBorder"

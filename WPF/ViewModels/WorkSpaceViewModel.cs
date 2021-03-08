@@ -108,11 +108,15 @@ namespace SmartPert.ViewModels
             foreach (Model.Task task in Project.Tasks)
             {
                 RowData num2 = new RowData(task.Name, 
-                    (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, 
-                    (((DateTime)task.CalculateLastTaskDate()).Date - ((DateTime)task.StartDate).Date).Days, false)
-                {
-                    Item = task
-                };
+                    startDateCol: (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, 
+                    colSpan: (((DateTime)task.CalculateLastTaskDate()).Date - ((DateTime)task.StartDate).Date).Days, 
+                    isProject: false,
+                    endDateSpan: task.EndDate != null ? ((DateTime)task.EndDate - task.StartDate).Days : -1,
+                    minEstSpan: task.MinDuration,
+                    maxEstSpan: task.MaxDuration - task.LikelyDuration,
+                    likelyEstSpan: task.LikelyDuration - task.MinDuration,
+                    timedItem: task
+                    );
                 this.RowData.Add(num2);
             }
         }

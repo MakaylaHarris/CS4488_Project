@@ -41,6 +41,38 @@ namespace SmartPert.View.Pages
             DataContext = viewModel.RowData;
             BuildGrid();
         }
+
+        /// <summary>
+        /// Gets the column distance between start and end points
+        /// Created 3/6/2021 by Robert Nelson
+        /// </summary>
+        /// <param name="start">start</param>
+        /// <param name="end">end</param>
+        /// <returns>number of columns, negative if end is before start</returns>
+        public int GetColumnShift(double start, double end)
+        {
+            int startCol = 0, endCol = 0, currentCol = 0;
+            double totalWidth = 0;
+            foreach(var columnDef in mainGrid.ColumnDefinitions)
+            {
+                totalWidth += columnDef.ActualWidth;
+                if (startCol == 0 && totalWidth > start)
+                {
+                    startCol = currentCol;
+                    if (endCol > 0)     // Shortcut if we found columns
+                        break;
+                }
+                if (endCol == 0 && totalWidth > end)
+                {
+                    endCol = currentCol;
+                    if (startCol > 0)
+                        break;
+                }
+                ++currentCol;
+            }
+            return endCol - startCol;
+        }
+
         private void BuildGrid()
         {
             AddRows();
@@ -111,7 +143,7 @@ namespace SmartPert.View.Pages
                 if (rowData.IsProject)
                     MyControl = new Button();
                 else
-                    MyControl = new TaskControl() { Task = (Model.Task) rowData.Item };
+                    MyControl = new TaskControl(this, rowData);
                 MyControl.Margin = new Thickness(0, 10, 0, 10);
 
                 Grid.SetRow(MyControl, i + 2);

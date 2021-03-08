@@ -186,7 +186,7 @@ namespace SmartPert.View.Pages
             tempDuration = maxDuration + 1;
 
             //taskcontrol
-            TaskControl t = new TaskControl();
+            TaskControl t = new TaskControl(null, null);
             t.taskBorder.Background = taskBrush;
             t.ToolTip = createToolTip(parent);
             t.MouseDown += resizeTask;
@@ -450,7 +450,7 @@ namespace SmartPert.View.Pages
             taskGrid.Children.Add(taskRect);
             taskGrid.Children.Add(taskTextBlock);
 
-            TaskControl taskControl = new TaskControl();
+            TaskControl taskControl = new TaskControl(null, null);
             taskControl.Width = rectVal.Width;
             taskControl.Height = 50;
 

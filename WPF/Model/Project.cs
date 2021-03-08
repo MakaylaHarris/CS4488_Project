@@ -54,10 +54,17 @@ namespace SmartPert.Model
         public void AddTask(Task t)
         {
             if(!tasks.Contains(t))
+            {
                 tasks.Add(t);
+                NotifyUpdate();
+            }
         }
 
-        public void RemoveTask(Task t) => tasks.Remove(t);
+        public void RemoveTask(Task t)
+        {
+            tasks.Remove(t);
+            NotifyUpdate();
+        }
         #endregion
 
         #region Workers

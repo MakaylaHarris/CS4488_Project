@@ -178,6 +178,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\CommandStack.cs" />
+    <Compile Include="Command\TaskShiftCmd.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="StateSwitcher.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />

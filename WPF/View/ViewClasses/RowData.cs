@@ -8,20 +8,32 @@ using System.Threading.Tasks;
 
 namespace SmartPert.View.ViewClasses
 {
-    class RowData
+    /// <summary>
+    /// View class for handling a row on the workspace corresponding to a TimedItem
+    /// </summary>
+    public class RowData
     {
         private string _Name;
         private int _StartDateCol;
         private int _ColSpan;
         private bool _isProject;
-        public TimedItem Item;
+        private readonly int endDateSpan;
+        private readonly int minEstSpan;
+        private readonly int maxEstSpan;
+        private readonly int likelyEstSpan;
+        private readonly TimedItem timedItem;
 
-        public RowData(string name, int startDateCol, int endDateCol, bool isProject)
+        public RowData(string name, int startDateCol, int colSpan, bool isProject, int endDateSpan = -1, int minEstSpan = -1, int maxEstSpan = -1, int likelyEstSpan = -1, TimedItem timedItem = null)
         {
             _Name = name;
             _StartDateCol = startDateCol;
-            _ColSpan = endDateCol;
+            _ColSpan = colSpan;
             _isProject = isProject;
+            this.endDateSpan = endDateSpan;
+            this.minEstSpan = minEstSpan;
+            this.maxEstSpan = maxEstSpan;
+            this.likelyEstSpan = likelyEstSpan;
+            this.timedItem = timedItem;
         }
 
         public string Name
@@ -43,5 +55,15 @@ namespace SmartPert.View.ViewClasses
         {
             get => _isProject;
         }
+        
+        public int EndDateSpan => endDateSpan;
+
+        public int MinEstSpan => minEstSpan;
+
+        public int MaxEstSpan => maxEstSpan;
+
+        public int LikelyEstSpan => likelyEstSpan;
+
+        public TimedItem TimedItem => timedItem;
     }
 }
