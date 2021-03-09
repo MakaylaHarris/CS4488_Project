@@ -9,7 +9,8 @@
 	[MostLikelyEstDuration] [int] NOT NULL,
 	[ProjectId] [int] NOT NULL,
 	[CreationDate] [datetime] NOT NULL,
-	[CreatorUsername] VARCHAR(50) NULL
+	[CreatorUsername] VARCHAR(50) NULL,
+	[ProjectRow] [int] NOT NULL		/* The row number in relation to project*/
  CONSTRAINT [PK_Task] PRIMARY KEY CLUSTERED 
 (
 	[TaskId] ASC

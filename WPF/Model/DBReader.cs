@@ -23,6 +23,7 @@ namespace SmartPert.Model
         private Dictionary<int, HashSet<User>> projectWorkers;
         private Dictionary<int, HashSet<User>> taskWorkers;
         private Dictionary<int, HashSet<Task>> dependencies;
+        private Dictionary<int, HashSet<Task>> subtasks;
 
         private DBPoller polling;
         private SqlConnection connection;
@@ -78,6 +79,7 @@ namespace SmartPert.Model
             projectWorkers = new Dictionary<int, HashSet<User>>();
             taskWorkers = new Dictionary<int, HashSet<User>>();
             dependencies = new Dictionary<int, HashSet<Task>>();
+            subtasks = new Dictionary<int, HashSet<Task>>();
             isUpdating = false;
         }
         #endregion
@@ -145,7 +147,7 @@ namespace SmartPert.Model
             Dictionary<int, bool> found = new Dictionary<int, bool>();
             foreach (Task task in tasks.Values)
                 found[task.Id] = false;
-            SqlDataReader reader = OpenReader("Select * from Task;");
+            SqlDataReader reader = OpenReader("Select * from Task ORDER BY ProjectRow DESC;");
             while (reader.Read())
             {
                 if(tasks.TryGetValue((int) reader["TaskId"], out t))
@@ -223,6 +225,39 @@ namespace SmartPert.Model
                 task.DB_UpdateDependencies(keyValue.Value);
             }
             dependencies = newDepend;
+        }
+
+        private void UpdateSubtasks(Dictionary<int, Task> idToTask)
+        {
+            // Grab the new data
+            Dictionary<int, HashSet<Task>> newSubtasks = new Dictionary<int, HashSet<Task>>();
+            HashSet<Task> tmp;
+            SqlDataReader reader = ReadTable("SubTask");
+            while (reader.Read())
+            {
+                int rootId = (int)reader["ParentTaskId"];
+                if (!newSubtasks.TryGetValue(rootId, out tmp))
+                    newSubtasks[rootId] = tmp = new HashSet<Task>();
+                tmp.Add(idToTask[(int)reader["SubTaskId"]]);
+            }
+            reader.Close();
+
+            // Now update any removed subtasks
+            foreach (int key in subtasks.Keys)
+            {
+                if (!newSubtasks.ContainsKey(key))
+                    if (idToTask.ContainsKey(key))
+                        idToTask[key].DB_UpdateSubtasks(null);
+            }
+            Task task;
+            // And update new/changed subtasks
+            foreach (KeyValuePair<int, HashSet<Task>> keyValue in newSubtasks)
+            {
+                task = idToTask[keyValue.Key];
+                task.DB_UpdateSubtasks(keyValue.Value);
+            }
+            subtasks = newSubtasks;
+
         }
 
         private Dictionary<int, HashSet<User>> ReadWorkerData(string table, string id)
@@ -538,6 +573,7 @@ namespace SmartPert.Model
             UpdateProject();
             Dictionary<int, Task> idToTask = UpdateTasks();
             UpdateDependencies(idToTask);
+            UpdateSubtasks(idToTask);
             UpdateProjectWorkers();
             UpdateTaskWorkers();
             connection.Close();

@@ -150,8 +150,8 @@ namespace SmartPert.Model
         #region Private Methods
         private void NotifyDelete()
         {
-            foreach (IItemObserver observer in observers)
-                observer.OnDeleted(this);
+            for (int i = observers.Count - 1; i >= 0; i--)
+                observers[i].OnDeleted(this);
             observers.Clear();      // No more updates
         }
 
@@ -176,7 +176,8 @@ namespace SmartPert.Model
         /// <param name="observer">observer</param>
         public void UnSubscribe(IItemObserver observer)
         {
-            observers.Remove(observer);
+            if(!isDeleted && !isOutdated)
+                observers.Remove(observer);
         }
 
         /// <summary>

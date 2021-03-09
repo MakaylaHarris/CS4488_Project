@@ -147,16 +147,7 @@ namespace SmartPert.View.Windows
         #region Event Handlers
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            if (!AssigneePopup.IsFocused && !cb_assign.IsMouseOver && !IsMouseOver)
-            {
-                // Todo: Known issue when creating task and pressing tab this throws null exception
-                try
-                {
-                    Close();
-                }
-                catch (InvalidOperationException) { 
-                }
-            }
+           Close();
         }
 
 
@@ -210,7 +201,6 @@ namespace SmartPert.View.Windows
         private void On_Max_Change(object sender, int val)
         {
             // Ensure Max >= most likely
-            Console.WriteLine(val);
             if (val < MostLikelyDuration.Value)
                 MostLikelyDuration.Value = val;
             else
@@ -255,7 +245,7 @@ namespace SmartPert.View.Windows
                 Assignees.Add(user);
             ObservableCollection<object> items = cb_assign.Items;
             items.Clear();
-            foreach (object o in task.Proj.Workers)
+            foreach (object o in task.Project.Workers)
                 items.Add(o);
         }
 

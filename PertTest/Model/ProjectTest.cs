@@ -19,7 +19,7 @@ namespace PertTest.Model
         private Project project;
 
         #region Constructor
-        public ProjectTest()
+        public ProjectTest() : base()
         {
             name = "Project 1123462123";
             description = "Test project";
@@ -75,7 +75,7 @@ namespace PertTest.Model
             try
             {
                 command.ExecuteNonQuery();
-            } catch(SqlException) { }
+            } catch(Exception) { }
             CloseConnection();
         }
 

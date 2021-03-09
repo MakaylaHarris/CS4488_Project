@@ -177,7 +177,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command\AddSubTaskCmd.cs" />
     <Compile Include="Command\CommandStack.cs" />
+    <Compile Include="Command\RemoveSubtaskCmd.cs" />
     <Compile Include="Command\TaskShiftCmd.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="StateSwitcher.cs" />
@@ -206,9 +208,6 @@
     <Compile Include="View\OpenProjectCommand.cs" />
     <Compile Include="View\Login\RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Pages\Chart.xaml.cs">
-      <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
     <Compile Include="TaskToolTip.cs" />
     <Compile Include="View\Pages\ErrorCatch.xaml.cs">
@@ -276,10 +275,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Login\RegisterPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Pages\Chart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -381,12 +376,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModelCommands\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="database\AttachPert.sql" />
-    <Content Include="database\SQL\Register.sql" />
-    <Content Include="database\SQL\TestData.sql" />
-    <Content Include="database\SQL\TryLogin.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

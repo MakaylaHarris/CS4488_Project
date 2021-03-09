@@ -23,7 +23,7 @@ namespace PertTest.Model
         private ProjectTest projectTest;
 
         #region Constructor
-        public TaskTest()
+        public TaskTest() : base()
         {
             name = "TASK_3361234";
             start = DateTime.Now;
@@ -43,6 +43,14 @@ namespace PertTest.Model
         #endregion
 
         #region Private Methods
+        private Task DB_GetOrCreateTask(string taskname, Project project)
+        {
+            Task ret = DB_ReadTask(taskname, project);
+            if (ret == null)
+                ret = new Task(taskname, DateTime.Now, null, 5, project: project);
+            return ret;
+        }
+
         private bool DB_HasTask(string taskname)
         {
             SqlCommand command = OpenConnection("SELECT COUNT(*) FROM dbo.[Task] WHERE Name=@Name");
@@ -87,12 +95,12 @@ namespace PertTest.Model
             {
                 task = DB_ReadTask(name, project);
                 if(task == null)
-                    task = new Task(name, DateTime.Now, null, estimatedDuration, project: project);
+                    task = new Task(name, start, null, estimatedDuration, project: project);
                 isCreated = true;
                 this.project = project;
             }
             else // Better be on the same project
-                Assert.IsTrue(project == task.Proj);
+                Assert.IsTrue(project == task.Project);
             return task;
         }
 
@@ -135,6 +143,26 @@ namespace PertTest.Model
             // Delete Task
             updated.Delete();
             Assert.IsFalse(DB_HasTask(name));
+        }
+
+        [TestMethod]
+        public void TestAddSubTask()
+        {
+            Task task = Create();
+            string someName = "Task390123490182301";
+            Task tmp = DB_GetOrCreateTask(someName, project);
+            string subname = "SubTask12363213413";
+            
+            Task sub = DB_GetOrCreateTask(subname, project);
+            // Add sub
+            task.AddSubTask(sub);
+            Assert.IsTrue(task.Tasks.Contains(sub));
+            Assert.IsTrue(DB_HasTask(sub.Name));
+            // Test that task delete removes sub
+            sub.Delete();
+            Assert.IsFalse(task.Tasks.Contains(sub));
+            Assert.IsFalse(DB_HasTask(sub.Name));
+            
         }
         #endregion
 

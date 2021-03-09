@@ -32,7 +32,6 @@ namespace SmartPert
     {
         static private Random random = new Random();
         private IModel model;
-        //private Chart chart;
         private WorkSpace workSpace;
         private ObservableCollection<MenuItemViewModel> items;
         public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }

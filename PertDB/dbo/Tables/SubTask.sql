@@ -1,0 +1,19 @@
+﻿CREATE TABLE [dbo].[SubTask]
+(
+	[SubTaskId] INT NOT NULL PRIMARY KEY,
+	[ParentTaskId] INT NOT NULL
+)
+GO
+ALTER TABLE [dbo].[SubTask] ENABLE CHANGE_TRACKING WITH(TRACK_COLUMNS_UPDATED = ON)
+GO
+ALTER TABLE [dbo].[SubTask]  WITH CHECK ADD  CONSTRAINT [FK_SubTask_SubTask] FOREIGN KEY([SubTaskId])
+REFERENCES [dbo].[Task] ([TaskId])
+GO
+ALTER TABLE [dbo].[SubTask]  WITH CHECK ADD  CONSTRAINT [FK_SubTask_ParentTask] FOREIGN KEY([ParentTaskId])
+REFERENCES [dbo].[Task] ([TaskId])
+GO
+ALTER TABLE [dbo].[SubTask]  WITH CHECK ADD  CONSTRAINT [CK_SubTask_DIFF] CHECK (SubTaskId != ParentTaskId)
+GO
+ALTER TABLE [dbo].[SubTask] CHECK CONSTRAINT [CK_SubTask_DIFF]
+GO
+

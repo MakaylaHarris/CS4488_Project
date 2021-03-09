@@ -105,7 +105,7 @@ namespace SmartPert.ViewModels
         {
             RowData num1 = new RowData(Project.Name, GridOffset + 1, DaySpan, true);
             this.RowData.Add(num1);
-            foreach (Model.Task task in Project.Tasks)
+            foreach (Model.Task task in Project.SortedTasks)
             {
                 RowData num2 = new RowData(task.Name, 
                     startDateCol: (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, 

@@ -137,7 +137,6 @@ namespace SmartPert.Model
             try
             {
                 task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
-                project.AddTask(task);
             } catch (Exception) { }
             return task;
         }
@@ -153,8 +152,10 @@ namespace SmartPert.Model
 
         public List<Task> GetTasks()
         {
-            return GetProject().Tasks;
+            return GetProject().SortedTasks;
         }
+
+        public HashSet<Task> GetTaskSet() => GetProject().Tasks;
 
         public bool IsValidTaskName(string name)
         {
