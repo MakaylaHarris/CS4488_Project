@@ -163,6 +163,8 @@ namespace SmartPert.View.Controls
 
         private void mi_deleteTask_Click(object sender, RoutedEventArgs e)
         {
+            Task.DeleteDependency(Task);
+            
             new DeleteTaskCmd(Task).Run();
         }
 

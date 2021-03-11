@@ -184,17 +184,37 @@ namespace SmartPert.Model
         #region Dependencies
         public void UpdateDependencies()
         {
-
+            
         }
-
+        //Creates a dependency, the parameter is the Root, and the current task is the dependent. 
         public void AddDependency(Task dependency)
         {
-
+            string query = "EXEC CreateDependency @RootId, @DependentId";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@RootId", dependency.Id);
+            command.Parameters.AddWithValue("@DependentId", this.Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
         }
-
+        //Removes a dependency, the parameter is the Root, and the current task is the dependent. 
         public void RemoveDependency(Task dependency)
         {
-
+            string query = "EXEC RemoveDependency @RootId, @DependentId";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@RootId", dependency.Id);
+            command.Parameters.AddWithValue("@DependentId", this.Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
+        }
+        //Calls sproc DeleteDependency that removes all dependencies associated with the task to be deleted
+        public void DeleteDependency(Task delTask)
+        {
+            Dependencies.Remove(delTask);
+            string query = "EXEC DeleteDependency @taskId";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@taskId", delTask.Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
         }
         #endregion
 

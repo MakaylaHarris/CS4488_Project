@@ -148,6 +148,7 @@ namespace SmartPert.Model
             if (task != null)
             {
                 task.Delete();
+                
             }
         }
 
