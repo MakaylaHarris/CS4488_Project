@@ -45,3 +45,5 @@ ALTER TABLE [dbo].[Task] WITH CHECK ADD CONSTRAINT [CK_Task_Start_Before_End] CH
 GO
 ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [CK_Task_Start_Before_End]
 GO
+ALTER TABLE [dbo].[Task] ADD CONSTRAINT [CK_Unique_Project_Row] UNIQUE (ProjectId, ProjectRow)
+GO

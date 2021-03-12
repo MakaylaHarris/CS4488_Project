@@ -291,6 +291,8 @@ namespace SmartPert.Model
                 LikelyDate = sub.LikelyDate;
             if (sub.MinEstDate > MinEstDate)
                 MinEstDate = sub.MinEstDate;
+            if (sub.StartDate < StartDate)
+                StartDate = sub.StartDate;
         }
 
         /// <summary>

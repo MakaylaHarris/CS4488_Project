@@ -49,6 +49,7 @@ namespace SmartPert.Model
             if (!tasks.Contains(t))
             {
                 tasks.Add(t);
+                sorted = null;
                 t.Subscribe(this);
                 NotifyUpdate();
             }

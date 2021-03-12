@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using SmartPert.Command;
 using SmartPert.Model;
 using SmartPert.View.Pages;
@@ -38,6 +39,7 @@ namespace SmartPert.View.Controls
         private Brush likelyColor;
         private Point dragStartPoint;
         private Shifter shifter;
+        private TaskControlPreview preview;
         private Task task;
 
         #region Properties
@@ -120,7 +122,7 @@ namespace SmartPert.View.Controls
         #endregion
 
         #region Private Methods
-        private static int NaturalNum(int n) => n > 0 ? n : 1;
+        public static int NaturalNum(int n) => n > 0 ? n : 1;
         private void SetColSpans(int likely, int min, int max)
         {
             Grid.SetColumnSpan(MinRect, NaturalNum(min));
@@ -149,7 +151,7 @@ namespace SmartPert.View.Controls
         {
             // Create the grid
             MyGrid.ColumnDefinitions.Clear();
-            for (int i = 0; i < rowData.ColSpan; i++)
+            for (int i = 0; i < NaturalNum(rowData.ColSpan); i++)
                 MyGrid.ColumnDefinitions.Add(new ColumnDefinition());
             SetColSpans(rowData.LikelyEstSpan, rowData.MinEstSpan, rowData.MaxEstSpan);
             LoadBrush(rowData);
@@ -201,30 +203,40 @@ namespace SmartPert.View.Controls
             return shifter;
         }
 
-        private void PerformShift(Shifter shifter, int shift)
+        private void PerformShift(Shifter shifter, int horizontalShift, int verticalShift)
         {
-            DateTime start;
-            DateTime? end;
-            int likely, min, max;
-            if((shifter & Shifter.StartDateExtender) > 0)
+            // Vertical Shift
+            if(verticalShift != 0)
             {
-                start = Task.StartDate.AddDays(shift);
-                end = Task.EndDate;
-                likely = NaturalNum(Task.LikelyDuration - shift);
-                min = NaturalNum(Task.MinDuration - shift);
-                max = NaturalNum(Task.MaxDuration - shift);
+                Task.TryShiftRows(verticalShift);
             }
-            else
+
+            if(horizontalShift != 0)
             {
-                start = (shifter & Shifter.StartDateShifter) > 0 ? Task.StartDate.AddDays(shift) : Task.StartDate;
-                end = (shifter & Shifter.EndDateShifter) > 0 ? ((DateTime)Task.EndDate).AddDays(shift) : Task.EndDate;
-                likely = (shifter & Shifter.LikelyEstShifter) > 0 ? Task.LikelyDuration + shift : Task.LikelyDuration;
-                min = (shifter & Shifter.MinEstShifter) > 0 ? Task.MinDuration + shift : Task.MinDuration;
-                max = (shifter & Shifter.MaxEstShifter) > 0 ? Task.MaxDuration + shift : Task.MaxDuration;
+                // Horizontal Shift
+                DateTime start;
+                DateTime? end;
+                int likely, min, max;
+                if ((shifter & Shifter.StartDateExtender) > 0)
+                {
+                    start = Task.StartDate.AddDays(horizontalShift);
+                    end = Task.EndDate;
+                    likely = NaturalNum(Task.LikelyDuration - horizontalShift);
+                    min = NaturalNum(Task.MinDuration - horizontalShift);
+                    max = NaturalNum(Task.MaxDuration - horizontalShift);
+                }
+                else
+                {
+                    start = (shifter & Shifter.StartDateShifter) > 0 ? Task.StartDate.AddDays(horizontalShift) : Task.StartDate;
+                    end = (shifter & Shifter.EndDateShifter) > 0 ? ((DateTime)Task.EndDate).AddDays(horizontalShift) : Task.EndDate;
+                    likely = (shifter & Shifter.LikelyEstShifter) > 0 ? Task.LikelyDuration + horizontalShift : Task.LikelyDuration;
+                    min = (shifter & Shifter.MinEstShifter) > 0 ? Task.MinDuration + horizontalShift : Task.MinDuration;
+                    max = (shifter & Shifter.MaxEstShifter) > 0 ? Task.MaxDuration + horizontalShift : Task.MaxDuration;
+                }
+                if (end != null && end < start)
+                    return;
+                new EditTaskCmd(Task, Task.Name, start, end, likely, max, min, Task.Description).Run();
             }
-            if (end != null && end < start)
-                return;
-            new EditTaskCmd(Task, Task.Name, start, end, likely, max, min, Task.Description).Run();
         }
 
         private void UserControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -232,17 +244,30 @@ namespace SmartPert.View.Controls
             dragStartPoint = e.GetPosition(WorkSpace.mainGrid);
             // Determine what we're dragging
             shifter = DetermineShifter(e.GetPosition(this.MyGrid));
+            if (shifter == Shifter.StartDateShifter)
+                preview = new TaskControlPreview(WorkSpace.MainCanvas, MinRect, LikelyRect, MaxRect, e.GetPosition(WorkSpace.MainCanvas));
+            else
+                preview = null;
             CaptureMouse();
         }
+
+        private void UserControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (preview != null)
+                preview.Location = e.GetPosition(WorkSpace.MainCanvas);
+        }
+
+
         private void UserControl_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Point endPoint = e.GetPosition(WorkSpace.mainGrid);
             if(endPoint != dragStartPoint)
             {
-                int shift = WorkSpace.GetColumnShift(dragStartPoint.X, endPoint.X);
-                if(shift != 0)
-                    PerformShift(shifter, shift);
+                int horizontalShift = WorkSpace.GetColumnShift(dragStartPoint.X, endPoint.X);
+                int verticalShift = WorkSpace.GetRowShift(dragStartPoint.Y, endPoint.Y);
+                PerformShift(shifter, horizontalShift, verticalShift);
             }
+            preview = null;
             ReleaseMouseCapture();
         }
 
@@ -251,6 +276,15 @@ namespace SmartPert.View.Controls
             new TaskEditor(Task).ShowDialog();
         }
 
+        private void Add_NewSub_Click(object sender, RoutedEventArgs e)
+        {
+            new TaskEditor(parentTask: Task).ShowDialog();
+        }
+
+        private void Add_New_Click(object sender, RoutedEventArgs e)
+        {
+            new TaskEditor().ShowDialog();
+        }
         #endregion
 
         #region Public Methods
@@ -276,5 +310,6 @@ namespace SmartPert.View.Controls
         }
 
         #endregion
+
     }
 }

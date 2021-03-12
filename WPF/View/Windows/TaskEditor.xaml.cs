@@ -23,6 +23,7 @@ namespace SmartPert.View.Windows
     public partial class TaskEditor : Window, IItemObserver
     {
         private Task task;
+        private Task parentTask;
         private bool isLoading;
         private static DateTime defaultStartDate = DateTime.Now;
 
@@ -46,11 +47,12 @@ namespace SmartPert.View.Windows
         /// Constructor for Task Editor, task is required for editing
         /// </summary>
         /// <param name="task">The underlying task</param>
-        public TaskEditor(Task task = null)
+        public TaskEditor(Task task = null, Task parentTask = null)
         {
             InitializeComponent();
             DataContext = this;
             isLoading = false;
+            this.parentTask = parentTask;
             Owner = Application.Current.MainWindow;
             Assignees = new ObservableCollection<User>();
             if (task != null)
@@ -85,13 +87,17 @@ namespace SmartPert.View.Windows
         #region Commands
         private void createTask()
         {
+            ICmd.BeginTransaction();
             CreateTaskCmd cmd = new CreateTaskCmd(TaskName.Text, (DateTime)StartDate.SelectedDate, EndDate.SelectedDate,
                 MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text);
             if(cmd.Run())
             {
+                if (parentTask != null)
+                    new AddSubTaskCmd(parentTask, cmd.Task).Run();
                 Task = cmd.Task;
                 LoadTaskData(task);
             }
+            ICmd.PostTransaction();
         }
 
         private void runTaskEdit()
@@ -147,7 +153,11 @@ namespace SmartPert.View.Windows
         #region Event Handlers
         private void Window_Deactivated(object sender, EventArgs e)
         {
-           Close();
+            try
+            {
+               Close();
+            }
+            catch (Exception) { }
         }
 
 

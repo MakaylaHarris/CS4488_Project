@@ -181,6 +181,7 @@
     <Compile Include="Command\CommandStack.cs" />
     <Compile Include="Command\RemoveSubtaskCmd.cs" />
     <Compile Include="Command\TaskShiftCmd.cs" />
+    <Compile Include="Command\TransactionCmd.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="StateSwitcher.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -217,6 +218,7 @@
       <DependentUpon>HintAndLink.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ViewClasses\CtrlHitTest.cs" />
+    <Compile Include="View\ViewClasses\TaskControlPreview.cs" />
     <Compile Include="View\Windows\ProjectCreator.xaml.cs">
       <DependentUpon>ProjectCreator.xaml</DependentUpon>
     </Compile>

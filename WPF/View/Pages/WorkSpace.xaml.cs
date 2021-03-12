@@ -89,6 +89,39 @@ namespace SmartPert.View.Pages
             return endCol - startCol;
         }
 
+        /// <summary>
+        /// Gets the row distance between start and end points
+        /// Created 3/9/2021 by Robert Nelson
+        /// </summary>
+        /// <param name="start">start</param>
+        /// <param name="end">end</param>
+        /// <returns>number of rows, negative if end is before start</returns>
+        public int GetRowShift(double start, double end)
+        {
+            int startRow = -1, endRow = -1, currentRow = 0;
+            double totalWidth = 0;
+            foreach (var columnDef in mainGrid.RowDefinitions)
+            {
+                totalWidth += columnDef.ActualHeight;
+                if (startRow == -1 && totalWidth > start)
+                {
+                    startRow = currentRow;
+                    if (endRow > 0)     // Shortcut if we found columns
+                        break;
+                }
+                if (endRow == -1 && totalWidth > end)
+                {
+                    endRow = currentRow;
+                    if (startRow > 0)
+                        break;
+                }
+                ++currentRow;
+            }
+            if (endRow == -1)
+                endRow = currentRow;
+            return endRow - startRow;
+        }
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             AddDependencies();
@@ -183,8 +216,8 @@ namespace SmartPert.View.Pages
                 MyControl.Margin = new Thickness(0, 4, 0, 4);
 
                 Grid.SetRow(MyControl, i + 2);
-                Grid.SetColumn(MyControl, rowData.StartDateCol);
-                Grid.SetColumnSpan(MyControl, rowData.ColSpan);
+                Grid.SetColumn(MyControl, TaskControl.NaturalNum(rowData.StartDateCol));
+                Grid.SetColumnSpan(MyControl, TaskControl.NaturalNum(rowData.ColSpan));
                 Grid.SetZIndex(MyControl, 100);
                 mainGrid.Children.Add(MyControl);
 
@@ -210,7 +243,7 @@ namespace SmartPert.View.Pages
                 {
                     txt1.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
                 }
-                txt1.Margin = new Thickness(10,0,0,0);
+                txt1.Margin = new Thickness(5 + 5 * viewModel.RowData[i].SubTaskLevel,0,0,0);
                 txt1.FontSize = 16;
                 txt1.VerticalAlignment = VerticalAlignment.Center;
                 Grid.SetRow(txt1, rowChange);

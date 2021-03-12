@@ -22,8 +22,10 @@ namespace SmartPert.View.ViewClasses
         private readonly int maxEstSpan;
         private readonly int likelyEstSpan;
         private readonly TimedItem timedItem;
+        private readonly int subTaskLevel;
 
-        public RowData(string name, int startDateCol, int colSpan, bool isProject, int endDateSpan = -1, int minEstSpan = -1, int maxEstSpan = -1, int likelyEstSpan = -1, TimedItem timedItem = null)
+        public RowData(string name, int startDateCol, int colSpan, bool isProject, int endDateSpan = -1, int minEstSpan = -1, int maxEstSpan = -1, int likelyEstSpan = -1, 
+            TimedItem timedItem = null, int subTaskLevel=0)
         {
             _Name = name;
             _StartDateCol = startDateCol;
@@ -34,6 +36,7 @@ namespace SmartPert.View.ViewClasses
             this.maxEstSpan = maxEstSpan;
             this.likelyEstSpan = likelyEstSpan;
             this.timedItem = timedItem;
+            this.subTaskLevel = subTaskLevel;
         }
 
         public string Name
@@ -65,5 +68,7 @@ namespace SmartPert.View.ViewClasses
         public int LikelyEstSpan => likelyEstSpan;
 
         public TimedItem TimedItem => timedItem;
+
+        public int SubTaskLevel => subTaskLevel;
     }
 }

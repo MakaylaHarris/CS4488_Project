@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using SmartPert.Annotations;
 using SmartPert.Model;
@@ -115,10 +114,18 @@ namespace SmartPert.ViewModels
                     minEstSpan: task.MinDuration,
                     maxEstSpan: task.MaxDuration - task.LikelyDuration,
                     likelyEstSpan: task.LikelyDuration - task.MinDuration,
-                    timedItem: task
+                    timedItem: task,
+                    subTaskLevel: GetSubLevel(task)
                     );
                 this.RowData.Add(num2);
             }
+        }
+
+        private int GetSubLevel(Task t)
+        {
+            if (t.ParentTask == null)
+                return 0;
+            return GetSubLevel(t.ParentTask) + 1;
         }
 
         /// <summary>
