@@ -147,7 +147,7 @@ namespace SmartPert.View.Windows
         #region Event Handlers
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            if (!AssigneePopup.IsFocused && !cb_assign.IsMouseOver && !IsMouseOver)
+            if (/*!AssigneePopup.IsFocused && */!cb_assign.IsMouseOver && !IsMouseOver)
             {
                 // Todo: Known issue when creating task and pressing tab this throws null exception
                 try
