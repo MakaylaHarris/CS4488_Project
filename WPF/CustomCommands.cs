@@ -9,14 +9,14 @@ namespace SmartPert
 {
     /// <summary>
     /// Custom Commands with keyboard shortcuts used by main menu.
-    /// Created 2/2/2021 by Robert Nelson
+    /// Created 2/2/2021 by Robert Nelson and Kaden Marchetti
     /// </summary>
     static class CustomCommands
     {
         public static readonly RoutedCommand AddTaskCommand = new RoutedUICommand("Add Task", "AddTaskCommand", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
 {
             new KeyGesture(Key.T, ModifierKeys.Control)
-}));
+        }));
 
         public static readonly RoutedCommand DBConnectCommand = new RoutedUICommand("Database Connection", "DBConnect", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
         {
@@ -51,6 +51,11 @@ namespace SmartPert
         public static readonly RoutedCommand SettingsCommand = new RoutedUICommand("Settings", "Settings", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
         {
             new KeyGesture(Key.S, ModifierKeys.Control)
+        }));
+
+        public static readonly RoutedCommand AcctSettings = new RoutedUICommand("Account", "Account", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        {
+            new KeyGesture(Key.T,  ModifierKeys.Alt)
         }));
     }
 }

@@ -20,6 +20,8 @@ namespace SmartPert.ViewModels
     class WorkSpaceViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<RowData> _rowData;
+        private ObservableCollection<ToolTipData> _tooltipData;
+        private ToolTipProjectData _projectTooltip;
         private Project _Project;
         private List<string> _headers = new List<string>();
         private String[] _weekDayAbbrev = { "S", "M", "T", "W", "T", "F", "S" };
@@ -31,9 +33,12 @@ namespace SmartPert.ViewModels
         {
             //Would get the Project we are working with
             this._rowData = new ObservableCollection<RowData>();
+            this._tooltipData = new ObservableCollection<ToolTipData>();
             _Project = Model.Model.Instance.GetProject();
             _headers = GetWeekHeader();
             LoadData();
+            LoadToolTipData();
+            LoadProjectData();
         }
 
         #region Properties
@@ -71,6 +76,31 @@ namespace SmartPert.ViewModels
                 OnPropertyChanged("RowData");
 
             }
+        }
+
+        /// <summary>
+        /// Property for Task Tooltip collection.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public ObservableCollection<ToolTipData> TooltipData
+        {
+            get { return _tooltipData; }
+            set
+            {
+                this._tooltipData = value;
+                OnPropertyChanged("TooltipData");
+
+            }
+        }
+
+        /// <summary>
+        /// Property for Project Tooltip.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public ToolTipProjectData ProjectTooltip
+        {
+            get { return _projectTooltip; }
+            set { this._projectTooltip = value; }
         }
 
         public List<string> Headers
@@ -119,6 +149,31 @@ namespace SmartPert.ViewModels
                     );
                 this.RowData.Add(num2);
             }
+        }
+
+        /// <summary>
+        /// A method that created ToolTip data classes that hold data for each task and adds them to a collection. Collection indexes are the same for this and RowData starting at index 1.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public void LoadToolTipData()
+        {
+            for(int i = 0; i < Project.Tasks.Count; i++)
+            {
+                //Task could also have been a reference to System.Threading.Task, so below declaration was necessary.
+                SmartPert.Model.Task t = Project.Tasks[i];
+
+                ToolTipData data = new ToolTipData(t.Name, t.StartDate, t.EndDate, t.LikelyDuration, t.MaxDuration, t.MinDuration, t.Description);
+                this.TooltipData.Add(data);
+            }
+        }
+
+        /// <summary>
+        /// A method that sets the Project data for  its tooltip.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public void LoadProjectData()
+        {
+            ProjectTooltip = new ToolTipProjectData(Project.Name, Project.StartDate, Project.EndDate, Project.Description);
         }
 
         /// <summary>
