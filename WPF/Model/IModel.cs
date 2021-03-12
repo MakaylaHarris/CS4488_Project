@@ -10,6 +10,7 @@ namespace SmartPert.Model
     public interface IModel
     {
         #region Project Methods
+        bool IsValidProjectName(string name);
         Project GetProject();
         void SetProject(Project project);
         List<Project> GetProjectList();
@@ -30,6 +31,8 @@ namespace SmartPert.Model
         #region User Methods
         List<User> GetUsers();
         User CreateUser(string name);
+        User CreateOrGetUser(string name);
+        User GetCurrentUser();
 
         bool IsValidNewUsername(string name);
 

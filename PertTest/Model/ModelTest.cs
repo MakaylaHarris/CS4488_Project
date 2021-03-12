@@ -23,6 +23,11 @@ namespace PertTest.Model
             throw new NotImplementedException();
         }
 
+        public void OnDisconnect()
+        {
+            throw new NotImplementedException();
+        }
+
         public void OnModelUpdate(Project p)
         {
             Console.WriteLine("Update received");

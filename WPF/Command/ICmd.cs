@@ -12,7 +12,7 @@ namespace SmartPert.Command
     /// Command pattern interface, any command that can be undone should implement
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    public abstract class ICmd : IViewModel
+    public abstract class ICmd
     {
         /// <summary>
         /// Runs the command and adds it to the stack if successful

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SmartPert.ViewModels;
 using SmartPert.View.ViewClasses;
+using SmartPert.View.Controls;
+using SmartPert.Model;
 
 namespace SmartPert.View.Pages
 {
@@ -25,7 +26,6 @@ namespace SmartPert.View.Pages
     public partial class WorkSpace : Page
     {
         WorkSpaceViewModel viewModel;
-        private List<string> test = new List<string>();
         //starts the grid content rows at 2 since the headers take up two rows
         //starts the grid content columns at 1 since the Project/task column is the first
         private const int rowStart = 2;
@@ -33,14 +33,78 @@ namespace SmartPert.View.Pages
         //This is the max integer number used to mean span all
         private const int maxInt = 2147483647;
         private List<int> weekendCols = new List<int>();
+        private Dictionary<Task, TaskControl> taskControls;
 
         public WorkSpace()
         {
             InitializeComponent();
             viewModel = new WorkSpaceViewModel();
+            taskControls = new Dictionary<Task, TaskControl>();
             DataContext = viewModel.RowData;
+            mainGrid.SizeChanged += MainGrid_SizeChanged;
             BuildGrid();
         }
+
+        private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize.Width < ActualWidth)
+                mainGrid.Width = ActualWidth;
+            else
+            {
+                MainCanvas.Width = e.NewSize.Width;
+                MainCanvas.Height = e.NewSize.Height > Height ? e.NewSize.Height : Height;
+            }
+        }
+
+        /// <summary>
+        /// Gets the column distance between start and end points
+        /// Created 3/6/2021 by Robert Nelson
+        /// </summary>
+        /// <param name="start">start</param>
+        /// <param name="end">end</param>
+        /// <returns>number of columns, negative if end is before start</returns>
+        public int GetColumnShift(double start, double end)
+        {
+            int startCol = -1, endCol = -1, currentCol = 0;
+            double totalWidth = 0;
+            foreach(var columnDef in mainGrid.ColumnDefinitions)
+            {
+                totalWidth += columnDef.ActualWidth;
+                if (startCol == -1 && totalWidth > start)
+                {
+                    startCol = currentCol;
+                    if (endCol > 0)     // Shortcut if we found columns
+                        break;
+                }
+                if (endCol == -1 && totalWidth > end)
+                {
+                    endCol = currentCol;
+                    if (startCol > 0)
+                        break;
+                }
+                ++currentCol;
+            }
+            if (endCol == -1)
+                endCol = currentCol;
+            return endCol - startCol;
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            AddDependencies();
+        }
+
+        // Added 3/8/2021 by Robert Nelson 
+        // Adds the task controls dependencies
+        private void AddDependencies()
+        {
+            foreach(KeyValuePair<Task, TaskControl> keyValue in taskControls)
+            {
+                foreach (Task t in keyValue.Key.Dependencies)
+                    keyValue.Value.ConnectDependentControl(taskControls[t]);
+            }
+        }
+
         private void BuildGrid()
         {
             AddRows();
@@ -103,21 +167,27 @@ namespace SmartPert.View.Pages
         /// </summary>
         private void AddTaskControls()
         {
+            Control MyControl;
+            RowData rowData;
             for (int i = 0; i < viewModel.RowData.Count; i++)
             {
-                //TODO: add different time case scenarios
-                Button MyControl = new Button();
-                MyControl.Margin = new Thickness(0, 10, 0, 10);
-                MyControl.MinWidth = 0;
-
-                Grid.SetRow(MyControl, i + rowStart);
-                Grid.SetColumn(MyControl, viewModel.RowData[i].StartDateCol);
-                if (viewModel.RowData[i].ColSpan != 1)
+                rowData = viewModel.RowData[i];
+                if (rowData.IsProject)
+                    MyControl = new Button();
+                else
                 {
-                    Grid.SetColumnSpan(MyControl, viewModel.RowData[i].ColSpan);
+                    TaskControl control = new TaskControl(this, rowData) { Canvas = MainCanvas };
+                    taskControls.Add(control.Task, control);
+                    MyControl = control;
                 }
+                MyControl.Margin = new Thickness(0, 4, 0, 4);
 
-                //Tyler K.
+                Grid.SetRow(MyControl, i + 2);
+                Grid.SetColumn(MyControl, rowData.StartDateCol);
+                Grid.SetColumnSpan(MyControl, rowData.ColSpan);
+                Grid.SetZIndex(MyControl, 100);
+                
+                                //Tyler K.
                 //Don't want task tooltips on the project "button". 
                 if(i > 0)
                 {
@@ -128,11 +198,9 @@ namespace SmartPert.View.Pages
                 {
                     MyControl.ToolTip = viewModel.ProjectTooltip.OutputToolTipProject();
                 }
-
-
-                //Grid.SetZIndex(MyControl, 100);
-                mainGrid.Children.Add(MyControl);
                 
+                mainGrid.Children.Add(MyControl);
+
             }
         }
 

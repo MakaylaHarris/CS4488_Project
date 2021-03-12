@@ -223,8 +223,9 @@ namespace SmartPert.Model
         /// </summary>
         protected void NotifyUpdate()
         {
-            foreach (IItemObserver observer in observers)
-                observer.OnUpdate(this);
+            /* Notify newest subscribers first, this is important so the generic model update is sent last! */
+            for(int i = observers.Count - 1; i >= 0; i--)
+                observers[i].OnUpdate(this);
         }
 
 

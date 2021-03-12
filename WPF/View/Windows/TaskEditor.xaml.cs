@@ -24,6 +24,7 @@ namespace SmartPert.View.Windows
     {
         private Task task;
         private bool isLoading;
+        private static DateTime defaultStartDate = DateTime.Now;
 
         #region Properties
         private Task Task { 
@@ -58,8 +59,7 @@ namespace SmartPert.View.Windows
                 LoadTaskData(task);
             } else      // Set a default start that makes sense (now)
             {
-                DateTime projectStart = Model.Model.Instance.GetProject().StartDate;
-                StartDate.SelectedDate = DateTime.Now > projectStart ? DateTime.Now : projectStart;
+                StartDate.SelectedDate = defaultStartDate;
             }
         }
 
@@ -154,7 +154,8 @@ namespace SmartPert.View.Windows
                 {
                     Close();
                 }
-                catch (InvalidOperationException) { }
+                catch (InvalidOperationException) { 
+                }
             }
         }
 
@@ -224,7 +225,10 @@ namespace SmartPert.View.Windows
         private void StartDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (task == null || StartDate.SelectedDate != task.StartDate)
+            {
+                defaultStartDate = (DateTime)StartDate.SelectedDate;  // update default start
                 On_Input();
+            }
         }
 
         private void TaskDescription_LostFocus(object sender, RoutedEventArgs e)

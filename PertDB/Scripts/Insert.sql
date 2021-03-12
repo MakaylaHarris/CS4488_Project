@@ -39,14 +39,13 @@ INSERT INTO [dbo].[Task] (Name, StartDate, Description, ProjectId, MostLikelyEst
 VALUES ('Task5', '2/8/2021', 'This is the fifth task and is not complete', @projectId, 3, 10, 2, 'TestUser', '2/6/2021');
 
 INSERT INTO [dbo].[Task] (Name, StartDate, Description, ProjectId, MostLikelyEstDuration, MaxEstDuration, MinEstDuration, [CreatorUsername], [CreationDate])
-VALUES ('Task6', '2/10/2021', 'This is the sixth task and is not complete', @projectId, 5, 8, 3, 'TestUser', '2/6/2021');
+VALUES ('Task6', '2/20/2021', 'This is the sixth task and is not complete', @projectId, 5, 8, 3, 'TestUser', '2/6/2021');
 
 
 -- Dependencies
 INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task1'), dbo.GetTaskId('Task2'));
 INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task1'), dbo.GetTaskId('Task3'));
 INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task3'), dbo.GetTaskId('Task6'));
-INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task4'), dbo.GetTaskId('Task5'));
 INSERT INTO [dbo].Dependency (RootId, DependentId) VALUES (dbo.GetTaskId('Task5'), dbo.GetTaskId('Task6'));
 
 -- Add users to project

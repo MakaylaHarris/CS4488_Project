@@ -34,12 +34,14 @@ namespace SmartPert.Model
             {
                 if(mostLikelyDuration != value)
                 {
+                    if (value < 0)
+                        value = 0;
                     if (value < minDuration)
                         minDuration = value;
                     else if (value > MaxDuration)
                         maxDuration = value;
                     mostLikelyDuration = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -47,10 +49,12 @@ namespace SmartPert.Model
             set {
                 if(maxDuration != value)
                 {
+                    if (value < 0)
+                        value = 0;
                     if (value < mostLikelyDuration)
                         LikelyDuration = value;
                     maxDuration = value;
-                    PerformUpdate();
+                    Update();
                 }
             } 
         }
@@ -61,10 +65,12 @@ namespace SmartPert.Model
             {
                 if (minDuration != value)
                 {
+                    if (value < 0)
+                        value = 0;
                     if (value > LikelyDuration)
                         LikelyDuration = value;
                     minDuration = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -232,7 +238,7 @@ namespace SmartPert.Model
             if (creator == null)
                 command.Parameters.AddWithValue("@Creator", DBNull.Value);
             else
-                command.Parameters.AddWithValue("@Creator", creator.Name);
+                command.Parameters.AddWithValue("@Creator", creator.Username);
             var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
             sd.Value = StartDate;
             var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
@@ -349,13 +355,14 @@ namespace SmartPert.Model
         /// <returns></returns>
         public DateTime CalculateLastTaskDate()
         {
-            if (this.EndDate != null)
+            DateTime max = this.StartDate.AddDays(maxDuration);
+            if (this.EndDate != null && EndDate >= max)
             {
                 return (DateTime)this.EndDate;
             }
             else
             {
-                return this.StartDate.AddDays(maxDuration);
+                return max;
             }
         }
     }

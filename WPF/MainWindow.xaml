@@ -15,25 +15,24 @@
         FontFamily="{DynamicResource MaterialDesignFont}">
     <!--#region Commands -->
     <Window.CommandBindings>
-        <CommandBinding Command="New" CanExecute="CommandBinding_CanExecute" Executed="New_Executed" />
-        <CommandBinding Command="Open" CanExecute="CommandBinding_CanExecute" Executed="Open_Execute"/>
-        <CommandBinding Command="Print" CanExecute="CommandBinding_CanExecute" Executed="Print_Execute"/>
+        <CommandBinding Command="New" CanExecute="CommandBinding_CanIfLoggedIn" Executed="New_Executed" />
+        <CommandBinding Command="Open" CanExecute="CommandBinding_CanIfLoggedIn" Executed="Open_Execute"/>
+        <CommandBinding Command="Print" CanExecute="CommandBinding_CanIfLoggedIn" Executed="Print_Execute"/>
         <CommandBinding Command="Close" CanExecute="CommandBinding_CanExecute" Executed="Exit_Execute" />
         <CommandBinding Command="Undo" CanExecute="Undo_CanExecute" Executed="Undo_Execute" />
         <CommandBinding Command="Redo" CanExecute="Redo_CanExecute" Executed="Redo_Execute" />
         <CommandBinding Command="Cut" CanExecute="Cut_CanExecute" Executed="Cut_Execute" />
         <CommandBinding Command="Copy" CanExecute="Copy_CanExecute" Executed="Copy_Execute"/>
         <CommandBinding Command="Paste" CanExecute="Paste_CanExecute" Executed="Paste_Execute"/>
-        <CommandBinding Command="{x:Static local:CustomCommands.AddTaskCommand}" CanExecute="AddTask_CanExecute" Executed="AddTask_Execute"/>
-        <CommandBinding Command="{x:Static local:CustomCommands.DBConnectCommand}" CanExecute="CommandBinding_CanExecute" Executed="DBConnect_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.AddTaskCommand}" CanExecute="CommandBinding_CanIfActiveProject" Executed="AddTask_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.DBConnectCommand}" Executed="DBConnect_Execute"/>
         <!-- <CommandBinding Command="{x:Static local:CustomCommands.OptionsCommand}" CanExecute="CommandBinding_CanExecute" Executed="Options_Execute"/> -->
         <CommandBinding Command="{x:Static local:CustomCommands.RefreshCommand}" Executed="Refresh_Execute"/>
-        <CommandBinding Command="{x:Static local:CustomCommands.DocsCommand}" CanExecute="CommandBinding_CanExecute" Executed="Docs_Execute"/>
-        <CommandBinding Command="{x:Static local:CustomCommands.AboutCommand}" CanExecute="CommandBinding_CanExecute" Executed="About_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.DocsCommand}" Executed="Docs_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.AboutCommand}" Executed="About_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AddHelpCommand}" Executed="Additional_Help"/>
-        <CommandBinding Command="{x:Static local:CustomCommands.SettingsCommand}" Executed="Settings_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AcctSettings}" Executed="Account_Execute"/>
-        
+        <CommandBinding Command="{x:Static local:CustomCommands.SettingsCommand}" CanExecute="CommandBinding_CanIfActiveProject" Executed="Settings_Execute"/>
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Control" Command="New"/>

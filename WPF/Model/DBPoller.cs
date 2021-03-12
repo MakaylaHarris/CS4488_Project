@@ -115,7 +115,7 @@ namespace SmartPert.Model
                 while (running)
                 {
                     Thread.Sleep(refreshTime);
-                    if (context != null && DBIsUpdated())
+                    if (running && context != null && DBIsUpdated())
                     {
                         context.Post(new SendOrPostCallback(Handler), null);
                     }
