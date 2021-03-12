@@ -17,7 +17,7 @@
         Closing="Window_Closing"
         Deactivated="Window_Deactivated"
         MouseLeftButtonDown="Window_Deactivated"
-        Height="750" Width="350">
+        Height="650" Width="350">
     <Grid Margin="10">
         <Grid.Resources>
             <Style TargetType="{x:Type controls:IntegerEdit}">
@@ -31,19 +31,18 @@
         </Grid.Resources>
         <!--#region Definitions-->
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="4*"/>
             <RowDefinition/>
-            <RowDefinition Height="120"/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition Height="80"/>
-            <RowDefinition Height="120"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <!--#endregion-->
@@ -87,13 +86,13 @@
             </Grid>
         </Border>
         <!--#endregion-->
-            
+
         <!--#region Assignees-->
         <Label Content="Assignees:" Grid.Row="7"/>
         <Button x:Name="AssignBtn" Grid.Column="2" Grid.Row="7" Foreground="{StaticResource PrimaryHueLightBrush}" Background="Transparent" BorderThickness="0" Width="80" MouseEnter="AssignBtn_MouseEnter" >
             <StackPanel>
                 <materialDesign:PackIcon Kind="ArrowDownDropCircleOutline" Width="30" Height="25"/>
-                <Popup x:Name="AssigneePopup" MouseLeave="AssigneePopup_LostFocus" >
+                <Popup x:Name="AssigneePopup" MouseLeave="AssigneePopup_LostFocus">
                     <StackPanel>
                         <ListBox ItemsSource="{Binding Assignees}">
                             <ListBox.ItemTemplate>
@@ -106,25 +105,14 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <controls:FilteredComboBox x:Name="cb_assign" SelectionChanged="Assign_to"></controls:FilteredComboBox>
-                        --><!--<Button Content="Add..." Click="AddAssignee_Click"/>--><!--
+                        <!--<Button Content="Add..." Click="AddAssignee_Click"/>-->
                     </StackPanel>
                 </Popup>
             </StackPanel>
-        </Button>-->
+        </Button>
         <!--#endregion-->
-        <controls:FilteredComboBox x:Name="cb_assign" SelectionChanged="Assign_to" Grid.Row="7" Grid.Column="1"/>
-        <ListBox ItemsSource="{Binding Assignees}" Grid.Row="8" Grid.ColumnSpan="2">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="{Binding Name}"/>
-                        <Button Content="x" Foreground="Red" Background="Transparent" BorderThickness="0" Click="RM_Assignee"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
 
-        <Label x:Name="ValidateLabel" Content="" Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Red"/>
+        <Label x:Name="ValidateLabel" Content="" Grid.Row="8" Grid.ColumnSpan="2" HorizontalAlignment="Center" Foreground="Red"/>
     </Grid>
 
 </Window>
