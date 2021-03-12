@@ -178,9 +178,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\CommandStack.cs" />
+    <Compile Include="Command\TaskShiftCmd.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="StateSwitcher.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
+    <Compile Include="View\ViewClasses\Anchor.cs" />
+    <Compile Include="View\ViewClasses\Connectable.cs" />
+    <Compile Include="View\ViewClasses\Connector.cs" />
     <Compile Include="View\Controls\FilteredComboBox.xaml.cs">
       <DependentUpon>FilteredComboBox.xaml</DependentUpon>
     </Compile>
@@ -209,6 +214,10 @@
     <Compile Include="View\Pages\ErrorCatch.xaml.cs">
       <DependentUpon>ErrorCatch.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Pages\HintAndLink.xaml.cs">
+      <DependentUpon>HintAndLink.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ViewClasses\CtrlHitTest.cs" />
     <Compile Include="View\Windows\ProjectCreator.xaml.cs">
       <DependentUpon>ProjectCreator.xaml</DependentUpon>
     </Compile>
@@ -275,6 +284,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Pages\ErrorCatch.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Pages\HintAndLink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

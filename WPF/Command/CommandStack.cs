@@ -110,6 +110,11 @@ namespace SmartPert.Command
             foreach (ICmd cmd in redoStack)
                 cmd.OnModelUpdate(p);
         }
+
+        public void OnDisconnect()
+        {
+            Clear();
+        }
         #endregion
     }
 }

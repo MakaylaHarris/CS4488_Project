@@ -36,7 +36,7 @@ ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [CK_Task_Max] CHECK  (([Max
 GO
 ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [CK_Task_Max]
 GO
-ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [CK_Task_Min] CHECK  (([MinEstDuration]<=[MostLikelyEstDuration]))
+ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [CK_Task_Min] CHECK  (([MinEstDuration]<=[MostLikelyEstDuration] AND [MinEstDuration]>=0))
 GO
 ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [CK_Task_Min]
 GO

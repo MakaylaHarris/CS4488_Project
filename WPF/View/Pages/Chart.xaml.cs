@@ -19,7 +19,7 @@ namespace SmartPert.View.Pages
     /// </summary>
 
     //By Levi Delezene
-    public partial class Chart : Page, IViewModel
+    public partial class Chart : Page
     {
 
         List<Task> taskList;
@@ -52,7 +52,6 @@ namespace SmartPert.View.Pages
             InitializeComponent();
 
             this.model = model;
-            model.Subscribe(this);
             _project = model.GetProject();
             this.PreviewMouseWheel += ZoomCanvas;
             this.MouseMove += DragCanvas;
@@ -187,14 +186,12 @@ namespace SmartPert.View.Pages
             tempDuration = maxDuration + 1;
 
             //taskcontrol
-            TaskControl t = new TaskControl(parent, this);
+            TaskControl t = new TaskControl(null, null);
             t.taskBorder.Background = taskBrush;
             t.ToolTip = createToolTip(parent);
             t.MouseDown += resizeTask;
             if(parent.IsComplete)
             {
-                t.Completed.Visibility = Visibility.Visible;
-                t.Completed.Width = dayWidth * ((DateTime)parent.EndDate - parent.StartDate).TotalDays;
             }
             Canvas.SetLeft(t, ((DateTime)parent.StartDate - _project.StartDate).TotalDays * dayWidth);
             Canvas.SetTop(t, topMargin);
@@ -364,7 +361,7 @@ namespace SmartPert.View.Pages
 
         private void mi_addTask_Click(object sender, RoutedEventArgs e)
         {
-            new TaskEditor().ShowDialog();
+            StateSwitcher.Instance.OnTaskCreateOrEdit();
             DrawGraph(Project.Tasks);
         }
 
@@ -453,7 +450,7 @@ namespace SmartPert.View.Pages
             taskGrid.Children.Add(taskRect);
             taskGrid.Children.Add(taskTextBlock);
 
-            TaskControl taskControl = new TaskControl(task, this);
+            TaskControl taskControl = new TaskControl(null, null);
             taskControl.Width = rectVal.Width;
             taskControl.Height = 50;
 
