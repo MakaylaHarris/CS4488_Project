@@ -22,15 +22,17 @@ namespace SmartPert.Model
         #region Properties
         public User Creator { get => creator; }
         public DateTime CreationDate { get => startDate; }
-        public DateTime StartDate
+        public virtual DateTime StartDate
         {
             get => startDate;
             set
             {
                 if(startDate != value)
                 {
+                    if (endDate != null && startDate > endDate)
+                        throw new ArgumentOutOfRangeException("StartDate", "Start date must be before end date");
                     startDate = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -42,12 +44,14 @@ namespace SmartPert.Model
             {
                 if(endDate != value)
                 {
+                    if (value != null && startDate > value)
+                        throw new ArgumentOutOfRangeException("EndDate", "Start date must be before end date");
                     endDate = value;
                     if (endDate == null)
                         isComplete = false;
                     else
                         isComplete = true;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -60,7 +64,7 @@ namespace SmartPert.Model
                 if(name != value)
                 {
                     name = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -73,7 +77,7 @@ namespace SmartPert.Model
                 if(description != value)
                 {
                     description = value;
-                    PerformUpdate();
+                    Update();
                 }
             }
         }
@@ -92,7 +96,7 @@ namespace SmartPert.Model
                 }
                 else if (endDate != null)
                     EndDate = null;
-                isComplete = value;
+                isComplete = EndDate != null;
             }
         }
         #endregion
@@ -124,6 +128,21 @@ namespace SmartPert.Model
         /// </summary>
         /// <returns>Name</returns>
         public override string ToString() => Name;
+
+        /// <summary>
+        /// Shifts the task start and end by an amount
+        /// </summary>
+        /// <param name="days">number of days to shift</param>
+        public virtual void Shift(int days)
+        {
+            if(days != 0)
+            {
+                startDate = startDate.AddDays(days);
+                if (endDate != null)
+                    endDate = ((DateTime)endDate).AddDays(days);
+                Update();
+            }
+        }
 
         #region Worker Methods
         abstract public bool AddWorker(User worker);

@@ -85,7 +85,9 @@ namespace SmartPert.View.Login
         {
             bool result = model.Register(username, email, password, name);
             if (result)
+            {
                 Close();
+            }
             return result;
         }
 

@@ -48,7 +48,7 @@
             <DatePicker x:Name="EndDatePicker" Grid.Column="1" Grid.Row="3" SelectedDateChanged="EndDatePicker_SelectedDateChanged"/>
         </Grid>
         <Label x:Name="ValidateLbl" Foreground="Red" Content="" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
-        <Button x:Name="CancelBtn" Grid.Row="2" Content="Cancel" Margin="10" Click="Cancel_Click"/>
-        <Button x:Name="SubmitBtn" Grid.Row="2" Grid.Column="1" Content="Create" Click="Create_Click"/>
+        <Button x:Name="CancelBtn" Grid.Row="2" Content="Cancel" Margin="10" Click="Cancel_Click" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
+        <Button x:Name="SubmitBtn" Grid.Row="2" Grid.Column="1" Content="Create" Click="Create_Click" IsDefault="True" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
     </Grid>
 </Window>

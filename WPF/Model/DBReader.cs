@@ -212,7 +212,8 @@ namespace SmartPert.Model
             foreach(int key in dependencies.Keys)
             {
                 if (!newDepend.ContainsKey(key))
-                    idToTask[key].DB_UpdateDependencies(null);
+                    if(idToTask.ContainsKey(key))
+                        idToTask[key].DB_UpdateDependencies(null);
             }
             Task task;
             // And update new task dependencies
@@ -484,6 +485,7 @@ namespace SmartPert.Model
         /// <returns>true if connection succeeds</returns>
         public bool TestNewConnection(string connectString)
         {
+            bool isConnected = true;
             try
             {
                 connection = new SqlConnection(connectString);
@@ -493,21 +495,24 @@ namespace SmartPert.Model
             {
                 Console.WriteLine(e);
                 polling.Stop();
-                return false;
-            }
-            if (connectString != Properties.Settings.Default.ConnectionString)
+                isConnected = false;
+            } finally
             {
-                Properties.Settings.Default.ConnectionString = connectString;
-                Properties.Settings.Default.Save();
+                if (connectString != Properties.Settings.Default.ConnectionString)
+                {
+                    Properties.Settings.Default.ConnectionString = connectString;
+                    Properties.Settings.Default.Save();
+                }
             }
-            if (Connected)
+            if(isConnected)
             {
-                polling.Reset();
+                if (Connected)  // poller connected?
+                    polling.Reset();
+                else
+                    polling.Start();
+                OnDBUpdate();
             }
-            else
-                polling.Start();
-            OnDBUpdate();
-            return true;
+            return isConnected;
         }
 
         /// <summary>
@@ -557,9 +562,13 @@ namespace SmartPert.Model
                 u.PostUpdate();
         }
 
+        /// <summary>
+        /// Disconnect event
+        /// </summary>
         public void OnDBDisconnect()
         {
             currentUser = null;
+            receiver.OnDBDisconnect();
         }
 
         /// <summary>
