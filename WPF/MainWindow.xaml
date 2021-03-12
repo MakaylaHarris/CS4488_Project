@@ -32,6 +32,8 @@
         <CommandBinding Command="{x:Static local:CustomCommands.AboutCommand}" CanExecute="CommandBinding_CanExecute" Executed="About_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AddHelpCommand}" Executed="Additional_Help"/>
         <CommandBinding Command="{x:Static local:CustomCommands.SettingsCommand}" Executed="Settings_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.AcctSettings}" Executed="Account_Execute"/>
+        
     </Window.CommandBindings>
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Control" Command="New"/>
@@ -50,6 +52,11 @@
         <!--#region Menus-->
         <DockPanel>
             <Menu DockPanel.Dock="Top" x:Name="TopMenu" IsMainMenu="True">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel HorizontalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
                 <MenuItem Header="_File" x:Name="FileMenu">
                     <MenuItem Command="New" >
                     </MenuItem>
@@ -93,6 +100,9 @@
                     <MenuItem Command="{x:Static local:CustomCommands.AddHelpCommand}"/>
                     <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.AboutCommand}" />
+                </MenuItem>
+                <MenuItem Header="Account" HorizontalAlignment="Right">
+                    <MenuItem Command="{x:Static local:CustomCommands.AcctSettings}"/>
                 </MenuItem>
             </Menu>
             <TextBox AcceptsReturn="True" />
