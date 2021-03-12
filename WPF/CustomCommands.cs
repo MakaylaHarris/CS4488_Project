@@ -53,9 +53,18 @@ namespace SmartPert
             new KeyGesture(Key.S, ModifierKeys.Control)
         }));
 
-        public static readonly RoutedCommand AcctSettings = new RoutedUICommand("Account", "Account", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        public static readonly RoutedCommand AcctSettingsCommand = new RoutedUICommand("Account", "Account", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
         {
-            new KeyGesture(Key.T,  ModifierKeys.Alt)
+            new KeyGesture(Key.A,  ModifierKeys.Alt)
+        }));
+
+        public static readonly RoutedCommand ThemeCommand = new RoutedUICommand("Theme", "Theme", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        {
+            new KeyGesture(Key.C,  ModifierKeys.Alt)
+        }));
+        public static readonly RoutedCommand SignOutCommand = new RoutedUICommand("Sign Out", "SignOut", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        {
+            new KeyGesture(Key.L,  ModifierKeys.Alt)
         }));
     }
 }

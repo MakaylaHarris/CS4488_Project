@@ -113,6 +113,7 @@ namespace SmartPert.View.Controls
             this.RowData = rowData;
             CompletedColor = ((SolidColorBrush)FindResource("SecondaryHueMidBrush")).Color;
             IncompleteColor = ((SolidColorBrush) FindResource("PrimaryHueMidBrush")).Color;
+
             AddAnchor(LeftAnchor);
             AddAnchor(RightAnchor);
         }

@@ -15,9 +15,9 @@
                 BorderThickness="1,1,1,1"
                 CornerRadius="8,8,8,8">
             <Grid x:Name="MyGrid">
-                
+
+                <Rectangle x:Name="LikelyRect" Fill="{Binding LikelyColor}" Grid.RowSpan="2" />
                 <Rectangle x:Name="MinRect" Fill="{Binding MinColor}" Grid.RowSpan="2"/>
-                <Rectangle x:Name="LikelyRect" Fill="{Binding LikelyColor}" Grid.RowSpan="2"/>
                 <Rectangle x:Name="MaxRect" Fill="{Binding MaxColor}" Grid.RowSpan="2"/>
 
                 <Rectangle x:Name="CompletionRect" Fill="{Binding LikelyColor}" Grid.ColumnSpan="3"/>

@@ -197,7 +197,7 @@ namespace SmartPert
             InputTextBox.Text = Properties.Settings.Default.ConnectionString;
             InputBox.Visibility = Visibility.Visible;
             if (model != null && model.IsConnected())
-                UpdateDBStatus("Connected", Brushes.Green);
+                UpdateDBStatus("Connected", (SolidColorBrush)FindResource("MaterialDesignBody"));
             else
                 UpdateDBStatus("Disconnected", Brushes.Red);
 
@@ -305,9 +305,19 @@ namespace SmartPert
         {
             // For Makayla
         }
-#endregion
 
-#region Model Update
+        private void Theme_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            // For Makayla
+        }
+
+        private void SignOut_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            // For Makayla
+        }
+        #endregion
+
+        #region Model Update
         public void OnModelUpdate(Project p)
         {
             PopulateProjects();
