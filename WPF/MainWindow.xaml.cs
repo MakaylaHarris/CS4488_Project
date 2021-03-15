@@ -303,7 +303,7 @@ namespace SmartPert
         
         private void Account_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            // For Makayla
+            StateSwitcher.Instance.OnAccountEdit();
         }
 
         private void Theme_Execute(object sender, ExecutedRoutedEventArgs e)

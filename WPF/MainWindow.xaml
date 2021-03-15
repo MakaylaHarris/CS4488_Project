@@ -109,7 +109,9 @@
                                                  Foreground="{StaticResource PrimaryHueMidBrush}"/>
                     </MenuItem.Icon>
                     <MenuItem Command="{x:Static local:CustomCommands.AcctSettingsCommand}"/>
+                    <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.ThemeCommand}"/>
+                    <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.SignOutCommand}"/>
                     
                 </MenuItem>

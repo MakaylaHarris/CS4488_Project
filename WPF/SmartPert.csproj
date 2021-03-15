@@ -181,9 +181,16 @@
     <Compile Include="Command\TaskShiftCmd.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModelCommands\AccountUpdateCommand.cs" />
+    <Compile Include="ViewModelCommands\PasswordUpdateCommand.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="StateSwitcher.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
+    <Compile Include="View\Account\AccountInfo.xaml.cs">
+      <DependentUpon>AccountInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Account\ChangePassword.xaml.cs">
+      <DependentUpon>ChangePassword.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ViewClasses\Anchor.cs" />
     <Compile Include="View\ViewClasses\Connectable.cs" />
     <Compile Include="View\ViewClasses\Connector.cs" />
@@ -215,9 +222,11 @@
     <Compile Include="View\Pages\ErrorCatch.xaml.cs">
       <DependentUpon>ErrorCatch.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ViewClasses\PasswordDisplay.cs" />
     <Compile Include="View\ViewClasses\ToolTipData.cs" />
     <Compile Include="View\ViewClasses\ToolTipProjectData.cs" />
-    <Compile Include="View\Windows\AccountEditor.xaml.cs">
+    <Compile Include="View\ViewClasses\UserDisplay.cs" />
+    <Compile Include="View\Account\AccountEditor.xaml.cs">
       <DependentUpon>AccountEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\HintAndLink.xaml.cs">
@@ -261,6 +270,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Account\AccountInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Account\ChangePassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Controls\FilteredComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -301,7 +318,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Windows\AccountEditor.xaml">
+    <Page Include="View\Account\AccountEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

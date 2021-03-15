@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using SmartPert.View.Account;
 
 namespace SmartPert
 {
@@ -228,6 +229,14 @@ namespace SmartPert
         public void OnModelUpdate(Project p)
         {
             Update();
+        }
+
+        public void OnAccountEdit()
+        {
+            if (!isConnected || !isLoggedIn)
+                Update();
+            else
+                OpenDialog(new AccountEditor());
         }
         #endregion
     }

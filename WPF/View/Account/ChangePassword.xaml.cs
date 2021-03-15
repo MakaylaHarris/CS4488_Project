@@ -10,20 +10,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SmartPert.ViewModels;
 
-namespace SmartPert.View.Windows
+namespace SmartPert.View.Account
 {
     /// <summary>
-    /// Interaction logic for AccountEditor.xaml
+    /// Interaction logic for ChangePassword.xaml
     /// </summary>
-    public partial class AccountEditor : Window
+    public partial class ChangePassword : Page
     {
-        public AccountEditor()
+        private AccountEditor window;
+        public ChangePassword(AccountEditor window)
         {
             InitializeComponent();
-            DataContext = new AccountViewModel();
+            this.window = window;
+        }
+
+        private void Account_Click(object sender, RoutedEventArgs e)
+        {
+            window.SwitchToAccount();
         }
     }
 }
