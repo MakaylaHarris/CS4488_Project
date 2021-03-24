@@ -101,7 +101,8 @@ namespace SmartPert.View.Pages
             foreach(KeyValuePair<Task, TaskControl> keyValue in taskControls)
             {
                 foreach (Task t in keyValue.Key.Dependencies)
-                    keyValue.Value.ConnectDependentControl(taskControls[t]);
+                    if (taskControls.ContainsKey(t))
+                        keyValue.Value.ConnectDependentControl(taskControls[t]);
             }
         }
 

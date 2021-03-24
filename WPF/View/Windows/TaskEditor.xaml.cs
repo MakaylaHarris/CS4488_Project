@@ -255,8 +255,9 @@ namespace SmartPert.View.Windows
                 Assignees.Add(user);
             ObservableCollection<object> items = cb_assign.Items;
             items.Clear();
-            foreach (object o in task.Proj.Workers)
+            foreach (object o in Model.Model.Instance.GetUsers())
                 items.Add(o);
+            cb_assign.Items = items;
         }
 
         private void AssignBtn_MouseEnter(object sender, MouseEventArgs e)
