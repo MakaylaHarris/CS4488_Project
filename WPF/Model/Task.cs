@@ -186,35 +186,56 @@ namespace SmartPert.Model
         {
             
         }
-        //Creates a dependency, the parameter is the Root, and the current task is the dependent. 
+        /// <summary>
+        /// Creates a dependency, the parameter is the Root, and the current task is the dependent. 
+        /// </summary>
         public void AddDependency(Task dependency)
         {
+            if (dependencies.Contains(dependency))
+            {
+                throw new Exception("Dependency already exists");
+            }
+
+            dependencies.Add(dependency);
+
             string query = "EXEC CreateDependency @RootId, @DependentId";
             SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@RootId", dependency.Id);
-            command.Parameters.AddWithValue("@DependentId", this.Id);
+            command.Parameters.AddWithValue("@RootId", this.Id);
+            command.Parameters.AddWithValue("@DependentId", dependency.Id);
             command.ExecuteNonQuery();
             CloseConnection();
+            NotifyUpdate();
         }
-        //Removes a dependency, the parameter is the Root, and the current task is the dependent. 
+        /// <summary>
+        /// Removes a dependency, the parameter is the Root, and the current task is the dependent. 
+        /// </summary>
         public void RemoveDependency(Task dependency)
         {
+            if (!(dependencies.Contains(dependency)))
+                {
+                throw new Exception("Dependency does not exist between these two tasks");
+                }
+            dependencies.Remove(dependency);
             string query = "EXEC RemoveDependency @RootId, @DependentId";
             SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@RootId", dependency.Id);
-            command.Parameters.AddWithValue("@DependentId", this.Id);
+            command.Parameters.AddWithValue("@RootId", this.Id);
+            command.Parameters.AddWithValue("@DependentId", dependency.Id);
             command.ExecuteNonQuery();
             CloseConnection();
+            NotifyUpdate();
         }
-        //Calls sproc DeleteDependency that removes all dependencies associated with the task to be deleted
-        public void DeleteDependency(Task delTask)
+        /// <summary>
+        /// Calls sproc DeleteDependency that removes all dependencies associated with the task to be deleted
+        /// </summary>
+        public void DeleteAllDependencies(Task delTask)
         {
-            Dependencies.Remove(delTask);
+            dependencies.Clear();
             string query = "EXEC DeleteDependency @taskId";
             SqlCommand command = OpenConnection(query);
             command.Parameters.AddWithValue("@taskId", delTask.Id);
             command.ExecuteNonQuery();
             CloseConnection();
+            NotifyUpdate();
         }
         #endregion
 
@@ -279,7 +300,6 @@ namespace SmartPert.Model
             id = (int) resultId.Value;
             return id;
         }
-
         /// <summary>
         /// Deletes a task
         /// </summary>

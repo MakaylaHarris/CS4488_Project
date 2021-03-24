@@ -151,7 +151,6 @@ namespace SmartPert.Model
                 
             }
         }
-
         public List<Task> GetTasks()
         {
             return GetProject().Tasks;

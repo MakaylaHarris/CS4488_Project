@@ -105,10 +105,6 @@ namespace SmartPert.View.Pages
                         keyValue.Value.ConnectDependentControl(taskControls[t]);
             }
         }
-        private void RemoveDependencies(Task t)
-        {
-
-        }
 
         private void BuildGrid()
         {
