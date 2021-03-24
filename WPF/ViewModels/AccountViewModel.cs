@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -20,9 +21,10 @@ namespace SmartPert.ViewModels
     {
         private User _user;
         private UserDisplay _tempUser;
-        private PasswordDisplay _tempPassword;
         private bool _isUpdated;
         private bool _isPwUpdated;
+        private bool _isError;
+        private bool _isPwMismatch;
         private StateSwitcher stateSwitcher;
 
         /// <summary>
@@ -53,10 +55,6 @@ namespace SmartPert.ViewModels
             get { return _tempUser; }
         }
 
-        public PasswordDisplay TempPassword
-        {
-            get { return _tempPassword; }
-        }
 
         /// <summary>
         /// Gets the AccountUpdateCommand for the view model.
@@ -110,23 +108,56 @@ namespace SmartPert.ViewModels
             set
             {
                 _isPwUpdated = value;
-                OnPropertyChanged("IsUpdated");
+                OnPropertyChanged("IsPwUpdated");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a bool indicating if there is a general error with updating the password
+        /// </summary>
+        public bool IsError
+        {
+            get { return _isError; }
+            set
+            {
+                _isError = value;
+                OnPropertyChanged("IsError");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a bool indicating if the new password fields are mismatched
+        /// </summary>
+        public bool IsPwMismatch
+        {
+            get { return _isPwMismatch; }
+            set
+            {
+                _isPwMismatch = value;
+                OnPropertyChanged("IsError");
             }
         }
 
         /// <summary>
         /// Gets a bool that returns if the password can be updated or not
+        /// This is where you would have conditionals if you need specific password formatting (certain number of characters, etc.)
         /// </summary>
         public bool CanUpdatePw {
             get
             {
-                if (User == null && User.Password != TempPassword.CurrentPw || TempPassword.NewPw != TempPassword.ConfirmNewPw)
+                if (User == null)
                 {
+                    IsError = true;
+                    return false;
+                }
+                else if (TempUser.NewPw != TempUser.ConfirmNewPw)
+                {
+                    IsPwMismatch = true;
                     return false;
                 }
                 else
                 {
-                    return !String.IsNullOrWhiteSpace(TempPassword.NewPw);
+                    return !String.IsNullOrWhiteSpace(TempUser.ConfirmNewPw);
                 }
             }
         }
@@ -143,14 +174,27 @@ namespace SmartPert.ViewModels
         {
             User.Name = TempUser.Name;
             User.Email = TempUser.Email;
-            User.Password = TempUser.Password;
             IsUpdated = true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void SavePasswordInfo()
         {
-            User.Password = TempPassword.NewPw;
-            IsPwUpdated = true;
+            //TODO: Get rid of encryption once the passwords are updated
+            if (TempUser.CurrentPw == User.Password || TempUser.CurrentPw ==
+                System.Text.Encoding.ASCII.GetString(
+                    new System.Security.Cryptography.SHA256Managed().ComputeHash(Encoding.UTF8.GetBytes(User.Password)))
+            )
+            {
+                User.Password = TempUser.NewPw;
+                IsPwUpdated = true;
+            }
+            else
+            {
+                IsError = true;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,6 +22,7 @@ namespace SmartPert.View.Account
     public partial class ChangePassword : Page
     {
         private AccountEditor window;
+
         public ChangePassword(AccountEditor window)
         {
             InitializeComponent();
@@ -30,6 +32,12 @@ namespace SmartPert.View.Account
         private void Account_Click(object sender, RoutedEventArgs e)
         {
             window.SwitchToAccount();
+        }
+
+        private void ChangePw_OnClick(object sender, RoutedEventArgs e)
+        {
+            string hashValue = System.Text.Encoding.ASCII.GetString(new System.Security.Cryptography.SHA256Managed().ComputeHash(Encoding.UTF8.GetBytes(PassBoxCurrent.Password.ToString())));
+            window.HandEncryptedPw(hashValue);
         }
     }
 }

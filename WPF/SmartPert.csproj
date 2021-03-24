@@ -222,7 +222,6 @@
     <Compile Include="View\Pages\ErrorCatch.xaml.cs">
       <DependentUpon>ErrorCatch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ViewClasses\PasswordDisplay.cs" />
     <Compile Include="View\ViewClasses\ToolTipData.cs" />
     <Compile Include="View\ViewClasses\ToolTipProjectData.cs" />
     <Compile Include="View\ViewClasses\UserDisplay.cs" />

@@ -17,13 +17,17 @@ namespace SmartPert.View.ViewClasses
     {
         private string _name;
         private string _email;
-        private string _password;
+        private string _currentPw;
+        private string _newPw;
+        private string _confirmNewPw;
 
         public UserDisplay(User user)
         {
             _name = user.Name;
             _email = user.Email;
-            _password = user.Password;
+            _currentPw = "";
+            _newPw = "";
+            _confirmNewPw = "";
         }
 
         public string Name
@@ -38,10 +42,22 @@ namespace SmartPert.View.ViewClasses
             set { _email = value; }
         }
 
-        public string Password
+        public string NewPw
         {
-            get { return _password; }
-            set { _password = value; }
+            get { return _newPw; }
+            set { _newPw = value; }
+        }
+
+        public string ConfirmNewPw
+        {
+            get { return _confirmNewPw; }
+            set { _confirmNewPw = value; }
+        }
+
+        public string CurrentPw
+        {
+            get { return _currentPw; }
+            set { _currentPw = value; }
         }
     }
 }
