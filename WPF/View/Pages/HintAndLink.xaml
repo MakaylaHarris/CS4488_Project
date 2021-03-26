@@ -16,6 +16,6 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label x:Name="HintLabel" Content="{Binding Path=HintText}" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        <Button x:Name="HintLink" Content="{Binding Path=LinkText}" Grid.Row="1" Foreground="Blue" Background="Transparent" />
+        <Button x:Name="HintLink" Style="{StaticResource MaterialDesignRaisedLightButton}"  Content="{Binding Path=LinkText}" Grid.Row="1" />
     </Grid>
 </Page>

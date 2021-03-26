@@ -148,9 +148,9 @@ namespace SmartPert.Model
             if (task != null)
             {
                 task.Delete();
+                
             }
         }
-
         public List<Task> GetTasks()
         {
             return GetProject().Tasks;

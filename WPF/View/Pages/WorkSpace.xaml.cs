@@ -101,7 +101,8 @@ namespace SmartPert.View.Pages
             foreach(KeyValuePair<Task, TaskControl> keyValue in taskControls)
             {
                 foreach (Task t in keyValue.Key.Dependencies)
-                    keyValue.Value.ConnectDependentControl(taskControls[t]);
+                    if (taskControls.ContainsKey(t))
+                        keyValue.Value.ConnectDependentControl(taskControls[t]);
             }
         }
 
@@ -110,9 +111,9 @@ namespace SmartPert.View.Pages
             AddRows();
             AddHeaders();
             AddGridSplitter();
-            AddTodayBorder();
             AddTaskControls();
             AddGridBorders();
+            AddTodayBorder();
         }
 
         /// <summary>
@@ -186,6 +187,19 @@ namespace SmartPert.View.Pages
                 Grid.SetColumn(MyControl, rowData.StartDateCol);
                 Grid.SetColumnSpan(MyControl, rowData.ColSpan);
                 Grid.SetZIndex(MyControl, 100);
+                
+                                //Tyler K.
+                //Don't want task tooltips on the project "button". 
+                if(i > 0)
+                {
+                    MyControl.ToolTip = viewModel.TooltipData[i - 1].OutputToolTip();
+                }
+                //If we're at index 0, it'll populate the Project "button". Add a project tooltip. 
+                if(i == 0)
+                {
+                    MyControl.ToolTip = viewModel.ProjectTooltip.OutputToolTipProject();
+                }
+                
                 mainGrid.Children.Add(MyControl);
 
             }
