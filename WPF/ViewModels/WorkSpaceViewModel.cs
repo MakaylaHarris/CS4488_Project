@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Input;
 using SmartPert.Annotations;
 using SmartPert.Model;
+using SmartPert.View;
+using SmartPert.View.Pages;
 using SmartPert.View.ViewClasses;
 
 namespace SmartPert.ViewModels
@@ -16,21 +18,24 @@ namespace SmartPert.ViewModels
     /// The interaction logic for the workspace view
     /// Implemented by: Makayla Linnastruth
     /// </summary>
-    class WorkSpaceViewModel : INotifyPropertyChanged
+    public class WorkSpaceViewModel : INotifyPropertyChanged, IViewModel
     {
         private ObservableCollection<RowData> _rowData;
         private Project _Project;
+        private WorkSpace workspace;
         private List<string> _headers = new List<string>();
         private String[] _weekDayAbbrev = { "S", "M", "T", "W", "T", "F", "S" };
 
         /// <summary>
         /// Initializes an instance of the WorkSpaceViewModel class
         /// </summary>
-        public WorkSpaceViewModel()
+        public WorkSpaceViewModel(WorkSpace workSpace)
         {
+            this.workspace = workSpace;
             //Would get the Project we are working with
             this._rowData = new ObservableCollection<RowData>();
-            _Project = Model.Model.Instance.GetProject();
+            Model.Model model = Model.Model.GetInstance(this);
+            _Project = model.GetProject();
             _headers = GetWeekHeader();
             LoadData();
         }
@@ -153,6 +158,20 @@ namespace SmartPert.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void OnDisconnect()
+        {
+            // do nothing
+        }
+
+        public void OnModelUpdate(Project p)
+        {
+            _Project = p;
+            _headers = GetWeekHeader();
+            this.RowData.Clear();
+            LoadData();
+            workspace.OnWorkspaceModelUpdate(this);
         }
         #endregion
     }

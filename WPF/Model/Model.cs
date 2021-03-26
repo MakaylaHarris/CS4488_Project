@@ -17,6 +17,7 @@ namespace SmartPert.Model
         private static readonly bool initialized = StartInstance();  
         private List<IViewModel> viewModels;
         private DBReader reader;
+        private bool isUpdating;
 
         #region Model Instance
         /// <summary>
@@ -262,12 +263,14 @@ namespace SmartPert.Model
         #region Database Methods
         public void OnModelUpdate(Project p = null)
         {
-            if(reader != null && !reader.IsUpdating)  // Don't send updates if we're in the middle of updating
+            if(reader != null && !reader.IsUpdating && ! this.isUpdating)  // Don't send updates if we're in the middle of updating
             {
+                isUpdating = true;
                 if (p == null)
                     p = GetProject();
                 foreach (IViewModel viewModel in viewModels)
                     viewModel.OnModelUpdate(p);
+                isUpdating = false;
             }
         }
 

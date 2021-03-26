@@ -14,7 +14,7 @@ namespace SmartPert.View.ViewClasses
     /// A preview for moving task control
     /// Created 3/9/2021 by Robert Nelson
     /// </summary>
-    public class TaskControlPreview
+    public class TaskControlPreview: UIElement
     {
         private readonly Canvas canvas;
         private readonly Point initial;

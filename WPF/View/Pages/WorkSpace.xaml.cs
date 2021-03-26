@@ -38,10 +38,28 @@ namespace SmartPert.View.Pages
         public WorkSpace()
         {
             InitializeComponent();
-            viewModel = new WorkSpaceViewModel();
+            viewModel = new WorkSpaceViewModel(this);
             taskControls = new Dictionary<Task, TaskControl>();
             DataContext = viewModel.RowData;
             mainGrid.SizeChanged += MainGrid_SizeChanged;
+            BuildGrid();
+        }
+
+        /// <summary>
+        /// Update workspace when the model has changed
+        /// </summary>
+        /// <param name="viewModel">view model</param>
+        public void OnWorkspaceModelUpdate(WorkSpaceViewModel viewModel)
+        {
+            foreach (TaskControl taskControl in taskControls.Values)
+                taskControl.DisconnectAllLines();
+            taskControls.Clear();
+            weekendCols.Clear();
+            for (int i = mainGrid.RowDefinitions.Count - 1; i >= rowStart; i--)
+                mainGrid.RowDefinitions.RemoveAt(i);
+            for (int i = mainGrid.ColumnDefinitions.Count - 1; i >= colStart; i--)
+                mainGrid.ColumnDefinitions.RemoveAt(i);
+            mainGrid.Children.Clear();
             BuildGrid();
         }
 
@@ -243,8 +261,9 @@ namespace SmartPert.View.Pages
                 {
                     txt1.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
                 }
-                txt1.Margin = new Thickness(5 + 5 * viewModel.RowData[i].SubTaskLevel,0,0,0);
-                txt1.FontSize = 16;
+                int subLevel = viewModel.RowData[i].SubTaskLevel;
+                txt1.Margin = new Thickness(5 + 5 * subLevel,0,0,0);
+                txt1.FontSize = 16 - subLevel >= 8 ? 16 - subLevel : 8;
                 txt1.VerticalAlignment = VerticalAlignment.Center;
                 Grid.SetRow(txt1, rowChange);
                 Grid.SetColumn(txt1, 0);

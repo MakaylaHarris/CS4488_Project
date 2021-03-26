@@ -28,7 +28,7 @@ namespace SmartPert.View.Controls
     /// Interaction logic for TaskControl.xaml
     /// Redone 3/5/2021 by Robert Nelson
     /// </summary>
-    public partial class TaskControl : Connectable
+    public partial class TaskControl : Connectable, IItemObserver
     {
         private RowData rowData;
         private Color completedColor;
@@ -117,6 +117,7 @@ namespace SmartPert.View.Controls
             IncompleteColor = ((SolidColorBrush) FindResource("PrimaryHueMidBrush")).Color;
             AddAnchor(LeftAnchor);
             AddAnchor(RightAnchor);
+            task.Subscribe(this);
         }
 
         #endregion
@@ -155,6 +156,7 @@ namespace SmartPert.View.Controls
                 MyGrid.ColumnDefinitions.Add(new ColumnDefinition());
             SetColSpans(rowData.LikelyEstSpan, rowData.MinEstSpan, rowData.MaxEstSpan);
             LoadBrush(rowData);
+            OnMove();
         }
 
 
@@ -245,9 +247,13 @@ namespace SmartPert.View.Controls
             // Determine what we're dragging
             shifter = DetermineShifter(e.GetPosition(this.MyGrid));
             if (shifter == Shifter.StartDateShifter)
-                preview = new TaskControlPreview(WorkSpace.MainCanvas, MinRect, LikelyRect, MaxRect, e.GetPosition(WorkSpace.MainCanvas));
+            {
+                preview = new TaskControlPreview(this, Canvas, e.GetPosition(WorkSpace.MainCanvas));
+            } 
             else
-                preview = null;
+            {
+                EndPreview();
+            }
             CaptureMouse();
         }
 
@@ -267,8 +273,14 @@ namespace SmartPert.View.Controls
                 int verticalShift = WorkSpace.GetRowShift(dragStartPoint.Y, endPoint.Y);
                 PerformShift(shifter, horizontalShift, verticalShift);
             }
-            preview = null;
+            EndPreview();
             ReleaseMouseCapture();
+        }
+
+        private void EndPreview()
+        {
+            Canvas.Children.Remove(preview);
+            preview = null;
         }
 
         private void UserControl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -307,6 +319,15 @@ namespace SmartPert.View.Controls
         {
             if (!isReceiver)
                 Task.RemoveDependency(((TaskControl)target).Task);
+        }
+
+        public void OnUpdate(IDBItem item)
+        {
+            LoadData(RowData);
+        }
+
+        public void OnDeleted(IDBItem item)
+        {
         }
 
         #endregion

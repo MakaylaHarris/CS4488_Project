@@ -186,6 +186,9 @@
     <Compile Include="StateSwitcher.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
+    <Compile Include="View\Controls\TaskControlPreview.xaml.cs">
+      <DependentUpon>TaskControlPreview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ViewClasses\Anchor.cs" />
     <Compile Include="View\ViewClasses\Connectable.cs" />
     <Compile Include="View\ViewClasses\Connector.cs" />
@@ -265,6 +268,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Controls\TaskControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\TaskControlPreview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

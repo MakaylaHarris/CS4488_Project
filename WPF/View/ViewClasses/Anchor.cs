@@ -103,6 +103,23 @@ namespace SmartPert.View
         }
 
         /// <summary>
+        /// Disconnect silently
+        /// </summary>
+        /// <param name="connector">connector to drop</param>
+        public void Disconnect(Connector connector)
+        {
+            if (connectors != null)
+                connectors.Remove(connector);
+        }
+
+        public void DisconnectAll()
+        {
+            if (connectors != null)
+                while (connectors.Count > 0)
+                    connectors[0].Disconnect(false);
+        }
+
+        /// <summary>
         /// Determines if two anchors can be connected
         /// </summary>
         /// <param name="anchor">anchor</param>
@@ -142,7 +159,7 @@ namespace SmartPert.View
     {
         public override bool CanConnect(Anchor anchor, bool anchorIsReceiver)
         {
-            if (anchorIsReceiver)
+            if (anchorIsReceiver && anchor.GetType() != typeof(SenderAnchor))
                 return false;
             return base.CanConnect(anchor, anchorIsReceiver);
         }
@@ -155,7 +172,7 @@ namespace SmartPert.View
     {
         public override bool CanConnect(Anchor anchor, bool anchorIsReceiver)
         {
-            if (!anchorIsReceiver)
+            if (!anchorIsReceiver && anchor.GetType() != typeof(ReceiverAnchor))
                 return false;
             return base.CanConnect(anchor, anchorIsReceiver);
         }

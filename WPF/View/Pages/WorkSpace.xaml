@@ -41,9 +41,9 @@
                         <RowDefinition Height="20"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.Children>
-                        <Label 
+                        <!--<Label 
                 Grid.Row="2"
-                Content="{Binding Path=Project.Name, Mode=OneWay}"/> 
+                Content="{Binding Path=Project.Name, Mode=OneWay}"/>--> 
                         <!--<GridSplitter
                 Grid.Column="0" Grid.RowSpan="2147483647"
                 Width="3" 

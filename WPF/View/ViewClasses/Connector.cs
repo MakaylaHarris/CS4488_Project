@@ -234,13 +234,20 @@ namespace SmartPert.View
         /// Disconnects the connection
         /// </summary>
         /// <returns>true if a disconnection occurred (was not already disconnected)</returns>
-        public bool Disconnect()
+        public bool Disconnect(bool notify=true)
         {
             // If connected then disconnect
             if (IsConnected())
             {
-                Anchor1.Disconnect(this, Anchor2.Connectable, !anchor2IsReceiver);
-                Anchor2.Disconnect(this, Anchor1.Connectable, anchor2IsReceiver);
+                if(notify)
+                {
+                    Anchor1.Disconnect(this, Anchor2.Connectable, !anchor2IsReceiver);
+                    Anchor2.Disconnect(this, Anchor1.Connectable, anchor2IsReceiver);
+                } else
+                {
+                    Anchor1.Disconnect(this);
+                    Anchor2.Disconnect(this);
+                }
                 ClearLines();
                 Anchor1 = Anchor2 = null;
                 return true;
