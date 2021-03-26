@@ -248,6 +248,8 @@ namespace SmartPert.View.Controls
             shifter = DetermineShifter(e.GetPosition(this.MyGrid));
             if (shifter == Shifter.StartDateShifter)
             {
+                if (preview != null)
+                    EndPreview();
                 preview = new TaskControlPreview(this, Canvas, e.GetPosition(WorkSpace.MainCanvas));
             } 
             else

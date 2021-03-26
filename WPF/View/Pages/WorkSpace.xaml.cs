@@ -54,6 +54,15 @@ namespace SmartPert.View.Pages
             foreach (TaskControl taskControl in taskControls.Values)
                 taskControl.DisconnectAllLines();
             taskControls.Clear();
+
+            // Remove any old previews
+            List<UIElement> toRemove = new List<UIElement>();
+            foreach(UIElement uIElement in MainCanvas.Children)
+                if (uIElement.GetType() == typeof(TaskControlPreview))
+                    toRemove.Add(uIElement);
+            foreach (UIElement uI in toRemove)
+                MainCanvas.Children.Remove(uI);
+
             weekendCols.Clear();
             for (int i = mainGrid.RowDefinitions.Count - 1; i >= rowStart; i--)
                 mainGrid.RowDefinitions.RemoveAt(i);
