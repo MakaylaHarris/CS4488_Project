@@ -221,14 +221,19 @@ namespace SmartPert.Model
         /// <param name="t">Task</param>
         public bool AddSubTask(Task t)
         {
-            if (!tasks.Contains(t) && t.TryShiftToRow(GetTaskAfterGroup()))
+            if (t.parentTask != this)
             {
-                t.parentTask = this;
-                tasks.Add(t);
-                t.Subscribe(this);
-                t.InsertSubTask();
-                NotifyUpdate();
-                return true;
+                if (t.parentTask != null)
+                    t.parentTask.RemoveSubTask(t);
+                if (t.TryShiftToRow(GetTaskAfterGroup()))
+                {
+                    t.parentTask = this;
+                    tasks.Add(t);
+                    t.Subscribe(this);
+                    t.InsertSubTask();
+                    NotifyUpdate();
+                    return true;
+                }
             }
             return false;
         }

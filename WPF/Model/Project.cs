@@ -48,8 +48,8 @@ namespace SmartPert.Model
         {
             if (!tasks.Contains(t))
             {
-                tasks.Add(t);
                 sorted = null;
+                tasks.Add(t);
                 t.Subscribe(this);
                 NotifyUpdate();
             }
@@ -59,6 +59,7 @@ namespace SmartPert.Model
         {
             if (tasks.Remove(t))
             {
+                sorted = null;
                 t.UnSubscribe(this);
                 NotifyUpdate();
             }

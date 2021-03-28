@@ -47,6 +47,7 @@ namespace SmartPert.Model
         /// </summary>
         public bool IsUpdating { get => isUpdating; }
 
+        public bool SaveSettings { get; set; }
 
         internal Project CurrentProject { get => currentProject; }
         internal Dictionary<int, Project> Projects { get => projects; }
@@ -80,6 +81,7 @@ namespace SmartPert.Model
             taskWorkers = new Dictionary<int, HashSet<User>>();
             dependencies = new Dictionary<int, HashSet<Task>>();
             subtasks = new Dictionary<int, HashSet<Task>>();
+            SaveSettings = true;
             isUpdating = false;
         }
         #endregion
@@ -311,7 +313,7 @@ namespace SmartPert.Model
                 Task t = (Task)item;
                 if(tasks.TryGetValue(t.Id, out task))
                     if(!ReferenceEquals(task, t))
-                        task.IsOutdated = true;
+                        task.MarkOutdatedBy(t);
                 tasks[t.Id] = t;
             }
             else if (item.GetType() == typeof(Project))
@@ -320,7 +322,7 @@ namespace SmartPert.Model
                 Project p = (Project)item;
                 if (projects.TryGetValue(p.Id, out project))
                     if (!ReferenceEquals(project, p))
-                        project.IsOutdated = true;
+                        project.MarkOutdatedBy(p);
                 projects[p.Id] = p;
             }  else if(item.GetType() == typeof(User))
             {
@@ -328,7 +330,7 @@ namespace SmartPert.Model
                 User u = (User)item;
                 if (users.TryGetValue(u.Username, out user))
                     if (!ReferenceEquals(u, user))
-                        user.IsOutdated = true;
+                        user.MarkOutdatedBy(u);
                 users[u.Username] = u;
             }
             item.Subscribe(this);
@@ -461,7 +463,8 @@ namespace SmartPert.Model
                 if(userId != Properties.Settings.Default.UserName)
                 {
                     Properties.Settings.Default.UserName = userId;
-                    Properties.Settings.Default.Save();
+                    if(SaveSettings)
+                        Properties.Settings.Default.Save();
                 }
             }
             return result;
@@ -482,7 +485,8 @@ namespace SmartPert.Model
                 User user = new User(name, email, password, username);
                 currentUser = user;
                 Properties.Settings.Default.UserName = currentUser.Username;
-                Properties.Settings.Default.Save();
+                if(SaveSettings)
+                    Properties.Settings.Default.Save();
                 if (!users.ContainsKey(user.Username))
                     users.Add(user.Username, user);
                 return true;
@@ -536,7 +540,8 @@ namespace SmartPert.Model
                 if (connectString != Properties.Settings.Default.ConnectionString)
                 {
                     Properties.Settings.Default.ConnectionString = connectString;
-                    Properties.Settings.Default.Save();
+                    if(SaveSettings)
+                        Properties.Settings.Default.Save();
                 }
             }
             if(isConnected)
@@ -567,6 +572,8 @@ namespace SmartPert.Model
         /// </summary>
         public void OnDBUpdate()
         {
+            if (isUpdating)
+                return;
             isUpdating = true;
             connection.Open();
             UpdateUsers();
@@ -617,7 +624,8 @@ namespace SmartPert.Model
             if(project.Name != Properties.Settings.Default.LastProject)
             {
                 Properties.Settings.Default.LastProject = project.Name;
-                Properties.Settings.Default.Save();
+                if(SaveSettings)
+                    Properties.Settings.Default.Save();
             }
             OnDBUpdate();
         }

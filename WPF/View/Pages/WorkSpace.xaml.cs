@@ -271,7 +271,7 @@ namespace SmartPert.View.Pages
                     txt1.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
                 }
                 int subLevel = viewModel.RowData[i].SubTaskLevel;
-                txt1.Margin = new Thickness(5 + 5 * subLevel,0,0,0);
+                txt1.Margin = new Thickness(5 + 10 * subLevel,0,0,0);
                 txt1.FontSize = 16 - subLevel >= 8 ? 16 - subLevel : 8;
                 txt1.VerticalAlignment = VerticalAlignment.Center;
                 Grid.SetRow(txt1, rowChange);

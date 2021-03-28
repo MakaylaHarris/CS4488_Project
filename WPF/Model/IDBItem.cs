@@ -131,6 +131,14 @@ namespace SmartPert.Model
             }
         }
 
+        protected virtual void OnOutdatedBy(IDBItem item) { }
+
+        public void MarkOutdatedBy(IDBItem updated)
+        {
+            OnOutdatedBy(updated);
+            IsOutdated = true;
+        }
+
         /// <summary>
         /// Is it outdated?
         /// </summary>

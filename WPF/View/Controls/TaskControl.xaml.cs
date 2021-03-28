@@ -205,14 +205,8 @@ namespace SmartPert.View.Controls
             return shifter;
         }
 
-        private void PerformShift(Shifter shifter, int horizontalShift, int verticalShift)
+        private void PerformHorizontalShift(Shifter shifter, int horizontalShift)
         {
-            // Vertical Shift
-            if(verticalShift != 0)
-            {
-                Task.TryShiftRows(verticalShift);
-            }
-
             if(horizontalShift != 0)
             {
                 // Horizontal Shift
@@ -265,15 +259,35 @@ namespace SmartPert.View.Controls
                 preview.Location = e.GetPosition(WorkSpace.MainCanvas);
         }
 
+        private bool ShouldAddAsSubTask(Task parentTask)
+        {
+            // todo: should ask user whether to add as subtask or shift here?
+            return true;
+        }
 
         private void UserControl_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Point endPoint = e.GetPosition(WorkSpace.mainGrid);
             if(endPoint != dragStartPoint)
             {
-                int horizontalShift = WorkSpace.GetColumnShift(dragStartPoint.X, endPoint.X);
                 int verticalShift = WorkSpace.GetRowShift(dragStartPoint.Y, endPoint.Y);
-                PerformShift(shifter, horizontalShift, verticalShift);
+                if(verticalShift != 0)
+                {
+                    // Test if we should add as subtask or just shift
+                    var taskControls = new CtrlHitTest(typeof(TaskControl), Canvas).Run(e.GetPosition(Canvas), this);
+                    var parentTask = taskControls.Count > 0 ? ((TaskControl)taskControls[0]).Task : null;
+                    if (parentTask != null && ShouldAddAsSubTask(parentTask))
+                    {
+                        // todo: command pattern here
+                        parentTask.AddSubTask(Task);
+                    }
+                    else
+                        Task.TryShiftRows(verticalShift);
+                } else
+                {
+                    int horizontalShift = WorkSpace.GetColumnShift(dragStartPoint.X, endPoint.X);
+                    PerformHorizontalShift(shifter, horizontalShift);
+                }
             }
             EndPreview();
             ReleaseMouseCapture();
@@ -299,6 +313,7 @@ namespace SmartPert.View.Controls
         {
             new TaskEditor().ShowDialog();
         }
+
         #endregion
 
         #region Public Methods

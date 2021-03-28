@@ -39,7 +39,7 @@ namespace SmartPert.View
         public HitTestFilterBehavior MyHitTestFilter(DependencyObject o)
         {
             // Test for the object value you want to filter, must be a subclass of filter.
-            if (!o.GetType().IsSubclassOf(filter))
+            if (o.GetType() != filter && !o.GetType().IsSubclassOf(filter))
             {
                 // Visual object is NOT part of hit test results enumeration.
                 return HitTestFilterBehavior.ContinueSkipSelf;
