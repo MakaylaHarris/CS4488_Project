@@ -36,7 +36,7 @@ namespace PertTest.Model
         #region Test Methods
 
         [TestMethod]
-        public void TestAddRemoveWorker()
+        public void Test_AddRemoveWorker()
         {
             User worker = model.GetUsers()[0];
             // TEST
@@ -49,7 +49,7 @@ namespace PertTest.Model
         }
 
         [TestMethod]
-        public void TestInsert()
+        public void Test_Insert()
         {
             // SETUP
             string name = "Test32312213";
@@ -61,7 +61,7 @@ namespace PertTest.Model
         }
 
         [TestMethod]
-        public void TestDelete()
+        public void Test_Delete()
         {
             Task t = model.GetTasks()[1];
             // Delete Task
@@ -72,7 +72,7 @@ namespace PertTest.Model
         }
 
         [TestMethod]
-        public void TestUpdate()
+        public void Test_Update()
         {
             // Update the task
             string description = "Something interesting";
@@ -82,7 +82,7 @@ namespace PertTest.Model
         }
 
         [TestMethod]
-        public void TestAddSubTask()
+        public void Test_AddSubTask()
         {
             Task sub = model.GetTasks()[1];
             // Add sub

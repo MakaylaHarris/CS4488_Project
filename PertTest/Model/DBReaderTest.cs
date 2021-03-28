@@ -21,7 +21,7 @@ namespace PertTest.Model
 
         #region Tests
         [TestMethod]
-        public void TestNewConnectionTest()
+        public void Test_NewConnection()
         {
             Assert.IsTrue(reader.Connected);
         }

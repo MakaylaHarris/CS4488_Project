@@ -64,9 +64,9 @@ def main(args):
             f'Failed to find database creation script at {create_script_path}, please rebuild the SmartPertDB project.')
         sys.exit(-1)
     if not should_create:
-        origin_date = datetime.datetime.fromtimestamp(pathlib.Path(create_script_path).stat().st_ctime)
+        origin_date = datetime.datetime.fromtimestamp(pathlib.Path(create_script_path).stat().st_mtime)
         if os.path.exists(test_creation_script):
-            test_date = datetime.datetime.fromtimestamp(pathlib.Path(test_creation_script).stat().st_ctime)
+            test_date = datetime.datetime.fromtimestamp(pathlib.Path(test_creation_script).stat().st_mtime)
             should_create = test_date < origin_date
         else:
             should_create = True

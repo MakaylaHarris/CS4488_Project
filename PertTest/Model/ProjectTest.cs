@@ -56,7 +56,7 @@ namespace PertTest.Model
         /// Created 2/20/2021 by Robert Nelson
         /// </summary>
         [TestMethod]
-        public void TestCreateDelete()
+        public void Test_CreateDelete()
         {
             // Test it creates
             project = new Project(name, start, end, description);

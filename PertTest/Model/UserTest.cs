@@ -31,7 +31,7 @@ namespace PertTest.Model
 
         #region Test Methods
         [TestMethod]
-        public void TestRegister()
+        public void Test_Register()
         {
             string name = "TestUser_33018t5";
             string pass = "TestPass3330";
@@ -41,7 +41,7 @@ namespace PertTest.Model
         }
 
         [TestMethod]
-        public void TestCreateUserRegister()
+        public void Test_CreateUserRegister()
         {
             string newName = "Mindy";
             Assert.IsTrue(SmartPert.Model.Model.Instance.CreateUser(newName) != null);
@@ -50,14 +50,14 @@ namespace PertTest.Model
         }
 
         [TestMethod]
-        public void TestBadLogin()
+        public void Test_BadLogin()
         {
             Assert.IsFalse(reader.Login("some_user", "WrongPass"));
             Assert.IsFalse(reader.Login("WrongUser", "password"));
         }
 
         [TestMethod]
-        public void TestLogin()
+        public void Test_Login()
         {
             Assert.IsTrue(reader.Login("some_user", "password"));
         }
