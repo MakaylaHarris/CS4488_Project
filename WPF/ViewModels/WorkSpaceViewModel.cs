@@ -21,6 +21,8 @@ namespace SmartPert.ViewModels
     public class WorkSpaceViewModel : INotifyPropertyChanged, IViewModel
     {
         private ObservableCollection<RowData> _rowData;
+        private ObservableCollection<ToolTipData> _tooltipData;
+        private ToolTipProjectData _projectTooltip;
         private Project _Project;
         private WorkSpace workspace;
         private List<string> _headers = new List<string>();
@@ -36,8 +38,11 @@ namespace SmartPert.ViewModels
             this._rowData = new ObservableCollection<RowData>();
             Model.Model model = Model.Model.GetInstance(this);
             _Project = model.GetProject();
+            this._tooltipData = new ObservableCollection<ToolTipData>();
             _headers = GetWeekHeader();
             LoadData();
+            LoadToolTipData();
+            LoadProjectData();
         }
 
         #region Properties
@@ -48,7 +53,7 @@ namespace SmartPert.ViewModels
 
         public int DaySpan
         {
-            get { 
+            get {
                 int days = (((DateTime)this.Project.CalculateLastProjectDate()).Date - this.Project.StartDate.Date).Days;
                 if (days <= 0)      /* Ensure natural number for span */
                     return 1;
@@ -75,6 +80,31 @@ namespace SmartPert.ViewModels
                 OnPropertyChanged("RowData");
 
             }
+        }
+
+        /// <summary>
+        /// Property for Task Tooltip collection.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public ObservableCollection<ToolTipData> TooltipData
+        {
+            get { return _tooltipData; }
+            set
+            {
+                this._tooltipData = value;
+                OnPropertyChanged("TooltipData");
+
+            }
+        }
+
+        /// <summary>
+        /// Property for Project Tooltip.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public ToolTipProjectData ProjectTooltip
+        {
+            get { return _projectTooltip; }
+            set { this._projectTooltip = value; }
         }
 
         public List<string> Headers
@@ -111,9 +141,9 @@ namespace SmartPert.ViewModels
             this.RowData.Add(num1);
             foreach (Model.Task task in Project.SortedTasks)
             {
-                RowData num2 = new RowData(task.Name, 
-                    startDateCol: (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, 
-                    colSpan: (((DateTime)task.CalculateLastTaskDate()).Date - ((DateTime)task.StartDate).Date).Days, 
+                RowData num2 = new RowData(task.Name,
+                    startDateCol: (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1,
+                    colSpan: (((DateTime)task.CalculateLastTaskDate()).Date - ((DateTime)task.StartDate).Date).Days,
                     isProject: false,
                     endDateSpan: task.EndDate != null ? ((DateTime)task.EndDate - task.StartDate).Days : -1,
                     minEstSpan: task.MinDuration,
@@ -131,6 +161,31 @@ namespace SmartPert.ViewModels
             if (t.ParentTask == null)
                 return 0;
             return GetSubLevel(t.ParentTask) + 1;
+        }
+
+        /// <summary>
+        /// A method that created ToolTip data classes that hold data for each task and adds them to a collection. Collection indexes are the same for this and RowData starting at index 1.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public void LoadToolTipData()
+        {
+            for(int i = 0; i < Project.Tasks.Count; i++)
+            {
+                //Task could also have been a reference to System.Threading.Task, so below declaration was necessary.
+                SmartPert.Model.Task t = Project.Tasks[i];
+
+                ToolTipData data = new ToolTipData(t.Name, t.StartDate, t.EndDate, t.LikelyDuration, t.MaxDuration, t.MinDuration, t.Description);
+                this.TooltipData.Add(data);
+            }
+        }
+
+        /// <summary>
+        /// A method that sets the Project data for  its tooltip.
+        /// Created 2/25/2021 by Tyler Kness-Miller
+        /// </summary>
+        public void LoadProjectData()
+        {
+            ProjectTooltip = new ToolTipProjectData(Project.Name, Project.StartDate, Project.EndDate, Project.Description);
         }
 
         /// <summary>

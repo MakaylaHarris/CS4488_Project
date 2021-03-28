@@ -44,6 +44,7 @@ namespace SmartPert.Model
         #endregion
 
         #region Task Methods
+        
         public void AddTask(Task t)
         {
             if (!tasks.Contains(t))

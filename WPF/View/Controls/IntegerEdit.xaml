@@ -17,10 +17,10 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBox x:Name="MyEdit" Grid.RowSpan="2" LostFocus="MyEdit_LostFocus" Text="1" TextWrapping="NoWrap" TextAlignment="Center" VerticalAlignment="Center"/>
-        <Button Grid.Column="1" Click="Up_Click" Margin="1" Height="Auto"/>
+        <Button Grid.Column="1" Click="Up_Click" Margin="1" Height="Auto" Style="{StaticResource MaterialDesignRaisedLightButton}"/>
         <materialDesign:PackIcon Kind="ChevronUp" Grid.Column="2" HorizontalAlignment="Center"/>
-        <Button Grid.Column="1" Grid.Row="1" Click="Down_Click" Margin="1" Height="Auto">
+        <Button Grid.Column="1" Grid.Row="1" Click="Down_Click" Margin="1" Height="Auto" Style="{StaticResource MaterialDesignRaisedLightButton}">
         </Button>
-        <materialDesign:PackIcon Kind="ChevronDown" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center"/>
+        <materialDesign:PackIcon Kind="ChevronDown" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

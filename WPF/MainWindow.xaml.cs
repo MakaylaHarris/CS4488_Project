@@ -299,6 +299,11 @@ namespace SmartPert
             StateSwitcher.Instance.OnProjectCreateOrEdit(model.GetProject());
             ProjectCreator pc = new ProjectCreator();
         }
+        
+        private void Account_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            // For Makayla
+        }
 #endregion
 
 #region Model Update

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartPert"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="SmartPert" Height="500" Width="900"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -31,6 +32,7 @@
         <CommandBinding Command="{x:Static local:CustomCommands.DocsCommand}" Executed="Docs_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AboutCommand}" Executed="About_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AddHelpCommand}" Executed="Additional_Help"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.AcctSettings}" Executed="Account_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.SettingsCommand}" CanExecute="CommandBinding_CanIfActiveProject" Executed="Settings_Execute"/>
     </Window.CommandBindings>
     <Window.InputBindings>
@@ -50,6 +52,11 @@
         <!--#region Menus-->
         <DockPanel>
             <Menu DockPanel.Dock="Top" x:Name="TopMenu" IsMainMenu="True">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <DockPanel HorizontalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
                 <MenuItem Header="_File" x:Name="FileMenu">
                     <MenuItem Command="New" >
                     </MenuItem>
@@ -93,6 +100,13 @@
                     <MenuItem Command="{x:Static local:CustomCommands.AddHelpCommand}"/>
                     <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.AboutCommand}" />
+                </MenuItem>
+                <MenuItem Header="_Account" HorizontalAlignment="Right">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="AccountCircle" 
+                                                 Foreground="{StaticResource PrimaryHueMidBrush}"/>
+                    </MenuItem.Icon>
+                    <MenuItem Command="{x:Static local:CustomCommands.AcctSettings}"/>
                 </MenuItem>
             </Menu>
             <TextBox AcceptsReturn="True" />

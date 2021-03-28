@@ -28,7 +28,7 @@ namespace SmartPert.View.Windows
         private static DateTime defaultStartDate = DateTime.Now;
 
         #region Properties
-        private Task Task { 
+        private Task Task {
             get => task;
             set {
                 task = value;

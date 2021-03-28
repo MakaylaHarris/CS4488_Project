@@ -170,9 +170,9 @@ namespace SmartPert.View.Pages
             AddRows();
             AddHeaders();
             AddGridSplitter();
-            AddTodayBorder();
             AddTaskControls();
             AddGridBorders();
+            AddTodayBorder();
         }
 
         /// <summary>
@@ -246,6 +246,19 @@ namespace SmartPert.View.Pages
                 Grid.SetColumn(MyControl, TaskControl.NaturalNum(rowData.StartDateCol));
                 Grid.SetColumnSpan(MyControl, TaskControl.NaturalNum(rowData.ColSpan));
                 Grid.SetZIndex(MyControl, 100);
+                
+                                //Tyler K.
+                //Don't want task tooltips on the project "button". 
+                if(i > 0)
+                {
+                    MyControl.ToolTip = viewModel.TooltipData[i - 1].OutputToolTip();
+                }
+                //If we're at index 0, it'll populate the Project "button". Add a project tooltip. 
+                if(i == 0)
+                {
+                    MyControl.ToolTip = viewModel.ProjectTooltip.OutputToolTipProject();
+                }
+                
                 mainGrid.Children.Add(MyControl);
 
             }
