@@ -6,9 +6,7 @@
     - nuget restore
     - msbuild /t:restore
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
-    # create Pert database
-    - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
-    - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\Scripts\Insert.sql
+    - python Scripts\manageTestDB.py
 
   build:
     project: SmartPert.sln
