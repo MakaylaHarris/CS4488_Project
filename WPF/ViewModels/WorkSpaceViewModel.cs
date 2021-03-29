@@ -172,7 +172,7 @@ namespace SmartPert.ViewModels
             for(int i = 0; i < Project.Tasks.Count; i++)
             {
                 //Task could also have been a reference to System.Threading.Task, so below declaration was necessary.
-                SmartPert.Model.Task t = Project.Tasks[i];
+                SmartPert.Model.Task t = Project.SortedTasks[i];
 
                 ToolTipData data = new ToolTipData(t.Name, t.StartDate, t.EndDate, t.LikelyDuration, t.MaxDuration, t.MinDuration, t.Description);
                 this.TooltipData.Add(data);

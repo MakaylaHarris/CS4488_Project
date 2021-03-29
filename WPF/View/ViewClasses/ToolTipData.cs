@@ -10,7 +10,7 @@ namespace SmartPert.View.ViewClasses
     /// Utility class for storing task data to be outputted in a string. 
     /// Created 2/25/2021 by Tyler Kness-Miller
     /// </summary>
-    class ToolTipData
+    public class ToolTipData
     {
         //Private fields.
         private string name;

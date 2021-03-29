@@ -15,9 +15,14 @@ namespace SmartPert.Model
         private Project project;
         private HashSet<Task> dependencies;
         private Task parentTask;
-        private int projectRow;    // The nth child of a parent
+        private int projectRow;
 
         #region Properties
+        /// <summary>
+        /// List of Subtasks
+        /// </summary>
+        public List<Task> SubTasks { get => Tasks.ToList(); }
+
         /// <summary>
         /// Gets the project the task is on
         /// Added 2/13/2021 by Robert Nelson
@@ -71,6 +76,40 @@ namespace SmartPert.Model
             PostInit(insert, track);
         }
 
+        #endregion
+
+        #region Property Callbacks
+        protected override void AfterStartDateChanged(DateTime dateTime)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_StartDateChange(dateTime);
+            project.OnChild_StartDateChange(dateTime);
+        }
+
+        protected override void AfterEndDateChanged(DateTime? newValue)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_CompletedDateChange(newValue);
+            project.OnChild_CompletedDateChange(newValue);
+        }
+        protected override void AfterLikelyDurationChanged(int newValue)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_LikelyDateChange(LikelyDate);
+            project.OnChild_LikelyDateChange(LikelyDate);
+        }
+        protected override void AfterMaxDurationChanged(int newValue)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_MaxEstDateChange(MaxEstDate);
+            project.OnChild_MaxEstDateChange(MaxEstDate);
+        }
+        protected override void AfterMinDurationChanged(int newValue)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_MinEstDateChange(MinEstDate);
+            project.OnChild_MinEstDateChange(MinEstDate);
+        }
         #endregion
 
         #region Task Methods
@@ -229,8 +268,8 @@ namespace SmartPert.Model
                 {
                     t.parentTask = this;
                     tasks.Add(t);
-                    t.Subscribe(this);
-                    t.InsertSubTask();
+                    OnChild_Change(t);
+                    t.DB_InsertSubTask();
                     NotifyUpdate();
                     return true;
                 }
@@ -246,9 +285,8 @@ namespace SmartPert.Model
         {
             if (tasks.Remove(t))
             {
-                t.UnSubscribe(this);
                 t.parentTask = null;
-                t.DeleteSubTask();
+                t.DB_DeleteSubTask();
                 NotifyUpdate();
                 return true;
             }
@@ -456,7 +494,7 @@ namespace SmartPert.Model
             return id;
         }
 
-        private void InsertSubTask()
+        private void DB_InsertSubTask()
         {
             if (parentTask != null)
             {
@@ -468,7 +506,7 @@ namespace SmartPert.Model
             }
         }
 
-        private void DeleteSubTask()
+        private void DB_DeleteSubTask()
         {
             ExecuteSql("DELETE FROM [dbo].[SubTask] WHERE SubTaskId=" + Id);
         }
@@ -552,7 +590,6 @@ namespace SmartPert.Model
                 {
                     t.parentTask = null;
                     tasks.Remove(t);
-                    t.UnSubscribe(this);
                 }
                 isUpdated = true;
             } else if(!tasks.SetEquals(subtasks)) // If the subtasks have changed, update the ones that have changed
@@ -561,13 +598,11 @@ namespace SmartPert.Model
                 {
                     t.parentTask = this;
                     tasks.Add(t);
-                    t.Subscribe(this);
                 }
                 foreach (Task t in Set_Diff(tasks, subtasks))
                 {
                     t.parentTask = null;
                     tasks.Remove(t);
-                    t.UnSubscribe(this);
                 }
                 isUpdated = true;
             }

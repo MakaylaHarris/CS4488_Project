@@ -48,7 +48,7 @@ namespace PertTest.DAL
                     string result = reader.ReadToEnd();
                     Console.Write(result);
                 }
-                process.WaitForExit(5000);
+                process.WaitForExit();
                 return process.ExitCode;
             }
         }

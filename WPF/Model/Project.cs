@@ -51,7 +51,7 @@ namespace SmartPert.Model
             {
                 sorted = null;
                 tasks.Add(t);
-                t.Subscribe(this);
+                OnChild_Change(t);
                 NotifyUpdate();
             }
         }
@@ -61,15 +61,8 @@ namespace SmartPert.Model
             if (tasks.Remove(t))
             {
                 sorted = null;
-                t.UnSubscribe(this);
                 NotifyUpdate();
             }
-        }
-
-        public override void OnUpdate(IDBItem item)
-        {
-            sorted = null;      // make it resort
-            base.OnUpdate(item);
         }
         #endregion
 

@@ -10,7 +10,7 @@ namespace SmartPert.Model
     /// Robert Nelson 1/28/2021
     /// Updated 3/8/2021 pulled up mostLikelyDuration, maxDuration, minDuration, and tasks.
     /// </summary>
-    public abstract class TimedItem : IDBItem, IItemObserver
+    public abstract class TimedItem : IDBItem
     {
         protected DateTime startDate;
         protected DateTime? endDate;
@@ -39,6 +39,7 @@ namespace SmartPert.Model
                     if (endDate != null && startDate > endDate)
                         throw new ArgumentOutOfRangeException("StartDate", "Start date must be before end date");
                     startDate = value;
+                    AfterStartDateChanged(startDate);
                     Update();
                 }
             }
@@ -58,6 +59,7 @@ namespace SmartPert.Model
                         isComplete = false;
                     else
                         isComplete = true;
+                    AfterEndDateChanged(EndDate);
                     Update();
                 }
             }
@@ -122,6 +124,7 @@ namespace SmartPert.Model
                     else if (value > MaxDuration)
                         maxDuration = value;
                     mostLikelyDuration = value;
+                    AfterLikelyDurationChanged(mostLikelyDuration);
                     Update();
                 }
             }
@@ -136,6 +139,7 @@ namespace SmartPert.Model
                     if (value < mostLikelyDuration)
                         LikelyDuration = value;
                     maxDuration = value;
+                    AfterMaxDurationChanged(maxDuration);
                     Update();
                 }
             } 
@@ -152,6 +156,7 @@ namespace SmartPert.Model
                     if (value > LikelyDuration)
                         LikelyDuration = value;
                     minDuration = value;
+                    AfterMinDurationChanged(value);
                     Update();
                 }
             }
@@ -161,6 +166,15 @@ namespace SmartPert.Model
 
         public DateTime MinEstDate { get => StartDate.AddDays(MinDuration); set => MinDuration = (value - StartDate).Days; }
         public DateTime MaxEstDate { get => StartDate.AddDays(MaxDuration); set => MaxDuration = (value - StartDate).Days; }
+        #endregion
+
+        #region Property Callbacks
+        protected virtual void AfterMaxDurationChanged(int newValue) { }
+        protected virtual void AfterLikelyDurationChanged(int newValue) { }
+        protected virtual void AfterMinDurationChanged(int newValue) { }
+        protected virtual void AfterStartDateChanged(DateTime newValue) { }
+        protected virtual void AfterEndDateChanged(DateTime? newValue) { }
+
         #endregion
 
         #region Constructor
@@ -231,6 +245,19 @@ namespace SmartPert.Model
         #endregion
 
         /// <summary>
+        /// Get Task by name
+        /// </summary>
+        /// <param name="name">string name of task</param>
+        /// <returns>task if found, or null</returns>
+        public Task GetTask(string name)
+        {
+            foreach (Task t in tasks)
+                if (t.Name == name)
+                    return t;
+            return null;
+        }
+
+        /// <summary>
         /// To string
         /// </summary>
         /// <returns>Name</returns>
@@ -278,35 +305,6 @@ namespace SmartPert.Model
         #endregion
 
         /// <summary>
-        /// When a subtask is updated it calls this, increasing this item's estimates as needed to match up with the subtask's estimates
-        /// </summary>
-        /// <param name="item">subtask</param>
-        public virtual void OnUpdate(IDBItem item)
-        {
-            // Recalculate durations, only shifting upward as needed
-            TimedItem sub = item as TimedItem;
-            if (sub.MaxEstDate > MaxEstDate)
-                MaxEstDate = sub.MaxEstDate;
-            if (sub.LikelyDate > LikelyDate)
-                LikelyDate = sub.LikelyDate;
-            if (sub.MinEstDate > MinEstDate)
-                MinEstDate = sub.MinEstDate;
-            if (sub.StartDate < StartDate)
-                StartDate = sub.StartDate;
-        }
-
-        /// <summary>
-        /// When one of it's children is deleted
-        /// </summary>
-        /// <param name="item">task</param>
-        public void OnDeleted(IDBItem item)
-        {
-            Task task = item as Task;
-            if (tasks.Remove(task))
-                NotifyUpdate();
-        }
-
-        /// <summary>
         /// Parses the TimedItem data
         /// </summary>
         /// <param name="reader">Sql Data reader</param>
@@ -332,6 +330,76 @@ namespace SmartPert.Model
                 return true;
             }
             return false;
+        }
+        #endregion
+
+        #region Child Methods
+        /// <summary>
+        /// Updates based on all of child's properties
+        /// </summary>
+        /// <param name="child">child</param>
+        public void OnChild_Change(TimedItem child)
+        {
+            OnChild_CompletedDateChange(child.EndDate);
+            OnChild_LikelyDateChange(child.LikelyDate);
+            OnChild_MaxEstDateChange(child.MaxEstDate);
+            OnChild_MinEstDateChange(child.MinEstDate);
+            OnChild_StartDateChange(child.StartDate);
+        }
+        /// <summary>
+        /// When a child task has a start date change, shifts the parent start date if the child's start date is earlier.
+        /// </summary>
+        /// <param name="newStart">the new date</param>
+        public void OnChild_StartDateChange(DateTime newStart)
+        {
+            if (newStart <= StartDate)
+            {
+                int days = (StartDate - newStart).Days;
+                StartDate = newStart;
+                MinDuration += days;
+                LikelyDuration += days;
+                MaxDuration += days;
+            }
+        }
+
+        /// <summary>
+        /// Shifts the likely date if the child's likely date exceeds its parent
+        /// </summary>
+        /// <param name="newLikelyDate">date</param>
+        public void OnChild_LikelyDateChange(DateTime newLikelyDate)
+        {
+            if (newLikelyDate > LikelyDate)
+                LikelyDate = newLikelyDate;
+        }
+
+        /// <summary>
+        /// Shifts the max estimated date if the child's maximum exceeds its parent
+        /// </summary>
+        /// <param name="newMaxDate">New maximum estimated date</param>
+        public void OnChild_MaxEstDateChange(DateTime newMaxDate)
+        {
+            if (newMaxDate > MaxEstDate)
+                MaxEstDate = newMaxDate;
+        }
+
+        /// <summary>
+        /// Shifts the Min estimated date if the child's exceeds this
+        /// </summary>
+        /// <param name="newMinDate">date</param>
+        public void OnChild_MinEstDateChange(DateTime newMinDate)
+        {
+            if (newMinDate > MinEstDate)
+                MinEstDate = newMinDate;
+        }
+
+        /// <summary>
+        /// Shifts the completed end date if the child's exceeds this
+        /// </summary>
+        /// <param name="completedDate">Child's end date</param>
+        public void OnChild_CompletedDateChange(DateTime? completedDate)
+        {
+            if (completedDate != null && EndDate != null && completedDate > EndDate)
+                EndDate = completedDate;
         }
         #endregion
     }

@@ -16,6 +16,7 @@ namespace PertTest.Model
 
         public DBReaderTest()
         {
+            new TestDB();
             reader = DBReader.Instantiate(this);
         }
 

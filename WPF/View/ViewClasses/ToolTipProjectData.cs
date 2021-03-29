@@ -10,7 +10,7 @@ namespace SmartPert.View.ViewClasses
     /// Utility class for storing project data to be outputted to a string. 
     /// Created 25 February 2021 by Tyler Kness-Miller
     /// </summary>
-    class ToolTipProjectData
+    public class ToolTipProjectData
     {
         //Private fields. 
         private string name;

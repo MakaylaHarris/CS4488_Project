@@ -108,6 +108,7 @@
     <Compile Include="Model\DBReaderTest.cs" />
     <Compile Include="Model\ModelTest.cs" />
     <Compile Include="Model\ProjectTest.cs" />
+    <Compile Include="Model\SubTaskTest.cs" />
     <Compile Include="Model\TaskTest.cs" />
     <Compile Include="Model\UserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,6 +124,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="fixtures\project_boat.sql" />
     <Content Include="fixtures\project_foo.sql" />
     <Content Include="fixtures\some_user.sql" />
   </ItemGroup>
