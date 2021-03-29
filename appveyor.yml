@@ -6,7 +6,8 @@
     - nuget restore
     - msbuild /t:restore
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
-    - python Scripts\manageTestDB.py
+
+  stack: python 3.6
 
   build:
     project: SmartPert.sln
@@ -19,8 +20,7 @@
       - main
   configuration: Release
   environment:
-    SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
-
+    - SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
   artifacts:
   - path: SmartPert.zip
     name: SmartPert
@@ -28,6 +28,7 @@
   - path: DemoAndCode.zip
     name: SmartPert_Demo
 
+  stack: python 3.6
   before_build:
     - choco install sandcastle
     - nuget restore
