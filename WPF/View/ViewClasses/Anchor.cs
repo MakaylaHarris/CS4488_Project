@@ -22,8 +22,9 @@ namespace SmartPert.View
         private Canvas canvas;
 
         #region Properties
-        public Point Point { get =>
-                TransformToAncestor(Canvas as Visual).Transform(new Point(ActualWidth / 2, ActualHeight / 2));
+        public Point Point { get {
+                    return TransformToAncestor(Canvas as Visual).Transform(new Point(ActualWidth / 2, ActualHeight / 2));
+            }
         }
         public Canvas Canvas { get => canvas;
             set {
@@ -65,6 +66,10 @@ namespace SmartPert.View
             if (connectors == null)
                 connectors = new List<Connector>();
             connectors.Add(connector);
+        }
+
+        public void AfterConnect(Connector connector, Connectable connected, bool isReceiver)
+        {
             Connectable.OnConnect(this, connected, isReceiver);
         }
 
@@ -88,20 +93,6 @@ namespace SmartPert.View
             anchor.connectors.Add(connector);
         }
 
-
-        /// <summary>
-        /// Disconnects the connection
-        /// </summary>
-        /// <param name="connector">connector</param>
-        /// <param name="connected">connectable that's disconnecting</param>
-        /// <param name="isReceiver">is receiver</param>
-        public virtual void Disconnect(Connector connector, Connectable connected, bool isReceiver)
-        {
-            if (connectors != null)
-                connectors.Remove(connector);
-            Connectable.OnDisconnect(this, connected, isReceiver);
-        }
-
         /// <summary>
         /// Disconnect silently
         /// </summary>
@@ -115,8 +106,11 @@ namespace SmartPert.View
         public void DisconnectAll()
         {
             if (connectors != null)
-                while (connectors.Count > 0)
-                    connectors[0].Disconnect(false);
+            {
+                for (int i = 0; i < connectors.Count; i++)
+                    connectors[i].Disconnect(false);
+                connectors.Clear();
+            }
         }
 
         /// <summary>
@@ -138,16 +132,31 @@ namespace SmartPert.View
             //Point = point;
             if (connectors != null)
                 foreach (Connector c in connectors)
-                    c.OnAnchorMove(this, Point);
+                    try
+                    {
+                        c.OnAnchorMove(this, Point);
+                    } catch(InvalidOperationException) { }
+        }
+
+        /// <summary>
+        /// After disconnect callback
+        /// </summary>
+        /// <param name="connector">connector</param>
+        /// <param name="connected">item connected</param>
+        /// <param name="isReceiver">true if this is the receiver</param>
+        public void AfterDisconnect(Connector connector, Connectable connected, bool isReceiver)
+        {
+            Connectable.OnDisconnect(this, connected, isReceiver);
         }
         #endregion
 
-        #region Private Methods
-        private void StartConnect(object sender, RoutedEventArgs e)
+        #region Protected Methods
+        protected virtual void StartConnect(object sender, RoutedEventArgs e)
         {
             Connector con = new Connector(Canvas) { Anchor1 = this };
             con.StartConnecting(this);
         }
+
         #endregion
 
     }
@@ -163,12 +172,12 @@ namespace SmartPert.View
                 return false;
             return base.CanConnect(anchor, anchorIsReceiver);
         }
-        public override void Disconnect(Connector connector, Connectable connected, bool isReceiver)
+        protected override void StartConnect(object sender, RoutedEventArgs e)
         {
-            if (connectors != null)
-                connectors.Remove(connector);
-            Connectable.OnDisconnect(this, connected, true);
+            Connector con = new Connector(Canvas);
+            con.StartConnecting(this, false);
         }
+
     }
 
     /// <summary>
@@ -182,12 +191,7 @@ namespace SmartPert.View
                 return false;
             return base.CanConnect(anchor, anchorIsReceiver);
         }
-        public override void Disconnect(Connector connector, Connectable connected, bool isReceiver)
-        {
-            if (connectors != null)
-                connectors.Remove(connector);
-            Connectable.OnDisconnect(this, connected, false);
-        }
+
     }
 
 }

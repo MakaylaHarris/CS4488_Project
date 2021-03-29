@@ -342,7 +342,7 @@ namespace SmartPert.View.Controls
 
         public void OnUpdate(IDBItem item)
         {
-            LoadData(RowData);
+            //LoadData(RowData);
         }
 
         public void OnDeleted(IDBItem item)

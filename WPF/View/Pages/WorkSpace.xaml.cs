@@ -16,6 +16,7 @@ using SmartPert.ViewModels;
 using SmartPert.View.ViewClasses;
 using SmartPert.View.Controls;
 using SmartPert.Model;
+using System.Windows.Threading;
 
 namespace SmartPert.View.Pages
 {
@@ -70,6 +71,7 @@ namespace SmartPert.View.Pages
                 mainGrid.ColumnDefinitions.RemoveAt(i);
             mainGrid.Children.Clear();
             BuildGrid();
+            Dispatcher.Invoke(new Action(() => { AddDependencies(); }), DispatcherPriority.ContextIdle);
         }
 
         private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
