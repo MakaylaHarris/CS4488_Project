@@ -17,7 +17,7 @@ namespace SmartPert.View
     /// </summary>
     public class Anchor : Button
     {
-        private List<Connector> connectors;
+        protected List<Connector> connectors;
         private Connectable connectable;
         private Canvas canvas;
 
@@ -95,7 +95,7 @@ namespace SmartPert.View
         /// <param name="connector">connector</param>
         /// <param name="connected">connectable that's disconnecting</param>
         /// <param name="isReceiver">is receiver</param>
-        public void Disconnect(Connector connector, Connectable connected, bool isReceiver)
+        public virtual void Disconnect(Connector connector, Connectable connected, bool isReceiver)
         {
             if (connectors != null)
                 connectors.Remove(connector);
@@ -163,6 +163,12 @@ namespace SmartPert.View
                 return false;
             return base.CanConnect(anchor, anchorIsReceiver);
         }
+        public override void Disconnect(Connector connector, Connectable connected, bool isReceiver)
+        {
+            if (connectors != null)
+                connectors.Remove(connector);
+            Connectable.OnDisconnect(this, connected, true);
+        }
     }
 
     /// <summary>
@@ -176,5 +182,12 @@ namespace SmartPert.View
                 return false;
             return base.CanConnect(anchor, anchorIsReceiver);
         }
+        public override void Disconnect(Connector connector, Connectable connected, bool isReceiver)
+        {
+            if (connectors != null)
+                connectors.Remove(connector);
+            Connectable.OnDisconnect(this, connected, false);
+        }
     }
+
 }

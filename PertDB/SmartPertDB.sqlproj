@@ -172,6 +172,9 @@
     <None Include="Scripts\DeleteData.sql">
       <QuotedIdentifier>Off</QuotedIdentifier>
     </None>
+    <Build Include="dbo\StoredProcedures\CreateDependency.sql" />
+    <Build Include="dbo\StoredProcedures\RemoveDependency.sql" />
+    <Build Include="dbo\StoredProcedures\DeleteDependency.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PertDB.refactorlog" />

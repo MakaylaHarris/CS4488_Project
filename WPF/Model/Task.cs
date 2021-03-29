@@ -34,7 +34,7 @@ namespace SmartPert.Model
         public HashSet<Task> Dependencies { get => dependencies; }
         public Task ParentTask { get => parentTask; }
 
-        public int ProjectRow { get => projectRow; 
+        public int ProjectRow { get => projectRow;
             private set
             {
                 projectRow = value;
@@ -59,8 +59,8 @@ namespace SmartPert.Model
         /// <param name="insert">flag to insert it into database</param>
         /// <param name="track">flag to track item</param>
         /// <param name="observer">observer for updates</param>
-        public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, 
-            string description = "", Project project=null, int id = -1, bool insert=true, bool track=true, IItemObserver observer=null) 
+        public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0,
+            string description = "", Project project=null, int id = -1, bool insert=true, bool track=true, IItemObserver observer=null)
             : base(name, start, end, description, id, observer, duration, maxDuration, minDuration)
         {
             this.Project = project != null ? project : Model.Instance.GetProject();
@@ -75,7 +75,7 @@ namespace SmartPert.Model
 
         #region Task Methods
         /// <summary>
-        /// Gets the first task after the task group, this being the parent task. 
+        /// Gets the first task after the task group, this being the parent task.
         /// If there are none after returns null.
         /// </summary>
         /// <returns>The task after the task group ends</returns>
@@ -168,7 +168,7 @@ namespace SmartPert.Model
                 for (i = startGroup; i < endGroup; i++)
                     tasks[i].ProjectRow = availableRows[j++];
             }
-            else // Target row is up, so shift others down 
+            else // Target row is up, so shift others down
             {
                 for (i = startGroup - 1, j = availableRows.Count; i >= 0 && tasks[i].projectRow >= row; i--)
                 {
@@ -317,15 +317,56 @@ namespace SmartPert.Model
         {
 
         }
-
+        /// <summary>
+        /// Creates a dependency, the parameter is the Root, and the current task is the dependent.
+        /// </summary>
         public void AddDependency(Task dependency)
         {
+            if (dependencies.Contains(dependency))
+            {
+                throw new Exception("Dependency already exists");
+            }
 
+            dependencies.Add(dependency);
+
+            string query = "EXEC CreateDependency @RootId, @DependentId";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@RootId", this.Id);
+            command.Parameters.AddWithValue("@DependentId", dependency.Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
+            NotifyUpdate();
         }
-
+        /// <summary>
+        /// Removes a dependency, the parameter is the Root, and the current task is the dependent.
+        /// </summary>
         public void RemoveDependency(Task dependency)
         {
-
+            if (!(dependencies.Contains(dependency)))
+                {
+                throw new Exception("Dependency does not exist between these two tasks");
+                }
+            dependencies.Remove(dependency);
+            string query = "EXEC RemoveDependency @RootId, @DependentId";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@RootId", this.Id);
+            command.Parameters.AddWithValue("@DependentId", dependency.Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
+            NotifyUpdate();
+        }
+        /// <summary>
+        /// Calls sproc DeleteDependency that removes all dependencies associated with the task to be deleted
+        /// </summary>
+        public void DeleteAllDependencies(Task delTask)
+        {
+            dependencies.Clear();
+            string query = "EXEC DeleteDependency @taskId";
+            SqlCommand command = OpenConnection(query);
+            command.Parameters.AddWithValue("@taskId", delTask.Id);
+            command.ExecuteNonQuery();
+            CloseConnection();
+            NotifyUpdate();
         }
         #endregion
 
@@ -341,9 +382,9 @@ namespace SmartPert.Model
         /// </summary>
         protected override void PerformUpdate()
         {
-            string query = "UPDATE dbo.[Task] SET Name=@Name, StartDate=@StartDate, EndDate=@EndDate" + 
+            string query = "UPDATE dbo.[Task] SET Name=@Name, StartDate=@StartDate, EndDate=@EndDate" +
                 ", Description=@Description, MinEstDuration=" + MinDuration + ", MaxEstDuration=" + MaxDuration + ", MostLikelyEstDuration=" +
-                LikelyDuration + ", ProjectRow=" + projectRow + " WHERE TaskId = " + Id + ";";                
+                LikelyDuration + ", ProjectRow=" + projectRow + " WHERE TaskId = " + Id + ";";
             SqlCommand command = OpenConnection(query);
             command.Parameters.AddWithValue("@Name", Name);
             command.Parameters.AddWithValue("@Description", Description);
@@ -366,7 +407,7 @@ namespace SmartPert.Model
         /// <throws>InsertionError on error (task name is already taken in project or project does not exist)</throws>
         protected override int PerformInsert()
         {
-            string query = "EXEC dbo.CreateTask @Name, @Description, " + MinDuration + ", " + LikelyDuration + ", " + MaxDuration + 
+            string query = "EXEC dbo.CreateTask @Name, @Description, " + MinDuration + ", " + LikelyDuration + ", " + MaxDuration +
                 ", @StartDate, @EndDate, @ProjectId, @Creator, @CreationDate out, @Result out, @ResultId out, " +
                 "@ProjectRow out, @HasParent, @ParentTaskId";
             SqlCommand command = OpenConnection(query);
@@ -496,7 +537,7 @@ namespace SmartPert.Model
                 if (!other.Contains(t))
                     ret.Add(t);
             return ret;
-        } 
+        }
 
         /// <summary>
         /// Updates Subtasks (dbreader only)
@@ -504,7 +545,7 @@ namespace SmartPert.Model
         /// <param name="subtasks">updated</param>
         public void DB_UpdateSubtasks(HashSet<Task> subtasks)
         {
-            // If tasks are gone, remove them 
+            // If tasks are gone, remove them
             if(subtasks == null)
             {
                 foreach (Task t in Tasks)

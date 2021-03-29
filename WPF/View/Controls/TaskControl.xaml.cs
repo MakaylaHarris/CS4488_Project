@@ -167,6 +167,7 @@ namespace SmartPert.View.Controls
 
         private void mi_deleteTask_Click(object sender, RoutedEventArgs e)
         {
+            
             new DeleteTaskCmd(Task).Run();
         }
 
@@ -329,13 +330,14 @@ namespace SmartPert.View.Controls
         public override void OnConnect(Anchor sender, Connectable target, bool isReceiver)
         {
             if (!isReceiver)
-                Task.AddDependency(((TaskControl)target).Task);
+                new AddDependencyCmd(Task, ((TaskControl)target).Task).Run();
+                
         }
 
         public override void OnDisconnect(Anchor sender, Connectable target, bool isReceiver)
         {
             if (!isReceiver)
-                Task.RemoveDependency(((TaskControl)target).Task);
+                new RemoveDependencyCmd(Task, ((TaskControl)target).Task).Run();
         }
 
         public void OnUpdate(IDBItem item)
