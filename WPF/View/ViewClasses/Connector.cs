@@ -197,7 +197,7 @@ namespace SmartPert.View
             CtrlHitTest test = new CtrlHitTest(typeof(Connectable), Canvas);
             Point p = Mouse.GetPosition(Canvas);
             List<DependencyObject> hits = test.Run(p, Anchor1.Connectable as DependencyObject);
-            if (hits.Count > 0)
+             if (hits.Count > 0)
             {
                 Connectable c = hits[0] as Connectable;
                 Anchor2 = GetClosestConnectableAnchor(c.GetAnchors(), p, Anchor1);

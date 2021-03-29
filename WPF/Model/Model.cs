@@ -46,6 +46,15 @@ namespace SmartPert.Model
             instance.reader = DBReader.Instantiate(instance);
             return true;
         }
+
+        /// <summary>
+        /// Shuts down model and database
+        /// </summary>
+        public void Shutdown()
+        {
+            viewModels.Clear();
+            reader.Shutdown();
+        }
         #endregion
 
         #region Project Methods

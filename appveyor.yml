@@ -7,7 +7,8 @@
     - msbuild /t:restore
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
 
-  stack: python 3.6
+  install:
+    pip install pathlib
 
   build:
     project: SmartPert.sln
@@ -28,7 +29,6 @@
   - path: DemoAndCode.zip
     name: SmartPert_Demo
 
-  stack: python 3.6
   before_build:
     - choco install sandcastle
     - nuget restore
@@ -36,6 +36,9 @@
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
     # create Pert database
     - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
+
+  install:
+    pip install pathlib
 
   build:
     project: SmartPert.sln

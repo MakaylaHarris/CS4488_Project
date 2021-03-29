@@ -22,13 +22,13 @@ fixtures_dir = 'PertTest/fixtures'
 
 def run_sql(script_path, ignore_errors=False, database=None):
     if not os.path.exists(script_path):
-        print(f'File not found at {script_path}')
+        print('File not found at {}'.format(script_path))
         if not ignore_errors:
             sys.exit(-1)
     if database is not None:
-        sql = f'sqlcmd -b -S {server} -d {database} -i {script_path} -l 20\n'
+        sql = 'sqlcmd -b -S {} -d {} -i {} -l 20\n'.format(server, database, script_path)
     else:
-        sql = f'sqlcmd -b -S {server} -i {script_path} -l 20\n'
+        sql = 'sqlcmd -b -S {} -i {} -l 20\n'.format(server, script_path)
     res = os.system(sql)
     if res != 0:
         print('An error occurred while running ' + script_path)
@@ -43,7 +43,7 @@ def install_fixture(fixture, database):
 
 
 def database_exists(db):
-    return os.system(f'sqlcmd -b -S {server} -d {db} -Q "SELECT * FROM dbo.[User]" -l 2\n') == 0
+    return os.system('sqlcmd -b -S {} -d {} -Q "SELECT * FROM dbo.[User]" -l 2\n'.format(server, db)) == 0
 
 
 def main(args):
@@ -61,7 +61,7 @@ def main(args):
         should_create = False
     if not os.path.exists(create_script_path):
         print(
-            f'Failed to find database creation script at {create_script_path}, please rebuild the SmartPertDB project.')
+            'Failed to find database creation script at {}, please rebuild the SmartPertDB project.'.format(create_script_path))
         sys.exit(-1)
     if not should_create:
         origin_date = datetime.datetime.fromtimestamp(pathlib.Path(create_script_path).stat().st_mtime)

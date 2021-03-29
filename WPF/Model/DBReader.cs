@@ -71,6 +71,25 @@ namespace SmartPert.Model
             return instance;
         }
 
+        public void Shutdown()
+        {
+            polling.Stop();
+            foreach (User u in users.Values)
+                u.UnSubscribe(this);
+            foreach (Task t in tasks.Values)
+                t.UnSubscribe(this);
+            foreach (Project p in projects.Values)
+                p.UnSubscribe(this);
+            users = null;
+            projects = null;
+            tasks = null;
+            projectWorkers = null;
+            taskWorkers = null;
+            dependencies = null;
+            subtasks = null;
+            receiver = null;
+        }
+
         private DBReader()
         {
             polling = new DBPoller(this);
