@@ -33,18 +33,16 @@ namespace SmartPert.Model
             private set
             {
                 project = value;
-                project.AddTask(this);
             }
         }
         public HashSet<Task> Dependencies { get => dependencies; }
         public Task ParentTask { get => parentTask; }
 
         public int ProjectRow { get => projectRow;
-            private set
+            set
             {
                 projectRow = value;
                 DB_UpdateRow();
-                NotifyUpdate();
             } }
         #endregion
 
@@ -76,14 +74,29 @@ namespace SmartPert.Model
             PostInit(insert, track);
         }
 
+        public override void PostInit(bool insert = true, bool track = true)
+        {
+            base.PostInit(insert, track);
+            project.AddTask(this);
+        }
+
         #endregion
 
         #region Property Callbacks
         protected override void AfterStartDateChanged(DateTime dateTime)
         {
             if (parentTask != null)
+            {
                 parentTask.OnChild_StartDateChange(dateTime);
+                parentTask.OnChild_LikelyDateChange(LikelyDate);
+                parentTask.OnChild_MaxEstDateChange(MaxEstDate);
+                parentTask.OnChild_MinEstDateChange(MinEstDate);
+            }
+            // Changing the start date also changes all of our estimated duration dates
             project.OnChild_StartDateChange(dateTime);
+            project.OnChild_LikelyDateChange(LikelyDate);
+            project.OnChild_MaxEstDateChange(MaxEstDate);
+            project.OnChild_MinEstDateChange(MinEstDate);
         }
 
         protected override void AfterEndDateChanged(DateTime? newValue)
@@ -114,126 +127,20 @@ namespace SmartPert.Model
 
         #region Task Methods
         /// <summary>
-        /// Gets the first task after the task group, this being the parent task.
-        /// If there are none after returns null.
+        /// Determines if a task is an ancestor of this task
         /// </summary>
-        /// <returns>The task after the task group ends</returns>
-        public Task GetTaskAfterGroup()
+        /// <param name="possibleAncestor">The task to check</param>
+        /// <returns>True if ancestor</returns>
+        public bool TaskIsAncestor(Task possibleAncestor)
         {
-            List<Task> tasks = Project.SortedTasks;
-            int i;
-            for (i = tasks.IndexOf(this) + 1; i < tasks.Count; i++)
-                if (!tasks[i].IsDescendentOf(this))
-                    break;
-            return i >= tasks.Count ? null : tasks[i];
-        }
-
-        // Determine if a task is a descendent of this
-        private bool IsDescendentOf(Task t)
-        {
-            if (parentTask == t)
-                return true;
-            if (parentTask == null)
-                return false;
-            return parentTask.IsDescendentOf(t);
-        }
-
-        // Shifts the task range to the bottom of project
-        private void ShiftToBottom(List<Task> tasks, int start, int end)
-        {
-            int maxRow = tasks.Max(x => x.ProjectRow);
-            for (; start < tasks.Count && start < end; ++start)
-                tasks[start].ProjectRow = ++maxRow;
-        }
-
-        private List<int> CacheProjectRows(List<Task> tasks, int start, int end)
-        {
-            List<int> cache = new List<int>();
-            int max = end >= tasks.Count ? tasks[end - 1].projectRow + 1 : tasks[end].projectRow;
-            for (int i = tasks[start].projectRow; i < max; i++)
-                cache.Add(i);
-            return cache;
-        }
-
-        /// <summary>
-        /// Attempts to shift by the number of task rows
-        /// </summary>
-        /// <param name="numRows">Number of rows, specify negative to shift up</param>
-        /// <returns>true if shift occurred</returns>
-        public bool TryShiftRows(int numRows)
-        {
-            List<Task> tasks = Project.SortedTasks;
-            int index = tasks.IndexOf(this) + numRows;
-            if (index >= tasks.Count)    // Shift to end
-                return TryShiftToRow(null);
-            else
-                return TryShiftToRow(index < 0 ? tasks[0] : tasks[index]);
-        }
-
-        /// <summary>
-        /// A long *ss function that Shifts the task to the row in the project
-        /// </summary>
-        /// <param name="task">the target task row</param>
-        /// <returns>True if successful</returns>
-        public bool TryShiftToRow(Task task)
-        {
-            if (task == this)      // We're already done!
-                return true;
-            List<Task> tasks = Project.SortedTasks;
-            int row = task == null ? tasks.Max(x => x.ProjectRow) + 1 : task.ProjectRow;
-            // Constraint Cannot shift to row within task group (ie making a parent task a child to one of its subtasks)
-            Task endGroupTask = GetTaskAfterGroup();
-            if (row >= this.projectRow && (endGroupTask == null || row < endGroupTask.projectRow))
-                return false;
-            int projectRow = this.projectRow;
-            Task taskAbove = null;
-            int startGroup = tasks.IndexOf(this), i, j;
-            int endGroup = endGroupTask == null ? tasks.Count : tasks.IndexOf(endGroupTask);
-            List<int> availableRows = CacheProjectRows(tasks, startGroup, endGroup);
-            // First move my range indices out of the way
-            ShiftToBottom(tasks, startGroup, endGroup);
-
-            // Perform the shift
-            // Target row is further down, so shift up
-            if (row > projectRow)
+            Task parent = ParentTask;
+            while (parent != null)
             {
-                for (i = endGroup, j = 0; i < tasks.Count && tasks[i].projectRow <= row; i++)
-                {
-                    availableRows.Add(tasks[i].ProjectRow);
-                    tasks[i].ProjectRow=availableRows[j++];
-                }
-                taskAbove = tasks[i - 1]; // last shifted becomes task directly above
-                // And finally update my group
-                for (i = startGroup; i < endGroup; i++)
-                    tasks[i].ProjectRow = availableRows[j++];
+                if (parent == possibleAncestor)
+                    return true;
+                parent = parent.ParentTask;
             }
-            else // Target row is up, so shift others down
-            {
-                for (i = startGroup - 1, j = availableRows.Count; i >= 0 && tasks[i].projectRow >= row; i--)
-                {
-                    availableRows.Insert(0, tasks[i].ProjectRow);
-                    tasks[i].ProjectRow = availableRows[j];      // Since we insert 1 no need to move j down
-                }
-                if (i >= 0)
-                   taskAbove = tasks[i];   // The task just above shifted tasks is directly above
-                // And finally update my group
-                for (i = endGroup - 1; i >= startGroup; i--)
-                    tasks[i].ProjectRow = availableRows[--j];
-            }
-
-
-            // But wait! what if the task above us is a parent? Add this as child
-            if (taskAbove != null)
-            {
-                if (taskAbove.Tasks.Count > 0)
-                    UpdateParentTask(taskAbove);
-                // Great, but what if we're in the middle of a subtask group? Find the closest parent
-                else
-                    UpdateParentTask(taskAbove.parentTask);
-            }
-            else  // TaskAbove == null, you're at the root!
-                UpdateParentTask(null);
-            return true;
+            return false;
         }
 
         /// <summary>
@@ -263,16 +170,13 @@ namespace SmartPert.Model
             if (t.parentTask != this)
             {
                 if (t.parentTask != null)
-                    t.parentTask.RemoveSubTask(t);
-                if (t.TryShiftToRow(GetTaskAfterGroup()))
-                {
-                    t.parentTask = this;
-                    tasks.Add(t);
-                    OnChild_Change(t);
-                    t.DB_InsertSubTask();
-                    NotifyUpdate();
-                    return true;
-                }
+                    throw new Exception(string.Format("Task {0} already has a parent, remove it from its parent first!", t));
+                t.parentTask = this;
+                tasks.Add(t);
+                OnChild_Change(t);
+                t.DB_InsertSubTask();
+                NotifyUpdate();
+                return true;
             }
             return false;
         }
@@ -489,8 +393,8 @@ namespace SmartPert.Model
             CloseConnection();
 
             // If the parent task exists, be sure to move it next to it
-            if(parentTask != null)
-                TryShiftToRow(parentTask.GetTaskAfterGroup());
+            //if(parentTask != null)
+            //    TryShiftToRow(parentTask.GetTaskAfterGroup());
             return id;
         }
 

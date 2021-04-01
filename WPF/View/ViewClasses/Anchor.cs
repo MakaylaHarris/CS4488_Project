@@ -42,6 +42,7 @@ namespace SmartPert.View
             Content = "o";
             Background = Brushes.Transparent;
             BorderThickness = new Thickness(0);
+            Foreground = (SolidColorBrush) FindResource("SecondaryHueMidBrush");
             Click += StartConnect;
         }
 

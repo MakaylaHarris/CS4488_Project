@@ -48,6 +48,7 @@ namespace SmartPert.View.Pages
 
         /// <summary>
         /// Update workspace when the model has changed
+        /// Added 3/27/2021 by Robert
         /// </summary>
         /// <param name="viewModel">view model</param>
         public void OnWorkspaceModelUpdate(WorkSpaceViewModel viewModel)
@@ -162,9 +163,10 @@ namespace SmartPert.View.Pages
         {
             foreach(KeyValuePair<Task, TaskControl> keyValue in taskControls)
             {
-                foreach (Task t in keyValue.Key.Dependencies)
-                    if (taskControls.ContainsKey(t))
-                        keyValue.Value.ConnectDependentControl(taskControls[t]);
+                if(keyValue.Key.Dependencies != null)   
+                    foreach (Task t in keyValue.Key.Dependencies)
+                        if (taskControls.ContainsKey(t))
+                            keyValue.Value.ConnectDependentControl(taskControls[t]);
             }
         }
 
@@ -278,21 +280,30 @@ namespace SmartPert.View.Pages
                 RowDefinition rowDef = new RowDefinition();
                 rowDef.Height = new GridLength(30, GridUnitType.Pixel);
                 mainGrid.RowDefinitions.Add(rowDef);
-                TextBlock txt1 = new TextBlock();
-                Binding b1 = new Binding("Name");
-                b1.Source = viewModel.RowData[i];
-                txt1.SetBinding(TextBlock.TextProperty, b1);
-                if (viewModel.RowData[i].IsProject)
-                {
-                    txt1.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
+                if(!viewModel.RowData[i].IsProject) { 
+                    TaskRowLabel label = new TaskRowLabel(viewModel.RowData[i].TimedItem as Task);
+                    int subLevel = viewModel.RowData[i].SubTaskLevel;
+                    label.Margin = new Thickness(10 * subLevel, 0, 0, 0);
+                    label.FontSize = 16 - subLevel >= 8 ? 16 - subLevel : 8;
+                    label.VerticalAlignment = VerticalAlignment.Center;
+                    Grid.SetRow(label, rowChange);
+                    Grid.SetColumn(label, 0);
+                    mainGrid.Children.Add(label);
                 }
-                int subLevel = viewModel.RowData[i].SubTaskLevel;
-                txt1.Margin = new Thickness(5 + 10 * subLevel,0,0,0);
-                txt1.FontSize = 16 - subLevel >= 8 ? 16 - subLevel : 8;
-                txt1.VerticalAlignment = VerticalAlignment.Center;
-                Grid.SetRow(txt1, rowChange);
-                Grid.SetColumn(txt1, 0);
-                mainGrid.Children.Add(txt1);
+                else
+                {
+                    TextBlock txt1 = new TextBlock();
+                    Binding b1 = new Binding("Name");
+                    b1.Source = viewModel.RowData[i];
+                    txt1.SetBinding(TextBlock.TextProperty, b1);
+                    txt1.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
+                    txt1.Margin = new Thickness(5, 0, 0, 0);
+                    txt1.FontSize = 16;
+                    txt1.VerticalAlignment = VerticalAlignment.Center;
+                    Grid.SetRow(txt1, rowChange);
+                    Grid.SetColumn(txt1, 0);
+                    mainGrid.Children.Add(txt1);
+                }
                 rowChange += 1;
                 
             }
@@ -346,10 +357,33 @@ namespace SmartPert.View.Pages
         }
 
         /// <summary>
+        /// Adds outer borders
+        /// </summary>
+        private void AddGridOuterBorder()
+        {
+            // Border around header
+            Border border = new Border();
+            border.BorderBrush = FindResource("PrimaryHueMidBrush") as SolidColorBrush;
+            border.BorderThickness = new Thickness(2);
+            mainGrid.Children.Add(border);
+            Grid.SetColumnSpan(border, mainGrid.ColumnDefinitions.Count);
+            Grid.SetRowSpan(border, 2);
+
+            // Border around entire grid
+            border = new Border();
+            border.BorderBrush = FindResource("PrimaryHueMidBrush") as SolidColorBrush;
+            border.BorderThickness = new Thickness(1);
+            mainGrid.Children.Add(border);
+            Grid.SetColumnSpan(border, mainGrid.ColumnDefinitions.Count);
+            Grid.SetRowSpan(border, mainGrid.RowDefinitions.Count);
+        }
+
+        /// <summary>
         /// Adds primary light hue grid borders to main workspace
         /// </summary>
         private void AddGridBorders()
         {
+            AddGridOuterBorder();
             for (int i = rowStart; i < mainGrid.RowDefinitions.Count; i++)
             {
                 Border border = new Border();

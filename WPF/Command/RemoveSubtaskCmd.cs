@@ -37,12 +37,12 @@ namespace SmartPert.Command
 
         public override bool Undo()
         {
-            return parent.RemoveSubTask(subtask);
+            return parent.AddSubTask(subtask);
         }
 
         protected override bool Execute()
         {
-            return parent.AddSubTask(subtask);
+            return parent.RemoveSubTask(subtask);
         }
     }
 }

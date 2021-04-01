@@ -225,7 +225,10 @@ namespace SmartPert.ViewModels
             _Project = p;
             _headers = GetWeekHeader();
             this.RowData.Clear();
+            TooltipData.Clear();
             LoadData();
+            LoadToolTipData();
+            LoadProjectData();
             workspace.OnWorkspaceModelUpdate(this);
         }
         #endregion

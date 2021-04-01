@@ -14,6 +14,8 @@ namespace SmartPert.Command
     {
         private Task parent;
         private Task subtask;
+        private bool detach;
+        private Task oldParent;
 
         public Task Parent => parent;
         public Task Subtask => subtask;
@@ -29,6 +31,8 @@ namespace SmartPert.Command
                 parent = (Task)newItem;
             else if (old == subtask)
                 subtask = (Task)newItem;
+            else if (old == oldParent)
+                oldParent = (Task)newItem;
         }
 
         public override void OnModelUpdate(Project p)
@@ -39,11 +43,23 @@ namespace SmartPert.Command
 
         public override bool Undo()
         {
-            return parent.RemoveSubTask(subtask);
+            bool result = parent.RemoveSubTask(subtask);
+            if(result && detach)
+            {
+                detach = false;
+                result = oldParent.AddSubTask(subtask);
+            }
+            return result;
         }
 
         protected override bool Execute()
         {
+            if(subtask.ParentTask != null)      // Then remove
+            {
+                detach = true;
+                oldParent = subtask.ParentTask;
+                oldParent.RemoveSubTask(subtask);
+            }
             return parent.AddSubTask(subtask);
         }
     }

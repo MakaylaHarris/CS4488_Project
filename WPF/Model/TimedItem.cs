@@ -271,10 +271,10 @@ namespace SmartPert.Model
         {
             if(days != 0)
             {
-                startDate = startDate.AddDays(days);
+                StartDate = startDate.AddDays(days);
+                
                 if (endDate != null)
-                    endDate = ((DateTime)endDate).AddDays(days);
-                Update();
+                    EndDate = ((DateTime)endDate).AddDays(days);
             }
         }
 

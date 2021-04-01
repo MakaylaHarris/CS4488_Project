@@ -53,7 +53,7 @@ namespace SmartPert.Model
         /// </summary>
         /// <param name="insert">insertion</param>
         /// <param name="track">Track this as the latest object in dbreader</param>
-        public void PostInit(bool insert=true, bool track=true)
+        public virtual void PostInit(bool insert=true, bool track=true)
         {
             if (insert)  // insert first to set primary key
                 Insert();

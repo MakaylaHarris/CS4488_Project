@@ -26,7 +26,7 @@ namespace SmartPert.View.Controls
     }
     /// <summary>
     /// Interaction logic for TaskControl.xaml
-    /// Redone 3/5/2021 by Robert Nelson
+    /// Created 3/5/2021 by Robert Nelson
     /// </summary>
     public partial class TaskControl : Connectable, IItemObserver
     {
@@ -260,11 +260,6 @@ namespace SmartPert.View.Controls
                 preview.Location = e.GetPosition(WorkSpace.MainCanvas);
         }
 
-        private bool ShouldAddAsSubTask(Task parentTask)
-        {
-            // todo: should ask user whether to add as subtask or shift here?
-            return true;
-        }
 
         private void UserControl_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -275,15 +270,7 @@ namespace SmartPert.View.Controls
                 if(verticalShift != 0)
                 {
                     // Test if we should add as subtask or just shift
-                    var taskControls = new CtrlHitTest(typeof(TaskControl), Canvas).Run(e.GetPosition(Canvas), this);
-                    var parentTask = taskControls.Count > 0 ? ((TaskControl)taskControls[0]).Task : null;
-                    if (parentTask != null && ShouldAddAsSubTask(parentTask))
-                    {
-                        // todo: command pattern here
-                        parentTask.AddSubTask(Task);
-                    }
-                    else
-                        Task.TryShiftRows(verticalShift);
+                    new ShiftToRowCmd(Task, task.ProjectRow + verticalShift).Run();
                 } else
                 {
                     int horizontalShift = WorkSpace.GetColumnShift(dragStartPoint.X, endPoint.X);
@@ -303,11 +290,6 @@ namespace SmartPert.View.Controls
         private void UserControl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             new TaskEditor(Task).ShowDialog();
-        }
-
-        private void Add_NewSub_Click(object sender, RoutedEventArgs e)
-        {
-            new TaskEditor(parentTask: Task).ShowDialog();
         }
 
         private void Add_New_Click(object sender, RoutedEventArgs e)

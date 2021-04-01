@@ -21,6 +21,12 @@ namespace SmartPert.Model
                     sorted = Tasks.OrderBy(x => x.ProjectRow).ToList();
                 return sorted;
             }
+            set
+            {
+                sorted = value;
+                ResortTasks();
+                NotifyUpdate();
+            }
         }
 
         #region Project
@@ -123,6 +129,16 @@ namespace SmartPert.Model
         #endregion
 
         #region Database
+
+        /// <summary>
+        /// Resorts the task's project rows
+        /// </summary>
+        private void ResortTasks()
+        {
+            for (int i = 0; i < sorted.Count; i++)
+                sorted[i].ProjectRow = i;
+        }
+
         /// <summary>
         /// Deletes the project from the database
         /// </summary>

@@ -144,10 +144,7 @@ namespace SmartPert.Model
         {
             Project project = GetProject();
             Task task = null;
-            try
-            {
-                task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
-            } catch (Exception) { }
+            task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
             return task;
         }
 

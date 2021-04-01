@@ -45,6 +45,7 @@ namespace SmartPert
             DataContext = this;
             InitModel();
             StateSwitcher.Instance.Start(this);
+            PopulateProjects();
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)

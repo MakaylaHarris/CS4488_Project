@@ -156,8 +156,7 @@ namespace SmartPert.View.Windows
             try
             {
                 Close();
-            }
-            catch (Exception) { }
+            } catch(InvalidOperationException) { }
         }
 
 

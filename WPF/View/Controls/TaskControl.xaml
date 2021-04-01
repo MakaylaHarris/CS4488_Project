@@ -31,7 +31,6 @@
                     <ContextMenu>
                         <MenuItem x:Name="mi_editTask" Header="Edit" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_editTask_Click"/>
                         <MenuItem x:Name="mi_deleteTask" Header="Delete" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_deleteTask_Click"/>
-                        <MenuItem x:Name="Add_NewSub" Header="Create Subtask" Click="Add_NewSub_Click"/>
                         <Separator/>
                         <MenuItem x:Name="Add_New" Header="Create Task" Click="Add_New_Click"/>
                     </ContextMenu>

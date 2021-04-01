@@ -43,7 +43,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\SmartPert.xml</DocumentationFile>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
@@ -180,6 +180,7 @@
     <Compile Include="Command\AddSubTaskCmd.cs" />
     <Compile Include="Command\CommandStack.cs" />
     <Compile Include="Command\RemoveSubtaskCmd.cs" />
+    <Compile Include="Command\ShiftToRowCmd.cs" />
     <Compile Include="Command\TaskShiftCmd.cs" />
     <Compile Include="Command\TransactionCmd.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -399,9 +400,7 @@
   <ItemGroup>
     <Resource Include="images\broke_cow.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModelCommands\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
