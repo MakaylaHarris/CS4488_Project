@@ -18,6 +18,7 @@ def genString():
     return (
         f':: Auto-Generated Script to create database on {server} and run SmartPert\n'
         f'@echo off\n'
+        f'sqlcmd -b -S {server} -i {demo_folder}/Clean.sql\n'
         f'echo Trying to connect to server...\n'
         f'sqlcmd -b -S {server} -i {demo_folder}/Create.sql -l 30\n'
         f'IF NOT ERRORLEVEL 0'
@@ -37,27 +38,26 @@ for arg in sys.argv:
 print("Create Demo started...")
 
 # Some important variables
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.chdir(base_dir)
 server = "(localdb)\\MSSQLLocalDB"
-sql_create = "PertDB/bin/Demo/Pert_Create.sql"
-sql_insert = "PertDB/Scripts/Insert.sql"
+sql_create = os.path.join(base_dir, "PertDB/bin/Demo/Pert_Create.sql")
+sql_insert = os.path.join(base_dir, "PertDB/Scripts/Insert.sql")
 db_proj = "PertDB/SmartPertDB.sqlproj"
-demo_folder = "Demo"
+demo_folder = os.path.join(base_dir, "Demo")
 exe_name = "SmartPert.exe"
 search = "SmartPertDB"
 replace = "SPDB_Demo"
 prj_base = "WPF"
-bin_dir = "WPF/bin/Demo"
+bin_dir = os.path.join(base_dir, "WPF/bin/Demo")
 smartpert_prj = os.path.join(prj_base, 'SmartPert.csproj')
 apps_file = os.path.join(prj_base, 'App.config')
-startup = "CLICK_ME_FIRST_DEMO.bat"
+startup = os.path.join(prj_base, "CLICK_ME_FIRST_DEMO.bat")
 msbuild = 'msbuild'
 if not which(msbuild):
     print('Unable to find msbuild, please add it to your path environment')
     sys.exit(-1)
 
-
-if os.path.basename(os.getcwd()) == "Scripts":
-    os.chdir("..")
 
 if not os.path.exists(smartpert_prj):
     print(f"Unable to find {smartpert_prj}! Are you in the root directory and built Demo configuration?")
@@ -71,9 +71,9 @@ searchReplace(apps_file, apps_file, search, replace)
 # -------------------------------------------------------------------
 print('Building...')
 # SmartPert Database
-os.system(msbuild + ' -property:OutDir=bin/Demo ' + db_proj)
+os.system(msbuild + ' -property:Configuration=Release -property:OutDir=bin/Demo ' + db_proj)
 # Main app
-os.system(msbuild + ' -property:OutDir=bin/Demo ' + smartpert_prj)
+os.system(msbuild + ' -property:Configuration=Release -property:OutDir=bin/Demo ' + smartpert_prj)
 
 
 # -------------------------------------------------------------------
@@ -103,6 +103,7 @@ if not os.path.exists(os.path.join(demo_folder, exe_name)):
 print("Copying Database Scripts...")
 searchReplace(sql_create, os.path.join(demo_folder, 'Create.sql'), search, replace)
 searchReplace(sql_insert, os.path.join(demo_folder, 'Insert.sql'), search, replace)
+searchReplace(os.path.join(os.path.dirname(__file__), 'CleanTestDB.sql'), os.path.join(demo_folder, 'clean.sql'), 'Test_SmartPertDB', replace)
 
 # Now Make start up script
 print(f"Creating {startup} Script...")
@@ -113,7 +114,7 @@ with open(startup, "w") as f:
 # Zip the files?
 if(zip):
     from Package import zip_all
-    zip_file = 'DemoAndCode.zip'
+    zip_file = os.path.join(base_dir, 'DemoAndCode.zip')
     if not which('7z'):
         print('Unable to find 7z on your path, zipping files failed!')
     else:

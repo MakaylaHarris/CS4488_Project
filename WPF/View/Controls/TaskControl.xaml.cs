@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using SmartPert.Command;
 using SmartPert.Model;
 using SmartPert.View.Pages;
@@ -10,6 +12,9 @@ using SmartPert.View.Windows;
 
 namespace SmartPert.View.Controls
 {
+    /// <summary>
+    /// Shifters control what to shift on the task when user clicks and drags
+    /// </summary>
     public enum Shifter
     {
         MinEstShifter = 1,
@@ -21,9 +26,9 @@ namespace SmartPert.View.Controls
     }
     /// <summary>
     /// Interaction logic for TaskControl.xaml
-    /// Redone 3/5/2021 by Robert Nelson
+    /// Created 3/5/2021 by Robert Nelson
     /// </summary>
-    public partial class TaskControl : UserControl
+    public partial class TaskControl : Connectable, IItemObserver
     {
         private RowData rowData;
         private Color completedColor;
@@ -34,6 +39,8 @@ namespace SmartPert.View.Controls
         private Brush likelyColor;
         private Point dragStartPoint;
         private Shifter shifter;
+        private TaskControlPreview preview;
+        private Task task;
 
         #region Properties
         /// <summary>
@@ -92,7 +99,7 @@ namespace SmartPert.View.Controls
             }
         }
 
-        private Task Task { get => (Task)rowData.TimedItem; }
+        public Task Task { get => task; }
         #endregion
 
         #region Constructor
@@ -104,15 +111,19 @@ namespace SmartPert.View.Controls
             InitializeComponent();
             DataContext = this;
             WorkSpace = workSpace;
+            task = (Task)rowData.TimedItem;
             this.RowData = rowData;
             CompletedColor = ((SolidColorBrush)FindResource("SecondaryHueMidBrush")).Color;
             IncompleteColor = ((SolidColorBrush) FindResource("PrimaryHueMidBrush")).Color;
+            AddAnchor(LeftAnchor);
+            AddAnchor(RightAnchor);
+            task.Subscribe(this);
         }
 
         #endregion
 
         #region Private Methods
-        private static int NaturalNum(int n) => n > 0 ? n : 1;
+        public static int NaturalNum(int n) => n > 0 ? n : 1;
         private void SetColSpans(int likely, int min, int max)
         {
             Grid.SetColumnSpan(MinRect, NaturalNum(min));
@@ -141,10 +152,11 @@ namespace SmartPert.View.Controls
         {
             // Create the grid
             MyGrid.ColumnDefinitions.Clear();
-            for (int i = 0; i < rowData.ColSpan; i++)
+            for (int i = 0; i < NaturalNum(rowData.ColSpan); i++)
                 MyGrid.ColumnDefinitions.Add(new ColumnDefinition());
             SetColSpans(rowData.LikelyEstSpan, rowData.MinEstSpan, rowData.MaxEstSpan);
             LoadBrush(rowData);
+            OnMove();
         }
 
 
@@ -155,6 +167,7 @@ namespace SmartPert.View.Controls
 
         private void mi_deleteTask_Click(object sender, RoutedEventArgs e)
         {
+            
             new DeleteTaskCmd(Task).Run();
         }
 
@@ -193,30 +206,34 @@ namespace SmartPert.View.Controls
             return shifter;
         }
 
-        private void PerformShift(Shifter shifter, int shift)
+        private void PerformHorizontalShift(Shifter shifter, int horizontalShift)
         {
-            DateTime start;
-            DateTime? end;
-            int likely, min, max;
-            if((shifter & Shifter.StartDateExtender) > 0)
+            if(horizontalShift != 0)
             {
-                start = Task.StartDate.AddDays(shift);
-                end = Task.EndDate;
-                likely = NaturalNum(Task.LikelyDuration - shift);
-                min = NaturalNum(Task.MinDuration - shift);
-                max = NaturalNum(Task.MaxDuration - shift);
+                // Horizontal Shift
+                DateTime start;
+                DateTime? end;
+                int likely, min, max;
+                if ((shifter & Shifter.StartDateExtender) > 0)
+                {
+                    start = Task.StartDate.AddDays(horizontalShift);
+                    end = Task.EndDate;
+                    likely = NaturalNum(Task.LikelyDuration - horizontalShift);
+                    min = NaturalNum(Task.MinDuration - horizontalShift);
+                    max = NaturalNum(Task.MaxDuration - horizontalShift);
+                }
+                else
+                {
+                    start = (shifter & Shifter.StartDateShifter) > 0 ? Task.StartDate.AddDays(horizontalShift) : Task.StartDate;
+                    end = (shifter & Shifter.EndDateShifter) > 0 ? ((DateTime)Task.EndDate).AddDays(horizontalShift) : Task.EndDate;
+                    likely = (shifter & Shifter.LikelyEstShifter) > 0 ? Task.LikelyDuration + horizontalShift : Task.LikelyDuration;
+                    min = (shifter & Shifter.MinEstShifter) > 0 ? Task.MinDuration + horizontalShift : Task.MinDuration;
+                    max = (shifter & Shifter.MaxEstShifter) > 0 ? Task.MaxDuration + horizontalShift : Task.MaxDuration;
+                }
+                if (end != null && end < start)
+                    return;
+                new EditTaskCmd(Task, Task.Name, start, end, likely, max, min, Task.Description).Run();
             }
-            else
-            {
-                start = (shifter & Shifter.StartDateShifter) > 0 ? Task.StartDate.AddDays(shift) : Task.StartDate;
-                end = (shifter & Shifter.EndDateShifter) > 0 ? ((DateTime)Task.EndDate).AddDays(shift) : Task.EndDate;
-                likely = (shifter & Shifter.LikelyEstShifter) > 0 ? Task.LikelyDuration + shift : Task.LikelyDuration;
-                min = (shifter & Shifter.MinEstShifter) > 0 ? Task.MinDuration + shift : Task.MinDuration;
-                max = (shifter & Shifter.MaxEstShifter) > 0 ? Task.MaxDuration + shift : Task.MaxDuration;
-            }
-            if (end != null && end < start)
-                return;
-            new EditTaskCmd(Task, Task.Name, start, end, likely, max, min, Task.Description).Run();
         }
 
         private void UserControl_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -224,24 +241,96 @@ namespace SmartPert.View.Controls
             dragStartPoint = e.GetPosition(WorkSpace.mainGrid);
             // Determine what we're dragging
             shifter = DetermineShifter(e.GetPosition(this.MyGrid));
+            if (shifter == Shifter.StartDateShifter)
+            {
+                if (preview != null)
+                    EndPreview();
+                preview = new TaskControlPreview(this, Canvas, e.GetPosition(WorkSpace.MainCanvas));
+            } 
+            else
+            {
+                EndPreview();
+            }
             CaptureMouse();
         }
+
+        private void UserControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (preview != null)
+                preview.Location = e.GetPosition(WorkSpace.MainCanvas);
+        }
+
+
         private void UserControl_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Point endPoint = e.GetPosition(WorkSpace.mainGrid);
             if(endPoint != dragStartPoint)
             {
-                int shift = WorkSpace.GetColumnShift(dragStartPoint.X, endPoint.X);
-                if(shift != 0)
-                    PerformShift(shifter, shift);
+                int verticalShift = WorkSpace.GetRowShift(dragStartPoint.Y, endPoint.Y);
+                if(verticalShift != 0)
+                {
+                    // Test if we should add as subtask or just shift
+                    new ShiftToRowCmd(Task, task.ProjectRow + verticalShift).Run();
+                } else
+                {
+                    int horizontalShift = WorkSpace.GetColumnShift(dragStartPoint.X, endPoint.X);
+                    PerformHorizontalShift(shifter, horizontalShift);
+                }
             }
+            EndPreview();
             ReleaseMouseCapture();
+        }
+
+        private void EndPreview()
+        {
+            Canvas.Children.Remove(preview);
+            preview = null;
         }
 
         private void UserControl_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             new TaskEditor(Task).ShowDialog();
         }
+
+        private void Add_New_Click(object sender, RoutedEventArgs e)
+        {
+            new TaskEditor().ShowDialog();
+        }
+
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// Connect dependencies
+        /// </summary>
+        /// <param name="control">the task control that is a dependent</param>
+        public void ConnectDependentControl(TaskControl control)
+        {
+                RightAnchor.Connect(control.LeftAnchor);
+        }
+
+        public override void OnConnect(Anchor sender, Connectable target, bool isReceiver)
+        {
+            if (!isReceiver)
+                new AddDependencyCmd(Task, ((TaskControl)target).Task).Run();
+                
+        }
+
+        public override void OnDisconnect(Anchor sender, Connectable target, bool isReceiver)
+        {
+            if (!isReceiver)
+                new RemoveDependencyCmd(Task, ((TaskControl)target).Task).Run();
+        }
+
+        public void OnUpdate(IDBItem item)
+        {
+            //LoadData(RowData);
+        }
+
+        public void OnDeleted(IDBItem item)
+        {
+        }
+
         #endregion
 
     }

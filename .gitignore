@@ -7,6 +7,9 @@
 WPF/Help/toc/
 WPF/Help/fti/
 
+#pycharm
+*.idea/
+
 # User-specific files
 *.rsuser
 *.suo

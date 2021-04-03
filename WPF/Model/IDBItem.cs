@@ -53,7 +53,7 @@ namespace SmartPert.Model
         /// </summary>
         /// <param name="insert">insertion</param>
         /// <param name="track">Track this as the latest object in dbreader</param>
-        public void PostInit(bool insert=true, bool track=true)
+        public virtual void PostInit(bool insert=true, bool track=true)
         {
             if (insert)  // insert first to set primary key
                 Insert();
@@ -131,6 +131,14 @@ namespace SmartPert.Model
             }
         }
 
+        protected virtual void OnOutdatedBy(IDBItem item) { }
+
+        public void MarkOutdatedBy(IDBItem updated)
+        {
+            OnOutdatedBy(updated);
+            IsOutdated = true;
+        }
+
         /// <summary>
         /// Is it outdated?
         /// </summary>
@@ -150,8 +158,8 @@ namespace SmartPert.Model
         #region Private Methods
         private void NotifyDelete()
         {
-            foreach (IItemObserver observer in observers)
-                observer.OnDeleted(this);
+            for (int i = observers.Count - 1; i >= 0; i--)
+                observers[i].OnDeleted(this);
             observers.Clear();      // No more updates
         }
 
@@ -176,7 +184,8 @@ namespace SmartPert.Model
         /// <param name="observer">observer</param>
         public void UnSubscribe(IItemObserver observer)
         {
-            observers.Remove(observer);
+            if(!isDeleted && !isOutdated)
+                observers.Remove(observer);
         }
 
         /// <summary>

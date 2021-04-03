@@ -17,6 +17,7 @@ namespace SmartPert.Model
         private static readonly bool initialized = StartInstance();  
         private List<IViewModel> viewModels;
         private DBReader reader;
+        private bool isUpdating;
 
         #region Model Instance
         /// <summary>
@@ -44,6 +45,15 @@ namespace SmartPert.Model
         {
             instance.reader = DBReader.Instantiate(instance);
             return true;
+        }
+
+        /// <summary>
+        /// Shuts down model and database
+        /// </summary>
+        public void Shutdown()
+        {
+            viewModels.Clear();
+            reader.Shutdown();
         }
         #endregion
 
@@ -134,11 +144,7 @@ namespace SmartPert.Model
         {
             Project project = GetProject();
             Task task = null;
-            try
-            {
-                task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
-                project.AddTask(task);
-            } catch (Exception) { }
+            task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
             return task;
         }
 
@@ -148,13 +154,15 @@ namespace SmartPert.Model
             if (task != null)
             {
                 task.Delete();
+                
             }
         }
-
         public List<Task> GetTasks()
         {
-            return GetProject().Tasks;
+            return GetProject().SortedTasks;
         }
+
+        public HashSet<Task> GetTaskSet() => GetProject().Tasks;
 
         public bool IsValidTaskName(string name)
         {
@@ -261,12 +269,14 @@ namespace SmartPert.Model
         #region Database Methods
         public void OnModelUpdate(Project p = null)
         {
-            if(reader != null && !reader.IsUpdating)  // Don't send updates if we're in the middle of updating
+            if(reader != null && !reader.IsUpdating && ! this.isUpdating)  // Don't send updates if we're in the middle of updating
             {
+                isUpdating = true;
                 if (p == null)
                     p = GetProject();
                 foreach (IViewModel viewModel in viewModels)
                     viewModel.OnModelUpdate(p);
+                isUpdating = false;
             }
         }
 
