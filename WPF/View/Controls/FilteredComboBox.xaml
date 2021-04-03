@@ -18,6 +18,6 @@
                 </ItemsPanelTemplate>
             </ComboBox.ItemsPanel>
         </ComboBox>
-        <Button Grid.Column="1" Content="_Add" Click="Button_Click" Margin="10"/>
+        <Button x:Name="CanAddButton" Grid.Column="1" Content="_Add" Click="Button_Click" Margin="10"/>
     </StackPanel>
 </UserControl>

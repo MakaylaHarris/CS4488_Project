@@ -25,5 +25,20 @@ namespace SmartPert.Model
                 return "";
             return reader.GetString(index);
         }
+
+        /// <summary>
+        /// Reads the column value and casts to int
+        /// </summary>
+        /// <param name="reader">Open SqlDataReader</param>
+        /// <param name="column">column name</param>
+        /// <param name="null_val">what to return if null</param>
+        /// <returns>int</returns>
+        public static int IntCast(SqlDataReader reader, string column, int null_val=0)
+        {
+            int index = reader.GetOrdinal(column);
+            if (reader.IsDBNull(index))
+                return null_val;
+            return reader.GetInt32(index);
+        }
     }
 }

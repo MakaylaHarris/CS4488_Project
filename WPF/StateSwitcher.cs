@@ -112,6 +112,7 @@ namespace SmartPert
         private void UpdateMainContent()
         {
             HintAndLink hintAndLink;
+            
             if (!isConnected)
             {
                 hintAndLink = new HintAndLink() { HintText = "Connect to the server", LinkText = "Click here to connect!" };
@@ -130,7 +131,7 @@ namespace SmartPert
                 hintAndLink.HintLink.Click += OnProjectCreate;
                 main.MainContent.Content = hintAndLink;
             }
-            else
+            else if(main.MainContent.Content.GetType() != typeof(WorkSpace))
                 main.MainContent.Content = new WorkSpace();
 
         }

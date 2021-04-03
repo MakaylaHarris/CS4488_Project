@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace SmartPert.Model
 {
@@ -11,70 +12,38 @@ namespace SmartPert.Model
     /// </summary>
     public class Task : TimedItem
     {
-        private readonly Project project;
-        private int mostLikelyDuration;
-        private int maxDuration;
-        private int minDuration;
+        private Project project;
         private HashSet<Task> dependencies;
+        private Task parentTask;
+        private int projectRow;
 
         #region Properties
+        /// <summary>
+        /// List of Subtasks
+        /// </summary>
+        public List<Task> SubTasks { get => Tasks.ToList(); }
+
         /// <summary>
         /// Gets the project the task is on
         /// Added 2/13/2021 by Robert Nelson
         /// </summary>
-        public Project Proj
+        public Project Project
         {
             get => project;
-        }
-
-        public int LikelyDuration
-        {
-            get => mostLikelyDuration;
-            set
+            private set
             {
-                if(mostLikelyDuration != value)
-                {
-                    if (value < 0)
-                        value = 0;
-                    if (value < minDuration)
-                        minDuration = value;
-                    else if (value > MaxDuration)
-                        maxDuration = value;
-                    mostLikelyDuration = value;
-                    Update();
-                }
-            }
-        }
-        public int MaxDuration { get => maxDuration; 
-            set {
-                if(maxDuration != value)
-                {
-                    if (value < 0)
-                        value = 0;
-                    if (value < mostLikelyDuration)
-                        LikelyDuration = value;
-                    maxDuration = value;
-                    Update();
-                }
-            } 
-        }
-
-        public int MinDuration
-        {
-            get => minDuration; set
-            {
-                if (minDuration != value)
-                {
-                    if (value < 0)
-                        value = 0;
-                    if (value > LikelyDuration)
-                        LikelyDuration = value;
-                    minDuration = value;
-                    Update();
-                }
+                project = value;
             }
         }
         public HashSet<Task> Dependencies { get => dependencies; }
+        public Task ParentTask { get => parentTask; }
+
+        public int ProjectRow { get => projectRow;
+            set
+            {
+                projectRow = value;
+                DB_UpdateRow();
+            } }
         #endregion
 
         #region Constructor
@@ -93,38 +62,142 @@ namespace SmartPert.Model
         /// <param name="insert">flag to insert it into database</param>
         /// <param name="track">flag to track item</param>
         /// <param name="observer">observer for updates</param>
-        public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0, 
-            string description = "", Project project=null, int id = -1, bool insert=true, bool track=true, IItemObserver observer=null) 
-            : base(name, start, end, description, id, observer)
+        public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0,
+            string description = "", Project project=null, int id = -1, bool insert=true, bool track=true, IItemObserver observer=null)
+            : base(name, start, end, description, id, observer, duration, maxDuration, minDuration)
         {
-            this.project = project != null ? project : Model.Instance.GetProject();
+            this.Project = project != null ? project : Model.Instance.GetProject();
             if (this.project == null)
                 throw new ArgumentNullException("project");
-            if (duration == 0)
-                mostLikelyDuration = 1;
-            else
-                mostLikelyDuration = duration;
-            if (maxDuration <= 0)
-                this.maxDuration = mostLikelyDuration;
-            else
-            {
-                if (maxDuration < mostLikelyDuration)
-                    throw new ArgumentOutOfRangeException("MaxDuration", maxDuration, "Must be greater than likely duration!");
-                this.maxDuration = maxDuration;
-            }
-            if (minDuration <= 0)
-                this.minDuration = mostLikelyDuration;
-            else
-            {
-                if (minDuration > mostLikelyDuration)
-                    throw new ArgumentOutOfRangeException("MinDuration", minDuration, "Must be less than likely duration!");
-                this.minDuration = minDuration;
-            }
             dependencies = new HashSet<Task>();
+            projectRow = 0;
             PostInit(insert, track);
         }
 
+        public override void PostInit(bool insert = true, bool track = true)
+        {
+            base.PostInit(insert, track);
+            project.AddTask(this);
+        }
+
         #endregion
+
+        #region Property Callbacks
+        protected override void AfterStartDateChanged(DateTime dateTime)
+        {
+            if (parentTask != null)
+            {
+                parentTask.OnChild_StartDateChange(dateTime);
+                parentTask.OnChild_LikelyDateChange(LikelyDate);
+                parentTask.OnChild_MaxEstDateChange(MaxEstDate);
+                parentTask.OnChild_MinEstDateChange(MinEstDate);
+            }
+            // Changing the start date also changes all of our estimated duration dates
+            project.OnChild_StartDateChange(dateTime);
+            project.OnChild_LikelyDateChange(LikelyDate);
+            project.OnChild_MaxEstDateChange(MaxEstDate);
+            project.OnChild_MinEstDateChange(MinEstDate);
+        }
+
+        protected override void AfterEndDateChanged(DateTime? newValue)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_CompletedDateChange(newValue);
+            project.OnChild_CompletedDateChange(newValue);
+        }
+        protected override void AfterLikelyDurationChanged(int newValue)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_LikelyDateChange(LikelyDate);
+            project.OnChild_LikelyDateChange(LikelyDate);
+        }
+        protected override void AfterMaxDurationChanged(int newValue)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_MaxEstDateChange(MaxEstDate);
+            project.OnChild_MaxEstDateChange(MaxEstDate);
+        }
+        protected override void AfterMinDurationChanged(int newValue)
+        {
+            if (parentTask != null)
+                parentTask.OnChild_MinEstDateChange(MinEstDate);
+            project.OnChild_MinEstDateChange(MinEstDate);
+        }
+        #endregion
+
+        #region Task Methods
+        /// <summary>
+        /// Determines if a task is an ancestor of this task
+        /// </summary>
+        /// <param name="possibleAncestor">The task to check</param>
+        /// <returns>True if ancestor</returns>
+        public bool TaskIsAncestor(Task possibleAncestor)
+        {
+            Task parent = ParentTask;
+            while (parent != null)
+            {
+                if (parent == possibleAncestor)
+                    return true;
+                parent = parent.ParentTask;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Updates a tasks parent by removing it from its current parent and adding it as subtask to the new one
+        /// </summary>
+        /// <param name="newParent">the new task parent</param>
+        /// <returns>true if anything was updated</returns>
+        public bool UpdateParentTask(Task newParent)
+        {
+            bool result = false;
+            if(newParent != parentTask)
+            {
+                if (parentTask != null)
+                    result |= parentTask.RemoveSubTask(this);
+                if (newParent != null)
+                    result |= newParent.AddSubTask(this);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Adds sub task to tasks
+        /// </summary>
+        /// <param name="t">Task</param>
+        public bool AddSubTask(Task t)
+        {
+            if (t.parentTask != this)
+            {
+                if (t.parentTask != null)
+                    throw new Exception(string.Format("Task {0} already has a parent, remove it from its parent first!", t));
+                t.parentTask = this;
+                tasks.Add(t);
+                OnChild_Change(t);
+                t.DB_InsertSubTask();
+                NotifyUpdate();
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Removes sub task from tasks
+        /// </summary>
+        /// <param name="t">task to remove</param>
+        public bool RemoveSubTask(Task t)
+        {
+            if (tasks.Remove(t))
+            {
+                t.parentTask = null;
+                t.DB_DeleteSubTask();
+                NotifyUpdate();
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
 
         #region Workers
         /// <summary>
@@ -140,7 +213,7 @@ namespace SmartPert.Model
                 // Attempt to add...
                 try
                 {
-                    Proj.AddWorker(worker);  // Add to project too
+                    Project.AddWorker(worker);  // Add to project too
                     SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
                     command.Parameters.AddWithValue("@username", worker.Username);
                     command.Parameters.AddWithValue("@taskId", this.Id);
@@ -184,10 +257,10 @@ namespace SmartPert.Model
         #region Dependencies
         public void UpdateDependencies()
         {
-            
+
         }
         /// <summary>
-        /// Creates a dependency, the parameter is the Root, and the current task is the dependent. 
+        /// Creates a dependency, the parameter is the Root, and the current task is the dependent.
         /// </summary>
         public void AddDependency(Task dependency)
         {
@@ -207,7 +280,7 @@ namespace SmartPert.Model
             NotifyUpdate();
         }
         /// <summary>
-        /// Removes a dependency, the parameter is the Root, and the current task is the dependent. 
+        /// Removes a dependency, the parameter is the Root, and the current task is the dependent.
         /// </summary>
         public void RemoveDependency(Task dependency)
         {
@@ -240,14 +313,20 @@ namespace SmartPert.Model
         #endregion
 
         #region Database Methods
+        private void DB_UpdateRow()
+        {
+            string query = "UPDATE dbo.[Task] SET ProjectRow=" + projectRow + " WHERE TaskId=" + Id + ";";
+            ExecuteSql(query);
+        }
+
         /// <summary>
         /// Updates the task data in the database
         /// </summary>
         protected override void PerformUpdate()
         {
-            string query = "UPDATE dbo.[Task] SET Name=@Name, StartDate=@StartDate, EndDate=@EndDate" + 
+            string query = "UPDATE dbo.[Task] SET Name=@Name, StartDate=@StartDate, EndDate=@EndDate" +
                 ", Description=@Description, MinEstDuration=" + MinDuration + ", MaxEstDuration=" + MaxDuration + ", MostLikelyEstDuration=" +
-                mostLikelyDuration + " WHERE TaskId = " + Id + ";";                
+                LikelyDuration + ", ProjectRow=" + projectRow + " WHERE TaskId = " + Id + ";";
             SqlCommand command = OpenConnection(query);
             command.Parameters.AddWithValue("@Name", Name);
             command.Parameters.AddWithValue("@Description", Description);
@@ -270,12 +349,13 @@ namespace SmartPert.Model
         /// <throws>InsertionError on error (task name is already taken in project or project does not exist)</throws>
         protected override int PerformInsert()
         {
-            string query = "EXEC dbo.CreateTask @Name, @Description, " + MinDuration + ", " + mostLikelyDuration + ", " + MaxDuration + 
-                ", @StartDate, @EndDate, @ProjectId, @Creator, @CreationDate out, @Result out, @ResultId out";
+            string query = "EXEC dbo.CreateTask @Name, @Description, " + MinDuration + ", " + LikelyDuration + ", " + MaxDuration +
+                ", @StartDate, @EndDate, @ProjectId, @Creator, @CreationDate out, @Result out, @ResultId out, " +
+                "@ProjectRow out, @HasParent, @ParentTaskId";
             SqlCommand command = OpenConnection(query);
             command.Parameters.AddWithValue("@Name", Name);
             command.Parameters.AddWithValue("@Description", Description);
-            command.Parameters.AddWithValue("@ProjectId", Proj.Id);
+            command.Parameters.AddWithValue("@ProjectId", Project.Id);
             if (creator == null)
                 command.Parameters.AddWithValue("@Creator", DBNull.Value);
             else
@@ -293,13 +373,48 @@ namespace SmartPert.Model
             result.Direction = System.Data.ParameterDirection.Output;
             var resultId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
             resultId.Direction = System.Data.ParameterDirection.Output;
+            var childRow = command.Parameters.Add("@ProjectRow", System.Data.SqlDbType.Int);
+            childRow.Direction = System.Data.ParameterDirection.Output;
+            if(parentTask != null)
+            {
+                command.Parameters.AddWithValue("@HasParent", 1);
+                command.Parameters.AddWithValue("@ParentTaskId", parentTask.Id);
+            } else
+            {
+                command.Parameters.AddWithValue("@HasParent", 0);
+                command.Parameters.AddWithValue("@ParentTaskId", 0);
+            }
             command.ExecuteNonQuery();
             if (!(bool)result.Value)
                 throw new InsertionError("Failed to insert task " + Name);
             creationDate = (DateTime) createDate.Value;
             id = (int) resultId.Value;
+            projectRow = (int)childRow.Value;
+            CloseConnection();
+
+            // If the parent task exists, be sure to move it next to it
+            //if(parentTask != null)
+            //    TryShiftToRow(parentTask.GetTaskAfterGroup());
             return id;
         }
+
+        private void DB_InsertSubTask()
+        {
+            if (parentTask != null)
+            {
+                SqlCommand command = OpenConnection("INSERT INTO [dbo].[SubTask] (SubTaskId, ParentTaskId) Values (@SubId, @ParentId);");
+                command.Parameters.AddWithValue("@SubId", Id);
+                command.Parameters.AddWithValue("@ParentId", parentTask.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+            }
+        }
+
+        private void DB_DeleteSubTask()
+        {
+            ExecuteSql("DELETE FROM [dbo].[SubTask] WHERE SubTaskId=" + Id);
+        }
+
         /// <summary>
         /// Deletes a task
         /// </summary>
@@ -307,6 +422,8 @@ namespace SmartPert.Model
         {
             string query = "EXEC dbo.TaskDelete " + Id + ";";
             ExecuteSql(query);
+            if(parentTask != null)
+                parentTask.RemoveSubTask(this);
             project.RemoveTask(this);
         }
 
@@ -322,13 +439,14 @@ namespace SmartPert.Model
             string creator = DBFunctions.StringCast(reader, "CreatorUsername");
             Project proj = projects[(int)reader["ProjectId"]];
             User user = users != null && creator != "" ? users[creator] : null;
+            int mostLikely = (int)reader["MostLikelyEstDuration"];
             Task t = new Task(
                 (string)reader["Name"],
                 (DateTime)reader["StartDate"],
                 DBFunctions.DateCast(reader, "EndDate"),
-                (int)reader["MostLikelyEstDuration"],
-                (int)reader["MaxEstDuration"],
-                (int)reader["MinEstDuration"],
+                mostLikely,
+                DBFunctions.IntCast(reader, "MaxEstDuration", mostLikely),
+                DBFunctions.IntCast(reader, "MinEstDuration", mostLikely),
                 DBFunctions.StringCast(reader, "Description"),
                 project: proj,
                 id: (int)reader["TaskId"],
@@ -336,36 +454,62 @@ namespace SmartPert.Model
 
             t.creator = user;
             t.creationDate = (DateTime)DBFunctions.DateCast(reader, "CreationDate");
+            t.projectRow = (int)reader["ProjectRow"];
             proj.AddTask(t);
             return t;
         }
 
-        /// <summary>
-        /// Parses the task data
-        /// </summary>
-        /// <param name="reader">Sql Data reader</param>
-        /// <returns>true if updated</returns>
         public override bool PerformParse(SqlDataReader reader)
         {
-            string name = (string)reader["Name"];
-            DateTime start = (DateTime)reader["StartDate"];
-            DateTime? end = DBFunctions.DateCast(reader, "EndDate");
-            int likely = (int)reader["MostLikelyEstDuration"];
-            int max = (int)reader["MaxEstDuration"];
-            int min = (int)reader["MinEstDuration"];
-            string desc = DBFunctions.StringCast(reader, "Description");
-            if(name != Name || start != StartDate || end != EndDate || likely != mostLikelyDuration || max != maxDuration || min != minDuration || desc != Description)
+            bool result = base.PerformParse(reader);
+            int projectRow = (int)reader["ProjectRow"];
+            if(projectRow != this.projectRow)
             {
-                this.Name = name;
-                this.StartDate = start;
-                EndDate = end;
-                LikelyDuration = mostLikelyDuration;
-                maxDuration = max;
-                minDuration = min;
-                Description = desc;
+                this.projectRow = projectRow;
+                this.isUpdated = true;
                 return true;
             }
-            return false;
+            return result;
+        }
+
+        public static List<Task> Set_Diff(HashSet<Task> set, IEnumerable<Task> other)
+        {
+            List<Task> ret = new List<Task>();
+            foreach (Task t in set)
+                if (!other.Contains(t))
+                    ret.Add(t);
+            return ret;
+        }
+
+        /// <summary>
+        /// Updates Subtasks (dbreader only)
+        /// </summary>
+        /// <param name="subtasks">updated</param>
+        public void DB_UpdateSubtasks(HashSet<Task> subtasks)
+        {
+            // If tasks are gone, remove them
+            if(subtasks == null)
+            {
+                foreach (Task t in Tasks)
+                {
+                    t.parentTask = null;
+                    tasks.Remove(t);
+                }
+                isUpdated = true;
+            } else if(!tasks.SetEquals(subtasks)) // If the subtasks have changed, update the ones that have changed
+            {
+                foreach (Task t in Set_Diff(subtasks, tasks))
+                {
+                    t.parentTask = this;
+                    tasks.Add(t);
+                }
+                foreach (Task t in Set_Diff(tasks, subtasks))
+                {
+                    t.parentTask = null;
+                    tasks.Remove(t);
+                }
+                isUpdated = true;
+            }
         }
 
         /// <summary>
@@ -395,15 +539,8 @@ namespace SmartPert.Model
         /// <returns></returns>
         public DateTime CalculateLastTaskDate()
         {
-            DateTime max = this.StartDate.AddDays(maxDuration);
-            if (this.EndDate != null && EndDate >= max)
-            {
-                return (DateTime)this.EndDate;
-            }
-            else
-            {
-                return max;
-            }
+            DateTime maxEstimate = MaxEstDate;
+            return EndDate == null || maxEstimate > EndDate ? maxEstimate : (DateTime)EndDate;
         }
     }
 }

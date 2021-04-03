@@ -13,6 +13,9 @@ CREATE PROCEDURE  [dbo].[CreateProject]
 	@EndDate datetime,
 	@Description nvarchar(MAX),
 	@Creator varchar(50),				/* Added 2/19/2021 by Robert Nelson */
+	@LikelyDuration int,
+	@MinDuration int,
+	@MaxDuration int,
 	@CreationDate datetime OUTPUT,		/* Added 2/19/2021 by Robert Nelson */
 	@Result BIT OUTPUT,
 	@ResultId int OUTPUT				/* Added 2/19/2021 by Robert Nelson */
@@ -25,8 +28,8 @@ BEGIN
 	/* Check and make sure Project Name is unique. If not, do not insert into table. */
 	IF (SELECT COUNT(*) FROM [Project] WHERE [Project].Name = @ProjectName) = 0
 		BEGIN
-			INSERT INTO dbo.Project (Name, StartDate, EndDate, Description, Creator, CreationDate) 
-				VALUES (@ProjectName, @StartDate, @EndDate, @Description, @Creator, @CreationDate);
+			INSERT INTO dbo.Project (Name, StartDate, EndDate, Description, Creator, CreationDate, MostLikelyEstDuration, MinEstDuration, MaxEstDuration) 
+				VALUES (@ProjectName, @StartDate, @EndDate, @Description, @Creator, @CreationDate, @LikelyDuration, @MinDuration, @MaxDuration);
 			SET @ResultId = SCOPE_IDENTITY();
 			SET @Result=1;
 

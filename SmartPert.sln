@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartPert", "WPF\SmartPert.
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SmartPertDB", "PertDB\SmartPertDB.sqlproj", "{D7C97759-3478-45B5-824D-8B76B037575E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PertTest", "PertTest\PertTest.csproj", "{B7C33A50-D163-434F-B250-F3DD325F3C33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "PertTest\IntegrationTests.csproj", "{B7C33A50-D163-434F-B250-F3DD325F3C33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

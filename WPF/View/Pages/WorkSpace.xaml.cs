@@ -16,6 +16,7 @@ using SmartPert.ViewModels;
 using SmartPert.View.ViewClasses;
 using SmartPert.View.Controls;
 using SmartPert.Model;
+using System.Windows.Threading;
 
 namespace SmartPert.View.Pages
 {
@@ -38,11 +39,40 @@ namespace SmartPert.View.Pages
         public WorkSpace()
         {
             InitializeComponent();
-            viewModel = new WorkSpaceViewModel();
+            viewModel = new WorkSpaceViewModel(this);
             taskControls = new Dictionary<Task, TaskControl>();
             DataContext = viewModel.RowData;
             mainGrid.SizeChanged += MainGrid_SizeChanged;
             BuildGrid();
+        }
+
+        /// <summary>
+        /// Update workspace when the model has changed
+        /// Added 3/27/2021 by Robert
+        /// </summary>
+        /// <param name="viewModel">view model</param>
+        public void OnWorkspaceModelUpdate(WorkSpaceViewModel viewModel)
+        {
+            foreach (TaskControl taskControl in taskControls.Values)
+                taskControl.DisconnectAllLines();
+            taskControls.Clear();
+
+            // Remove any old previews
+            List<UIElement> toRemove = new List<UIElement>();
+            foreach(UIElement uIElement in MainCanvas.Children)
+                if (uIElement.GetType() == typeof(TaskControlPreview))
+                    toRemove.Add(uIElement);
+            foreach (UIElement uI in toRemove)
+                MainCanvas.Children.Remove(uI);
+
+            weekendCols.Clear();
+            for (int i = mainGrid.RowDefinitions.Count - 1; i >= rowStart; i--)
+                mainGrid.RowDefinitions.RemoveAt(i);
+            for (int i = mainGrid.ColumnDefinitions.Count - 1; i >= colStart; i--)
+                mainGrid.ColumnDefinitions.RemoveAt(i);
+            mainGrid.Children.Clear();
+            BuildGrid();
+            Dispatcher.Invoke(new Action(() => { AddDependencies(); }), DispatcherPriority.ContextIdle);
         }
 
         private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -89,6 +119,39 @@ namespace SmartPert.View.Pages
             return endCol - startCol;
         }
 
+        /// <summary>
+        /// Gets the row distance between start and end points
+        /// Created 3/9/2021 by Robert Nelson
+        /// </summary>
+        /// <param name="start">start</param>
+        /// <param name="end">end</param>
+        /// <returns>number of rows, negative if end is before start</returns>
+        public int GetRowShift(double start, double end)
+        {
+            int startRow = -1, endRow = -1, currentRow = 0;
+            double totalWidth = 0;
+            foreach (var columnDef in mainGrid.RowDefinitions)
+            {
+                totalWidth += columnDef.ActualHeight;
+                if (startRow == -1 && totalWidth > start)
+                {
+                    startRow = currentRow;
+                    if (endRow > 0)     // Shortcut if we found columns
+                        break;
+                }
+                if (endRow == -1 && totalWidth > end)
+                {
+                    endRow = currentRow;
+                    if (startRow > 0)
+                        break;
+                }
+                ++currentRow;
+            }
+            if (endRow == -1)
+                endRow = currentRow;
+            return endRow - startRow;
+        }
+
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             AddDependencies();
@@ -100,9 +163,10 @@ namespace SmartPert.View.Pages
         {
             foreach(KeyValuePair<Task, TaskControl> keyValue in taskControls)
             {
-                foreach (Task t in keyValue.Key.Dependencies)
-                    if (taskControls.ContainsKey(t))
-                        keyValue.Value.ConnectDependentControl(taskControls[t]);
+                if(keyValue.Key.Dependencies != null)   
+                    foreach (Task t in keyValue.Key.Dependencies)
+                        if (taskControls.ContainsKey(t))
+                            keyValue.Value.ConnectDependentControl(taskControls[t]);
             }
         }
 
@@ -184,8 +248,8 @@ namespace SmartPert.View.Pages
                 MyControl.Margin = new Thickness(0, 4, 0, 4);
 
                 Grid.SetRow(MyControl, i + 2);
-                Grid.SetColumn(MyControl, rowData.StartDateCol);
-                Grid.SetColumnSpan(MyControl, rowData.ColSpan);
+                Grid.SetColumn(MyControl, TaskControl.NaturalNum(rowData.StartDateCol));
+                Grid.SetColumnSpan(MyControl, TaskControl.NaturalNum(rowData.ColSpan));
                 Grid.SetZIndex(MyControl, 100);
                 
                                 //Tyler K.
@@ -216,20 +280,30 @@ namespace SmartPert.View.Pages
                 RowDefinition rowDef = new RowDefinition();
                 rowDef.Height = new GridLength(30, GridUnitType.Pixel);
                 mainGrid.RowDefinitions.Add(rowDef);
-                TextBlock txt1 = new TextBlock();
-                Binding b1 = new Binding("Name");
-                b1.Source = viewModel.RowData[i];
-                txt1.SetBinding(TextBlock.TextProperty, b1);
-                if (viewModel.RowData[i].IsProject)
-                {
-                    txt1.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
+                if(!viewModel.RowData[i].IsProject) { 
+                    TaskRowLabel label = new TaskRowLabel(viewModel.RowData[i].TimedItem as Task);
+                    int subLevel = viewModel.RowData[i].SubTaskLevel;
+                    label.Margin = new Thickness(10 * subLevel, 0, 0, 0);
+                    label.FontSize = 16 - subLevel >= 8 ? 16 - subLevel : 8;
+                    label.VerticalAlignment = VerticalAlignment.Center;
+                    Grid.SetRow(label, rowChange);
+                    Grid.SetColumn(label, 0);
+                    mainGrid.Children.Add(label);
                 }
-                txt1.Margin = new Thickness(10,0,0,0);
-                txt1.FontSize = 16;
-                txt1.VerticalAlignment = VerticalAlignment.Center;
-                Grid.SetRow(txt1, rowChange);
-                Grid.SetColumn(txt1, 0);
-                mainGrid.Children.Add(txt1);
+                else
+                {
+                    TextBlock txt1 = new TextBlock();
+                    Binding b1 = new Binding("Name");
+                    b1.Source = viewModel.RowData[i];
+                    txt1.SetBinding(TextBlock.TextProperty, b1);
+                    txt1.SetValue(TextBlock.FontWeightProperty, FontWeights.Bold);
+                    txt1.Margin = new Thickness(5, 0, 0, 0);
+                    txt1.FontSize = 16;
+                    txt1.VerticalAlignment = VerticalAlignment.Center;
+                    Grid.SetRow(txt1, rowChange);
+                    Grid.SetColumn(txt1, 0);
+                    mainGrid.Children.Add(txt1);
+                }
                 rowChange += 1;
                 
             }
@@ -283,10 +357,33 @@ namespace SmartPert.View.Pages
         }
 
         /// <summary>
+        /// Adds outer borders
+        /// </summary>
+        private void AddGridOuterBorder()
+        {
+            // Border around header
+            Border border = new Border();
+            border.BorderBrush = FindResource("PrimaryHueMidBrush") as SolidColorBrush;
+            border.BorderThickness = new Thickness(2);
+            mainGrid.Children.Add(border);
+            Grid.SetColumnSpan(border, mainGrid.ColumnDefinitions.Count);
+            Grid.SetRowSpan(border, 2);
+
+            // Border around entire grid
+            border = new Border();
+            border.BorderBrush = FindResource("PrimaryHueMidBrush") as SolidColorBrush;
+            border.BorderThickness = new Thickness(1);
+            mainGrid.Children.Add(border);
+            Grid.SetColumnSpan(border, mainGrid.ColumnDefinitions.Count);
+            Grid.SetRowSpan(border, mainGrid.RowDefinitions.Count);
+        }
+
+        /// <summary>
         /// Adds primary light hue grid borders to main workspace
         /// </summary>
         private void AddGridBorders()
         {
+            AddGridOuterBorder();
             for (int i = rowStart; i < mainGrid.RowDefinitions.Count; i++)
             {
                 Border border = new Border();

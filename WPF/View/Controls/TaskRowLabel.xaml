@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="SmartPert.View.Controls.TaskRowLabel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartPert.View.Controls" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             MouseEnter="UserControl_MouseEnter"
+             MouseLeave="UserControl_MouseLeave"
+             d:DesignHeight="100" d:DesignWidth="350">
+    <Grid>
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem x:Name="mi_editTask" Header="Edit" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_editTask_Click"/>
+                <MenuItem x:Name="mi_deleteTask" Header="Delete" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_deleteTask_Click"/>
+                <Separator/>
+                <MenuItem x:Name="Add_New" Header="Create Task" Click="Add_New_Click"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Button x:Name="LeftButton" Visibility="Hidden" Click="LeftButton_Click">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Content" Value="{materialDesign:PackIcon ArrowLeftDropCircleOutline}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <Label Content="{Binding Name}" Grid.Column="1"/>
+        <Button x:Name="RightButton" Grid.Column="2" Visibility="Hidden" Click="RightButton_Click">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Setter Property="Content" Value="{materialDesign:PackIcon ArrowRightDropCircleOutline}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </Button.Style>
+        </Button>
+    </Grid>
+</UserControl>

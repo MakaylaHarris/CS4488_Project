@@ -40,29 +40,6 @@
                         <RowDefinition Height="20"></RowDefinition>
                         <RowDefinition Height="20"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Grid.Children>
-                        <Label 
-                Grid.Row="2"
-                Content="{Binding Path=Project.Name, Mode=OneWay}"/> 
-                        <!--<GridSplitter
-                Grid.Column="0" Grid.RowSpan="2147483647"
-                Width="3" 
-                Background="{DynamicResource PrimaryHueMidBrush}"
-                VerticalAlignment="Stretch" 
-                HorizontalAlignment="Right" />-->
-
-                        <!-- 2147483647 is the highest int, basically saying border spans all columns -->
-                        <Border 
-                Grid.Column="0" Grid.ColumnSpan="2147483647" 
-                Grid.Row="0" Grid.RowSpan="2" 
-                BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2">
-                        </Border>
-                        <Border 
-                Grid.Column="0" Grid.ColumnSpan="2147483647" 
-                Grid.Row="0" Grid.RowSpan="2147483647" 
-                BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">
-                        </Border>
-                    </Grid.Children>
                 </Grid>
             </Canvas>
         </ScrollViewer>

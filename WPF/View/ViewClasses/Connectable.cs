@@ -107,6 +107,15 @@ namespace SmartPert.View
         /// </summary>
         /// <returns>List of anchors</returns>
         public List<Anchor> GetAnchors() => anchors;
+
+        /// <summary>
+        /// Removes all connection lines
+        /// </summary>
+        public void DisconnectAllLines()
+        {
+            foreach (Anchor a in GetAnchors())
+                a.DisconnectAll();
+        }
         #endregion
 
         #region Protected Methods
@@ -125,7 +134,7 @@ namespace SmartPert.View
         /// <summary>
         /// Call whenever control is moved
         /// </summary>
-        protected virtual void OnMove(double x, double y)
+        protected virtual void OnMove()
         {
             foreach (Anchor a in anchors)
                 a.OnMove();

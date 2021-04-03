@@ -31,8 +31,7 @@ namespace SmartPert
     public partial class MainWindow : Window, IViewModel
     {
         static private Random random = new Random();
-        private IModel model;
-        //private Chart chart;
+        private Model.Model model;
         private WorkSpace workSpace;
         private ObservableCollection<MenuItemViewModel> items;
         public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }
@@ -46,6 +45,7 @@ namespace SmartPert
             DataContext = this;
             InitModel();
             StateSwitcher.Instance.Start(this);
+            PopulateProjects();
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
@@ -325,5 +325,9 @@ namespace SmartPert
         }
         #endregion
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            model.Shutdown();
+        }
     }
 }

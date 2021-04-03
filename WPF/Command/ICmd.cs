@@ -14,15 +14,41 @@ namespace SmartPert.Command
     /// </summary>
     public abstract class ICmd
     {
+        private static TransactionCmd transaction;
+
+        public ICmd()
+        {
+            if (transaction != null)
+                transaction.Add(this);
+        }
+
+        public static void BeginTransaction(ICmd cmd=null)
+        {
+            if(transaction == null)
+                transaction = new TransactionCmd();
+            if (cmd != null)
+                transaction.Add(cmd);
+        }
+
+        public static bool PostTransaction()
+        {
+            bool result = transaction.Run();
+            transaction = null;
+            return result;
+        }
+
         /// <summary>
         /// Runs the command and adds it to the stack if successful
         /// </summary>
         /// <returns>True on success</returns>
-        public bool Run(bool isRedo=false)
+        public bool Run(bool isRedo=false, bool pushStack=true)
         {
+            if (transaction != null && transaction != this && pushStack)
+                return transaction.Run(this);
             if(Execute())
             {
-                CommandStack.Instance.PushCommand(this, isRedo);
+                if(pushStack)
+                    CommandStack.Instance.PushCommand(this, isRedo);
                 return true;
             }
             return false;

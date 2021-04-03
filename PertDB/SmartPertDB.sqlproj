@@ -167,6 +167,8 @@
     <Build Include="dbo\StoredProcedures\TaskDelete.sql" />
     <None Include="Scripts\ClearProjects.sql" />
     <None Include="Scripts\ClearUsers.sql" />
+    <Build Include="dbo\StoredFunctions\GetNextChildRow.sql" />
+    <Build Include="dbo\Tables\SubTask.sql" />
     <None Include="Scripts\DeleteData.sql">
       <QuotedIdentifier>Off</QuotedIdentifier>
     </None>

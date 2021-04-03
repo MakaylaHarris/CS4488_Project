@@ -70,6 +70,7 @@ namespace SmartPert.View
         public Connector(Canvas canvas)
         {
             thickness = 2;
+            anchor2IsReceiver = true;
             brush = ((SolidColorBrush)Application.Current.FindResource("SecondaryHueMidBrush"));
             this.canvas = canvas;
             path = new List<Line>();
@@ -86,6 +87,7 @@ namespace SmartPert.View
             thickness = 2;
             brush = ((SolidColorBrush)Application.Current.FindResource("SecondaryHueMidBrush"));
             this.canvas = canvas;
+            anchor2IsReceiver = true;
             path = new List<Line>();
             line = init_line();
             Anchor1 = anchor1;
@@ -141,15 +143,16 @@ namespace SmartPert.View
             }
             else
             {
-                // Find closest endpoint
-                Point end1, end2, point;
-                point = e.GetPosition(Canvas);
-                end1 = Anchor1.Point;
-                end2 = Anchor2.Point;
-                if (Distance(point, end1) > Distance(point, end2))
-                    StartConnecting(Anchor1, anchor2IsReceiver);
-                else
-                    StartConnecting(Anchor2, !anchor2IsReceiver);
+                Disconnect();
+                //// Find closest endpoint
+                //Point end1, end2, point;
+                //point = e.GetPosition(Canvas);
+                //end1 = Anchor1.Point;
+                //end2 = Anchor2.Point;
+                //if (Distance(point, end1) > Distance(point, end2))
+                //    StartConnecting(Anchor1, anchor2IsReceiver);
+                //else
+                //    StartConnecting(Anchor2, !anchor2IsReceiver);
             }
         }
 
@@ -197,7 +200,7 @@ namespace SmartPert.View
             CtrlHitTest test = new CtrlHitTest(typeof(Connectable), Canvas);
             Point p = Mouse.GetPosition(Canvas);
             List<DependencyObject> hits = test.Run(p, Anchor1.Connectable as DependencyObject);
-            if (hits.Count > 0)
+             if (hits.Count > 0)
             {
                 Connectable c = hits[0] as Connectable;
                 Anchor2 = GetClosestConnectableAnchor(c.GetAnchors(), p, Anchor1);
@@ -214,6 +217,10 @@ namespace SmartPert.View
                 Anchor2.Connect(this, Anchor1.Connectable, anchor2IsReceiver);
                 Anchor1.Connect(this, Anchor2.Connectable, !anchor2IsReceiver);
                 CreatePathFromLine(line);
+                if (Anchor2 != null)
+                    Anchor2.AfterConnect(this, Anchor1.Connectable, anchor2IsReceiver);
+                if (Anchor1 != null)
+                    Anchor1.AfterConnect(this, Anchor2.Connectable, !anchor2IsReceiver);
             }
             Canvas.Children.Remove(line);
             // Canvas events cleanup
@@ -234,13 +241,18 @@ namespace SmartPert.View
         /// Disconnects the connection
         /// </summary>
         /// <returns>true if a disconnection occurred (was not already disconnected)</returns>
-        public bool Disconnect()
+        public bool Disconnect(bool notify=true)
         {
             // If connected then disconnect
             if (IsConnected())
             {
-                Anchor1.Disconnect(this, Anchor2.Connectable, !anchor2IsReceiver);
-                Anchor2.Disconnect(this, Anchor1.Connectable, anchor2IsReceiver);
+                Anchor1.Disconnect(this);
+                Anchor2.Disconnect(this);
+                if(notify)
+                {
+                    Anchor1.AfterDisconnect(this, Anchor2.Connectable, !anchor2IsReceiver);
+                    Anchor2.AfterDisconnect(this, Anchor1.Connectable, anchor2IsReceiver);
+                }
                 ClearLines();
                 Anchor1 = Anchor2 = null;
                 return true;
