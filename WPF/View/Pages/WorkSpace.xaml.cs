@@ -30,7 +30,7 @@ namespace SmartPert.View.Pages
         //starts the grid content rows at 2 since the headers take up two rows
         //starts the grid content columns at 1 since the Project/task column is the first
         private const int rowStart = 2;
-        private const int colStart = 1;
+        private const int colStart = 0;
         //This is the max integer number used to mean span all
         private const int maxInt = 2147483647;
         private List<int> weekendCols = new List<int>();
@@ -67,23 +67,22 @@ namespace SmartPert.View.Pages
 
             weekendCols.Clear();
             for (int i = mainGrid.RowDefinitions.Count - 1; i >= rowStart; i--)
+            {
                 mainGrid.RowDefinitions.RemoveAt(i);
+                LeftGrid.RowDefinitions.RemoveAt(i);
+            }
             for (int i = mainGrid.ColumnDefinitions.Count - 1; i >= colStart; i--)
                 mainGrid.ColumnDefinitions.RemoveAt(i);
             mainGrid.Children.Clear();
+            LeftGrid.Children.Clear();
             BuildGrid();
             Dispatcher.Invoke(new Action(() => { AddDependencies(); }), DispatcherPriority.ContextIdle);
         }
 
         private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (e.NewSize.Width < ActualWidth)
-                mainGrid.Width = ActualWidth;
-            else
-            {
-                MainCanvas.Width = e.NewSize.Width;
-                MainCanvas.Height = e.NewSize.Height > Height ? e.NewSize.Height : Height;
-            }
+            MainCanvas.Width = e.NewSize.Width;
+            MainCanvas.Height = e.NewSize.Height;
         }
 
         /// <summary>
@@ -279,6 +278,9 @@ namespace SmartPert.View.Pages
             {
                 RowDefinition rowDef = new RowDefinition();
                 rowDef.Height = new GridLength(30, GridUnitType.Pixel);
+                LeftGrid.RowDefinitions.Add(rowDef);
+                rowDef = new RowDefinition();
+                rowDef.Height = new GridLength(30, GridUnitType.Pixel);
                 mainGrid.RowDefinitions.Add(rowDef);
                 if(!viewModel.RowData[i].IsProject) { 
                     TaskRowLabel label = new TaskRowLabel(viewModel.RowData[i].TimedItem as Task);
@@ -288,7 +290,7 @@ namespace SmartPert.View.Pages
                     label.VerticalAlignment = VerticalAlignment.Center;
                     Grid.SetRow(label, rowChange);
                     Grid.SetColumn(label, 0);
-                    mainGrid.Children.Add(label);
+                    LeftGrid.Children.Add(label);
                 }
                 else
                 {
@@ -302,7 +304,7 @@ namespace SmartPert.View.Pages
                     txt1.VerticalAlignment = VerticalAlignment.Center;
                     Grid.SetRow(txt1, rowChange);
                     Grid.SetColumn(txt1, 0);
-                    mainGrid.Children.Add(txt1);
+                    LeftGrid.Children.Add(txt1);
                 }
                 rowChange += 1;
                 
@@ -329,7 +331,7 @@ namespace SmartPert.View.Pages
             Grid.SetZIndex(splitter, 90);
             Grid.SetColumn(splitter, 0);
             Grid.SetRowSpan(splitter, maxInt);
-            mainGrid.Children.Add(splitter);
+            workSpace.Children.Add(splitter);
 
         }
 
@@ -361,21 +363,28 @@ namespace SmartPert.View.Pages
         /// </summary>
         private void AddGridOuterBorder()
         {
+            SolidColorBrush midbrush = FindResource("PrimaryHueMidBrush") as SolidColorBrush;
             // Border around header
-            Border border = new Border();
-            border.BorderBrush = FindResource("PrimaryHueMidBrush") as SolidColorBrush;
-            border.BorderThickness = new Thickness(2);
-            mainGrid.Children.Add(border);
+            Border border = CreateBorder(mainGrid, midbrush, 2, 1);
             Grid.SetColumnSpan(border, mainGrid.ColumnDefinitions.Count);
+            Grid.SetRowSpan(border, 2);
+            border = CreateBorder(LeftGrid, midbrush, 2, 1);
             Grid.SetRowSpan(border, 2);
 
             // Border around entire grid
-            border = new Border();
-            border.BorderBrush = FindResource("PrimaryHueMidBrush") as SolidColorBrush;
-            border.BorderThickness = new Thickness(1);
-            mainGrid.Children.Add(border);
-            Grid.SetColumnSpan(border, mainGrid.ColumnDefinitions.Count);
-            Grid.SetRowSpan(border, mainGrid.RowDefinitions.Count);
+            border = CreateBorder(workSpace, midbrush, 1, 1);
+            Grid.SetColumnSpan(border, workSpace.ColumnDefinitions.Count);
+        }
+
+        // Helper function to create borders
+        private Border CreateBorder(Grid grid, SolidColorBrush brush, double thickness=0.3, double opacity=0.5)
+        {
+            Border border = new Border();
+            border.BorderThickness = new Thickness(thickness);
+            border.Opacity = opacity;
+            border.BorderBrush = brush;
+            grid.Children.Add(border);
+            return border;
         }
 
         /// <summary>
@@ -383,43 +392,46 @@ namespace SmartPert.View.Pages
         /// </summary>
         private void AddGridBorders()
         {
+            Border border;
+            SolidColorBrush lightbrush = (SolidColorBrush)Application.Current.Resources["PrimaryHueLightBrush"];
             AddGridOuterBorder();
             for (int i = rowStart; i < mainGrid.RowDefinitions.Count; i++)
             {
-                Border border = new Border();
-
                 // Create a primary hue light Brush  
-                SolidColorBrush primaryLight = (SolidColorBrush)Application.Current.Resources["PrimaryHueLightBrush"];
-                border.BorderThickness = new Thickness(0.3);
-                border.Opacity = 0.5;
-                border.BorderBrush = primaryLight;
-
+                border = CreateBorder(mainGrid, lightbrush);
                 Grid.SetRow(border, i);
                 Grid.SetColumnSpan(border, maxInt);
-                mainGrid.Children.Add(border);
+                border = CreateBorder(LeftGrid, lightbrush);
+                Grid.SetRow(border, i);
             }
 
             for (int i = colStart; i < mainGrid.ColumnDefinitions.Count; i++)
             {
-                Border border = new Border();
-
                 // Create a primary hue light Brush  
-                SolidColorBrush primaryLight = (SolidColorBrush)Application.Current.Resources["PrimaryHueLightBrush"];
-                border.BorderThickness = new Thickness(0.3);
-                border.Opacity = 0.5;
                 if (weekendCols.Contains(i))
                 {
+                    border = CreateBorder(mainGrid, lightbrush, opacity: 0.25);
                     border.Background = (SolidColorBrush)Application.Current.Resources["PrimaryHueDarkBrush"];
-                    border.Opacity = 0.25;
-                }
+                } else
+                    border = CreateBorder(mainGrid, lightbrush);
 
-                border.BorderBrush = primaryLight;
                 Grid.SetZIndex(border, 0);
                 Grid.SetColumn(border, i);
                 Grid.SetRow(border, 1);
                 Grid.SetRowSpan(border, maxInt);
-                mainGrid.Children.Add(border);
             }
+        }
+
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if(LeftView.VerticalOffset != e.VerticalOffset)
+                LeftView.ScrollToVerticalOffset(e.VerticalOffset);
+        }
+
+        private void LeftView_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (ScrollViewer.VerticalOffset != e.VerticalOffset)
+                ScrollViewer.ScrollToVerticalOffset(e.VerticalOffset);
         }
     }
 }

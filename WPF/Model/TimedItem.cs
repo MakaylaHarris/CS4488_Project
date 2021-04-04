@@ -356,9 +356,9 @@ namespace SmartPert.Model
             {
                 int days = (StartDate - newStart).Days;
                 StartDate = newStart;
-                MinDuration += days;
-                LikelyDuration += days;
                 MaxDuration += days;
+                LikelyDuration += days;
+                MinDuration += days;
             }
         }
 
