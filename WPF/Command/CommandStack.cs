@@ -12,7 +12,7 @@ namespace SmartPert.Command
     /// Command Stack singleton that maintains the Stack of commands executed
     /// Created 2/2/2021 by Robert Nelson
     /// </summary>
-    class CommandStack : IViewModel
+    public class CommandStack : IViewModel
     {
         private static readonly CommandStack instance = new CommandStack();
         private Stack<ICmd> cmds;
@@ -23,7 +23,6 @@ namespace SmartPert.Command
         {
             cmds = new Stack<ICmd>();
             redoStack = new Stack<ICmd>();
-            Model.Model.Instance.Subscribe(this);
         }
 
         /// <summary>
@@ -33,6 +32,9 @@ namespace SmartPert.Command
         {
             get { return instance; }
         }
+
+        public Stack<ICmd> Cmds { get => cmds; }
+        public Stack<ICmd> RedoStack { get => redoStack;}
 
         #region Command public methods
         // Used by commands only

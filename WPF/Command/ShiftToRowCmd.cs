@@ -55,9 +55,13 @@ namespace SmartPert.Command
         private bool CanShiftToRow()
         {
             // the task can not be a subtask of itself
-            return isValid;
+            return isValid && !dependentOnParents();
         }
 
+        private bool dependentOnParents()
+        {
+            return false;
+        }
 
         private void BeforeExecute()
         {

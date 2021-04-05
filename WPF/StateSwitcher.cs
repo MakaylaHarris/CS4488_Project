@@ -1,4 +1,5 @@
-﻿using SmartPert.Model;
+﻿using SmartPert.Command;
+using SmartPert.Model;
 using SmartPert.View;
 using SmartPert.View.Login;
 using SmartPert.View.Pages;
@@ -182,6 +183,7 @@ namespace SmartPert
         /// </summary>
         public void OnDisconnect()
         {
+            CommandStack.Instance.OnDisconnect();
             Update();
             Main.ShowDBConnectionSettings();
         }
@@ -228,6 +230,7 @@ namespace SmartPert
         /// <param name="p"></param>
         public void OnModelUpdate(Project p)
         {
+            CommandStack.Instance.OnModelUpdate(p);
             Update();
         }
         #endregion

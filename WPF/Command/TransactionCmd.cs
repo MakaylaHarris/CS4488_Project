@@ -14,6 +14,7 @@ namespace SmartPert.Command
     {
         private List<ICmd> cmds;
         int currentCmdId;
+        bool isRedo;
 
         public TransactionCmd()
         {
@@ -21,15 +22,25 @@ namespace SmartPert.Command
             currentCmdId = 0;
         }
 
-        public void Add(ICmd cmd)
+        public void Add(ICmd cmd, bool hasRun=false)
         {
+            // We're trying to add new commands to an action that was already performed
+            if (isRedo)
+                return;
             cmds.Add(cmd);
+            if (hasRun)
+                currentCmdId++;
         }
 
         public bool Run(ICmd cmd)
         {
             if (currentCmdId >= cmds.Count || cmds[currentCmdId] != cmd)
-                throw new InvalidOperationException("Cmd " + cmd.ToString() + " was not expected during transaction");
+            {
+                if (isRedo)
+                    return true; // ignore, we already have the commands we need to run
+                else
+                    throw new InvalidOperationException("Cmd " + cmd.ToString() + " was not expected during transaction");
+            }
             currentCmdId++;
             return cmd.Run(pushStack: false);
         }
@@ -49,16 +60,23 @@ namespace SmartPert.Command
         public override bool Undo()
         {
             bool result = true;
+            isRedo = true;
             for (int i = currentCmdId - 1; i >= 0; i--)
+            {
                 if (!cmds[i].Undo())
-                    return false;
+                {
+                    result = false;
+                    break;
+                }
+                --currentCmdId;
+            }
             return result;
         }
 
         protected override bool Execute()
         {
-            for(; currentCmdId < cmds.Count; currentCmdId++)
-                if (!cmds[currentCmdId].Run(pushStack: false))
+            for(; currentCmdId < cmds.Count; )
+                if (!cmds[currentCmdId++].Run(pushStack: false))
                     return false;
             return true;
         }
