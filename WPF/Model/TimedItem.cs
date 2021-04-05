@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartPert.Command;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -341,8 +342,8 @@ namespace SmartPert.Model
         public void OnChild_Change(TimedItem child)
         {
             OnChild_CompletedDateChange(child.EndDate);
-            OnChild_LikelyDateChange(child.LikelyDate);
             OnChild_MaxEstDateChange(child.MaxEstDate);
+            OnChild_LikelyDateChange(child.LikelyDate);
             OnChild_MinEstDateChange(child.MinEstDate);
             OnChild_StartDateChange(child.StartDate);
         }
@@ -352,13 +353,13 @@ namespace SmartPert.Model
         /// <param name="newStart">the new date</param>
         public void OnChild_StartDateChange(DateTime newStart)
         {
-            if (newStart <= StartDate)
+            if (newStart < StartDate)
             {
                 int days = (StartDate - newStart).Days;
-                StartDate = newStart;
-                MaxDuration += days;
-                LikelyDuration += days;
-                MinDuration += days;
+                if (GetType() == typeof(Task))
+                    new EditTaskCmd(this as Task, Name, newStart, EndDate, LikelyDuration + days, MaxDuration + days, MinDuration + days, Description).Run();
+                else if (GetType() == typeof(Project))
+                    new EditProjectCmd(this as Project, Name, newStart, EndDate, Description, LikelyDuration + days, MaxDuration + days, MinDuration + days).Run();
             }
         }
 
@@ -369,7 +370,14 @@ namespace SmartPert.Model
         public void OnChild_LikelyDateChange(DateTime newLikelyDate)
         {
             if (newLikelyDate > LikelyDate)
-                LikelyDate = newLikelyDate;
+            {
+                int newLikely = (newLikelyDate - StartDate).Days;
+                if (GetType() == typeof(Task))
+                    new EditTaskCmd(this as Task, Name, startDate, EndDate, newLikely, MaxDuration, MinDuration, Description).Run();
+                else if (GetType() == typeof(Project))
+                    new EditProjectCmd(this as Project, Name, startDate, EndDate, Description, newLikely, MaxDuration, MinDuration).Run();
+
+            }
         }
 
         /// <summary>
@@ -379,7 +387,14 @@ namespace SmartPert.Model
         public void OnChild_MaxEstDateChange(DateTime newMaxDate)
         {
             if (newMaxDate > MaxEstDate)
-                MaxEstDate = newMaxDate;
+            {
+                int newMax = (newMaxDate - StartDate).Days;
+                if (GetType() == typeof(Task))
+                    new EditTaskCmd(this as Task, Name, startDate, EndDate, LikelyDuration, newMax, MinDuration, Description).Run();
+                else if (GetType() == typeof(Project))
+                    new EditProjectCmd(this as Project, Name, startDate, EndDate, Description, LikelyDuration, newMax, MinDuration).Run();
+
+            }
         }
 
         /// <summary>
@@ -389,7 +404,14 @@ namespace SmartPert.Model
         public void OnChild_MinEstDateChange(DateTime newMinDate)
         {
             if (newMinDate > MinEstDate)
-                MinEstDate = newMinDate;
+            {
+                int newMin = (newMinDate - StartDate).Days;
+                if (GetType() == typeof(Task))
+                    new EditTaskCmd(this as Task, Name, startDate, EndDate, LikelyDuration, MaxDuration, newMin, Description).Run();
+                else if (GetType() == typeof(Project))
+                    new EditProjectCmd(this as Project, Name, startDate, EndDate, Description, LikelyDuration, MaxDuration, newMin).Run();
+
+            }
         }
 
         /// <summary>
@@ -399,7 +421,13 @@ namespace SmartPert.Model
         public void OnChild_CompletedDateChange(DateTime? completedDate)
         {
             if (completedDate != null && EndDate != null && completedDate > EndDate)
-                EndDate = completedDate;
+            {
+                if (GetType() == typeof(Task))
+                    new EditTaskCmd(this as Task, Name, startDate, completedDate, LikelyDuration, MaxDuration, MinDuration, Description).Run();
+                else if (GetType() == typeof(Project))
+                    new EditProjectCmd(this as Project, Name, startDate, completedDate, Description, LikelyDuration, MaxDuration, MinDuration).Run();
+
+            }
         }
         #endregion
     }

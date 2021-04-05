@@ -334,6 +334,7 @@ namespace SmartPert.Model
             this.dependentEstStartDate = null;
             foreach (Task t in dependencies)
                 t.ResetDependentEstStartDate();
+            NotifyUpdate();
         }
 
         private DateTime? GetDependentEstStartDate()
@@ -364,31 +365,35 @@ namespace SmartPert.Model
             return true;
         }
 
-        private bool IsDependentAncestor(Task t)
+        private bool IsDependentAncestor(Task t, HashSet<Task> checkedTasks=null)
         {
             if (t == this)
                 return true;
+            if (checkedTasks == null)
+                checkedTasks = new HashSet<Task> { this };
+            else
+                checkedTasks.Add(this);
             foreach (Task task in dependentOn)
-                if (task.IsDependentAncestor(t))
+                if (!checkedTasks.Contains(task) && task.IsDependentAncestor(t))
                     return true;
             return false;
         }
 
-        private bool IsDependentDescendant(Task t)
+        private bool IsDependentDescendant(Task t, HashSet<Task> checkedTasks=null)
         {
             if (t == this)
                 return true;
+            if (checkedTasks == null)
+                checkedTasks = new HashSet<Task> { this };
+            else
+                checkedTasks.Add(this);
             foreach (Task task in dependencies)
-                if (task.IsDependentDescendant(t))
+                if (!checkedTasks.Contains(task) && task.IsDependentDescendant(t))
                     return true;
             return false;
         }
 
 
-        public void UpdateDependencies()
-        {
-
-        }
         /// <summary>
         /// Creates a dependency, the parameter is the Root, and the current task is the dependent.
         /// </summary>
@@ -402,7 +407,7 @@ namespace SmartPert.Model
                 DB_AddDependency(dependency);
             dependencies.Add(dependency);
             dependency.dependentOn.Add(this);
-            NotifyUpdate();
+            ResetDependentEstStartDate();
         }
         /// <summary>
         /// Removes a dependency, the parameter is the Root, and the current task is the dependent.
@@ -417,7 +422,7 @@ namespace SmartPert.Model
                 DB_RemoveDependency(dependency);
             dependencies.Remove(dependency);
             dependency.dependentOn.Remove(this);
-            NotifyUpdate();
+            ResetDependentEstStartDate();
         }
         /// <summary>
         /// Calls sproc DeleteDependency that removes all dependencies associated with the task to be deleted

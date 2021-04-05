@@ -30,8 +30,8 @@ namespace SmartPert.Model
         }
 
         #region Project
-        public Project(string name, DateTime start, DateTime? end, string description = "", int id = -1, bool insert = true, bool track=true, IItemObserver observer=null) 
-            : base(name, start, end, description, id, observer)
+        public Project(string name, DateTime start, DateTime? end, string description = "", int id = -1, bool insert = true, bool track=true, IItemObserver observer=null, int likelyDuration=0, int maxDuration=0, int minDuration = 0) 
+            : base(name, start, end, description, id, observer, likelyDuration, maxDuration, minDuration)
         {
             PostInit(insert, track);
         }

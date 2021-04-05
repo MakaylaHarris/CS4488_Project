@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PertTest.DAL;
+using SmartPert.Command;
 using SmartPert.Model;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,18 @@ namespace PertTest.Model
 
             Assert.IsTrue(task.MaxEstDate == sub.MaxEstDate);
             Assert.IsTrue(task.LikelyDate == sub.LikelyDate);
+        }
+
+        [TestMethod]
+        public void Test_UndoAddSubtaskShiftsParentBack()
+        {
+            Task task = project.GetTask("Build Frame");
+            DateTime prevLikely = task.LikelyDate;
+            Task sub = project.GetTask("Seal with Glue");
+            ICmd cmd = new AddSubTaskCmd(task, sub);
+            cmd.Run();
+            CommandStack.Instance.Undo();
+            Assert.AreEqual(prevLikely, task.LikelyDate);
         }
 
         [TestMethod]
