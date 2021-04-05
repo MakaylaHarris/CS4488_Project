@@ -12,13 +12,60 @@ namespace SmartPert.Model
     /// </summary>
     public class Task : TimedItem
     {
+        private static bool CalculateDependentsMaxEstimate;
         private Project project;
         private HashSet<Task> dependencies;
         private HashSet<Task> dependentOn;
+        protected DateTime? dependentEstStartDate;  // Estimated start date based on dependencies
         private Task parentTask;
         private int projectRow;
 
         #region Properties
+        /// <summary>
+        /// Gets the actual (if not null) or estimated end date (based on calculating the dependent's start date or ours, whichever is last)
+        /// </summary>
+        public DateTime ActualOrEstimatedEnd { get
+            {
+                if(endDate == null)
+                {
+                    if (CalculateDependentsMaxEstimate)
+                        return MaxEstStartDate.AddDays(maxDuration);
+                    else
+                        return MaxEstStartDate.AddDays(LikelyDuration);
+                } else
+                {
+                    return (DateTime)endDate;
+                }
+            } 
+        }
+
+        /// <summary>
+        /// This returns the max estimated start date, based on dependents or the start date max date
+        /// </summary>
+        public DateTime MaxEstStartDate
+        {
+            get {
+                DateTime? depEst = DependentEstStartDate;
+                if (depEst != null) {
+                    if (depEst > startDate)
+                        return (DateTime) depEst;
+                }
+                return startDate;
+            }
+        }
+
+        public override DateTime StartDate { get => MaxEstStartDate; set => base.StartDate = value; }
+
+
+        public DateTime? DependentEstStartDate { 
+            get
+            {
+                if (dependentEstStartDate == null)
+                    dependentEstStartDate = GetDependentEstStartDate();
+                return dependentEstStartDate;
+            } 
+        }
+
         /// <summary>
         /// List of Subtasks
         /// </summary>
@@ -46,6 +93,13 @@ namespace SmartPert.Model
             {
                 projectRow = value;
                 DB_UpdateRow();
+            } }
+
+        public static bool CalculateDependentsMaxEstimate1 { get => CalculateDependentsMaxEstimate; 
+            set { 
+                CalculateDependentsMaxEstimate = value;
+                foreach (Task t in DBReader.Instance.Tasks.Values)  // Reset the est start dates
+                    t.dependentEstStartDate = null;
             } }
         #endregion
 
@@ -90,18 +144,20 @@ namespace SmartPert.Model
         #region Property Callbacks
         protected override void AfterStartDateChanged(DateTime dateTime)
         {
+            DateTime likely = LikelyDate, max = MaxEstDate, min = MinEstDate;
             if (parentTask != null)
             {
                 parentTask.OnChild_StartDateChange(dateTime);
-                parentTask.OnChild_LikelyDateChange(LikelyDate);
-                parentTask.OnChild_MaxEstDateChange(MaxEstDate);
-                parentTask.OnChild_MinEstDateChange(MinEstDate);
+                parentTask.OnChild_LikelyDateChange(likely);
+                parentTask.OnChild_MaxEstDateChange(max);
+                parentTask.OnChild_MinEstDateChange(min);
             }
             // Changing the start date also changes all of our estimated duration dates
             project.OnChild_StartDateChange(dateTime);
-            project.OnChild_LikelyDateChange(LikelyDate);
-            project.OnChild_MaxEstDateChange(MaxEstDate);
-            project.OnChild_MinEstDateChange(MinEstDate);
+            project.OnChild_LikelyDateChange(likely);
+            project.OnChild_MaxEstDateChange(max);
+            project.OnChild_MinEstDateChange(min);
+            ResetDependentEstStartDate();
         }
 
         protected override void AfterEndDateChanged(DateTime? newValue)
@@ -109,18 +165,27 @@ namespace SmartPert.Model
             if (parentTask != null)
                 parentTask.OnChild_CompletedDateChange(newValue);
             project.OnChild_CompletedDateChange(newValue);
+            // reset dependent's estimations
+            foreach (Task t in dependencies)
+                t.ResetDependentEstStartDate();
         }
         protected override void AfterLikelyDurationChanged(int newValue)
         {
             if (parentTask != null)
                 parentTask.OnChild_LikelyDateChange(LikelyDate);
             project.OnChild_LikelyDateChange(LikelyDate);
+            if(!CalculateDependentsMaxEstimate)
+                foreach (Task t in dependencies)
+                    t.ResetDependentEstStartDate();
         }
         protected override void AfterMaxDurationChanged(int newValue)
         {
             if (parentTask != null)
                 parentTask.OnChild_MaxEstDateChange(MaxEstDate);
             project.OnChild_MaxEstDateChange(MaxEstDate);
+            if(CalculateDependentsMaxEstimate)
+                foreach (Task t in dependencies)
+                    t.ResetDependentEstStartDate();
         }
         protected override void AfterMinDurationChanged(int newValue)
         {
@@ -263,6 +328,28 @@ namespace SmartPert.Model
         #endregion
 
         #region Dependencies
+        // Resets estimated dependent date for task, and all of its dependents
+        public void ResetDependentEstStartDate()
+        {
+            this.dependentEstStartDate = null;
+            foreach (Task t in dependencies)
+                t.ResetDependentEstStartDate();
+        }
+
+        private DateTime? GetDependentEstStartDate()
+        {
+            if (dependentOn.Count <= 0)
+                return null;
+            DateTime start = DateTime.MinValue;
+            foreach(Task t in dependentOn)
+            {
+                DateTime compare = t.ActualOrEstimatedEnd;
+                if (compare > start)
+                    start = compare;
+            }
+            return start;
+        }
+
         /// <summary>
         /// Determines if the dependency can be added, checking that its not a subtask or parent and not going to create circular dependencies
         /// </summary>
