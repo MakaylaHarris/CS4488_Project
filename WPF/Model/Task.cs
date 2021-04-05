@@ -161,26 +161,6 @@ namespace SmartPert.Model
             return !IsDependentDescendant(t) && !IsDependentAncestor(t);
         }
 
-        private bool IsDependentAncestor(Task t)
-        {
-            if (t == this)
-                return true;
-            foreach (Task task in dependentOn)
-                if (task.IsDependentAncestor(t))
-                    return true;
-            return false;
-        }
-
-        private bool IsDependentDescendant(Task t)
-        {
-            if (t == this)
-                return true;
-            foreach (Task task in dependencies)
-                if (task.IsDependentDescendant(t))
-                    return true;
-            return false;
-        }
-
         /// <summary>
         /// Updates a tasks parent by removing it from its current parent and adding it as subtask to the new one
         /// </summary>
@@ -283,6 +263,41 @@ namespace SmartPert.Model
         #endregion
 
         #region Dependencies
+        /// <summary>
+        /// Determines if the dependency can be added, checking that its not a subtask or parent and not going to create circular dependencies
+        /// </summary>
+        /// <param name="dependency">the dependency to add</param>
+        /// <returns>true if it can</returns>
+        public bool CanAddDependency(Task dependency)
+        {
+            if (IsDependentAncestor(dependency) || IsDependentDescendant(dependency))
+                return false;
+            if (TaskIsAncestor(dependency) || dependency.TaskIsAncestor(this))
+                return false;
+            return true;
+        }
+
+        private bool IsDependentAncestor(Task t)
+        {
+            if (t == this)
+                return true;
+            foreach (Task task in dependentOn)
+                if (task.IsDependentAncestor(t))
+                    return true;
+            return false;
+        }
+
+        private bool IsDependentDescendant(Task t)
+        {
+            if (t == this)
+                return true;
+            foreach (Task task in dependencies)
+                if (task.IsDependentDescendant(t))
+                    return true;
+            return false;
+        }
+
+
         public void UpdateDependencies()
         {
 

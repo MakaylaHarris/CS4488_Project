@@ -25,8 +25,7 @@ namespace SmartPert.Command
 
         public static void BeginTransaction(ICmd cmd=null, bool hasRun=false)
         {
-            if(transaction == null)
-                transaction = new TransactionCmd();
+            transaction = new TransactionCmd();
             if (cmd != null)
                 transaction.Add(cmd, hasRun);
         }
