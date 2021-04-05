@@ -31,7 +31,7 @@ EXEC [dbo].CreateTask 'Secure with Screws', 'Secure all sides with screws', 1, 2
 EXEC [dbo].CreateDependency @RootId, @ResultId;
 set @RootId = (SELECT @ResultId);
 
-EXEC [dbo].CreateTask 'Seal with Glue', 'Seal all joints with adhesive', 1, 7, 14, '4/21/2021', null, @projectId, @username, @CreationDate, @Result, @ResultId out, @ChildRowNum, 0, 0;
+EXEC [dbo].CreateTask 'Seal with Glue', 'Seal all joints with adhesive', 1, 14, 21, '4/21/2021', null, @projectId, @username, @CreationDate, @Result, @ResultId out, @ChildRowNum, 0, 0;
 EXEC [dbo].CreateDependency @RootId, @ResultId;
 
 EXEC [dbo].CreateTask 'Paint', 'Paint the boat with waterproof paint so that it will withstand the elements', 1, 7, 14, '4/15/2021', null, @projectId, @username, @CreationDate, @Result, @ResultId out, @ChildRowNum, 0, 0;

@@ -300,6 +300,10 @@ namespace SmartPert.View.Controls
         #endregion
 
         #region Public Methods
+        public override bool CanConnect(Connectable target, Anchor targetAnchor, bool isReceiver)
+        {
+            return base.CanConnect(target, targetAnchor, isReceiver) && (isReceiver || (!isReceiver && task.CanAddDependency(((TaskControl)target).Task)));
+        }
         /// <summary>
         /// Connect dependencies
         /// </summary>

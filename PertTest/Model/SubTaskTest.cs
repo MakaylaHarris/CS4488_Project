@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PertTest.DAL;
+using SmartPert.Command;
 using SmartPert.Model;
 using System;
 using System.Collections.Generic;
@@ -36,8 +37,8 @@ namespace PertTest.Model
         [TestMethod]
         public void Test_AddSubtaskShiftsParentStartDate()
         {
-            Task task = project.SortedTasks.Find(x => x.Name == "Water Test");
-            Task sub = project.SortedTasks.Find(x => x.Name == "Acquire Plans");
+            Task task = project.SortedTasks.Find(x => x.Name == "Acquire Plans");
+            Task sub = new Task("Stakeholder sign off", task.StartDate.AddDays(-2), null, 2);
             DateTime endEstimated = task.MaxEstDate;
             task.AddSubTask(sub);
 
@@ -54,8 +55,20 @@ namespace PertTest.Model
             Task sub = project.GetTask("Seal with Glue");
             task.AddSubTask(sub);
 
-            Assert.IsTrue(task.MaxEstDate == sub.MaxEstDate);
-            Assert.IsTrue(task.LikelyDate == sub.LikelyDate);
+            Assert.IsTrue(task.MaxEstDate >= sub.MaxEstDate);
+            Assert.IsTrue(task.LikelyDate >= sub.LikelyDate);
+        }
+
+        [TestMethod]
+        public void Test_UndoAddSubtaskShiftsParentBack()
+        {
+            Task task = project.GetTask("Build Frame");
+            DateTime prevLikely = task.LikelyDate;
+            Task sub = project.GetTask("Seal with Glue");
+            ICmd cmd = new AddSubTaskCmd(task, sub);
+            cmd.Run();
+            CommandStack.Instance.Undo();
+            Assert.AreEqual(prevLikely, task.LikelyDate);
         }
 
         [TestMethod]

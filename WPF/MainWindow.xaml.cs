@@ -20,9 +20,7 @@ using SmartPert.View.Windows;
 using MessageBox = System.Windows.MessageBox;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 
-/// <summary>
-/// Name space for the SmartPert Pert Application
-/// </summary>
+
 namespace SmartPert
 {
     /// <summary>

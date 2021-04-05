@@ -152,7 +152,8 @@ namespace SmartPert.View.Windows
             bool result = Validate();
             if (result && isEditMode)
             {
-                new EditProjectCmd(Project, PrjName.Text, (DateTime) StartDatePicker.SelectedDate, EndDatePicker.SelectedDate, PrjDescription.Text).Run();
+                new EditProjectCmd(Project, PrjName.Text, (DateTime) StartDatePicker.SelectedDate, EndDatePicker.SelectedDate, PrjDescription.Text, 
+                    project.LikelyDuration, project.MaxDuration, project.MinDuration).Run();
             }
             return result;
         }

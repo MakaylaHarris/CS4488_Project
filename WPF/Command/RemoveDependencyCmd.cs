@@ -29,8 +29,12 @@ namespace SmartPert.Command
 
         public override bool Undo()
         {
-            parent.AddDependency(dependent);
-            return true;
+            if (parent.CanAddDependency(dependent))
+            {
+                parent.AddDependency(dependent);
+                return true;
+            }
+            return false;
         }
 
         public override void OnIdUpdate(TimedItem old, TimedItem newItem)

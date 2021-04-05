@@ -12,12 +12,60 @@ namespace SmartPert.Model
     /// </summary>
     public class Task : TimedItem
     {
+        private static bool CalculateDependentsMaxEstimate;
         private Project project;
         private HashSet<Task> dependencies;
+        private HashSet<Task> dependentOn;
+        protected DateTime? dependentEstStartDate;  // Estimated start date based on dependencies
         private Task parentTask;
         private int projectRow;
 
         #region Properties
+        /// <summary>
+        /// Gets the actual (if not null) or estimated end date (based on calculating the dependent's start date or ours, whichever is last)
+        /// </summary>
+        public DateTime ActualOrEstimatedEnd { get
+            {
+                if(endDate == null)
+                {
+                    if (CalculateDependentsMaxEstimate)
+                        return MaxEstStartDate.AddDays(maxDuration);
+                    else
+                        return MaxEstStartDate.AddDays(LikelyDuration);
+                } else
+                {
+                    return (DateTime)endDate;
+                }
+            } 
+        }
+
+        /// <summary>
+        /// This returns the max estimated start date, based on dependents or the start date max date
+        /// </summary>
+        public DateTime MaxEstStartDate
+        {
+            get {
+                DateTime? depEst = DependentEstStartDate;
+                if (depEst != null) {
+                    if (depEst > startDate)
+                        return (DateTime) depEst;
+                }
+                return startDate;
+            }
+        }
+
+        public override DateTime StartDate { get => MaxEstStartDate; set => base.StartDate = value; }
+
+
+        public DateTime? DependentEstStartDate { 
+            get
+            {
+                if (dependentEstStartDate == null)
+                    dependentEstStartDate = GetDependentEstStartDate();
+                return dependentEstStartDate;
+            } 
+        }
+
         /// <summary>
         /// List of Subtasks
         /// </summary>
@@ -36,6 +84,8 @@ namespace SmartPert.Model
             }
         }
         public HashSet<Task> Dependencies { get => dependencies; }
+        public HashSet<Task> DependentOn { get => dependentOn; }
+
         public Task ParentTask { get => parentTask; }
 
         public int ProjectRow { get => projectRow;
@@ -43,6 +93,13 @@ namespace SmartPert.Model
             {
                 projectRow = value;
                 DB_UpdateRow();
+            } }
+
+        public static bool CalculateDependentsMaxEstimate1 { get => CalculateDependentsMaxEstimate; 
+            set { 
+                CalculateDependentsMaxEstimate = value;
+                foreach (Task t in DBReader.Instance.Tasks.Values)  // Reset the est start dates
+                    t.dependentEstStartDate = null;
             } }
         #endregion
 
@@ -67,9 +124,10 @@ namespace SmartPert.Model
             : base(name, start, end, description, id, observer, duration, maxDuration, minDuration)
         {
             this.Project = project != null ? project : Model.Instance.GetProject();
-            if (this.project == null)
-                throw new ArgumentNullException("project");
+            //if (this.project == null)
+            //    throw new ArgumentNullException("project");
             dependencies = new HashSet<Task>();
+            dependentOn = new HashSet<Task>();
             projectRow = 0;
             PostInit(insert, track);
         }
@@ -77,7 +135,8 @@ namespace SmartPert.Model
         public override void PostInit(bool insert = true, bool track = true)
         {
             base.PostInit(insert, track);
-            project.AddTask(this);
+            if(project != null)
+                project.AddTask(this);
         }
 
         #endregion
@@ -85,43 +144,61 @@ namespace SmartPert.Model
         #region Property Callbacks
         protected override void AfterStartDateChanged(DateTime dateTime)
         {
+            DateTime likely = LikelyDate, max = MaxEstDate, min = MinEstDate;
             if (parentTask != null)
             {
                 parentTask.OnChild_StartDateChange(dateTime);
-                parentTask.OnChild_LikelyDateChange(LikelyDate);
-                parentTask.OnChild_MaxEstDateChange(MaxEstDate);
-                parentTask.OnChild_MinEstDateChange(MinEstDate);
+                parentTask.OnChild_LikelyDateChange(likely);
+                parentTask.OnChild_MaxEstDateChange(max);
+                parentTask.OnChild_MinEstDateChange(min);
             }
             // Changing the start date also changes all of our estimated duration dates
-            project.OnChild_StartDateChange(dateTime);
-            project.OnChild_LikelyDateChange(LikelyDate);
-            project.OnChild_MaxEstDateChange(MaxEstDate);
-            project.OnChild_MinEstDateChange(MinEstDate);
+            if(project != null)
+            {
+                project.OnChild_StartDateChange(dateTime);
+                project.OnChild_LikelyDateChange(likely);
+                project.OnChild_MaxEstDateChange(max);
+                project.OnChild_MinEstDateChange(min);
+            }
+            ResetDependentEstStartDate();
         }
 
         protected override void AfterEndDateChanged(DateTime? newValue)
         {
             if (parentTask != null)
                 parentTask.OnChild_CompletedDateChange(newValue);
-            project.OnChild_CompletedDateChange(newValue);
+            if(project != null)
+                project.OnChild_CompletedDateChange(newValue);
+            // reset dependent's estimations
+            foreach (Task t in dependencies)
+                t.ResetDependentEstStartDate();
         }
         protected override void AfterLikelyDurationChanged(int newValue)
         {
             if (parentTask != null)
                 parentTask.OnChild_LikelyDateChange(LikelyDate);
-            project.OnChild_LikelyDateChange(LikelyDate);
+            if(project != null)
+                project.OnChild_LikelyDateChange(LikelyDate);
+            if(!CalculateDependentsMaxEstimate)
+                foreach (Task t in dependencies)
+                    t.ResetDependentEstStartDate();
         }
         protected override void AfterMaxDurationChanged(int newValue)
         {
             if (parentTask != null)
                 parentTask.OnChild_MaxEstDateChange(MaxEstDate);
-            project.OnChild_MaxEstDateChange(MaxEstDate);
+            if(project != null)
+                project.OnChild_MaxEstDateChange(MaxEstDate);
+            if(CalculateDependentsMaxEstimate)
+                foreach (Task t in dependencies)
+                    t.ResetDependentEstStartDate();
         }
         protected override void AfterMinDurationChanged(int newValue)
         {
             if (parentTask != null)
                 parentTask.OnChild_MinEstDateChange(MinEstDate);
-            project.OnChild_MinEstDateChange(MinEstDate);
+            if(project != null)
+                project.OnChild_MinEstDateChange(MinEstDate);
         }
         #endregion
 
@@ -141,6 +218,19 @@ namespace SmartPert.Model
                 parent = parent.ParentTask;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Determines if a task can be added as a subtask
+        /// </summary>
+        /// <param name="t">The task to add</param>
+        /// <returns>true if it can add it</returns>
+        public bool CanAddSubTask(Task t)
+        {
+            if (TaskIsAncestor(t)) // Can not add a subtask that is ancestor of this
+                return false;
+            // Cannot add task that is dependent
+            return !IsDependentDescendant(t) && !IsDependentAncestor(t);
         }
 
         /// <summary>
@@ -174,7 +264,8 @@ namespace SmartPert.Model
                 t.parentTask = this;
                 tasks.Add(t);
                 OnChild_Change(t);
-                t.DB_InsertSubTask();
+                if(isTracked)
+                    t.DB_InsertSubTask();
                 NotifyUpdate();
                 return true;
             }
@@ -190,7 +281,8 @@ namespace SmartPert.Model
             if (tasks.Remove(t))
             {
                 t.parentTask = null;
-                t.DB_DeleteSubTask();
+                if(isTracked)
+                    t.DB_DeleteSubTask();
                 NotifyUpdate();
                 return true;
             }
@@ -211,19 +303,13 @@ namespace SmartPert.Model
             if (!workers.Contains(worker))
             {
                 // Attempt to add...
-                try
+                if(!isTracked || DB_AddWorker(worker))
                 {
                     Project.AddWorker(worker);  // Add to project too
-                    SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.Parameters.AddWithValue("@taskId", this.Id);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
                     workers.Add(worker);
                     added = true;
                     NotifyUpdate();
                 }
-                catch (SqlException) { }
             }
             return added;
         }
@@ -238,27 +324,85 @@ namespace SmartPert.Model
             bool removed = false;
             if (workers.Contains(worker))
             {
-                try
-                {
-                    SqlCommand command = OpenConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username");
-                    command.Parameters.AddWithValue("@taskId", this.Id);
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
+                if(!isTracked || DB_RemoveWorker(worker)) { 
                     workers.Remove(worker);
-                    removed = true;
                     NotifyUpdate();
-                } catch(SqlException) { }
+                    removed = true;
+                }
             }
             return removed;
         }
         #endregion
 
         #region Dependencies
-        public void UpdateDependencies()
+        // Resets estimated dependent date for task, and all of its dependents
+        public void ResetDependentEstStartDate()
         {
-
+            this.dependentEstStartDate = null;
+            foreach (Task t in dependencies)
+                t.ResetDependentEstStartDate();
+            NotifyUpdate();
         }
+
+        private DateTime? GetDependentEstStartDate()
+        {
+            if (dependentOn.Count <= 0)
+                return null;
+            DateTime start = DateTime.MinValue;
+            foreach(Task t in dependentOn)
+            {
+                DateTime compare = t.ActualOrEstimatedEnd;
+                if (compare > start)
+                    start = compare;
+            }
+            return start;
+        }
+
+        /// <summary>
+        /// Determines if the dependency can be added, checking that its not a subtask or parent and not going to create circular dependencies
+        /// </summary>
+        /// <param name="dependency">the dependency to add</param>
+        /// <returns>true if it can</returns>
+        public bool CanAddDependency(Task dependency)
+        {
+            if (IsDependentAncestor(dependency) || IsDependentDescendant(dependency))
+                return false;
+            if (TaskIsAncestor(dependency) || dependency.TaskIsAncestor(this))
+                return false;
+            return true;
+        }
+
+        private bool IsDependentAncestor(Task t, HashSet<Task> checkedTasks=null)
+        {
+            if (t == this)
+                return true;
+            if (checkedTasks == null)
+                checkedTasks = new HashSet<Task> { this };
+            else
+                checkedTasks.Add(this);
+            foreach (Task task in dependentOn)
+            {
+                if (!checkedTasks.Contains(task) && task.IsDependentAncestor(t, checkedTasks))
+                    return true;
+            }
+            return false;
+        }
+
+        private bool IsDependentDescendant(Task t, HashSet<Task> checkedTasks=null)
+        {
+            if (t == this)
+                return true;
+            if (checkedTasks == null)
+                checkedTasks = new HashSet<Task> { this };
+            else
+                checkedTasks.Add(this);
+            foreach (Task task in dependencies)
+                if (!checkedTasks.Contains(task) && task.IsDependentDescendant(t, checkedTasks))
+                    return true;
+            return false;
+        }
+
+
         /// <summary>
         /// Creates a dependency, the parameter is the Root, and the current task is the dependent.
         /// </summary>
@@ -268,16 +412,11 @@ namespace SmartPert.Model
             {
                 throw new Exception("Dependency already exists");
             }
-
+            if (isTracked)
+                DB_AddDependency(dependency);
             dependencies.Add(dependency);
-
-            string query = "EXEC CreateDependency @RootId, @DependentId";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@RootId", this.Id);
-            command.Parameters.AddWithValue("@DependentId", dependency.Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
-            NotifyUpdate();
+            dependency.dependentOn.Add(this);
+            ResetDependentEstStartDate();
         }
         /// <summary>
         /// Removes a dependency, the parameter is the Root, and the current task is the dependent.
@@ -288,31 +427,92 @@ namespace SmartPert.Model
                 {
                 throw new Exception("Dependency does not exist between these two tasks");
                 }
+            if (isTracked)
+                DB_RemoveDependency(dependency);
             dependencies.Remove(dependency);
-            string query = "EXEC RemoveDependency @RootId, @DependentId";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@RootId", this.Id);
-            command.Parameters.AddWithValue("@DependentId", dependency.Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
-            NotifyUpdate();
+            dependency.dependentOn.Remove(this);
+            ResetDependentEstStartDate();
         }
         /// <summary>
         /// Calls sproc DeleteDependency that removes all dependencies associated with the task to be deleted
         /// </summary>
         public void DeleteAllDependencies(Task delTask)
         {
+            foreach (Task t in dependencies)
+                t.dependentOn.Remove(this);
             dependencies.Clear();
-            string query = "EXEC DeleteDependency @taskId";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@taskId", delTask.Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            if(isTracked)
+            {
+                string query = "EXEC DeleteDependency @taskId";
+                SqlCommand command = OpenConnection(query);
+                command.Parameters.AddWithValue("@taskId", delTask.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+            }
             NotifyUpdate();
         }
         #endregion
 
         #region Database Methods
+        private bool DB_RemoveDependency(Task dependency)
+        {
+            try
+            {
+                string query = "EXEC RemoveDependency @RootId, @DependentId";
+                SqlCommand command = OpenConnection(query);
+                command.Parameters.AddWithValue("@RootId", this.Id);
+                command.Parameters.AddWithValue("@DependentId", dependency.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+                return true;
+            } catch(SqlException) { }
+            return false;
+        }
+
+        private bool DB_AddDependency(Task dependency)
+        {
+            try
+            {
+                string query = "EXEC CreateDependency @RootId, @DependentId";
+                SqlCommand command = OpenConnection(query);
+                command.Parameters.AddWithValue("@RootId", this.Id);
+                command.Parameters.AddWithValue("@DependentId", dependency.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+                return true;
+            } catch(SqlException) { }
+            return false;
+        }
+
+        private bool DB_AddWorker(User worker)
+        {
+            try
+            {
+                SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
+                command.Parameters.AddWithValue("@username", worker.Username);
+                command.Parameters.AddWithValue("@taskId", this.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+                return true;
+            } catch(SqlException)
+            { }
+            return false;
+        }
+        private bool DB_RemoveWorker(User worker)
+        {
+            try
+            {
+                SqlCommand command = OpenConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username");
+                command.Parameters.AddWithValue("@taskId", this.Id);
+                command.Parameters.AddWithValue("@username", worker.Username);
+                command.ExecuteNonQuery();
+                CloseConnection();
+                return true;
+            }
+            catch (SqlException) { }
+            return false;
+        }
+
         private void DB_UpdateRow()
         {
             string query = "UPDATE dbo.[Task] SET ProjectRow=" + projectRow + " WHERE TaskId=" + Id + ";";
@@ -530,6 +730,23 @@ namespace SmartPert.Model
             }
         }
 
+        /// <summary>
+        /// Updates dependencies (dbreader only)
+        /// </summary>
+        /// <param name="updatedDependentOn">updated</param>
+        public void DB_UpdateDependentOn(HashSet<Task> updatedDependentOn)
+        {
+            if (updatedDependentOn == null)
+            {
+                dependentOn.Clear();
+                isUpdated = true;
+            }
+            else if (!dependentOn.SetEquals(updatedDependentOn))
+            {
+                dependentOn = updatedDependentOn;
+                isUpdated = true;
+            }
+        }
         #endregion
 
         /// <summary>

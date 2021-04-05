@@ -33,6 +33,7 @@ namespace SmartPert.Model
         private bool isOutdated;    // Out of date object (not tracked by model)
         private bool isDeleted;     // Set when item is gone from database
         protected bool isUpdated;     // Set during updating, if it has updated
+        protected bool isTracked;     // Set in PostInit, whether or not to track this item
         private bool isUpdating;    // Set during an update
         private List<IItemObserver> observers;
 
@@ -42,6 +43,7 @@ namespace SmartPert.Model
         /// </summary>
         public IDBItem(IItemObserver observer=null)
         {
+            isTracked = true;
             observers = new List<IItemObserver>();
             if (observer != null)
                 Subscribe(observer);
@@ -62,13 +64,17 @@ namespace SmartPert.Model
                 try
                 {
                     DBReader.Instance.TrackItem(this);
-                } catch(ArgumentException)
+                }
+                catch (ArgumentException)
                 {
                     throw new DuplicateKeyError("Error creating " + this.ToString() + ", duplicate item exists with same primary key");
                 }
             }
             else
+            {
                 isOutdated = true;
+                isTracked = false;
+            }
         }
         #endregion
 
@@ -196,7 +202,8 @@ namespace SmartPert.Model
         {
             if (IsDeleted || IsOutdated)
                 throw new ItemDeletedException("Unable to delete deleted item");
-            PerformDelete();
+            if(isTracked)
+                PerformDelete();
             IsDeleted = true;
         }
 
@@ -257,6 +264,11 @@ namespace SmartPert.Model
         {
             if (isUpdating)  // Triggered while updating from database (no update needed)
                 return;
+            if (!isTracked)
+            {
+                NotifyUpdate();
+                return;
+            }
             if (IsDeleted || IsOutdated)
                 throw new ItemDeletedException("Unable to update deleted item");
             PerformUpdate();
@@ -270,6 +282,8 @@ namespace SmartPert.Model
         /// <returns>SqlCommand to add params and/or execute</returns>
         protected SqlCommand OpenConnection(string query)
         {
+            if (!isTracked || IsOutdated)
+                throw new InvalidOperationException("Cannot perform database updates with untracked item!");
             connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
             connection.Open();
             return new SqlCommand(query, connection);
