@@ -465,7 +465,7 @@ namespace SmartPert.Model
                 command.ExecuteNonQuery();
                 CloseConnection();
                 return true;
-            } catch(SqlException e) { }
+            } catch(SqlException) { }
             return false;
         }
 
@@ -494,7 +494,7 @@ namespace SmartPert.Model
                 command.ExecuteNonQuery();
                 CloseConnection();
                 return true;
-            } catch(SqlException s)
+            } catch(SqlException)
             { }
             return false;
         }

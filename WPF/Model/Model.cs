@@ -70,13 +70,13 @@ namespace SmartPert.Model
         public Project CreateProject(string name, DateTime start, DateTime? end, string description = "")
         {
             // Try to create
-            //try
-            //{
+            try
+            {
                 Project project = new Project(name, start, end, description);
                 reader.SetProject(project);
                 return project;
-            //}
-            //catch (Exception) {}
+            }
+            catch (Exception) { }
             return null;
         }
 
