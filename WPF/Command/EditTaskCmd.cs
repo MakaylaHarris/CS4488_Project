@@ -41,8 +41,8 @@ namespace SmartPert.Command
             toEdit.Name = name;
             toEdit.StartDate = start;
             toEdit.EndDate = end;
-            toEdit.LikelyDuration = likelyDuration;
             toEdit.MaxDuration = maxDuration;
+            toEdit.LikelyDuration = likelyDuration;
             toEdit.MinDuration = minDuration;
             toEdit.Description = description;
             return true;

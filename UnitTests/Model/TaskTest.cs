@@ -65,8 +65,8 @@ namespace UnitTests.Model
         [TestMethod]
         public void TestCannotAddSubtask()
         {
-            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false);
-            Task parent = new Task("Bar", DateTime.Now, null, 5, insert: false, track: false);
+            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false, id: -5);
+            Task parent = new Task("Bar", DateTime.Now, null, 5, insert: false, track: false, id: -4);
             parent.AddSubTask(task);
             Assert.IsFalse(parent.CanAddDependency(task));
             Assert.IsFalse(task.CanAddDependency(parent));
@@ -75,9 +75,9 @@ namespace UnitTests.Model
         [TestMethod]
         public void TestCannotCreateCircularDependents()
         {
-            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false);
-            Task parent = new Task("Bar", DateTime.Now, null, 5, insert: false, track: false);
-            Task t = new Task("Foxo", DateTime.Now, null, 5, insert: false, track: false);
+            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false, id: -5);
+            Task parent = new Task("Bar", DateTime.Now, null, 5, insert: false, track: false, id: -4);
+            Task t = new Task("Foxo", DateTime.Now, null, 5, insert: false, track: false, id: -3);
             parent.AddDependency(task);
             task.AddDependency(t);
 
@@ -88,8 +88,8 @@ namespace UnitTests.Model
         [TestMethod]
         public void TestCanAddNew()
         {
-            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false);
-            Task parent = new Task("Bar", DateTime.Now, null, 5, insert: false, track: false);
+            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false, id: -5);
+            Task parent = new Task("Bar", DateTime.Now, null, 5, insert: false, track: false, id: -4);
             Assert.IsTrue(parent.CanAddDependency(task));
         }
     }
@@ -113,8 +113,8 @@ namespace UnitTests.Model
         [TestMethod]
         public void TestCannotAddDependentSubTask()
         {
-            Task parent = new Task("Parent", DateTime.Now, null, 5, insert: false, track: false);
-            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false);
+            Task parent = new Task("Parent", DateTime.Now, null, 5, insert: false, track: false, id: -5);
+            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false, id: -4);
             parent.AddDependency(task);
 
             Assert.IsFalse(parent.CanAddSubTask(task));

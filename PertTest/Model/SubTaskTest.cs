@@ -37,8 +37,8 @@ namespace PertTest.Model
         [TestMethod]
         public void Test_AddSubtaskShiftsParentStartDate()
         {
-            Task task = project.SortedTasks.Find(x => x.Name == "Water Test");
-            Task sub = project.SortedTasks.Find(x => x.Name == "Acquire Plans");
+            Task task = project.SortedTasks.Find(x => x.Name == "Acquire Plans");
+            Task sub = new Task("Stakeholder sign off", task.StartDate.AddDays(-2), null, 2);
             DateTime endEstimated = task.MaxEstDate;
             task.AddSubTask(sub);
 
@@ -55,8 +55,8 @@ namespace PertTest.Model
             Task sub = project.GetTask("Seal with Glue");
             task.AddSubTask(sub);
 
-            Assert.IsTrue(task.MaxEstDate == sub.MaxEstDate);
-            Assert.IsTrue(task.LikelyDate == sub.LikelyDate);
+            Assert.IsTrue(task.MaxEstDate >= sub.MaxEstDate);
+            Assert.IsTrue(task.LikelyDate >= sub.LikelyDate);
         }
 
         [TestMethod]

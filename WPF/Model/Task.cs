@@ -153,10 +153,13 @@ namespace SmartPert.Model
                 parentTask.OnChild_MinEstDateChange(min);
             }
             // Changing the start date also changes all of our estimated duration dates
-            project.OnChild_StartDateChange(dateTime);
-            project.OnChild_LikelyDateChange(likely);
-            project.OnChild_MaxEstDateChange(max);
-            project.OnChild_MinEstDateChange(min);
+            if(project != null)
+            {
+                project.OnChild_StartDateChange(dateTime);
+                project.OnChild_LikelyDateChange(likely);
+                project.OnChild_MaxEstDateChange(max);
+                project.OnChild_MinEstDateChange(min);
+            }
             ResetDependentEstStartDate();
         }
 
@@ -164,7 +167,8 @@ namespace SmartPert.Model
         {
             if (parentTask != null)
                 parentTask.OnChild_CompletedDateChange(newValue);
-            project.OnChild_CompletedDateChange(newValue);
+            if(project != null)
+                project.OnChild_CompletedDateChange(newValue);
             // reset dependent's estimations
             foreach (Task t in dependencies)
                 t.ResetDependentEstStartDate();
@@ -173,7 +177,8 @@ namespace SmartPert.Model
         {
             if (parentTask != null)
                 parentTask.OnChild_LikelyDateChange(LikelyDate);
-            project.OnChild_LikelyDateChange(LikelyDate);
+            if(project != null)
+                project.OnChild_LikelyDateChange(LikelyDate);
             if(!CalculateDependentsMaxEstimate)
                 foreach (Task t in dependencies)
                     t.ResetDependentEstStartDate();
@@ -182,7 +187,8 @@ namespace SmartPert.Model
         {
             if (parentTask != null)
                 parentTask.OnChild_MaxEstDateChange(MaxEstDate);
-            project.OnChild_MaxEstDateChange(MaxEstDate);
+            if(project != null)
+                project.OnChild_MaxEstDateChange(MaxEstDate);
             if(CalculateDependentsMaxEstimate)
                 foreach (Task t in dependencies)
                     t.ResetDependentEstStartDate();
@@ -191,7 +197,8 @@ namespace SmartPert.Model
         {
             if (parentTask != null)
                 parentTask.OnChild_MinEstDateChange(MinEstDate);
-            project.OnChild_MinEstDateChange(MinEstDate);
+            if(project != null)
+                project.OnChild_MinEstDateChange(MinEstDate);
         }
         #endregion
 
@@ -374,8 +381,10 @@ namespace SmartPert.Model
             else
                 checkedTasks.Add(this);
             foreach (Task task in dependentOn)
-                if (!checkedTasks.Contains(task) && task.IsDependentAncestor(t))
+            {
+                if (!checkedTasks.Contains(task) && task.IsDependentAncestor(t, checkedTasks))
                     return true;
+            }
             return false;
         }
 
@@ -388,7 +397,7 @@ namespace SmartPert.Model
             else
                 checkedTasks.Add(this);
             foreach (Task task in dependencies)
-                if (!checkedTasks.Contains(task) && task.IsDependentDescendant(t))
+                if (!checkedTasks.Contains(task) && task.IsDependentDescendant(t, checkedTasks))
                     return true;
             return false;
         }
