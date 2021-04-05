@@ -54,6 +54,8 @@ namespace SmartPert.Command
 
         protected override bool Execute()
         {
+            if (!parent.CanAddSubTask(subtask))
+                return false;
             if(subtask.ParentTask != null)      // Then remove
             {
                 detach = true;

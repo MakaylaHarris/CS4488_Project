@@ -23,6 +23,7 @@ namespace SmartPert.Model
         private Dictionary<int, HashSet<User>> projectWorkers;
         private Dictionary<int, HashSet<User>> taskWorkers;
         private Dictionary<int, HashSet<Task>> dependencies;
+        private Dictionary<int, HashSet<Task>> dependentOn;
         private Dictionary<int, HashSet<Task>> subtasks;
 
         private DBPoller polling;
@@ -86,6 +87,7 @@ namespace SmartPert.Model
             projectWorkers = null;
             taskWorkers = null;
             dependencies = null;
+            dependentOn = null;
             subtasks = null;
             receiver = null;
         }
@@ -99,6 +101,7 @@ namespace SmartPert.Model
             projectWorkers = new Dictionary<int, HashSet<User>>();
             taskWorkers = new Dictionary<int, HashSet<User>>();
             dependencies = new Dictionary<int, HashSet<Task>>();
+            dependentOn = new Dictionary<int, HashSet<Task>>();
             subtasks = new Dictionary<int, HashSet<Task>>();
             SaveSettings = true;
             isUpdating = false;
@@ -220,14 +223,20 @@ namespace SmartPert.Model
         {
             // Grab the new data
             Dictionary<int, HashSet<Task>> newDepend = new Dictionary<int, HashSet<Task>>();
+            Dictionary<int, HashSet<Task>> newDependOn = new Dictionary<int, HashSet<Task>>();
             HashSet<Task> tmp;
             SqlDataReader reader = ReadTable("Dependency");
             while(reader.Read())
             {
                 int rootId = (int) reader["RootId"];
+                int dependentId = (int)reader["DependentId"];
                 if (!newDepend.TryGetValue(rootId, out tmp))
                     newDepend[rootId] = tmp = new HashSet<Task>();
-                tmp.Add(idToTask[(int)reader["DependentId"]]);
+                tmp.Add(idToTask[dependentId]);
+
+                if (!newDependOn.TryGetValue(dependentId, out tmp))
+                    newDependOn[dependentId] = tmp = new HashSet<Task>();
+                tmp.Add(idToTask[rootId]);
             }
             reader.Close();
 
@@ -238,6 +247,13 @@ namespace SmartPert.Model
                     if(idToTask.ContainsKey(key))
                         idToTask[key].DB_UpdateDependencies(null);
             }
+            foreach(int key in dependentOn.Keys)
+            {
+                if (!newDependOn.ContainsKey(key))
+                    if (idToTask.ContainsKey(key))
+                        idToTask[key].DB_UpdateDependentOn(null);
+            }
+
             Task task;
             // And update new task dependencies
             foreach(KeyValuePair<int, HashSet<Task>> keyValue in newDepend)
@@ -245,7 +261,13 @@ namespace SmartPert.Model
                 task = idToTask[keyValue.Key];
                 task.DB_UpdateDependencies(keyValue.Value);
             }
+            foreach (KeyValuePair<int, HashSet<Task>> keyValue in newDependOn)
+            {
+                task = idToTask[keyValue.Key];
+                task.DB_UpdateDependentOn(keyValue.Value);
+            }
             dependencies = newDepend;
+            dependentOn = newDependOn;
         }
 
         private void UpdateSubtasks(Dictionary<int, Task> idToTask)

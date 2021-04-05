@@ -18,6 +18,7 @@ namespace SmartPert.Command
         private List<Task> subtaskGroup;
         private List<Task> tasks;
         private List<Task> prevSorted;
+        private List<Task> possibleParents;
         private Task above;
         private bool attached;
         private bool isValid;
@@ -55,12 +56,7 @@ namespace SmartPert.Command
         private bool CanShiftToRow()
         {
             // the task can not be a subtask of itself
-            return isValid && !dependentOnParents();
-        }
-
-        private bool dependentOnParents()
-        {
-            return false;
+            return isValid;
         }
 
         private void BeforeExecute()
@@ -95,6 +91,9 @@ namespace SmartPert.Command
                     tasks.Add(sorted[i]);
                 }
             }
+            possibleParents = GetTasksThatCouldBeParent();
+            if (possibleParents.Count <= 0)
+                isValid = false;
         }
 
         /// <summary>
@@ -110,7 +109,8 @@ namespace SmartPert.Command
             if(insertIndex - 1 >= 0)
                 for(Task t = tasks[insertIndex - 1]; t != null; t = t.ParentTask)
                 {
-                    ret.Add(t);
+                    if(t.CanAddSubTask(task))
+                        ret.Add(t);
                     if (insertIndex < tasks.Count && tasks[insertIndex].TaskIsAncestor(t))
                     {
                         canBeOutermost = false;
@@ -129,7 +129,7 @@ namespace SmartPert.Command
         /// <returns>New Parent task</returns>
         private Task GetIdealParent(Task t)
         {
-            List<Task> possible = GetTasksThatCouldBeParent();
+            List<Task> possible = possibleParents;
             if (possible.Contains(t.ParentTask))
                 return t.ParentTask;
             // Otherwise, Gives the outermost level possible
@@ -201,9 +201,6 @@ namespace SmartPert.Command
                 task = (Task)newItem;
         }
 
-        public override void OnModelUpdate(Project p)
-        {
-        }
 
         public override bool Undo()
         {

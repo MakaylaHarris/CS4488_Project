@@ -14,6 +14,7 @@ namespace SmartPert.Model
     {
         private Project project;
         private HashSet<Task> dependencies;
+        private HashSet<Task> dependentOn;
         private Task parentTask;
         private int projectRow;
 
@@ -36,6 +37,8 @@ namespace SmartPert.Model
             }
         }
         public HashSet<Task> Dependencies { get => dependencies; }
+        public HashSet<Task> DependentOn { get => dependentOn; }
+
         public Task ParentTask { get => parentTask; }
 
         public int ProjectRow { get => projectRow;
@@ -67,9 +70,10 @@ namespace SmartPert.Model
             : base(name, start, end, description, id, observer, duration, maxDuration, minDuration)
         {
             this.Project = project != null ? project : Model.Instance.GetProject();
-            if (this.project == null)
-                throw new ArgumentNullException("project");
+            //if (this.project == null)
+            //    throw new ArgumentNullException("project");
             dependencies = new HashSet<Task>();
+            dependentOn = new HashSet<Task>();
             projectRow = 0;
             PostInit(insert, track);
         }
@@ -77,7 +81,8 @@ namespace SmartPert.Model
         public override void PostInit(bool insert = true, bool track = true)
         {
             base.PostInit(insert, track);
-            project.AddTask(this);
+            if(project != null)
+                project.AddTask(this);
         }
 
         #endregion
@@ -144,6 +149,39 @@ namespace SmartPert.Model
         }
 
         /// <summary>
+        /// Determines if a task can be added as a subtask
+        /// </summary>
+        /// <param name="t">The task to add</param>
+        /// <returns>true if it can add it</returns>
+        public bool CanAddSubTask(Task t)
+        {
+            if (TaskIsAncestor(t)) // Can not add a subtask that is ancestor of this
+                return false;
+            // Cannot add task that is dependent
+            return !IsDependentDescendant(t) && !IsDependentAncestor(t);
+        }
+
+        private bool IsDependentAncestor(Task t)
+        {
+            if (t == this)
+                return true;
+            foreach (Task task in dependentOn)
+                if (task.IsDependentAncestor(t))
+                    return true;
+            return false;
+        }
+
+        private bool IsDependentDescendant(Task t)
+        {
+            if (t == this)
+                return true;
+            foreach (Task task in dependencies)
+                if (task.IsDependentDescendant(t))
+                    return true;
+            return false;
+        }
+
+        /// <summary>
         /// Updates a tasks parent by removing it from its current parent and adding it as subtask to the new one
         /// </summary>
         /// <param name="newParent">the new task parent</param>
@@ -174,7 +212,8 @@ namespace SmartPert.Model
                 t.parentTask = this;
                 tasks.Add(t);
                 OnChild_Change(t);
-                t.DB_InsertSubTask();
+                if(isTracked)
+                    t.DB_InsertSubTask();
                 NotifyUpdate();
                 return true;
             }
@@ -190,7 +229,8 @@ namespace SmartPert.Model
             if (tasks.Remove(t))
             {
                 t.parentTask = null;
-                t.DB_DeleteSubTask();
+                if(isTracked)
+                    t.DB_DeleteSubTask();
                 NotifyUpdate();
                 return true;
             }
@@ -211,19 +251,13 @@ namespace SmartPert.Model
             if (!workers.Contains(worker))
             {
                 // Attempt to add...
-                try
+                if(!isTracked || DB_AddWorker(worker))
                 {
                     Project.AddWorker(worker);  // Add to project too
-                    SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.Parameters.AddWithValue("@taskId", this.Id);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
                     workers.Add(worker);
                     added = true;
                     NotifyUpdate();
                 }
-                catch (SqlException) { }
             }
             return added;
         }
@@ -238,17 +272,11 @@ namespace SmartPert.Model
             bool removed = false;
             if (workers.Contains(worker))
             {
-                try
-                {
-                    SqlCommand command = OpenConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username");
-                    command.Parameters.AddWithValue("@taskId", this.Id);
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
+                if(!isTracked || DB_RemoveWorker(worker)) { 
                     workers.Remove(worker);
-                    removed = true;
                     NotifyUpdate();
-                } catch(SqlException) { }
+                    removed = true;
+                }
             }
             return removed;
         }
@@ -268,15 +296,10 @@ namespace SmartPert.Model
             {
                 throw new Exception("Dependency already exists");
             }
-
+            if (isTracked)
+                DB_AddDependency(dependency);
             dependencies.Add(dependency);
-
-            string query = "EXEC CreateDependency @RootId, @DependentId";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@RootId", this.Id);
-            command.Parameters.AddWithValue("@DependentId", dependency.Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            dependency.dependentOn.Add(this);
             NotifyUpdate();
         }
         /// <summary>
@@ -288,13 +311,10 @@ namespace SmartPert.Model
                 {
                 throw new Exception("Dependency does not exist between these two tasks");
                 }
+            if (isTracked)
+                DB_RemoveDependency(dependency);
             dependencies.Remove(dependency);
-            string query = "EXEC RemoveDependency @RootId, @DependentId";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@RootId", this.Id);
-            command.Parameters.AddWithValue("@DependentId", dependency.Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            dependency.dependentOn.Remove(this);
             NotifyUpdate();
         }
         /// <summary>
@@ -302,17 +322,81 @@ namespace SmartPert.Model
         /// </summary>
         public void DeleteAllDependencies(Task delTask)
         {
+            foreach (Task t in dependencies)
+                t.dependentOn.Remove(this);
             dependencies.Clear();
-            string query = "EXEC DeleteDependency @taskId";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@taskId", delTask.Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            if(isTracked)
+            {
+                string query = "EXEC DeleteDependency @taskId";
+                SqlCommand command = OpenConnection(query);
+                command.Parameters.AddWithValue("@taskId", delTask.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+            }
             NotifyUpdate();
         }
         #endregion
 
         #region Database Methods
+        private bool DB_RemoveDependency(Task dependency)
+        {
+            try
+            {
+                string query = "EXEC RemoveDependency @RootId, @DependentId";
+                SqlCommand command = OpenConnection(query);
+                command.Parameters.AddWithValue("@RootId", this.Id);
+                command.Parameters.AddWithValue("@DependentId", dependency.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+                return true;
+            } catch(SqlException e) { }
+            return false;
+        }
+
+        private bool DB_AddDependency(Task dependency)
+        {
+            try
+            {
+                string query = "EXEC CreateDependency @RootId, @DependentId";
+                SqlCommand command = OpenConnection(query);
+                command.Parameters.AddWithValue("@RootId", this.Id);
+                command.Parameters.AddWithValue("@DependentId", dependency.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+                return true;
+            } catch(SqlException) { }
+            return false;
+        }
+
+        private bool DB_AddWorker(User worker)
+        {
+            try
+            {
+                SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
+                command.Parameters.AddWithValue("@username", worker.Username);
+                command.Parameters.AddWithValue("@taskId", this.Id);
+                command.ExecuteNonQuery();
+                CloseConnection();
+                return true;
+            } catch(SqlException s)
+            { }
+            return false;
+        }
+        private bool DB_RemoveWorker(User worker)
+        {
+            try
+            {
+                SqlCommand command = OpenConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username");
+                command.Parameters.AddWithValue("@taskId", this.Id);
+                command.Parameters.AddWithValue("@username", worker.Username);
+                command.ExecuteNonQuery();
+                CloseConnection();
+                return true;
+            }
+            catch (SqlException) { }
+            return false;
+        }
+
         private void DB_UpdateRow()
         {
             string query = "UPDATE dbo.[Task] SET ProjectRow=" + projectRow + " WHERE TaskId=" + Id + ";";
@@ -530,6 +614,23 @@ namespace SmartPert.Model
             }
         }
 
+        /// <summary>
+        /// Updates dependencies (dbreader only)
+        /// </summary>
+        /// <param name="updatedDependentOn">updated</param>
+        public void DB_UpdateDependentOn(HashSet<Task> updatedDependentOn)
+        {
+            if (updatedDependentOn == null)
+            {
+                dependentOn.Clear();
+                isUpdated = true;
+            }
+            else if (!dependentOn.SetEquals(updatedDependentOn))
+            {
+                dependentOn = updatedDependentOn;
+                isUpdated = true;
+            }
+        }
         #endregion
 
         /// <summary>
