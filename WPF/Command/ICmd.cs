@@ -15,6 +15,7 @@ namespace SmartPert.Command
     public abstract class ICmd
     {
         private static TransactionCmd transaction;
+        private static bool transactionIsInternal;
         private static ICmd current;  // Wether a command is currently running
 
         public ICmd()
@@ -23,9 +24,10 @@ namespace SmartPert.Command
                 transaction.Add(this);
         }
 
-        public static void BeginTransaction(ICmd cmd=null, bool hasRun=false)
+        public static void BeginTransaction(ICmd cmd=null, bool hasRun=false, bool isInternal=false)
         {
             transaction = new TransactionCmd();
+            transactionIsInternal = isInternal;
             if (cmd != null)
                 transaction.Add(cmd, hasRun);
         }
@@ -48,7 +50,7 @@ namespace SmartPert.Command
             {
                 if (transaction == null)
                 {
-                    BeginTransaction(current, true);
+                    BeginTransaction(current, true, true);
                     transaction.Add(this);
                 }
             }
@@ -71,7 +73,7 @@ namespace SmartPert.Command
             // Reset current
             if (current == this)
             {
-                if (transaction != null && current != transaction)
+                if (transaction != null && current != transaction && transactionIsInternal)
                     result = result && PostTransaction();
                 current = null;
             }

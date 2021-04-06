@@ -41,6 +41,18 @@ namespace UnitTests.Command
 
         }
 
+        public void TestSeriesTransactionSucceeds()
+        {
+            ModelClass model = new ModelClass(5);
+            ICmd.BeginTransaction();
+            new AddOne(model).Run();
+            new AddOne(model).Run();
+            ICmd.PostTransaction();
+            Assert.AreEqual(7, model.x);
+            CommandStack.Instance.Undo();
+            Assert.AreEqual(5, model.x);
+        }
+
         [TestMethod]
         public void TestNestedCommandCreatesTransaction()
         {
