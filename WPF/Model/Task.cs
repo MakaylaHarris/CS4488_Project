@@ -136,10 +136,12 @@ namespace SmartPert.Model
         public override void PostInit(bool insert = true, bool track = true)
         {
             base.PostInit(insert, track);
-            if (!insert && !track && id == -1)
-                id = GetUniqueId(project.Tasks);
             if (project != null)
+            {
+                if (!insert && !track && id == -1)
+                    id = GetUniqueId(project.Tasks);
                 project.AddTask(this);
+            }
         }
 
         #endregion

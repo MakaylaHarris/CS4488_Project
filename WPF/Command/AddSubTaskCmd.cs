@@ -12,6 +12,9 @@ namespace SmartPert.Command
     /// </summary>
     public class AddSubTaskCmd : ICmd
     {
+        public const int InsertAfterGroup = 0;
+        public const int InsertAfterOutmost = 1;
+
         private Task parent;
         private Task subtask;
         private List<Task> oldSorted;
@@ -41,12 +44,23 @@ namespace SmartPert.Command
             return sorted[subGroup.Item2 + 1].ParentTask == parent;
         }
 
-        protected List<Task> ReorderRows(Task toMove, Task parent)
+        public static List<Task> ReorderRows(Task toMove, Task parent, int insertOp=0)
         {
-            oldSorted = toMove.Project.SortedTasks;
+            List<Task> oldSorted = toMove.Project.SortedTasks;
             var subgroup = ShiftToRowCmd.GetSubTaskGroup(toMove);
             var parentgroup = ShiftToRowCmd.GetSubTaskGroup(parent);
             int insertAt = parentgroup.Item2 + 1;
+            // Shift insertion point to the next non-subtask
+            if (insertOp == InsertAfterOutmost)
+            {
+                while(insertAt < oldSorted.Count)
+                {
+                    if (oldSorted[insertAt].ParentTask == null)
+                        break;
+                    insertAt++;
+                }
+            }
+
             List<Task> reordered = new List<Task>();
             // Add initial tasks
             for (int i = 0; i < insertAt; i++)
@@ -105,6 +119,7 @@ namespace SmartPert.Command
             }
             if (!CanAddSubtaskAtRow())
             {
+                oldSorted = subtask.Project.SortedTasks;
                 subtask.Project.SortedTasks = ReorderRows(subtask, parent);
             }
             else

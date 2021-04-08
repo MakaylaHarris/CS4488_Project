@@ -63,7 +63,6 @@ namespace UnitTests.Command
 
             // Ensure Transaction command on stack
             Assert.IsTrue(CommandStack.Instance.Cmds.Peek().GetType() == typeof(TransactionCmd));
-            Assert.IsTrue(CommandStack.Instance.Cmds.Count == 1);
         }
 
         [TestMethod]
