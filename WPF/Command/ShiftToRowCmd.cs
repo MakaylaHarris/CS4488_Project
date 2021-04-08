@@ -30,7 +30,7 @@ namespace SmartPert.Command
             get
             {
                 if (groupRange == null)
-                    groupRange = GetSubTaskGroup(task.Project.SortedTasks, task);
+                    groupRange = GetSubTaskGroup(task);
                 return groupRange;
             }
         }
@@ -154,13 +154,23 @@ namespace SmartPert.Command
         }
 
         /// <summary>
+        /// Gets the row after the subtask group ends
+        /// </summary>
+        /// <param name="parent"></param>
+        public static int GetRowAfterSubtaskGroup(Task parent)
+        {
+            return parent.Project.SortedTasks[GetSubTaskGroup(parent).Item2].ProjectRow + 1;
+        }
+
+        /// <summary>
         /// Gets the group of subtasks under a parent task
         /// </summary>
         /// <param name="sorted">list of all tasks, ordered</param>
         /// <param name="parent">the parent of the group</param>
         /// <returns>integer range [min,max]</returns>
-        private static Tuple<int, int> GetSubTaskGroup(List<Task> sorted, Task parent)
+        public static Tuple<int, int> GetSubTaskGroup(Task parent)
         {
+            List<Task> sorted = parent.Project.SortedTasks;
             int start = -1, end = -1;
             for (int i = 0; i < sorted.Count; i++)
             {

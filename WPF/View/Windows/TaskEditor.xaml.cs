@@ -93,7 +93,7 @@ namespace SmartPert.View.Windows
             if(cmd.Run())
             {
                 if (parentTask != null)
-                    new AddSubTaskCmd(parentTask, cmd.Task).Run();
+                    new AddSubTaskCmd(parentTask, Task).Run();
                 Task = cmd.Task;
                 LoadTaskData(task);
             }

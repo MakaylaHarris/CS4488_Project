@@ -215,6 +215,15 @@ namespace SmartPert.Model
 
         }
 
+        protected int GetUniqueId(IEnumerable<TimedItem> items)
+        {
+            int min = -1;
+            foreach (TimedItem item in items)
+                if (item.id < min)
+                    min = item.id;
+            return min - 1;
+        }
+
         #endregion
 
         #region Public Methods

@@ -92,7 +92,8 @@ namespace SmartPert.Model
             set
             {
                 projectRow = value;
-                DB_UpdateRow();
+                if(isTracked)
+                    DB_UpdateRow();
             } }
 
         public static bool CalculateDependentsMaxEstimate1 { get => CalculateDependentsMaxEstimate; 
@@ -135,7 +136,9 @@ namespace SmartPert.Model
         public override void PostInit(bool insert = true, bool track = true)
         {
             base.PostInit(insert, track);
-            if(project != null)
+            if (!insert && !track && id == -1)
+                id = GetUniqueId(project.Tasks);
+            if (project != null)
                 project.AddTask(this);
         }
 
@@ -221,7 +224,19 @@ namespace SmartPert.Model
         }
 
         /// <summary>
-        /// Determines if a task can be added as a subtask
+        /// Returns the number of all of its subtasks including descendants
+        /// </summary>
+        /// <returns>int</returns>
+        public int CountAllSubtasks()
+        {
+            int sum = 0;
+            foreach (Task t in Tasks)
+                sum += t.CountAllSubtasks() + 1;
+            return sum;
+        }
+
+        /// <summary>
+        /// Determines if a task can be added as a subtask based on dependencies and ancestors (Does not check project row)
         /// </summary>
         /// <param name="t">The task to add</param>
         /// <returns>true if it can add it</returns>
@@ -234,25 +249,7 @@ namespace SmartPert.Model
         }
 
         /// <summary>
-        /// Updates a tasks parent by removing it from its current parent and adding it as subtask to the new one
-        /// </summary>
-        /// <param name="newParent">the new task parent</param>
-        /// <returns>true if anything was updated</returns>
-        public bool UpdateParentTask(Task newParent)
-        {
-            bool result = false;
-            if(newParent != parentTask)
-            {
-                if (parentTask != null)
-                    result |= parentTask.RemoveSubTask(this);
-                if (newParent != null)
-                    result |= newParent.AddSubTask(this);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Adds sub task to tasks
+        /// Adds sub task to tasks, WARNING: Does not update or check project row
         /// </summary>
         /// <param name="t">Task</param>
         public bool AddSubTask(Task t)

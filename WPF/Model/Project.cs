@@ -57,6 +57,8 @@ namespace SmartPert.Model
             {
                 sorted = null;
                 tasks.Add(t);
+                if (t.ProjectRow == 0 && tasks.Count > 1)
+                    t.ProjectRow = tasks.Max(x => x.ProjectRow) + 1;
                 OnChild_Change(t);
                 NotifyUpdate();
             }
