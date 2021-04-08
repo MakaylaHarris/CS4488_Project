@@ -12,7 +12,7 @@ namespace SmartPert.Model
     /// </summary>
     public class Task : TimedItem
     {
-        private static bool CalculateDependentsMaxEstimate;
+        private static bool calculateDependentsMaxEstimate;
         private Project project;
         private HashSet<Task> dependencies;
         private HashSet<Task> dependentOn;
@@ -28,7 +28,7 @@ namespace SmartPert.Model
             {
                 if(endDate == null)
                 {
-                    if (CalculateDependentsMaxEstimate)
+                    if (calculateDependentsMaxEstimate)
                         return MaxEstStartDate.AddDays(maxDuration);
                     else
                         return MaxEstStartDate.AddDays(LikelyDuration);
@@ -96,11 +96,15 @@ namespace SmartPert.Model
                     DB_UpdateRow();
             } }
 
-        public static bool CalculateDependentsMaxEstimate1 { get => CalculateDependentsMaxEstimate; 
+        public static bool CalculateDependentsMaxEstimate { get => calculateDependentsMaxEstimate; 
             set { 
-                CalculateDependentsMaxEstimate = value;
-                foreach (Task t in DBReader.Instance.Tasks.Values)  // Reset the est start dates
+                calculateDependentsMaxEstimate = value;
+                foreach (Task t in DBReader.Instance.Tasks.Values)
+                {   
+                    // Reset the est start dates
                     t.dependentEstStartDate = null;
+                }
+                Model.Instance.OnModelUpdate();
             } }
         #endregion
 
@@ -184,7 +188,7 @@ namespace SmartPert.Model
                 parentTask.OnChild_LikelyDateChange(LikelyDate);
             if(project != null)
                 project.OnChild_LikelyDateChange(LikelyDate);
-            if(!CalculateDependentsMaxEstimate)
+            if(!calculateDependentsMaxEstimate)
                 foreach (Task t in dependencies)
                     t.ResetDependentEstStartDate();
         }
@@ -194,7 +198,7 @@ namespace SmartPert.Model
                 parentTask.OnChild_MaxEstDateChange(MaxEstDate);
             if(project != null)
                 project.OnChild_MaxEstDateChange(MaxEstDate);
-            if(CalculateDependentsMaxEstimate)
+            if(calculateDependentsMaxEstimate)
                 foreach (Task t in dependencies)
                     t.ResetDependentEstStartDate();
         }

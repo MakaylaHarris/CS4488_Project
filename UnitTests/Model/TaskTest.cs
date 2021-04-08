@@ -47,7 +47,7 @@ namespace UnitTests.Model
         [TestMethod]
         public void TestSwitchingToMaxEstimation()
         {
-            Task.CalculateDependentsMaxEstimate1 = true;
+            Task.CalculateDependentsMaxEstimate = true;
             Assert.AreEqual(8, (task.StartDate - parent.StartDate).Days);
         }
 

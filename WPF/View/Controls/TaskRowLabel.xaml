@@ -18,8 +18,8 @@
             </ContextMenu>
         </Grid.ContextMenu>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="20px"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
@@ -34,7 +34,7 @@
         </Button>
 
         <Label Content="{Binding Name}" Grid.Column="1"/>
-        <Button x:Name="RightButton" Grid.Column="2" Visibility="Hidden" Click="RightButton_Click">
+        <Button x:Name="RightButton" Grid.Column="2" Visibility="Hidden" Click="RightButton_Click" HorizontalAlignment="Left">
             <Button.Style>
                 <Style TargetType="Button">
                     <Setter Property="Content" Value="{materialDesign:PackIcon ArrowRightDropCircleOutline}"/>

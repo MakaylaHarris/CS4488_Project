@@ -652,7 +652,8 @@ namespace SmartPert.Model
         public void OnDBDisconnect()
         {
             currentUser = null;
-            receiver.OnDBDisconnect();
+            if(receiver != null)
+                receiver.OnDBDisconnect();
         }
 
         /// <summary>

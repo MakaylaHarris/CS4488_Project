@@ -433,5 +433,15 @@ namespace SmartPert.View.Pages
             if (ScrollViewer.VerticalOffset != e.VerticalOffset)
                 ScrollViewer.ScrollToVerticalOffset(e.VerticalOffset);
         }
+
+        private void BestCaseRadio_Click(object sender, RoutedEventArgs e)
+        {
+            Model.Task.CalculateDependentsMaxEstimate = false;
+        }
+
+        private void WorstCaseRadio_Click(object sender, RoutedEventArgs e)
+        {
+            Model.Task.CalculateDependentsMaxEstimate = true;
+        }
     }
 }

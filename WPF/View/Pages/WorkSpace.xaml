@@ -26,11 +26,19 @@
     </Page.Resources>
     
     <Grid x:Name="workSpace">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" MinWidth="100" MaxWidth="300"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer x:Name="LeftView"
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <RadioButton x:Name="BestCaseRadio" IsChecked="True" Click="BestCaseRadio_Click">Best-Case Scenario</RadioButton>
+            <RadioButton x:Name="WorstCaseRadio" Click="WorstCaseRadio_Click">Worst-Case Scenario</RadioButton>
+        </StackPanel>
+        <ScrollViewer x:Name="LeftView" Grid.Row="1"
             HorizontalContentAlignment="Left" 
                       VerticalContentAlignment="Top"
                       ScrollChanged="LeftView_ScrollChanged"
@@ -44,7 +52,7 @@
             </Grid>
         </ScrollViewer>
         <ScrollViewer x:Name="ScrollViewer"
-                      Grid.Column="1"
+                      Grid.Column="1" Grid.Row="1"
                       HorizontalContentAlignment="Left" 
                       VerticalContentAlignment="Top" 
                       VerticalScrollBarVisibility="Visible" 
