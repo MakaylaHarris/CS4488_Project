@@ -117,7 +117,6 @@ namespace SmartPert.View.Controls
             IncompleteColor = ((SolidColorBrush) FindResource("PrimaryHueMidBrush")).Color;
             AddAnchor(LeftAnchor);
             AddAnchor(RightAnchor);
-            task.Subscribe(this);
         }
 
         #endregion

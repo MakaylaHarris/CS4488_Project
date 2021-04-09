@@ -86,9 +86,9 @@ namespace SmartPert.Command
                 }
                 else // i > GroupRange.Item2 
                 {
+                    tasks.Add(sorted[i]);
                     if (insertIndex == -1 && sorted[i].ProjectRow >= targetRow)
                         insertIndex = tasks.Count;
-                    tasks.Add(sorted[i]);
                 }
             }
             possibleParents = GetTasksThatCouldBeParent();

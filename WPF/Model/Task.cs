@@ -12,7 +12,7 @@ namespace SmartPert.Model
     /// </summary>
     public class Task : TimedItem
     {
-        private static bool calculateDependentsMaxEstimate;
+        private static bool calculateDependentsMaxEstimate = true;
         private Project project;
         private HashSet<Task> dependencies;
         private HashSet<Task> dependentOn;
@@ -45,11 +45,9 @@ namespace SmartPert.Model
         public DateTime MaxEstStartDate
         {
             get {
-                DateTime? depEst = DependentEstStartDate;
-                if (depEst != null) {
-                    if (depEst > startDate)
-                        return (DateTime) depEst;
-                }
+                DateTime depEst = DependentEstStartDate;
+                if (depEst > startDate)
+                    return (DateTime) depEst;
                 return startDate;
             }
         }
@@ -57,12 +55,12 @@ namespace SmartPert.Model
         public override DateTime StartDate { get => MaxEstStartDate; set => base.StartDate = value; }
 
 
-        public DateTime? DependentEstStartDate { 
+        public DateTime DependentEstStartDate { 
             get
             {
                 if (dependentEstStartDate == null)
                     dependentEstStartDate = GetDependentEstStartDate();
-                return dependentEstStartDate;
+                return (DateTime) dependentEstStartDate;
             } 
         }
 
@@ -125,7 +123,7 @@ namespace SmartPert.Model
         /// <param name="track">flag to track item</param>
         /// <param name="observer">observer for updates</param>
         public Task(string name, DateTime start, DateTime? end, int duration, int maxDuration = 0, int minDuration = 0,
-            string description = "", Project project=null, int id = -1, bool insert=true, bool track=true, IItemObserver observer=null)
+            string description = "", Project project=null, int id = -1, bool insert=true, bool track=true, IItemObserver observer=null, bool addToProject=true)
             : base(name, start, end, description, id, observer, duration, maxDuration, minDuration)
         {
             this.Project = project != null ? project : Model.Instance.GetProject();
@@ -133,18 +131,14 @@ namespace SmartPert.Model
             //    throw new ArgumentNullException("project");
             dependencies = new HashSet<Task>();
             dependentOn = new HashSet<Task>();
-            projectRow = 0;
+            projectRow = -1;
             PostInit(insert, track);
-        }
-
-        public override void PostInit(bool insert = true, bool track = true)
-        {
-            base.PostInit(insert, track);
             if (project != null)
             {
                 if (!insert && !track && id == -1)
-                    id = GetUniqueId(project.Tasks);
-                project.AddTask(this);
+                    this.id = GetUniqueId(project.Tasks);
+                if (addToProject)
+                    project.AddTask(this);
             }
         }
 
@@ -248,10 +242,13 @@ namespace SmartPert.Model
         /// <returns>true if it can add it</returns>
         public bool CanAddSubTask(Task t)
         {
-            if (TaskIsAncestor(t) || t.ParentTask == this) // Can not add a subtask that is ancestor of this
+            if (t.ParentTask == this) // Already added!
                 return false;
-            // Cannot add task that is dependent
-            return !IsDependentDescendant(t) && !IsDependentAncestor(t);
+            for (Task task = this; task != null; task = task.ParentTask)
+                if (task == t   // cannot be ancestor
+                    || task.IsDependentDescendant(t) || task.IsDependentAncestor(t)) // cannot be dependent on ancestor either
+                    return false;
+            return true;
         }
 
         /// <summary>
@@ -349,12 +346,17 @@ namespace SmartPert.Model
 
         private DateTime? GetDependentEstStartDate()
         {
-            if (dependentOn.Count <= 0)
-                return null;
-            DateTime start = DateTime.MinValue;
+            DateTime start = DateTime.MinValue, compare;
             foreach(Task t in dependentOn)
             {
-                DateTime compare = t.ActualOrEstimatedEnd;
+                compare = t.ActualOrEstimatedEnd;
+                if (compare > start)
+                    start = compare;
+            }
+            // And check task parent
+            if(ParentTask != null)
+            {
+                compare = ParentTask.StartDate;
                 if (compare > start)
                     start = compare;
             }
@@ -434,7 +436,7 @@ namespace SmartPert.Model
                 DB_RemoveDependency(dependency);
             dependencies.Remove(dependency);
             dependency.dependentOn.Remove(this);
-            ResetDependentEstStartDate();
+            dependency.ResetDependentEstStartDate();
         }
         /// <summary>
         /// Calls sproc DeleteDependency that removes all dependencies associated with the task to be deleted
@@ -653,12 +655,15 @@ namespace SmartPert.Model
                 DBFunctions.StringCast(reader, "Description"),
                 project: proj,
                 id: (int)reader["TaskId"],
-                insert: false);
+                insert: false,
+                addToProject: false);
 
+            // update project
+            t.project = proj;
+            proj.AddTaskNoCheck(t);
             t.creator = user;
             t.creationDate = (DateTime)DBFunctions.DateCast(reader, "CreationDate");
             t.projectRow = (int)reader["ProjectRow"];
-            proj.AddTask(t);
             return t;
         }
 

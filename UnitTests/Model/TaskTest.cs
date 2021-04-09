@@ -26,7 +26,8 @@ namespace UnitTests.Model
         [TestMethod]
         public void TestDependentStartDate()
         {
-            Assert.AreEqual(5, (task.StartDate - parent.StartDate).Days);
+            int expected = Task.CalculateDependentsMaxEstimate ? 8 : 5;
+            Assert.AreEqual(expected, (task.StartDate - parent.StartDate).Days);
         }
 
         [TestMethod]

@@ -223,7 +223,7 @@ namespace SmartPert.Model
         /// <summary>
         /// After a refresh, send out updates to subscribers
         /// </summary>
-        public void PostUpdate()
+        public virtual void PostUpdate()
         {
             if(isUpdated)
             {

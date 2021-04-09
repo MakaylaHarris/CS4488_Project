@@ -128,17 +128,17 @@ namespace SmartPert.View.Pages
         public int GetRowShift(double start, double end)
         {
             int startRow = -1, endRow = -1, currentRow = 0;
-            double totalWidth = 0;
-            foreach (var columnDef in mainGrid.RowDefinitions)
+            double totalHeight = 0;
+            foreach (var rowDef in mainGrid.RowDefinitions)
             {
-                totalWidth += columnDef.ActualHeight;
-                if (startRow == -1 && totalWidth > start)
+                totalHeight += rowDef.ActualHeight;
+                if (startRow == -1 && totalHeight > start)
                 {
                     startRow = currentRow;
                     if (endRow > 0)     // Shortcut if we found columns
                         break;
                 }
-                if (endRow == -1 && totalWidth > end)
+                if (endRow == -1 && totalHeight > end)
                 {
                     endRow = currentRow;
                     if (startRow > 0)

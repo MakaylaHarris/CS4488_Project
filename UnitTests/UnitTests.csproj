@@ -49,15 +49,18 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\AddDependencyCmdTest.cs" />
     <Compile Include="Command\AddSubTaskCmdTest.cs" />
     <Compile Include="Command\EditTaskCmdTest.cs" />
     <Compile Include="Command\Helpers.cs" />
+    <Compile Include="Command\RemoveDependencyCmdTest.cs" />
     <Compile Include="Command\RemoveSubTaskCmdTest.cs" />
     <Compile Include="Command\TransactionCmdTest.cs" />
     <Compile Include="lib\InitModel.cs" />
     <Compile Include="Model\ProjectTest.cs" />
     <Compile Include="Model\TaskTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\TaskRowLabelViewModelTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -50,7 +50,6 @@ namespace SmartPert.Model
         #endregion
 
         #region Task Methods
-
         /// <summary>
         /// Determines if the sorted task list is a valid order based on having unique project rows and subtasks underlying their parents.
         /// </summary>
@@ -123,13 +122,18 @@ namespace SmartPert.Model
         {
             if (!tasks.Contains(t))
             {
-                sorted = null;
-                tasks.Add(t);
-                if (t.ProjectRow == 0 && tasks.Count > 1)
-                    t.ProjectRow = tasks.Max(x => x.ProjectRow) + 1;
+                AddTaskNoCheck(t);
+                if (t.ProjectRow == -1)
+                    t.ProjectRow = tasks.Count > 0 ? tasks.Max(x => x.ProjectRow) + 1 : 0;
                 OnChild_Change(t);
                 NotifyUpdate();
             }
+        }
+
+        public void AddTaskNoCheck(Task t)
+        {
+            sorted = null;
+            tasks.Add(t);
         }
 
         public void RemoveTask(Task t)

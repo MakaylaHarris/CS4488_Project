@@ -31,12 +31,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" MinWidth="100" MaxWidth="300"/>
+            <ColumnDefinition Width="250" MinWidth="100" MaxWidth="350"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <RadioButton x:Name="BestCaseRadio" IsChecked="True" Click="BestCaseRadio_Click">Best-Case Scenario</RadioButton>
-            <RadioButton x:Name="WorstCaseRadio" Click="WorstCaseRadio_Click">Worst-Case Scenario</RadioButton>
+            <RadioButton x:Name="BestCaseRadio" Click="BestCaseRadio_Click">Best-Case Scenario</RadioButton>
+            <RadioButton x:Name="WorstCaseRadio" IsChecked="True" Click="WorstCaseRadio_Click">Worst-Case Scenario</RadioButton>
         </StackPanel>
         <ScrollViewer x:Name="LeftView" Grid.Row="1"
             HorizontalContentAlignment="Left" 

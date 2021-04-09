@@ -191,6 +191,7 @@
     <Compile Include="ViewModelCommands\AccountUpdateCommand.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="StateSwitcher.cs" />
+    <Compile Include="ViewModels\TaskRowLabelViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
     <Compile Include="View\Controls\TaskControlPreview.xaml.cs">
       <DependentUpon>TaskControlPreview.xaml</DependentUpon>
