@@ -54,6 +54,7 @@
     <Compile Include="Command\RemoveSubTaskCmdTest.cs" />
     <Compile Include="Command\TransactionCmdTest.cs" />
     <Compile Include="lib\InitModel.cs" />
+    <Compile Include="Model\ProjectTest.cs" />
     <Compile Include="Model\TaskTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

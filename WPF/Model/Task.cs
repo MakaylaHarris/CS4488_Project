@@ -248,7 +248,7 @@ namespace SmartPert.Model
         /// <returns>true if it can add it</returns>
         public bool CanAddSubTask(Task t)
         {
-            if (TaskIsAncestor(t)) // Can not add a subtask that is ancestor of this
+            if (TaskIsAncestor(t) || t.ParentTask == this) // Can not add a subtask that is ancestor of this
                 return false;
             // Cannot add task that is dependent
             return !IsDependentDescendant(t) && !IsDependentAncestor(t);

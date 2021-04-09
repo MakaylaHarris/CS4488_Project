@@ -17,8 +17,8 @@ namespace SmartPert.Model
         {
             get
             {
-                if(sorted == null)
-                    sorted = Tasks.OrderBy(x => x.ProjectRow).ToList();
+                if (sorted == null)
+                    sorted = SortTasks();
                 return sorted;
             }
             set
@@ -50,7 +50,75 @@ namespace SmartPert.Model
         #endregion
 
         #region Task Methods
-        
+
+        /// <summary>
+        /// Determines if the sorted task list is a valid order based on having unique project rows and subtasks underlying their parents.
+        /// </summary>
+        /// <param name="tasks">sorted tasks</param>
+        /// <returns>true if valid</returns>
+        protected static bool IsValidSort(List<Task> tasks)
+        {
+            HashSet<int> rows = new HashSet<int>();
+            Stack<Task> stack = new Stack<Task>();
+            foreach (Task t in tasks)
+            {
+                // Must have unique row number
+                if (rows.Contains(t.ProjectRow))
+                    return false;
+                rows.Add(t.ProjectRow);
+
+                // test stack, subtasks should be ordered in a stack-like way
+                if (t.ParentTask == null)
+                    stack.Clear();
+                else
+                {
+                    try
+                    {
+                        while (t.ParentTask != stack.First())
+                            stack.Pop();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return false;
+                    }
+                }
+                if (t.Tasks.Count > 0)
+                    stack.Push(t);
+            }
+            return true;
+        }
+
+        private static void ResortTasksAddRecursively(List<Task> resorted, Task subtaskToAdd)
+        {
+            resorted.Add(subtaskToAdd);
+            foreach (Task t in subtaskToAdd.Tasks.OrderBy(x => x.ProjectRow))
+                ResortTasksAddRecursively(resorted, t);
+        }
+
+        /// <summary>
+        /// Resorts the task's list to have subtasks under their parent
+        /// </summary>
+        /// <param name="currentSort">the current sort by project row</param>
+        /// <returns>sorted list</returns>
+        protected static List<Task> ResortTasks(List<Task> currentSort)
+        {
+            List<Task> newSort = new List<Task>();
+            foreach (Task t in currentSort)
+            {
+                if (t.ParentTask == null)
+                    ResortTasksAddRecursively(newSort, t);
+            }
+            return newSort;
+        }
+
+        private List<Task> SortTasks()
+        {
+            List<Task> sorted = Tasks.OrderBy(x => x.ProjectRow).ToList();
+            if (IsValidSort(sorted))
+                return sorted;
+            return ResortTasks(sorted);
+        }
+
         public void AddTask(Task t)
         {
             if (!tasks.Contains(t))

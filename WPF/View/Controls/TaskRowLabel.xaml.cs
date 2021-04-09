@@ -50,7 +50,7 @@ namespace SmartPert.View.Controls
         {
             // if it's at the same level...
             Task above = GetTaskAbove();
-            return above != null && above != task.ParentTask;
+            return above != null && above.CanAddSubTask(task);
         }
 
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
