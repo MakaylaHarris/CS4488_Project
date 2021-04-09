@@ -157,16 +157,16 @@ namespace SmartPert.Model
             if (parentTask != null)
             {
                 parentTask.OnChild_StartDateChange(dateTime);
-                parentTask.OnChild_LikelyDateChange(likely);
                 parentTask.OnChild_MaxEstDateChange(max);
+                parentTask.OnChild_LikelyDateChange(likely);
                 parentTask.OnChild_MinEstDateChange(min);
             }
             // Changing the start date also changes all of our estimated duration dates
             if(project != null)
             {
                 project.OnChild_StartDateChange(dateTime);
-                project.OnChild_LikelyDateChange(likely);
                 project.OnChild_MaxEstDateChange(max);
+                project.OnChild_LikelyDateChange(likely);
                 project.OnChild_MinEstDateChange(min);
             }
             ResetDependentEstStartDate();

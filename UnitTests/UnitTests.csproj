@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\AddSubTaskCmdTest.cs" />
+    <Compile Include="Command\EditTaskCmdTest.cs" />
     <Compile Include="Command\Helpers.cs" />
     <Compile Include="Command\RemoveSubTaskCmdTest.cs" />
     <Compile Include="Command\TransactionCmdTest.cs" />

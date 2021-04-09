@@ -71,6 +71,12 @@ namespace UnitTests.lib
             return projects;
         }
 
+        public static void Link_Dependencies(List<Task> toLink)
+        {
+            for (int i = 0; i < toLink.Count - 1; i++)
+                toLink[i].AddDependency(toLink[i + 1]);
+        }
+
         public static List<Task> Init_Tasks(Project project, int numTasks = 1, string baseName="Task ", InitTaskCallback initTaskCallback = null)
         {
             List<Task> tasks = new List<Task>();
