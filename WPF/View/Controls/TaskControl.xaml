@@ -38,6 +38,6 @@
             </Grid>
         </Border>
         <view:ReceiverAnchor FontSize="8" x:Name="LeftAnchor" HorizontalAlignment="Left" Margin="0, 5, 0,5" Visibility="Hidden"/>
-        <view:SenderAnchor FontSize="8" x:Name="RightAnchor" HorizontalAlignment="Right" Margin="0, 5, 0, 5" Visibility="Hidden"/>
+        <view:VariableLinePositionAnchor FontSize="8" x:Name="RightAnchor" HorizontalAlignment="Right" Margin="0, 5, 0, 5" Visibility="Hidden"/>
     </Grid>
 </view:Connectable>

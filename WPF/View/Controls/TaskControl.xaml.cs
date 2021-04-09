@@ -117,12 +117,12 @@ namespace SmartPert.View.Controls
             IncompleteColor = ((SolidColorBrush) FindResource("PrimaryHueMidBrush")).Color;
             AddAnchor(LeftAnchor);
             AddAnchor(RightAnchor);
+            RightAnchor.GetStart = GetStartConnectorPoint;
         }
 
         #endregion
 
         #region Private Methods
-        public static int NaturalNum(int n) => n > 0 ? n : 1;
         private void SetColSpans(int likely, int min, int max)
         {
             Grid.SetColumnSpan(MinRect, NaturalNum(min));
@@ -299,6 +299,14 @@ namespace SmartPert.View.Controls
         #endregion
 
         #region Public Methods
+        public Point GetStartConnectorPoint(Anchor sender)
+        {
+            int endOffset = NaturalNum((task.ActualOrEstimatedEnd - task.StartDate).Days);
+            return TransformToAncestor(Canvas).Transform(new Point(ActualWidth / Grid.GetColumnSpan(this) * endOffset, ActualHeight / 2));
+        }
+
+        public static int NaturalNum(int n) => n > 0 ? n : 1;
+
         public override bool CanConnect(Connectable target, Anchor targetAnchor, bool isReceiver)
         {
             return base.CanConnect(target, targetAnchor, isReceiver) && (isReceiver || (!isReceiver && task.CanAddDependency(((TaskControl)target).Task)));

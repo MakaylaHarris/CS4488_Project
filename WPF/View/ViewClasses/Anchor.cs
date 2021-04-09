@@ -22,7 +22,7 @@ namespace SmartPert.View
         private Canvas canvas;
 
         #region Properties
-        public Point Point { get {
+        public virtual Point Point { get {
                     return TransformToAncestor(Canvas as Visual).Transform(new Point(ActualWidth / 2, ActualHeight / 2));
             }
         }
@@ -193,6 +193,17 @@ namespace SmartPert.View
             return base.CanConnect(anchor, anchorIsReceiver);
         }
 
+    }
+
+    /// <summary>
+    /// Sender Anchor that shows connections at a variable location
+    /// </summary>
+    public class VariableLinePositionAnchor : SenderAnchor
+    {
+        public delegate Point GetStartPoint(Anchor a);
+        public GetStartPoint GetStart { get; set; }
+
+        public override Point Point => GetStart(this);
     }
 
 }

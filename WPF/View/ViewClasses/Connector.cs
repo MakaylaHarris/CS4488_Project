@@ -144,15 +144,6 @@ namespace SmartPert.View
             else
             {
                 Disconnect();
-                //// Find closest endpoint
-                //Point end1, end2, point;
-                //point = e.GetPosition(Canvas);
-                //end1 = Anchor1.Point;
-                //end2 = Anchor2.Point;
-                //if (Distance(point, end1) > Distance(point, end2))
-                //    StartConnecting(Anchor1, anchor2IsReceiver);
-                //else
-                //    StartConnecting(Anchor2, !anchor2IsReceiver);
             }
         }
 
