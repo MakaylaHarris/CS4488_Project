@@ -1,4 +1,5 @@
-﻿using SmartPert.Model;
+﻿using SmartPert.Command;
+using SmartPert.Model;
 using SmartPert.View;
 using SmartPert.View.Login;
 using SmartPert.View.Pages;
@@ -112,6 +113,7 @@ namespace SmartPert
         private void UpdateMainContent()
         {
             HintAndLink hintAndLink;
+            
             if (!isConnected)
             {
                 hintAndLink = new HintAndLink() { HintText = "Connect to the server", LinkText = "Click here to connect!" };
@@ -130,7 +132,7 @@ namespace SmartPert
                 hintAndLink.HintLink.Click += OnProjectCreate;
                 main.MainContent.Content = hintAndLink;
             }
-            else
+            else if(main.MainContent.Content.GetType() != typeof(WorkSpace))
                 main.MainContent.Content = new WorkSpace();
 
         }
@@ -181,6 +183,7 @@ namespace SmartPert
         /// </summary>
         public void OnDisconnect()
         {
+            CommandStack.Instance.OnDisconnect();
             Update();
             Main.ShowDBConnectionSettings();
         }
@@ -227,6 +230,7 @@ namespace SmartPert
         /// <param name="p"></param>
         public void OnModelUpdate(Project p)
         {
+            CommandStack.Instance.OnModelUpdate(p);
             Update();
         }
         #endregion

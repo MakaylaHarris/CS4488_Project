@@ -15,6 +15,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -32,8 +34,6 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,10 +43,11 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>3</WarningLevel>
     <DocumentationFile>bin\Debug\SmartPert.xml</DocumentationFile>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -56,6 +57,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>logo.ico</ApplicationIcon>
@@ -71,6 +73,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -115,6 +118,7 @@
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Demo|x64'">
     <OutputPath>bin\x64\Demo\</OutputPath>
@@ -177,13 +181,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command\AddSubTaskCmd.cs" />
     <Compile Include="Command\CommandStack.cs" />
+    <Compile Include="Command\RemoveSubtaskCmd.cs" />
+    <Compile Include="Command\ShiftToRowCmd.cs" />
     <Compile Include="Command\TaskShiftCmd.cs" />
+    <Compile Include="Command\TransactionCmd.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModelCommands\AccountUpdateCommand.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="StateSwitcher.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
+    <Compile Include="View\Controls\TaskControlPreview.xaml.cs">
+      <DependentUpon>TaskControlPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Controls\TaskRowLabel.xaml.cs">
+      <DependentUpon>TaskRowLabel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ViewClasses\Anchor.cs" />
     <Compile Include="View\ViewClasses\Connectable.cs" />
     <Compile Include="View\ViewClasses\Connector.cs" />
@@ -207,9 +221,6 @@
     <Compile Include="View\OpenProjectCommand.cs" />
     <Compile Include="View\Login\RegisterPage.xaml.cs">
       <DependentUpon>RegisterPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Pages\Chart.xaml.cs">
-      <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
     <Compile Include="TaskToolTip.cs" />
     <Compile Include="View\Pages\ErrorCatch.xaml.cs">
@@ -273,6 +284,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Controls\TaskControlPreview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Controls\TaskRowLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Login\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -282,10 +301,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Login\RegisterPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Pages\Chart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -390,12 +405,6 @@
     <Resource Include="images\broke_cow.png" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="database\AttachPert.sql" />
-    <Content Include="database\SQL\Register.sql" />
-    <Content Include="database\SQL\TestData.sql" />
-    <Content Include="database\SQL\TryLogin.sql" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

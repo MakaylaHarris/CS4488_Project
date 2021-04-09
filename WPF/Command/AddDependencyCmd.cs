@@ -23,8 +23,12 @@ namespace SmartPert.Command
 
         protected override bool Execute()
         {
-            parent.AddDependency(dependent);
-            return true;
+            if(parent.CanAddDependency(dependent))
+            {
+                parent.AddDependency(dependent);
+                return true;
+            }
+            return false;
         }
 
         public override bool Undo()

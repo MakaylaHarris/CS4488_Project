@@ -2,12 +2,16 @@ import sys
 
 
 def searchReplace(src, dst, search, replace=""):
-    contents = ''
     with open(src, "r") as f:
         contents = f.read()
     with open(dst, "w") as f:
         f.write(contents.replace(search, replace))
 
+
+def searchReplaceFileToText(src, search, replace=""):
+    with open(src, "r") as f:
+        contents = f.read()
+        return contents.replace(search, replace)
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:

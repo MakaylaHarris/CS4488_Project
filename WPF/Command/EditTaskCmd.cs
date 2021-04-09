@@ -33,7 +33,7 @@ namespace SmartPert.Command
             this.minDuration = minDuration;
             this.description = description;
             oldTask = new Task(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.LikelyDuration, toEdit.MaxDuration,
-                toEdit.MinDuration, toEdit.Description, toEdit.Proj, toEdit.Id, false, false);
+                toEdit.MinDuration, toEdit.Description, toEdit.Project, toEdit.Id, false, false);
         }
 
         protected override bool Execute()
@@ -41,8 +41,8 @@ namespace SmartPert.Command
             toEdit.Name = name;
             toEdit.StartDate = start;
             toEdit.EndDate = end;
-            toEdit.LikelyDuration = likelyDuration;
             toEdit.MaxDuration = maxDuration;
+            toEdit.LikelyDuration = likelyDuration;
             toEdit.MinDuration = minDuration;
             toEdit.Description = description;
             return true;

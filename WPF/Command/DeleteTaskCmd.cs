@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using SmartPert.Model;
 
 namespace SmartPert.Command
@@ -24,7 +23,7 @@ namespace SmartPert.Command
             Model.Model.Instance.DeleteTask(task);
             return true;
         }
-
+        
         public override bool Undo()
         {
             Model.Task newTask = Model.Model.Instance.CreateTask(task.Name, task.StartDate, task.EndDate, task.Description, task.LikelyDuration, task.MaxDuration, task.MinDuration);

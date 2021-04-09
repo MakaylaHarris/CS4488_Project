@@ -28,8 +28,19 @@ OR
 Building the project is done using visual studio. The solution contains the following:
 * SmartPert: The main project for building the client interface in WPF.
 * SmartPertDB: Project for editing and creating the database.
-* PertTest: Unit test project.
+* PertTest: Integration testing project that uses a database set up from the SmartPertDB database build.
 * Sandcastle: Builds the code documentation, found in the folder WPF/Sandcastle. Documentation is found under WPF/Help.
+
+# Integration Tests
+In order to create a clean testing environment for integration tests, a python script is used to create and clean a test database. If all tests are failing, check the following:
+* Have python installed and on your system path.
+* Install the pathlib module `python -m pip install pathlib`
+* Build the SmartPertDB project, and ensure the script exists at `./PertDB/bin/Output/Pert_Create.sql`
+
+## Creating Your Own Tests
+Integration tests require you to set up the test database for a clean environment to work in. To do this, simply call `new TestDB();`
+at the start of your test.
+Fixtures can also be added either by using an existing fixture or creating your own sql script in the fixtures directory. To include the fixture when testing simply add the name of the file when creating the new test database. `new TestDB(new List<string>{'project_foo.sql'})`
 
 ## Build Configurations
 * Debug: For regular debugging and testing, does not build Sandcastle documentation.

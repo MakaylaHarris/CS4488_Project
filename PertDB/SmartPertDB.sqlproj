@@ -170,6 +170,11 @@
     <None Include="Scripts\DeleteData.sql">
       <QuotedIdentifier>Off</QuotedIdentifier>
     </None>
+    <Build Include="dbo\StoredFunctions\GetNextChildRow.sql" />
+    <Build Include="dbo\Tables\SubTask.sql" />
+    <None Include="Scripts\DeleteData.sql">
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </None>
     <Build Include="dbo\StoredProcedures\CreateDependency.sql" />
     <Build Include="dbo\StoredProcedures\RemoveDependency.sql" />
     <Build Include="dbo\StoredProcedures\DeleteDependency.sql" />

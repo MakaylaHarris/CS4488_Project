@@ -12,11 +12,10 @@ namespace SmartPert.Model
     /// </summary>
     public class Model : IModel, DBUpdateReceiver
     {
-        private static readonly Model instance = new Model();
-        // This initializes DBReader, which must be done after the instance is defined since updates are immediately sent to model
-        private static readonly bool initialized = StartInstance();  
+        private static Model instance;
         private List<IViewModel> viewModels;
         private DBReader reader;
+        private bool isUpdating;
 
         #region Model Instance
         /// <summary>
@@ -26,6 +25,8 @@ namespace SmartPert.Model
         /// <returns>Model instance</returns>
         static public Model GetInstance(IViewModel viewModel)
         {
+            if (instance == null)
+                StartInstance();
             instance.Subscribe(viewModel);
             return instance;
         }
@@ -34,16 +35,26 @@ namespace SmartPert.Model
         /// Gets the model instance
         /// </summary>
         /// <returns>model</returns>
-        static public Model Instance { get => instance; }
+        static public Model Instance { get => instance == null ? StartInstance() : instance; }
 
         private Model()
         {
             viewModels = new List<IViewModel>();
         }
-        static private bool StartInstance()
+        static private Model StartInstance()
         {
+            instance = new Model();
             instance.reader = DBReader.Instantiate(instance);
-            return true;
+            return instance;
+        }
+
+        /// <summary>
+        /// Shuts down model and database
+        /// </summary>
+        public void Shutdown()
+        {
+            viewModels.Clear();
+            reader.Shutdown();
         }
         #endregion
 
@@ -59,13 +70,13 @@ namespace SmartPert.Model
         public Project CreateProject(string name, DateTime start, DateTime? end, string description = "")
         {
             // Try to create
-            //try
-            //{
+            try
+            {
                 Project project = new Project(name, start, end, description);
                 reader.SetProject(project);
                 return project;
-            //}
-            //catch (Exception) {}
+            }
+            catch (Exception) { }
             return null;
         }
 
@@ -134,11 +145,7 @@ namespace SmartPert.Model
         {
             Project project = GetProject();
             Task task = null;
-            try
-            {
-                task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
-                project.AddTask(task);
-            } catch (Exception) { }
+            task = new Task(name, start, end, duration, maxDuration, minDuration, description, project: project);
             return task;
         }
 
@@ -153,8 +160,10 @@ namespace SmartPert.Model
         }
         public List<Task> GetTasks()
         {
-            return GetProject().Tasks;
+            return GetProject().SortedTasks;
         }
+
+        public HashSet<Task> GetTaskSet() => GetProject().Tasks;
 
         public bool IsValidTaskName(string name)
         {
@@ -261,12 +270,14 @@ namespace SmartPert.Model
         #region Database Methods
         public void OnModelUpdate(Project p = null)
         {
-            if(reader != null && !reader.IsUpdating)  // Don't send updates if we're in the middle of updating
+            if(reader != null && !reader.IsUpdating && ! this.isUpdating)  // Don't send updates if we're in the middle of updating
             {
+                isUpdating = true;
                 if (p == null)
                     p = GetProject();
                 foreach (IViewModel viewModel in viewModels)
                     viewModel.OnModelUpdate(p);
+                isUpdating = false;
             }
         }
 

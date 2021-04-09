@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace SmartPert.Model
 {
@@ -10,15 +11,28 @@ namespace SmartPert.Model
     /// </summary>
     public class Project : TimedItem
     {
-        private List<Task> tasks;
+        private List<Task> sorted;
 
-        public List<Task> Tasks { get => tasks; }
+        public List<Task> SortedTasks
+        {
+            get
+            {
+                if(sorted == null)
+                    sorted = Tasks.OrderBy(x => x.ProjectRow).ToList();
+                return sorted;
+            }
+            set
+            {
+                sorted = value;
+                ResortTasks();
+                NotifyUpdate();
+            }
+        }
 
         #region Project
-        public Project(string name, DateTime start, DateTime? end, string description = "", int id = -1, bool insert = true, bool track=true, IItemObserver observer=null) 
-            : base(name, start, end, description, id, observer)
+        public Project(string name, DateTime start, DateTime? end, string description = "", int id = -1, bool insert = true, bool track=true, IItemObserver observer=null, int likelyDuration=0, int maxDuration=0, int minDuration = 0) 
+            : base(name, start, end, description, id, observer, likelyDuration, maxDuration, minDuration)
         {
-            tasks = new List<Task>();
             PostInit(insert, track);
         }
 
@@ -29,23 +43,8 @@ namespace SmartPert.Model
         /// <returns>Latest date of a project</returns>
         public DateTime CalculateLastProjectDate()
         {
-            // Find last task date
-            DateTime latestDate = this.StartDate;
-            if (this.Tasks.Count != 0)
-            {
-                foreach (Task task in this.Tasks)
-                {
-                    DateTime temp = task.CalculateLastTaskDate();
-                    if (temp.CompareTo(latestDate) > 0)
-                    {
-                        latestDate = temp;
-                    }
-                }
-            }
-            // Check if end date is later than the latest
-            if (EndDate != null && latestDate.CompareTo((DateTime)EndDate) < 0)
-                latestDate = (DateTime)EndDate;
-            return latestDate;
+            DateTime maxEstimate = MaxEstDate;
+            return EndDate == null || maxEstimate > EndDate ? maxEstimate : (DateTime)EndDate;
         }
 
         #endregion
@@ -54,17 +53,22 @@ namespace SmartPert.Model
         
         public void AddTask(Task t)
         {
-            if(!tasks.Contains(t))
+            if (!tasks.Contains(t))
             {
+                sorted = null;
                 tasks.Add(t);
+                OnChild_Change(t);
                 NotifyUpdate();
             }
         }
 
         public void RemoveTask(Task t)
         {
-            tasks.Remove(t);
-            NotifyUpdate();
+            if (tasks.Remove(t))
+            {
+                sorted = null;
+                NotifyUpdate();
+            }
         }
         #endregion
 
@@ -125,6 +129,16 @@ namespace SmartPert.Model
         #endregion
 
         #region Database
+
+        /// <summary>
+        /// Resorts the task's project rows
+        /// </summary>
+        private void ResortTasks()
+        {
+            for (int i = 0; i < sorted.Count; i++)
+                sorted[i].ProjectRow = i;
+        }
+
         /// <summary>
         /// Deletes the project from the database
         /// </summary>
@@ -143,7 +157,8 @@ namespace SmartPert.Model
         /// <returns>the inserted id on success</returns>
         protected override int PerformInsert()
         {
-            string query = "EXEC CreateProject @ProjectName, @StartDate, @EndDate, @Description, @Creator, @CreationDate OUT, @Result OUT, @ResultId OUT";
+            string query = "EXEC CreateProject @ProjectName, @StartDate, @EndDate, @Description, @Creator," 
+                + "@LikelyDuration, @MinDuration, @MaxDuration, @CreationDate OUT, @Result OUT, @ResultId OUT";
             SqlCommand command = OpenConnection(query);
             command.Parameters.AddWithValue("@ProjectName", Name);
             command.Parameters.AddWithValue("@StartDate", StartDate);
@@ -157,6 +172,9 @@ namespace SmartPert.Model
                 command.Parameters.AddWithValue("@Creator", creator.Username);
             else
                 command.Parameters.AddWithValue("@Creator", DBNull.Value);
+            command.Parameters.AddWithValue("@LikelyDuration", LikelyDuration);
+            command.Parameters.AddWithValue("@MinDuration", MinDuration);
+            command.Parameters.AddWithValue("@MaxDuration", MaxDuration);
             var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
             createDate.Direction = System.Data.ParameterDirection.Output;
             var insertedId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
@@ -176,7 +194,9 @@ namespace SmartPert.Model
         /// </summary>
         protected override void PerformUpdate()
         {
-            SqlCommand command = OpenConnection("UPDATE Project SET Name=@Name, Description=@Description, StartDate=@StartDate, EndDate=@EndDate WHERE ProjectId=@Id;");
+            string query = "UPDATE Project SET Name=@Name, Description=@Description, StartDate=@StartDate, EndDate=@EndDate, MinEstDuration=" 
+                + MinDuration + ", MaxEstDuration=" + MaxDuration + ", MostLikelyEstDuration=" + LikelyDuration + " WHERE ProjectId=@Id;";
+            SqlCommand command = OpenConnection(query);
             command.Parameters.AddWithValue("@Name", Name);
             command.Parameters.AddWithValue("@Description", Description);
             command.Parameters.AddWithValue("@StartDate", StartDate);
@@ -201,30 +221,12 @@ namespace SmartPert.Model
                 (int)reader["ProjectId"], insert: false);
             p.creator = user;
             p.creationDate = (DateTime)DBFunctions.DateCast(reader, "CreationDate");
+            p.mostLikelyDuration = DBFunctions.IntCast(reader, "MostLikelyEstDuration");
+            p.maxDuration = DBFunctions.IntCast(reader, "MaxEstDuration", p.mostLikelyDuration); 
+            p.minDuration = DBFunctions.IntCast(reader, "MinEstDuration", p.mostLikelyDuration); 
             return p;
         }
 
-        /// <summary>
-        /// Parses the project data
-        /// </summary>
-        /// <param name="reader">Sql data reader</param>
-        /// <returns>true if updated</returns>
-        public override bool PerformParse(SqlDataReader reader)
-        {
-            string name = (string)reader["Name"];
-            DateTime start = (DateTime)reader["StartDate"];
-            DateTime? end = DBFunctions.DateCast(reader, "EndDate");
-            string desc = DBFunctions.StringCast(reader, "Description");
-            if(name != Name || start != StartDate || end != EndDate || desc != Description)
-            {
-                Name = name;
-                StartDate = start;
-                EndDate = end;
-                Description = desc;
-                return true;
-            }
-            return false;
-        }
         #endregion
     }
 }
