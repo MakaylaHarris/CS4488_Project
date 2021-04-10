@@ -188,6 +188,11 @@ namespace SmartPert.View
             Canvas.ReleaseMouseCapture();
             if (!isConnecting)
                 throw new InvalidOperationException("Can't finish connection if it's not connecting");
+            if(Anchor1 == null)
+            {
+                OnConnectingFinish();
+                return;
+            }
             CtrlHitTest test = new CtrlHitTest(typeof(Connectable), Canvas);
             Point p = Mouse.GetPosition(Canvas);
             List<DependencyObject> hits = test.Run(p, Anchor1.Connectable as DependencyObject);

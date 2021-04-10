@@ -385,7 +385,7 @@ namespace SmartPert.Model
         /// <param name="item">an updated item</param>
         public void OnUpdate(IDBItem item)
         {
-            if (!isUpdating)
+            if (!IsUpdating)
                 receiver.OnDBUpdate(currentProject); // Send the update up
         }
 
@@ -413,7 +413,7 @@ namespace SmartPert.Model
                 if (u == currentUser)
                     currentUser = null;
             }
-            if(!isUpdating)
+            if(!IsUpdating)
                 receiver.OnDBUpdate(CurrentProject);
         }
 
@@ -613,7 +613,7 @@ namespace SmartPert.Model
         /// </summary>
         public void OnDBUpdate()
         {
-            if (isUpdating)
+            if (IsUpdating)
                 return;
             isUpdating = true;
             connection.Open();

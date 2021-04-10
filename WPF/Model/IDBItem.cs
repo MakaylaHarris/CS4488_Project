@@ -237,7 +237,7 @@ namespace SmartPert.Model
         /// <summary>
         /// Notify an update occurred
         /// </summary>
-        protected void NotifyUpdate()
+        public void NotifyUpdate()
         {
             /* Notify newest subscribers first, this is important so the generic model update is sent last! */
             for(int i = observers.Count - 1; i >= 0; i--)

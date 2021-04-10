@@ -385,7 +385,7 @@ namespace SmartPert.Model
                 if (GetType() == typeof(Task))
                     new EditTaskCmd(this as Task, Name, startDate, EndDate, newLikely, MaxDuration, MinDuration, Description).Run();
                 else if (GetType() == typeof(Project))
-                    new EditProjectCmd(this as Project, Name, startDate, EndDate, Description, newLikely, MaxDuration, MinDuration).Run();
+                    new EditProjectCmd(this as Project, Name, startDate, EndDate, Description, newLikely, newLikely > MaxDuration ? newLikely : MaxDuration, MinDuration).Run();
 
             }
         }

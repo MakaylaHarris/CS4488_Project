@@ -47,6 +47,22 @@ namespace SmartPert.Model
             return EndDate == null || maxEstimate > EndDate ? maxEstimate : (DateTime)EndDate;
         }
 
+        public void Recalculate()
+        {
+            int likelyDuration = 1, maxDuration = 1, ndays;
+            DateTime start = StartDate;
+            foreach(Task t in tasks)
+            {
+                ndays = (t.LikelyDate - start).Days;
+                if (ndays > likelyDuration)
+                    likelyDuration = ndays;
+                ndays = (t.MaxEstDate - start).Days;
+                if (ndays > maxDuration)
+                    maxDuration = ndays;
+            }
+            LikelyDuration = likelyDuration;
+            MaxDuration = maxDuration;
+        }
         #endregion
 
         #region Task Methods

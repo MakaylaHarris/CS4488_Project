@@ -18,9 +18,9 @@ namespace UnitTests.Command
         [ClassInitialize]
         public static void init(TestContext context)
         {
-            project = new InitModel(3).Project;
+            project = new InitModel(3, 1, 1).Project;
             tasks = project.SortedTasks.ToList();
-            InitModel.Link_Dependencies(tasks);
+            InitModel.Link_Dependencies(new List<Task> { tasks[0], tasks[2] });
             tasks[0].LikelyDuration = 5;
             tasks[0].MaxDuration = 8;
         }
@@ -38,12 +38,24 @@ namespace UnitTests.Command
         [TestMethod]
         public void TestEditStartDateOfDependent()
         {
-            Task task = tasks[1];
+            Task task = tasks[2];
             DateTime startdate = task.StartDate;
             new EditTaskCmd(task, task.Name, startdate.AddDays(5), null, task.LikelyDuration, task.MaxDuration, task.MinDuration, task.Description).Run();
             Assert.AreEqual(5, (task.StartDate - startdate).Days);
             CommandStack.Instance.Undo();
             Assert.AreEqual(startdate, task.StartDate);
+        }
+
+        [TestMethod]
+        public void TestEditStartDateOfParentTask()
+        {
+            Task parent = tasks[0], subtask = tasks[1];
+            subtask.StartDate = parent.StartDate;
+            DateTime start = subtask.StartDate;
+            new EditTaskCmd(parent, parent.Name, start.AddDays(5), null, parent.LikelyDuration, parent.MaxDuration, parent.MinDuration, parent.Description).Run();
+            Assert.AreEqual(5, (subtask.StartDate - start).Days);
+            CommandStack.Instance.Undo();
+            Assert.AreEqual(start, subtask.StartDate);
         }
     }
 }

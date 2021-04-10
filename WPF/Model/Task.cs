@@ -102,7 +102,9 @@ namespace SmartPert.Model
                     // Reset the est start dates
                     t.dependentEstStartDate = null;
                 }
-                Model.Instance.OnModelUpdate();
+                Project project = Model.Instance.GetProject();
+                if(project != null)
+                    project.Recalculate();
             } }
         #endregion
 
@@ -335,14 +337,22 @@ namespace SmartPert.Model
         #endregion
 
         #region Dependencies
-        // Resets estimated dependent date for task, and all of its dependents
         public void ResetDependentEstStartDate()
+        {
+            ResetDependentEstStartDateHelper();
+            if(project != null)
+                project.Recalculate();
+        }
+        // Resets estimated dependent date for task, and all of its dependents
+        public void ResetDependentEstStartDateHelper()
         {
             this.dependentEstStartDate = null;
             foreach (Task t in dependencies)
-                t.ResetDependentEstStartDate();
-            NotifyUpdate();
+                t.ResetDependentEstStartDateHelper();
+            foreach (Task t in Tasks)
+                t.ResetDependentEstStartDateHelper();
         }
+
 
         private DateTime? GetDependentEstStartDate()
         {

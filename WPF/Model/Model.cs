@@ -16,6 +16,8 @@ namespace SmartPert.Model
         private List<IViewModel> viewModels;
         private DBReader reader;
         private bool isUpdating;
+        private bool storeUpdates;      // Stores updates
+        private List<IDBItem> updated;  // Tracks items updated during store stored
 
         #region Model Instance
         /// <summary>
