@@ -107,7 +107,9 @@ namespace UnitTests.Command
         [TestMethod]
         public void TestExecuteWithReorder()
         {
-            Task parent = tasks[0], subtask = tasks[2];
+            Task parent = tasks[0];
+            Task subtask = InitModel.Init_Tasks(project, baseName: "Fox")[0];
+            List<Task> currentOrder = project.SortedTasks;
             int prevRow = subtask.ProjectRow;
             new AddSubTaskCmd(parent, subtask).Run();
             Assert.IsTrue(subtask.ParentTask == parent);
@@ -116,7 +118,7 @@ namespace UnitTests.Command
             // Undo
             CommandStack.Instance.Undo();
             Assert.IsTrue(subtask.ProjectRow == prevRow);
-            Assert.IsTrue(tasks.SequenceEqual(parent.Project.SortedTasks));
+            Assert.IsTrue(currentOrder.SequenceEqual(parent.Project.SortedTasks));
         }
 
         [TestMethod]

@@ -161,7 +161,7 @@ namespace SmartPert.View
             double dist;
             foreach (Anchor anchor in anchors)
             {
-                if (origin.CanConnect(anchor, true) && anchor.CanConnect(origin, false))
+                if (origin.CanConnect(anchor, false) && anchor.CanConnect(origin, true))
                 {
                     Point point = anchor.Point;
                     // distance

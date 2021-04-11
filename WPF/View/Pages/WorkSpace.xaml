@@ -25,9 +25,10 @@
         </Style>
     </Page.Resources>
     
-    <Grid x:Name="workSpace">
+    <Grid x:Name="workSpace" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="30px"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -38,21 +39,30 @@
             <RadioButton x:Name="BestCaseRadio" Click="BestCaseRadio_Click">Best-Case Scenario</RadioButton>
             <RadioButton x:Name="WorstCaseRadio" IsChecked="True" Click="WorstCaseRadio_Click">Worst-Case Scenario</RadioButton>
         </StackPanel>
-        <ScrollViewer x:Name="LeftView" Grid.Row="1"
+        <ScrollViewer x:Name="HeaderView" Grid.Row="1" Grid.Column="1"
+            HorizontalContentAlignment="Left" Margin="0,0,20,0"
+                      VerticalContentAlignment="Top"
+                      ScrollChanged="HeaderView_ScrollChanged"
+                      VerticalScrollBarVisibility="Hidden" 
+                      HorizontalScrollBarVisibility="Hidden">
+            <Grid x:Name="HeaderGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+            </Grid>
+        </ScrollViewer>
+        <ScrollViewer x:Name="LeftView" Grid.Row="2"
             HorizontalContentAlignment="Left" 
                       VerticalContentAlignment="Top"
                       ScrollChanged="LeftView_ScrollChanged"
                       VerticalScrollBarVisibility="Hidden" 
                       HorizontalScrollBarVisibility="Hidden">
             <Grid x:Name="LeftGrid" Margin="0,0,0,20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"></RowDefinition>
-                    <RowDefinition Height="20"></RowDefinition>
-                </Grid.RowDefinitions>
             </Grid>
         </ScrollViewer>
         <ScrollViewer x:Name="ScrollViewer"
-                      Grid.Column="1" Grid.Row="1"
+                      Grid.Column="1" Grid.Row="2"
                       HorizontalContentAlignment="Left" 
                       VerticalContentAlignment="Top" 
                       VerticalScrollBarVisibility="Visible" 
@@ -60,10 +70,6 @@
                       HorizontalScrollBarVisibility="Visible">
             <Canvas x:Name="MainCanvas" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Grid x:Name="mainGrid" ShowGridLines="False" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20"></RowDefinition>
-                        <RowDefinition Height="20"></RowDefinition>
-                    </Grid.RowDefinitions>
                 </Grid>
             </Canvas>
         </ScrollViewer>

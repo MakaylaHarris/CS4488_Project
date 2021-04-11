@@ -41,13 +41,18 @@ namespace SmartPert.Model
 
         /// <summary>
         /// This returns the max estimated start date, based on dependents or the start date max date
+        /// or the end date
         /// </summary>
         public DateTime MaxEstStartDate
         {
             get {
                 DateTime depEst = DependentEstStartDate;
                 if (depEst > startDate)
-                    return (DateTime) depEst;
+                {
+                    if (endDate != null && ((DateTime)endDate) < depEst)
+                        return (DateTime)depEst;
+                    return depEst;
+                }
                 return startDate;
             }
         }
@@ -380,14 +385,24 @@ namespace SmartPert.Model
         /// <returns>true if it can</returns>
         public bool CanAddDependency(Task dependency)
         {
-            if (IsDependentAncestor(dependency) || IsDependentDescendant(dependency))
-                return false;
-            if (TaskIsAncestor(dependency) || dependency.TaskIsAncestor(this))
+            if (dependencies.Contains(dependency) || IsDependentTracebackChildren(dependency))
                 return false;
             return true;
         }
 
-        private bool IsDependentAncestor(Task t, HashSet<Task> checkedTasks=null)
+        private bool IsDependentTracebackChildren(Task dependent, HashSet<Task> checkedTasks=null, bool checkParent = true)
+        {
+            if (checkedTasks == null)
+                checkedTasks = new HashSet<Task>();
+            if (checkParent && IsDependentAncestor(dependent, checkedTasks))
+                return true;
+            foreach (Task t in Tasks)
+                if (t.IsDependentTracebackChildren(dependent, checkedTasks))
+                    return true;
+            return false;
+        }
+
+        private bool IsDependentAncestor(Task t, HashSet<Task> checkedTasks=null, bool isParent=false)
         {
             if (t == this)
                 return true;
@@ -395,11 +410,18 @@ namespace SmartPert.Model
                 checkedTasks = new HashSet<Task> { this };
             else
                 checkedTasks.Add(this);
+            // Check those we're dependent on
             foreach (Task task in dependentOn)
             {
                 if (!checkedTasks.Contains(task) && task.IsDependentAncestor(t, checkedTasks))
                     return true;
             }
+            // As well as parent tasks
+             if (parentTask != null && !checkedTasks.Contains(parentTask) && parentTask.IsDependentAncestor(t, checkedTasks, true))
+                return true;
+            // If we're not a parent, then we have a solid connection tracing back so we cannot add children
+            if (!isParent && IsDependentTracebackChildren(t, checkedTasks, false))
+                return true;
             return false;
         }
 
@@ -412,6 +434,10 @@ namespace SmartPert.Model
             else
                 checkedTasks.Add(this);
             foreach (Task task in dependencies)
+                if (!checkedTasks.Contains(task) && task.IsDependentDescendant(t, checkedTasks))
+                    return true;
+            // Check subtasks as well
+            foreach (Task task in SubTasks)
                 if (!checkedTasks.Contains(task) && task.IsDependentDescendant(t, checkedTasks))
                     return true;
             return false;

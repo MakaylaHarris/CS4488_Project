@@ -109,7 +109,7 @@ namespace SmartPert.Command
             if(insertIndex - 1 >= 0)
                 for(Task t = tasks[insertIndex - 1]; t != null; t = t.ParentTask)
                 {
-                    if(t.CanAddSubTask(task))
+                    if(t.CanAddSubTask(task) || task.ParentTask == t)
                         ret.Add(t);
                     if (insertIndex < tasks.Count && tasks[insertIndex].TaskIsAncestor(t))
                     {
