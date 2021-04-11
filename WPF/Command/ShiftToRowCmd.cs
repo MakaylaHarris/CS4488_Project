@@ -165,7 +165,6 @@ namespace SmartPert.Command
         /// <summary>
         /// Gets the group of subtasks under a parent task
         /// </summary>
-        /// <param name="sorted">list of all tasks, ordered</param>
         /// <param name="parent">the parent of the group</param>
         /// <returns>integer range [min,max]</returns>
         public static Tuple<int, int> GetSubTaskGroup(Task parent)

@@ -31,15 +31,18 @@ namespace SmartPert.View.Pages
         private const int maxInt = 2147483647;
         private List<int> weekendCols = new List<int>();
         private Dictionary<Task, TaskControl> taskControls;
+        private bool isInitializing;
 
         public WorkSpace()
         {
+            isInitializing = true;
             InitializeComponent();
             viewModel = new WorkSpaceViewModel(this);
             taskControls = new Dictionary<Task, TaskControl>();
             DataContext = viewModel.RowData;
             mainGrid.SizeChanged += MainGrid_SizeChanged;
             BuildGrid();
+            isInitializing = false;
         }
 
         /// <summary>
@@ -49,6 +52,8 @@ namespace SmartPert.View.Pages
         /// <param name="viewModel">view model</param>
         public void OnWorkspaceModelUpdate(WorkSpaceViewModel viewModel)
         {
+            if (isInitializing)
+                return;
             foreach (TaskControl taskControl in taskControls.Values)
                 taskControl.DisconnectAllLines();
             taskControls.Clear();
@@ -70,7 +75,10 @@ namespace SmartPert.View.Pages
             LeftGrid.Children.Clear();
             HeaderGrid.Children.Clear();
             BuildGrid();
-            Dispatcher.Invoke(new Action(() => { AddDependencies(); }), DispatcherPriority.ContextIdle);
+            try
+            {
+                Dispatcher.Invoke(new Action(() => { AddDependencies(); }), DispatcherPriority.ContextIdle);
+            } catch (InvalidOperationException) { }
         }
 
         private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -397,7 +405,7 @@ namespace SmartPert.View.Pages
         /// </summary>
         private void AddGridBorders()
         {
-            Border border, border2;
+            Border border;
             SolidColorBrush lightbrush = (SolidColorBrush)Application.Current.Resources["PrimaryHueLightBrush"];
             AddGridOuterBorder();
             for (int i = 0; i < mainGrid.RowDefinitions.Count; i++)

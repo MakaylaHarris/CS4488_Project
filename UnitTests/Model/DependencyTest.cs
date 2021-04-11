@@ -80,6 +80,17 @@ namespace UnitTests.Model
         }
 
         [TestMethod]
+        public void TestCompletedDateDoesNotShift()
+        {
+            var tasks = new InitModel(3).Project.SortedTasks;
+            DateTime end = tasks[0].StartDate;
+            tasks[0].EndDate = end;
+            tasks[1].AddDependency(tasks[0]);
+            Assert.IsTrue(tasks[0].EndDate == end);
+            Assert.IsTrue(tasks[0].StartDate <= end);
+        }
+
+        [TestMethod]
         public void TestDependentStartDate()
         {
             int expected = Task.CalculateDependentsMaxEstimate ? 8 : 5;

@@ -45,6 +45,7 @@ namespace UnitTests.ViewModels
             Assert.IsFalse(viewModel.CanShiftRight());
         }
 
+
         [TestMethod]
         public void TestCannotShiftLeftWithNoParent()
         {

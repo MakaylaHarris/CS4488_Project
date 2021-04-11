@@ -47,14 +47,20 @@ namespace SmartPert.Model
         {
             get {
                 DateTime depEst = DependentEstStartDate;
-                if (depEst > startDate)
+                if (depEst > startDate && (endDate == null || ((DateTime)endDate) > depEst))
                 {
-                    if (endDate != null && ((DateTime)endDate) < depEst)
-                        return (DateTime)depEst;
                     return depEst;
                 }
                 return startDate;
             }
+        }
+
+        /// <summary>
+        /// Gets the set start date (not the calculated one)
+        /// </summary>
+        public DateTime SetStartDate
+        {
+            get => startDate; set => StartDate = value;
         }
 
         public override DateTime StartDate { get => MaxEstStartDate; set => base.StartDate = value; }
@@ -149,6 +155,20 @@ namespace SmartPert.Model
             }
         }
 
+        /// <summary>
+        /// Creates a readonly shallow copy of a task
+        /// </summary>
+        /// <param name="task">Task</param>
+        public Task(Task task) : base (task.name, task.startDate, task.endDate, task.description, task.id, null, task.mostLikelyDuration, task.maxDuration, task.minDuration)
+        {
+            dependencies = task.dependencies;
+            dependentOn = task.dependentOn;
+            project = task.project;
+            projectRow = task.projectRow;
+            parentTask = task.parentTask;
+            dependentEstStartDate = task.dependentEstStartDate;
+            PostInit(false, false);
+        }
         #endregion
 
         #region Property Callbacks
@@ -249,13 +269,11 @@ namespace SmartPert.Model
         /// <returns>true if it can add it</returns>
         public bool CanAddSubTask(Task t)
         {
-            if (t.ParentTask == this) // Already added!
+            Task parent = t.ParentTask;
+            if (parent == this) // Already added!
                 return false;
-            for (Task task = this; task != null; task = task.ParentTask)
-                if (task == t   // cannot be ancestor
-                    || task.IsDependentDescendant(t) || task.IsDependentAncestor(t)) // cannot be dependent on ancestor either
-                    return false;
-            return true;
+            bool result = t.IsDependentDescendant(this) || t.IsDependentTracebackChildren(this, ignoreIfParent: true);
+            return !result;
         }
 
         /// <summary>
@@ -390,19 +408,19 @@ namespace SmartPert.Model
             return true;
         }
 
-        private bool IsDependentTracebackChildren(Task dependent, HashSet<Task> checkedTasks=null, bool checkParent = true)
+        private bool IsDependentTracebackChildren(Task dependent, HashSet<Task> checkedTasks=null, bool checkThis = true, bool ignoreIfParent=false)
         {
             if (checkedTasks == null)
                 checkedTasks = new HashSet<Task>();
-            if (checkParent && IsDependentAncestor(dependent, checkedTasks))
+            if (checkThis && IsDependentAncestor(dependent, checkedTasks, ignoreIfParent: ignoreIfParent))
                 return true;
             foreach (Task t in Tasks)
-                if (t.IsDependentTracebackChildren(dependent, checkedTasks))
+                if (t.IsDependentTracebackChildren(dependent, checkedTasks, ignoreIfParent:ignoreIfParent))
                     return true;
             return false;
         }
 
-        private bool IsDependentAncestor(Task t, HashSet<Task> checkedTasks=null, bool isParent=false)
+        private bool IsDependentAncestor(Task t, HashSet<Task> checkedTasks=null, bool isParent=false, bool ignoreIfParent=false)
         {
             if (t == this)
                 return true;
@@ -413,14 +431,14 @@ namespace SmartPert.Model
             // Check those we're dependent on
             foreach (Task task in dependentOn)
             {
-                if (!checkedTasks.Contains(task) && task.IsDependentAncestor(t, checkedTasks))
+                if (!checkedTasks.Contains(task) && task.IsDependentAncestor(t, checkedTasks, ignoreIfParent: ignoreIfParent))
                     return true;
             }
             // As well as parent tasks
-             if (parentTask != null && !checkedTasks.Contains(parentTask) && parentTask.IsDependentAncestor(t, checkedTasks, true))
+             if (!ignoreIfParent && parentTask != null && !checkedTasks.Contains(parentTask) && parentTask.IsDependentAncestor(t, checkedTasks, true))
                 return true;
             // If we're not a parent, then we have a solid connection tracing back so we cannot add children
-            if (!isParent && IsDependentTracebackChildren(t, checkedTasks, false))
+            if (!isParent && IsDependentTracebackChildren(t, checkedTasks, false, ignoreIfParent))
                 return true;
             return false;
         }

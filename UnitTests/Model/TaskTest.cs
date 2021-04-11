@@ -15,15 +15,21 @@ namespace UnitTests.Model
     [TestClass]
     public class CanAddSubTaskTest
     {
+        private static List<Task> tasks;
+
+        [ClassInitialize]
+        public static void init(TestContext c)
+        {
+            tasks = new InitModel(2, 2, 2).Project.SortedTasks;
+            InitModel.Link_Dependencies(new List<Task> { tasks[1], tasks[4] });
+        }
+
         [TestMethod]
         public void TestCannotAddAncestor()
         {
             // Setup
-            Task ancestor = new Task("Ancestor", DateTime.Now, null, 5, insert: false, track: false);
-            Task parent = new Task("Parent", DateTime.Now, null, 5, insert: false, track: false);
-            ancestor.AddSubTask(parent);
-            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false);
-            parent.AddSubTask(task);
+            Task ancestor = tasks[0];
+            Task task = tasks[2];
 
             Assert.IsFalse(task.CanAddSubTask(ancestor));
         }
@@ -31,9 +37,8 @@ namespace UnitTests.Model
         [TestMethod]
         public void TestCannotAddDependentSubTask()
         {
-            Task parent = new Task("Parent", DateTime.Now, null, 5, insert: false, track: false, id: -5);
-            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false, id: -4);
-            parent.AddDependency(task);
+            Task parent = tasks[1];
+            Task task = tasks[4];
 
             Assert.IsFalse(parent.CanAddSubTask(task));
         }
@@ -41,8 +46,8 @@ namespace UnitTests.Model
         [TestMethod]
         public void TestCanAddSubTask()
         {
-            Task parent = new Task("Parent", DateTime.Now, null, 5, insert: false, track: false);
-            Task task = new Task("Foo", DateTime.Now, null, 5, insert: false, track: false);
+            Task parent = tasks[2];
+            Task task = tasks[3];
             Assert.IsTrue(parent.CanAddSubTask(task));
         }
     }

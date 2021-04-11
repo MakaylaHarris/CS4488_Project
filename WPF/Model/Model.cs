@@ -16,8 +16,7 @@ namespace SmartPert.Model
         private List<IViewModel> viewModels;
         private DBReader reader;
         private bool isUpdating;
-        private bool storeUpdates;      // Stores updates
-        private List<IDBItem> updated;  // Tracks items updated during store stored
+        private List<IViewModel> toRemove;
 
         #region Model Instance
         /// <summary>
@@ -42,6 +41,7 @@ namespace SmartPert.Model
         private Model()
         {
             viewModels = new List<IViewModel>();
+            toRemove = new List<IViewModel>();
         }
         static private Model StartInstance()
         {
@@ -264,12 +264,24 @@ namespace SmartPert.Model
 
         public void UnSubscribe(IViewModel viewModel)
         {
-            if (viewModels.Contains(viewModel))
+            if (isUpdating) // Can't unsubscribe mid-update
+                toRemove.Add(viewModel);
+            else if (viewModels.Contains(viewModel))
                 viewModels.Remove(viewModel);
         }
         #endregion
 
         #region Database Methods
+        private void AfterModelUpdate()
+        {
+            if(toRemove.Count > 0)
+            {
+                foreach (IViewModel x in toRemove)
+                    viewModels.Remove(x);
+                toRemove.Clear();
+            }
+        }
+
         public void OnModelUpdate(Project p = null)
         {
             if(reader != null && !reader.IsUpdating && ! this.isUpdating)  // Don't send updates if we're in the middle of updating
@@ -277,9 +289,10 @@ namespace SmartPert.Model
                 isUpdating = true;
                 if (p == null)
                     p = GetProject();
-                foreach (IViewModel viewModel in viewModels)
-                    viewModel.OnModelUpdate(p);
+                for(int i = 0; i < viewModels.Count; i++)
+                    viewModels[i].OnModelUpdate(p);
                 isUpdating = false;
+                AfterModelUpdate();
             }
         }
 

@@ -156,6 +156,7 @@ namespace SmartPert.View.Controls
             SetColSpans(rowData.LikelyEstSpan, rowData.MinEstSpan, rowData.MaxEstSpan);
             LoadBrush(rowData);
             OnMove();
+            mi_MarkComplete.IsChecked = Task.IsComplete;
         }
 
 
@@ -231,7 +232,7 @@ namespace SmartPert.View.Controls
                 }
                 if (end != null && end < start)
                     return;
-                new EditTaskCmd(Task, Task.Name, start, end, likely, max, min, Task.Description).Run();
+                new EditTaskCmd(Task, Task.Name, start, end, likely, max, min, Task.Description, true).Run();
             }
         }
 
@@ -344,5 +345,17 @@ namespace SmartPert.View.Controls
 
         #endregion
 
+        private void mi_MarkComplete_Checked(object sender, RoutedEventArgs e)
+        {
+            DateTime? newEnd = null;
+            if (mi_MarkComplete.IsChecked)
+                newEnd = DateTime.Now;
+            new EditTaskCmd(Task, end: newEnd, markIncomplete: true).Run();
+        }
+
+        private void mi_AddSubtask_Click(object sender, RoutedEventArgs e)
+        {
+            new TaskEditor(parentTask: Task).ShowDialog();
+        }
     }
 }

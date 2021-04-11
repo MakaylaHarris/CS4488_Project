@@ -26,6 +26,14 @@ namespace UnitTests.Command
         }
         
         [TestMethod]
+        public void TestMarkCompleteEarlyEndChangesStartDate()
+        {
+            Task toEdit = tasks[4];
+            new EditTaskCmd(toEdit, end: toEdit.StartDate.AddDays(-3)).Run();
+            Assert.IsTrue(toEdit.EndDate >= toEdit.StartDate);
+        }
+
+        [TestMethod]
         public void TestEditStartDate()
         {
             DateTime startdate = tasks[0].StartDate;
