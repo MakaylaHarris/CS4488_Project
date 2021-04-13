@@ -170,7 +170,22 @@ namespace SmartPert.View.Controls
             
             new DeleteTaskCmd(Task).Run();
         }
+        private void mi_MarkComplete_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!Task.IsComplete)
+                new EditTaskCmd(Task, end: DateTime.Now).Run();
+        }
+        private void mi_MarkComplete_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (Task.IsComplete)
+                new EditTaskCmd(Task, markIncomplete: true).Run();
+        }
 
+
+        private void mi_AddSubtask_Click(object sender, RoutedEventArgs e)
+        {
+            new TaskEditor(parentTask: Task).ShowDialog();
+        }
         private bool InRange(double clickedX, double hitRange, double elementX)
         {
             return clickedX > elementX - hitRange && clickedX < elementX + hitRange;
@@ -345,17 +360,5 @@ namespace SmartPert.View.Controls
 
         #endregion
 
-        private void mi_MarkComplete_Checked(object sender, RoutedEventArgs e)
-        {
-            DateTime? newEnd = null;
-            if (mi_MarkComplete.IsChecked)
-                newEnd = DateTime.Now;
-            new EditTaskCmd(Task, end: newEnd, markIncomplete: true).Run();
-        }
-
-        private void mi_AddSubtask_Click(object sender, RoutedEventArgs e)
-        {
-            new TaskEditor(parentTask: Task).ShowDialog();
-        }
     }
 }

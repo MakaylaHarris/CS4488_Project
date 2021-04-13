@@ -176,11 +176,12 @@ namespace SmartPert.Model
             {
                 try
                 {
-                    SqlCommand command = OpenConnection("INSERT INTO UserProject (UserName, ProjectId) VALUES(@username, @projectId);");
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.Parameters.AddWithValue("@projectId", this.Id);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
+                    using(var connection = new DBConnection("INSERT INTO UserProject (UserName, ProjectId) VALUES(@username, @projectId);")) {
+                        var command = connection.Command;
+                        command.Parameters.AddWithValue("@username", worker.Username);
+                        command.Parameters.AddWithValue("@projectId", this.Id);
+                        command.ExecuteNonQuery();
+                    }
                     workers.Add(worker);
                     added = true;
                     NotifyUpdate();
@@ -203,11 +204,13 @@ namespace SmartPert.Model
             {
                 try
                 {
-                    SqlCommand command = OpenConnection("DELETE FROM UserProject WHERE ProjectId = @projectId AND UserName = @username);");
-                    command.Parameters.AddWithValue("@projectId", Id);
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
+                    using(var conn = new DBConnection("DELETE FROM UserProject WHERE ProjectId = @projectId AND UserName = @username);"))
+                    {
+                        var command = conn.Command;
+                        command.Parameters.AddWithValue("@projectId", Id);
+                        command.Parameters.AddWithValue("@username", worker.Username);
+                        command.ExecuteNonQuery();
+                    }
                     workers.Remove(worker);
                     removed = true;
                     NotifyUpdate();
@@ -234,10 +237,7 @@ namespace SmartPert.Model
         /// </summary>
         protected override void PerformDelete()
         {
-            SqlCommand command = OpenConnection("EXEC ProjectDelete @ProjectID");
-            command.Parameters.AddWithValue("@ProjectID", Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            DBConnection.ExecuteNonQuery("EXEC ProjectDelete " + Id);
         }
 
         /// <summary>
@@ -249,34 +249,37 @@ namespace SmartPert.Model
         {
             string query = "EXEC CreateProject @ProjectName, @StartDate, @EndDate, @Description, @Creator," 
                 + "@LikelyDuration, @MinDuration, @MaxDuration, @CreationDate OUT, @Result OUT, @ResultId OUT";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@ProjectName", Name);
-            command.Parameters.AddWithValue("@StartDate", StartDate);
-            if (EndDate != null)
-                command.Parameters.AddWithValue("@EndDate", EndDate);
-            else
-                command.Parameters.AddWithValue("@EndDate", DBNull.Value);
-            command.Parameters.AddWithValue("@Description", Description);
-            creator = Model.Instance.GetCurrentUser();
-            if (creator != null)
-                command.Parameters.AddWithValue("@Creator", creator.Username);
-            else
-                command.Parameters.AddWithValue("@Creator", DBNull.Value);
-            command.Parameters.AddWithValue("@LikelyDuration", LikelyDuration);
-            command.Parameters.AddWithValue("@MinDuration", MinDuration);
-            command.Parameters.AddWithValue("@MaxDuration", MaxDuration);
-            var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
-            createDate.Direction = System.Data.ParameterDirection.Output;
-            var insertedId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
-            insertedId.Direction = System.Data.ParameterDirection.Output;
-            var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
-            result.Direction = System.Data.ParameterDirection.Output;
-            command.ExecuteNonQuery(); 
-            if (!(bool)result.Value)
-                throw new InsertionError("Failed to insert project " + Name + " into database!");
-            creationDate = (DateTime) createDate.Value;
-            id = (int) insertedId.Value;
-            return id;
+            using (var conn = new DBConnection(query))
+            {
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@ProjectName", Name);
+                command.Parameters.AddWithValue("@StartDate", StartDate);
+                if (EndDate != null)
+                    command.Parameters.AddWithValue("@EndDate", EndDate);
+                else
+                    command.Parameters.AddWithValue("@EndDate", DBNull.Value);
+                command.Parameters.AddWithValue("@Description", Description);
+                creator = Model.Instance.GetCurrentUser();
+                if (creator != null)
+                    command.Parameters.AddWithValue("@Creator", creator.Username);
+                else
+                    command.Parameters.AddWithValue("@Creator", DBNull.Value);
+                command.Parameters.AddWithValue("@LikelyDuration", LikelyDuration);
+                command.Parameters.AddWithValue("@MinDuration", MinDuration);
+                command.Parameters.AddWithValue("@MaxDuration", MaxDuration);
+                var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
+                createDate.Direction = System.Data.ParameterDirection.Output;
+                var insertedId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
+                insertedId.Direction = System.Data.ParameterDirection.Output;
+                var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
+                result.Direction = System.Data.ParameterDirection.Output;
+                command.ExecuteNonQuery();
+                if (!(bool)result.Value)
+                    throw new InsertionError("Failed to insert project " + Name + " into database!");
+                creationDate = (DateTime)createDate.Value;
+                id = (int)insertedId.Value;
+                return id;
+            }
         }
 
         /// <summary>
@@ -286,17 +289,19 @@ namespace SmartPert.Model
         {
             string query = "UPDATE Project SET Name=@Name, Description=@Description, StartDate=@StartDate, EndDate=@EndDate, MinEstDuration=" 
                 + MinDuration + ", MaxEstDuration=" + MaxDuration + ", MostLikelyEstDuration=" + LikelyDuration + " WHERE ProjectId=@Id;";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@Name", Name);
-            command.Parameters.AddWithValue("@Description", Description);
-            command.Parameters.AddWithValue("@StartDate", StartDate);
-            if (EndDate == null)
-                command.Parameters.AddWithValue("@EndDate", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@EndDate", EndDate);
-            command.Parameters.AddWithValue("@Id", Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            using (var conn = new DBConnection(query))
+            {
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@Name", Name);
+                command.Parameters.AddWithValue("@Description", Description);
+                command.Parameters.AddWithValue("@StartDate", StartDate);
+                if (EndDate == null)
+                    command.Parameters.AddWithValue("@EndDate", DBNull.Value);
+                else
+                    command.Parameters.AddWithValue("@EndDate", EndDate);
+                command.Parameters.AddWithValue("@Id", Id);
+                command.ExecuteNonQuery();
+            }
         }
 
         static public Project Parse(SqlDataReader reader, Dictionary<string, User> users)

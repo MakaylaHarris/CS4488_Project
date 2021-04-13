@@ -19,7 +19,6 @@ namespace SmartPert.Model
         private int refreshTime;
         private long lastVersion;
         private DBReader receiver;
-        private SqlConnection connection;
         #endregion
 
         /// <summary>
@@ -48,7 +47,6 @@ namespace SmartPert.Model
                 {
                     Console.WriteLine("No context found, database updates won't be sent.");
                 }
-                connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
                 running = true;
                 thread = new Thread(new ThreadStart(CheckForUpdates));
                 thread.IsBackground = true;
@@ -63,7 +61,6 @@ namespace SmartPert.Model
         public void Reset()
         {
             lastVersion = -1;
-            connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
         }
 
         /// <summary>
@@ -91,15 +88,15 @@ namespace SmartPert.Model
         /// <returns>true if updated</returns>
         private bool DBIsUpdated()
         {
-            connection.Open();
-            SqlCommand command = connection.CreateCommand();
-            command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = "dbo.TrackingVersion";
-            var tmp = command.Parameters.Add("@ret_value", SqlDbType.BigInt);
-            tmp.Direction = ParameterDirection.Output;
-            command.ExecuteNonQuery();
-            long newVersion = (long)tmp.Value;
-            connection.Close();
+            long newVersion = 0;
+            using (var conn = new DBConnection("dbo.TrackingVersion")) {
+                SqlCommand command = conn.Command;
+                command.CommandType = CommandType.StoredProcedure;
+                var tmp = command.Parameters.Add("@ret_value", SqlDbType.BigInt);
+                tmp.Direction = ParameterDirection.Output;
+                command.ExecuteNonQuery();
+                newVersion = (long)tmp.Value;
+            }
             bool result = newVersion > lastVersion;
             lastVersion = newVersion;
             return result;

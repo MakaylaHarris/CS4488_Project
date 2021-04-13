@@ -251,7 +251,11 @@ namespace SmartPert.View.Pages
             {
                 rowData = viewModel.RowData[i];
                 if (rowData.IsProject)
-                    MyControl = new Button();
+                {
+                    var button = new Button();
+                    button.Command = CustomCommands.SettingsCommand;
+                    MyControl = button;
+                }
                 else
                 {
                     TaskControl control = new TaskControl(this, rowData) { Canvas = MainCanvas };

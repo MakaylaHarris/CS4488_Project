@@ -31,7 +31,7 @@
                     <ContextMenu>
                         <MenuItem x:Name="mi_editTask" Header="Edit" HorizontalAlignment="Left" Click="mi_editTask_Click"/>
                         <MenuItem x:Name="mi_deleteTask" Header="Delete" HorizontalAlignment="Left" Click="mi_deleteTask_Click"/>
-                        <MenuItem x:Name="mi_MarkComplete" Header="Complete" IsCheckable="True" Checked="mi_MarkComplete_Checked"/>
+                        <MenuItem x:Name="mi_MarkComplete" Header="Complete" IsCheckable="True" Checked="mi_MarkComplete_Checked" Unchecked="mi_MarkComplete_Unchecked"/>
                         <Separator/>
                         <MenuItem x:Name="mi_AddSubtask" Header="Create Subtask" Click="mi_AddSubtask_Click"/>
                         <MenuItem x:Name="Add_New" Header="Create Task" Click="Add_New_Click"/>

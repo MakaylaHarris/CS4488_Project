@@ -88,6 +88,21 @@ namespace SmartPert.View.Controls
             new TaskEditor().ShowDialog();
         }
 
+        private void mi_MarkComplete_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!task.IsComplete)
+                new EditTaskCmd(task, end: DateTime.Now).Run();
+        }
+        private void mi_MarkComplete_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (task.IsComplete)
+                new EditTaskCmd(task, markIncomplete: true).Run();
+        }
+
+        private void mi_AddSubtask_Click(object sender, RoutedEventArgs e)
+        {
+            new TaskEditor(parentTask: task).ShowDialog();
+        }
 
     }
 }

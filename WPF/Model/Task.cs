@@ -101,7 +101,7 @@ namespace SmartPert.Model
             set
             {
                 projectRow = value;
-                if(isTracked)
+                if(CanConnectDB)
                     DB_UpdateRow();
             } }
 
@@ -116,6 +116,7 @@ namespace SmartPert.Model
                 Project project = Model.Instance.GetProject();
                 if(project != null)
                     project.Recalculate();
+                Model.Instance.OnModelUpdate(project);
             } }
         #endregion
 
@@ -148,18 +149,16 @@ namespace SmartPert.Model
             PostInit(insert, track);
             if (project != null)
             {
-                if (!insert && !track && id == -1)
-                    this.id = GetUniqueId(project.Tasks);
                 if (addToProject)
                     project.AddTask(this);
             }
         }
 
         /// <summary>
-        /// Creates a readonly shallow copy of a task
+        /// Creates a shallow copy of a task
         /// </summary>
         /// <param name="task">Task</param>
-        public Task(Task task) : base (task.name, task.startDate, task.endDate, task.description, task.id, null, task.mostLikelyDuration, task.maxDuration, task.minDuration)
+        public Task(Task task, bool insert=false, bool track=false) : base (task.name, task.startDate, task.endDate, task.description, task.id, null, task.mostLikelyDuration, task.maxDuration, task.minDuration)
         {
             dependencies = task.dependencies;
             dependentOn = task.dependentOn;
@@ -167,7 +166,7 @@ namespace SmartPert.Model
             projectRow = task.projectRow;
             parentTask = task.parentTask;
             dependentEstStartDate = task.dependentEstStartDate;
-            PostInit(false, false);
+            PostInit(insert, track);
         }
         #endregion
 
@@ -289,7 +288,7 @@ namespace SmartPert.Model
                 t.parentTask = this;
                 tasks.Add(t);
                 OnChild_Change(t);
-                if(isTracked)
+                if(CanConnectDB)
                     t.DB_InsertSubTask();
                 NotifyUpdate();
                 return true;
@@ -306,7 +305,7 @@ namespace SmartPert.Model
             if (tasks.Remove(t))
             {
                 t.parentTask = null;
-                if(isTracked)
+                if(CanConnectDB)
                     t.DB_DeleteSubTask();
                 NotifyUpdate();
                 return true;
@@ -328,7 +327,7 @@ namespace SmartPert.Model
             if (!workers.Contains(worker))
             {
                 // Attempt to add...
-                if(!isTracked || DB_AddWorker(worker))
+                if(!CanConnectDB || DB_AddWorker(worker))
                 {
                     Project.AddWorker(worker);  // Add to project too
                     workers.Add(worker);
@@ -349,7 +348,7 @@ namespace SmartPert.Model
             bool removed = false;
             if (workers.Contains(worker))
             {
-                if(!isTracked || DB_RemoveWorker(worker)) { 
+                if(!CanConnectDB || DB_RemoveWorker(worker)) { 
                     workers.Remove(worker);
                     NotifyUpdate();
                     removed = true;
@@ -471,7 +470,7 @@ namespace SmartPert.Model
             {
                 throw new Exception("Dependency already exists");
             }
-            if (isTracked)
+            if (CanConnectDB)
                 DB_AddDependency(dependency);
             dependencies.Add(dependency);
             dependency.dependentOn.Add(this);
@@ -486,7 +485,7 @@ namespace SmartPert.Model
                 {
                 throw new Exception("Dependency does not exist between these two tasks");
                 }
-            if (isTracked)
+            if (CanConnectDB)
                 DB_RemoveDependency(dependency);
             dependencies.Remove(dependency);
             dependency.dependentOn.Remove(this);
@@ -500,13 +499,15 @@ namespace SmartPert.Model
             foreach (Task t in dependencies)
                 t.dependentOn.Remove(this);
             dependencies.Clear();
-            if(isTracked)
+            if(CanConnectDB)
             {
                 string query = "EXEC DeleteDependency @taskId";
-                SqlCommand command = OpenConnection(query);
-                command.Parameters.AddWithValue("@taskId", delTask.Id);
-                command.ExecuteNonQuery();
-                CloseConnection();
+                using(var conn = new DBConnection(query))
+                {
+                    SqlCommand command =conn.Command;
+                    command.Parameters.AddWithValue("@taskId", delTask.Id);
+                    command.ExecuteNonQuery();
+                }
             }
             NotifyUpdate();
         }
@@ -517,12 +518,8 @@ namespace SmartPert.Model
         {
             try
             {
-                string query = "EXEC RemoveDependency @RootId, @DependentId";
-                SqlCommand command = OpenConnection(query);
-                command.Parameters.AddWithValue("@RootId", this.Id);
-                command.Parameters.AddWithValue("@DependentId", dependency.Id);
-                command.ExecuteNonQuery();
-                CloseConnection();
+                string query = string.Format("EXEC RemoveDependency {0}, {1}", Id, dependency.Id);
+                DBConnection.ExecuteNonQuery(query);
                 return true;
             } catch(SqlException) { }
             return false;
@@ -532,12 +529,8 @@ namespace SmartPert.Model
         {
             try
             {
-                string query = "EXEC CreateDependency @RootId, @DependentId";
-                SqlCommand command = OpenConnection(query);
-                command.Parameters.AddWithValue("@RootId", this.Id);
-                command.Parameters.AddWithValue("@DependentId", dependency.Id);
-                command.ExecuteNonQuery();
-                CloseConnection();
+                string query = string.Format("EXEC CreateDependency {0}, {1}", Id, dependency.Id);
+                DBConnection.ExecuteNonQuery(query);
                 return true;
             } catch(SqlException) { }
             return false;
@@ -547,11 +540,13 @@ namespace SmartPert.Model
         {
             try
             {
-                SqlCommand command = OpenConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);");
-                command.Parameters.AddWithValue("@username", worker.Username);
-                command.Parameters.AddWithValue("@taskId", this.Id);
-                command.ExecuteNonQuery();
-                CloseConnection();
+                using (var con = new DBConnection("INSERT INTO dbo.UserTask (UserName, TaskId) Values(@username, @taskId);"))
+                {
+                    SqlCommand command = con.Command;
+                    command.Parameters.AddWithValue("@username", worker.Username);
+                    command.Parameters.AddWithValue("@taskId", this.Id);
+                    command.ExecuteNonQuery();
+                }
                 return true;
             } catch(SqlException)
             { }
@@ -561,11 +556,12 @@ namespace SmartPert.Model
         {
             try
             {
-                SqlCommand command = OpenConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username");
-                command.Parameters.AddWithValue("@taskId", this.Id);
-                command.Parameters.AddWithValue("@username", worker.Username);
-                command.ExecuteNonQuery();
-                CloseConnection();
+                using (var conn = new DBConnection("DELETE FROM UserTask WHERE UserTask.TaskId=@taskId AND UserTask.UserName=@username")) {
+                    SqlCommand command = conn.Command;
+                    command.Parameters.AddWithValue("@taskId", this.Id);
+                    command.Parameters.AddWithValue("@username", worker.Username);
+                    command.ExecuteNonQuery(); 
+                } 
                 return true;
             }
             catch (SqlException) { }
@@ -575,7 +571,7 @@ namespace SmartPert.Model
         private void DB_UpdateRow()
         {
             string query = "UPDATE dbo.[Task] SET ProjectRow=" + projectRow + " WHERE TaskId=" + Id + ";";
-            ExecuteSql(query);
+            DBConnection.ExecuteNonQuery(query);
         }
 
         /// <summary>
@@ -586,18 +582,20 @@ namespace SmartPert.Model
             string query = "UPDATE dbo.[Task] SET Name=@Name, StartDate=@StartDate, EndDate=@EndDate" +
                 ", Description=@Description, MinEstDuration=" + MinDuration + ", MaxEstDuration=" + MaxDuration + ", MostLikelyEstDuration=" +
                 LikelyDuration + ", ProjectRow=" + projectRow + " WHERE TaskId = " + Id + ";";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@Name", Name);
-            command.Parameters.AddWithValue("@Description", Description);
-            var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
-            sd.Value = StartDate;
-            var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
-            if (EndDate != null)
-                ed.Value = EndDate;
-            else
-                ed.Value = DBNull.Value;
-            command.ExecuteNonQuery();
-            CloseConnection();
+            using (var conn = new DBConnection(query))
+            {
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@Name", Name);
+                command.Parameters.AddWithValue("@Description", Description);
+                var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
+                sd.Value = StartDate;
+                var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
+                if (EndDate != null)
+                    ed.Value = EndDate;
+                else
+                    ed.Value = DBNull.Value;
+                command.ExecuteNonQuery();
+            }
         }
 
         /// <summary>
@@ -611,45 +609,47 @@ namespace SmartPert.Model
             string query = "EXEC dbo.CreateTask @Name, @Description, " + MinDuration + ", " + LikelyDuration + ", " + MaxDuration +
                 ", @StartDate, @EndDate, @ProjectId, @Creator, @CreationDate out, @Result out, @ResultId out, " +
                 "@ProjectRow out, @HasParent, @ParentTaskId";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@Name", Name);
-            command.Parameters.AddWithValue("@Description", Description);
-            command.Parameters.AddWithValue("@ProjectId", Project.Id);
-            if (creator == null)
-                command.Parameters.AddWithValue("@Creator", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@Creator", creator.Username);
-            var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
-            sd.Value = StartDate;
-            var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
-            if (EndDate != null)
-                ed.Value = EndDate;
-            else
-                ed.Value = DBNull.Value;
-            var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
-            createDate.Direction = System.Data.ParameterDirection.Output;
-            var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
-            result.Direction = System.Data.ParameterDirection.Output;
-            var resultId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
-            resultId.Direction = System.Data.ParameterDirection.Output;
-            var childRow = command.Parameters.Add("@ProjectRow", System.Data.SqlDbType.Int);
-            childRow.Direction = System.Data.ParameterDirection.Output;
-            if(parentTask != null)
+            using(var conn = new DBConnection(query))
             {
-                command.Parameters.AddWithValue("@HasParent", 1);
-                command.Parameters.AddWithValue("@ParentTaskId", parentTask.Id);
-            } else
-            {
-                command.Parameters.AddWithValue("@HasParent", 0);
-                command.Parameters.AddWithValue("@ParentTaskId", 0);
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@Name", Name);
+                command.Parameters.AddWithValue("@Description", Description);
+                command.Parameters.AddWithValue("@ProjectId", Project.Id);
+                if (creator == null)
+                    command.Parameters.AddWithValue("@Creator", DBNull.Value);
+                else
+                    command.Parameters.AddWithValue("@Creator", creator.Username);
+                var sd = command.Parameters.Add("@StartDate", System.Data.SqlDbType.DateTime);
+                sd.Value = StartDate;
+                var ed = command.Parameters.Add("@EndDate", System.Data.SqlDbType.DateTime);
+                if (EndDate != null)
+                    ed.Value = EndDate;
+                else
+                    ed.Value = DBNull.Value;
+                var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
+                createDate.Direction = System.Data.ParameterDirection.Output;
+                var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
+                result.Direction = System.Data.ParameterDirection.Output;
+                var resultId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
+                resultId.Direction = System.Data.ParameterDirection.Output;
+                var childRow = command.Parameters.Add("@ProjectRow", System.Data.SqlDbType.Int);
+                childRow.Direction = System.Data.ParameterDirection.Output;
+                if(parentTask != null)
+                {
+                    command.Parameters.AddWithValue("@HasParent", 1);
+                    command.Parameters.AddWithValue("@ParentTaskId", parentTask.Id);
+                } else
+                {
+                    command.Parameters.AddWithValue("@HasParent", 0);
+                    command.Parameters.AddWithValue("@ParentTaskId", 0);
+                }
+                command.ExecuteNonQuery();
+                if (!(bool)result.Value)
+                    throw new InsertionError("Failed to insert task " + Name);
+                creationDate = (DateTime) createDate.Value;
+                id = (int) resultId.Value;
+                projectRow = (int)childRow.Value;
             }
-            command.ExecuteNonQuery();
-            if (!(bool)result.Value)
-                throw new InsertionError("Failed to insert task " + Name);
-            creationDate = (DateTime) createDate.Value;
-            id = (int) resultId.Value;
-            projectRow = (int)childRow.Value;
-            CloseConnection();
 
             // If the parent task exists, be sure to move it next to it
             //if(parentTask != null)
@@ -661,17 +661,13 @@ namespace SmartPert.Model
         {
             if (parentTask != null)
             {
-                SqlCommand command = OpenConnection("INSERT INTO [dbo].[SubTask] (SubTaskId, ParentTaskId) Values (@SubId, @ParentId);");
-                command.Parameters.AddWithValue("@SubId", Id);
-                command.Parameters.AddWithValue("@ParentId", parentTask.Id);
-                command.ExecuteNonQuery();
-                CloseConnection();
+                DBConnection.ExecuteNonQuery(string.Format("INSERT INTO [dbo].[SubTask] (SubTaskId, ParentTaskId) Values ({0}, {1});", Id, parentTask.Id));
             }
         }
 
         private void DB_DeleteSubTask()
         {
-            ExecuteSql("DELETE FROM [dbo].[SubTask] WHERE SubTaskId=" + Id);
+            DBConnection.ExecuteNonQuery("DELETE FROM [dbo].[SubTask] WHERE SubTaskId=" + Id);
         }
 
         /// <summary>
@@ -680,7 +676,7 @@ namespace SmartPert.Model
         protected override void PerformDelete()
         {
             string query = "EXEC dbo.TaskDelete " + Id + ";";
-            ExecuteSql(query);
+            DBConnection.ExecuteNonQuery(query);
             if(parentTask != null)
                 parentTask.RemoveSubTask(this);
             project.RemoveTask(this);

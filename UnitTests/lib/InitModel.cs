@@ -14,8 +14,9 @@ namespace UnitTests.lib
     public class InitModel
     {
         private Project project;
-
+        private static SmartPert.Model.Model model;
         public Project Project { get => project; }
+        public SmartPert.Model.Model MyModel { get => model; }
 
         /// <summary>
         /// Initializes a new project
@@ -25,6 +26,8 @@ namespace UnitTests.lib
         /// <param name="maxSubTaskLevel">The nested level of subtasks</param>
         public InitModel(int numTasks = 1, int subtasksPerTask = 1, int maxSubTaskLevel = 0)
         {
+            if (model == null)
+                model = SmartPert.Model.Model.GetInstance(ConnectDB: false);
             if (maxSubTaskLevel > 0 && subtasksPerTask > 0)
                 project = Init_Project(numTasks, initTaskCallback: new UniformSubtaskCallback(subtasksPerTask, maxSubTaskLevel).Callback);
             else
@@ -34,7 +37,7 @@ namespace UnitTests.lib
         /// <summary>
         /// Callback for creating uniform amount of subtasks
         /// </summary>
-        class UniformSubtaskCallback
+        public class UniformSubtaskCallback
         {
             private InitTaskCallback init;
             public UniformSubtaskCallback(int subtasksPerTask, int maxSubTaskLevel)
@@ -56,8 +59,9 @@ namespace UnitTests.lib
 
         public static Project Init_Project(int numTasks, string projectName = "Foo", string taskBaseName = "Task ", InitTaskCallback initTaskCallback=null)
         {
-            Project project = new Project(projectName, DateTime.Now, null, insert: false, track: false, likelyDuration: 10);
+            Project project = new Project(projectName, DateTime.Now, null, insert: false, likelyDuration: 10);
             Init_Tasks(project, numTasks, taskBaseName, initTaskCallback);
+            model.SetProject(project);
             return project;
         }
 
@@ -65,7 +69,7 @@ namespace UnitTests.lib
         {
             List<Project> projects = new List<Project>();
             for (int i = 0; i < numProjects; i++) {
-                Project project = new Project(projectBaseName + i.ToString(), DateTime.Now, null, insert: false, track: false, likelyDuration: 10);
+                Project project = new Project(projectBaseName + i.ToString(), DateTime.Now, null, insert: false, likelyDuration: 10);
                 Init_Tasks(project, numTasksPerProject, taskBaseName, initTaskCallback);
             }
             return projects;
@@ -82,7 +86,7 @@ namespace UnitTests.lib
             List<Task> tasks = new List<Task>();
             for (int i = 0; i < numTasks; i++)
             {
-                Task t = new Task(baseName + i.ToString(), DateTime.Now.AddDays(i * 3), null, 3, project: project, track: false, insert: false);
+                Task t = new Task(baseName + i.ToString(), DateTime.Now.AddDays(i * 3), null, 3, project: project, insert: false);
                 tasks.Add(t);
                 if (initTaskCallback != null)
                     initTaskCallback(t, i);
@@ -96,7 +100,7 @@ namespace UnitTests.lib
             List<Task> tasks = new List<Task>();
             for (int i = 0; i < numSubTasks; i++)
             {
-                Task t = new Task(baseName + i.ToString(), DateTime.Now.AddDays(i * 3), null, 3, project: project, track: false, insert: false);
+                Task t = new Task(baseName + i.ToString(), DateTime.Now.AddDays(i * 3), null, 3, project: project, insert: false);
                 parent.AddSubTask(t);
                 tasks.Add(t);
                 if (init != null)

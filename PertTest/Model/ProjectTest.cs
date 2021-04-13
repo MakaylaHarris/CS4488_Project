@@ -37,15 +37,17 @@ namespace PertTest.Model
         #region Private Methods
         private Project GetProjectByName(string name)
         {
-            SqlCommand command = OpenConnection("SELECT * FROM Project WHERE Name=@Name");
-            command.Parameters.AddWithValue("@Name", name);
-            SqlDataReader reader = command.ExecuteReader();
-            project = null;
-            while(reader.Read())
+            using (var conn = new DBConnection("SELECT * FROM Project WHERE Name=@Name"))
             {
-                project = Project.Parse(reader, null);
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@Name", name);
+                SqlDataReader reader = command.ExecuteReader();
+                project = null;
+                while (reader.Read())
+                {
+                    project = Project.Parse(reader, null);
+                }
             }
-            CloseConnection();
             return project;
         }
         #endregion

@@ -187,6 +187,8 @@ namespace SmartPert.Model
             startDate = start;
             endDate = end;
             this.description = description;
+            if(id == -1)
+                id = GetType() == typeof(Task) ? GetUniqueId(DBReader.Instance.Tasks.Keys) : GetUniqueId(DBReader.Instance.Projects.Keys);
             this.id = id;
             isComplete = EndDate != null && EndDate < DateTime.Now;
             creator = Model.Instance.GetCurrentUser();
@@ -215,15 +217,14 @@ namespace SmartPert.Model
 
         }
 
-        protected int GetUniqueId(IEnumerable<TimedItem> items)
+        protected int GetUniqueId(IEnumerable<int> ids)
         {
             int min = -1;
-            foreach (TimedItem item in items)
-                if (item.id < min)
-                    min = item.id;
+            foreach (int item in ids)
+                if (item < min)
+                    min = item;
             return min - 1;
         }
-
         #endregion
 
         #region Public Methods

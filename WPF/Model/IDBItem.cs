@@ -29,12 +29,12 @@ namespace SmartPert.Model
     /// </summary>
     public abstract class IDBItem
     {
-        private SqlConnection connection;
-        private bool isOutdated;    // Out of date object (not tracked by model)
-        private bool isDeleted;     // Set when item is gone from database
+        protected bool isOutdated;    // Out of date object (not tracked by model)
+        protected bool isDeleted;     // Set when item is gone from database
         protected bool isUpdated;     // Set during updating, if it has updated
+        protected bool isInserted;      // if item is inserted
         protected bool isTracked;     // Set in PostInit, whether or not to track this item
-        private bool isUpdating;    // Set during an update
+        protected bool isUpdating;    // Set during an update
         private List<IItemObserver> observers;
 
         #region Constructor
@@ -43,7 +43,6 @@ namespace SmartPert.Model
         /// </summary>
         public IDBItem(IItemObserver observer=null)
         {
-            isTracked = true;
             observers = new List<IItemObserver>();
             if (observer != null)
                 Subscribe(observer);
@@ -57,6 +56,7 @@ namespace SmartPert.Model
         /// <param name="track">Track this as the latest object in dbreader</param>
         public virtual void PostInit(bool insert=true, bool track=true)
         {
+            isTracked = track;
             if (insert)  // insert first to set primary key
                 Insert();
             if (track)
@@ -69,11 +69,6 @@ namespace SmartPert.Model
                 {
                     throw new DuplicateKeyError("Error creating " + this.ToString() + ", duplicate item exists with same primary key");
                 }
-            }
-            else
-            {
-                isOutdated = true;
-                isTracked = false;
             }
         }
         #endregion
@@ -123,6 +118,7 @@ namespace SmartPert.Model
         #endregion
 
         #region Properties
+        protected bool CanConnectDB { get => isTracked && DBConnection.CanConnect; }
 
         /// <summary>
         /// Has the item been deleted? Can not undelete!
@@ -157,6 +153,8 @@ namespace SmartPert.Model
                 NotifyDelete();     // sends the same notification as deleted
             }
         }
+
+        public bool IsTracked { get => isTracked; }
 
 
         #endregion
@@ -202,7 +200,7 @@ namespace SmartPert.Model
         {
             if (IsDeleted || IsOutdated)
                 throw new ItemDeletedException("Unable to delete deleted item");
-            if(isTracked)
+            if(CanConnectDB)
                 PerformDelete();
             IsDeleted = true;
         }
@@ -239,9 +237,10 @@ namespace SmartPert.Model
         /// </summary>
         public void NotifyUpdate()
         {
-            /* Notify newest subscribers first, this is important so the generic model update is sent last! */
-            for(int i = observers.Count - 1; i >= 0; i--)
-                observers[i].OnUpdate(this);
+            if(Model.Instance.Notify)
+                /* Notify newest subscribers first, this is important so the generic model update is sent last! */
+                for(int i = observers.Count - 1; i >= 0; i--)
+                    observers[i].OnUpdate(this);
         }
 
 
@@ -253,7 +252,9 @@ namespace SmartPert.Model
         {
             if (IsDeleted || IsOutdated)
                 throw new ItemDeletedException("Unable to insert deleted item");
-            PerformInsert();
+            if (CanConnectDB)
+                PerformInsert();
+            isInserted = true;
         }
 
         /// <summary>
@@ -264,51 +265,13 @@ namespace SmartPert.Model
         {
             if (isUpdating)  // Triggered while updating from database (no update needed)
                 return;
-            if (!isTracked)
-            {
-                NotifyUpdate();
-                return;
-            }
             if (IsDeleted || IsOutdated)
                 throw new ItemDeletedException("Unable to update deleted item");
-            PerformUpdate();
+            if(CanConnectDB)
+                    PerformUpdate();
             NotifyUpdate();
         }
 
-        /// <summary>
-        /// Open connection with the Default connection string. Use CloseConnection when done.
-        /// </summary>
-        /// <param name="query">Sql query to generate command</param>
-        /// <returns>SqlCommand to add params and/or execute</returns>
-        protected SqlCommand OpenConnection(string query)
-        {
-            if (!isTracked || IsOutdated)
-                throw new InvalidOperationException("Cannot perform database updates with untracked item!");
-            connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
-            connection.Open();
-            return new SqlCommand(query, connection);
-        }
-
-        /// <summary>
-        /// Executes the query and closes connection (no sql params)
-        /// </summary>
-        /// <param name="query">The sql statement</param>
-        /// <returns>the ExecuteNonQuery result</returns>
-        protected int ExecuteSql(string query)
-        {
-            SqlCommand cmd = OpenConnection(query);
-            int result = cmd.ExecuteNonQuery();
-            connection.Close();
-            return result;
-        }
-
-        /// <summary>
-        /// Closes sql connection
-        /// </summary>
-        protected void CloseConnection()
-        {
-            connection.Close();
-        }
         #endregion
 
         #region Abstract Methods

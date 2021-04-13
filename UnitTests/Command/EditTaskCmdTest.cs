@@ -26,6 +26,15 @@ namespace UnitTests.Command
         }
         
         [TestMethod]
+        public void TestMarkIncomplete()
+        {
+            Task t = InitModel.Init_Tasks(project, baseName: "Foo")[0];
+            t.IsComplete = true;
+            Assert.IsTrue(new EditTaskCmd(t, markIncomplete: true).Run());
+            Assert.IsFalse(t.IsComplete);
+        }
+
+        [TestMethod]
         public void TestMarkCompleteEarlyEndChangesStartDate()
         {
             Task toEdit = tasks[4];

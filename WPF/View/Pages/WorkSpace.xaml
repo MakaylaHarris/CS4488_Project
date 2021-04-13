@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:SmartPert.View.Pages"
-      xmlns:model="clr-namespace:SmartPert.Model"
+      xmlns:model="clr-namespace:SmartPert.Model" 
+      xmlns:smartpert="clr-namespace:SmartPert"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       mc:Ignorable="d" 
       Loaded="Page_Loaded"
@@ -26,6 +27,11 @@
     </Page.Resources>
     
     <Grid x:Name="workSpace" Grid.IsSharedSizeScope="True">
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Command="{x:Static smartpert:CustomCommands.AddTaskCommand}"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
         <Grid.RowDefinitions>
             <RowDefinition Height="30px"/>
             <RowDefinition Height="40"/>

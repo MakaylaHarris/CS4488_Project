@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Command\AddDependencyCmdTest.cs" />
     <Compile Include="Command\AddSubTaskCmdTest.cs" />
+    <Compile Include="Command\DeleteTaskCmdTest.cs" />
     <Compile Include="Command\EditTaskCmdTest.cs" />
     <Compile Include="Command\Helpers.cs" />
     <Compile Include="Command\RemoveDependencyCmdTest.cs" />

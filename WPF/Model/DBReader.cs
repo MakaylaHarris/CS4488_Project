@@ -16,6 +16,7 @@ namespace SmartPert.Model
         private Project currentProject;
         private DBUpdateReceiver receiver;
         private User currentUser;
+        private bool saveSettings;
         // Current copy of the data
         private Dictionary<int, Project> projects;
         private Dictionary<string, User> users;
@@ -27,7 +28,7 @@ namespace SmartPert.Model
         private Dictionary<int, HashSet<Task>> subtasks;
 
         private DBPoller polling;
-        private SqlConnection connection;
+        private DBConnectionReader connReader;
         private bool isUpdating;
         private int updateCount;
         #endregion
@@ -48,7 +49,7 @@ namespace SmartPert.Model
         /// </summary>
         public bool IsUpdating { get => isUpdating; }
 
-        public bool SaveSettings { get; set; }
+        public bool SaveSettings { get => saveSettings; set { saveSettings = value; } }
 
         internal Project CurrentProject { get => currentProject; }
         internal Dictionary<int, Project> Projects { get => projects; }
@@ -65,16 +66,19 @@ namespace SmartPert.Model
         /// </summary>
         /// <param name="receiver">The update receiver</param>
         /// <returns>DBReader instance</returns>
-        public static DBReader Instantiate(DBUpdateReceiver receiver)
+        public static DBReader Instantiate(DBUpdateReceiver receiver, bool connectToDB=true)
         {
             instance.receiver = receiver;
-            instance.TestNewConnection(Properties.Settings.Default.ConnectionString);
+            DBConnection.CanConnect = connectToDB;
+            if(connectToDB)
+                instance.TestNewConnection(Properties.Settings.Default.ConnectionString);
             return instance;
         }
 
         public void Shutdown()
         {
-            polling.Stop();
+            if(Connected)
+                polling.Stop();
             foreach (User u in users.Values)
                 u.UnSubscribe(this);
             foreach (Task t in tasks.Values)
@@ -103,30 +107,12 @@ namespace SmartPert.Model
             dependencies = new Dictionary<int, HashSet<Task>>();
             dependentOn = new Dictionary<int, HashSet<Task>>();
             subtasks = new Dictionary<int, HashSet<Task>>();
-            SaveSettings = true;
+            saveSettings = true;
             isUpdating = false;
         }
         #endregion
 
         #region Private Methods
-        private SqlDataReader OpenReader(string query)
-        {
-            if (connection.State == System.Data.ConnectionState.Closed)
-                connection.Open();
-            SqlCommand command = new SqlCommand(query, connection);
-            return command.ExecuteReader();
-        }
-
-        private SqlDataReader ReadTable(string table)
-        {
-            return OpenReader("Select * From " + table + ";");
-        }
-
-        private SqlCommand OpenAndGetCmd(string cmd)
-        {
-            connection.Open();
-            return new SqlCommand(cmd, connection);
-        }
 
         private void UpdateProject()
         {
@@ -134,7 +120,7 @@ namespace SmartPert.Model
             Dictionary<int, bool> found = new Dictionary<int, bool>();
             foreach(Project proj in projects.Values)
                 found[proj.Id] = false;
-            SqlDataReader reader = ReadTable("Project");
+            SqlDataReader reader = connReader.ReadTable("Project");
             string name = Properties.Settings.Default.LastProject;
             while (reader.Read())
             {
@@ -171,7 +157,7 @@ namespace SmartPert.Model
             Dictionary<int, bool> found = new Dictionary<int, bool>();
             foreach (Task task in tasks.Values)
                 found[task.Id] = false;
-            SqlDataReader reader = OpenReader("Select * from Task ORDER BY ProjectRow DESC;");
+            SqlDataReader reader = connReader.OpenReader("Select * from Task ORDER BY ProjectRow DESC;");
             while (reader.Read())
             {
                 if(tasks.TryGetValue((int) reader["TaskId"], out t))
@@ -196,7 +182,7 @@ namespace SmartPert.Model
             Dictionary<string, bool> found = new Dictionary<string, bool>();
             foreach (string s in users.Keys)
                 found[s] = false;
-            SqlDataReader reader = ReadTable("[User]");
+            SqlDataReader reader = connReader.ReadTable("[User]");
             while (reader.Read())
             {
                 string username = (string)reader["UserName"];
@@ -225,7 +211,7 @@ namespace SmartPert.Model
             Dictionary<int, HashSet<Task>> newDepend = new Dictionary<int, HashSet<Task>>();
             Dictionary<int, HashSet<Task>> newDependOn = new Dictionary<int, HashSet<Task>>();
             HashSet<Task> tmp;
-            SqlDataReader reader = ReadTable("Dependency");
+            SqlDataReader reader = connReader.ReadTable("Dependency");
             while(reader.Read())
             {
                 int rootId = (int) reader["RootId"];
@@ -275,7 +261,7 @@ namespace SmartPert.Model
             // Grab the new data
             Dictionary<int, HashSet<Task>> newSubtasks = new Dictionary<int, HashSet<Task>>();
             HashSet<Task> tmp;
-            SqlDataReader reader = ReadTable("SubTask");
+            SqlDataReader reader = connReader.ReadTable("SubTask");
             while (reader.Read())
             {
                 int rootId = (int)reader["ParentTaskId"];
@@ -308,7 +294,7 @@ namespace SmartPert.Model
             // Read in task workers
             Dictionary<int, HashSet<User>> newWorkers = new Dictionary<int, HashSet<User>>();
             HashSet<User> tmp;
-            SqlDataReader reader = ReadTable(table);
+            SqlDataReader reader = connReader.ReadTable(table);
             while (reader.Read())
             {
                 int id_val = (int)reader[id];
@@ -437,11 +423,13 @@ namespace SmartPert.Model
         {
             if(name != "" && !name.Contains("@"))
             {
-                SqlCommand command = OpenAndGetCmd("SELECT COUNT(*) FROM [USER] WHERE [USER].UserName=@username AND Password IS NOT Null AND PASSWORD !='';");
-                command.Parameters.AddWithValue("@username", name);
-                int result = (int)command.ExecuteScalar();
-                connection.Close();
-                return result == 0;
+                using (var conn = new DBConnection("SELECT COUNT(*) FROM [USER] WHERE [USER].UserName=@username AND Password IS NOT Null AND PASSWORD !='';"))
+                {
+                    SqlCommand command = conn.Command;
+                    command.Parameters.AddWithValue("@username", name);
+                    int result = (int)command.ExecuteScalar();
+                    return result == 0;
+                }
             }
             return false;
         }
@@ -458,11 +446,13 @@ namespace SmartPert.Model
                 var addr = new System.Net.Mail.MailAddress(email);
                 if(addr.Address == email)
                 {
-                    SqlCommand command = OpenAndGetCmd("SELECT COUNT(*) FROM [USER] WHERE [USER].Email=@email;");
-                    command.Parameters.AddWithValue("@email", email);
-                    int result = (int)command.ExecuteScalar();
-                    connection.Close();
-                    return result == 0;
+                    using (var conn = new DBConnection("SELECT COUNT(*) FROM [USER] WHERE [USER].Email=@email;"))
+                    {
+                        SqlCommand command = conn.Command;
+                        command.Parameters.AddWithValue("@email", email);
+                        int result = (int)command.ExecuteScalar();
+                        return result == 0;
+                    }
                 }
             }
             catch { }
@@ -477,14 +467,17 @@ namespace SmartPert.Model
         /// <returns>True on success</returns>
         public bool Login(string userId, string password)
         {
-            SqlCommand command = OpenAndGetCmd("EXECUTE [dbo].TryLogin @userId, @password, @success out;");
-            command.Parameters.AddWithValue("@userId", userId);
-            command.Parameters.AddWithValue("@password", password);
-            var success = command.Parameters.Add("@success", System.Data.SqlDbType.Bit);
-            success.Direction = System.Data.ParameterDirection.Output;
-            command.ExecuteNonQuery();
-            bool result = (bool) success.Value;
-            connection.Close();
+            bool result = false;
+            using (var conn = new DBConnection("EXECUTE [dbo].TryLogin @userId, @password, @success out;"))
+            {
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@userId", userId);
+                command.Parameters.AddWithValue("@password", password);
+                var success = command.Parameters.Add("@success", System.Data.SqlDbType.Bit);
+                success.Direction = System.Data.ParameterDirection.Output;
+                command.ExecuteNonQuery();
+                result = (bool)success.Value;
+            }
             if (result)
             {
                 bool isUserName = false;
@@ -565,12 +558,12 @@ namespace SmartPert.Model
         /// <returns>true if connection succeeds</returns>
         public bool TestNewConnection(string connectString)
         {
+            if (!DBConnection.CanConnect)
+                throw new Exception("Connecting to Database not allowed!");
             bool isConnected = true;
             try
             {
-                connection = new SqlConnection(connectString);
-                connection.Open();
-                connection.Close();
+                using(var conn = new DBConnection(true)) { }
             } catch(Exception e)
             {
                 Console.WriteLine(e);
@@ -615,20 +608,23 @@ namespace SmartPert.Model
         {
             if (IsUpdating)
                 return;
-            isUpdating = true;
-            connection.Open();
-            UpdateUsers();
-            UpdateProject();
-            Dictionary<int, Task> idToTask = UpdateTasks();
-            UpdateDependencies(idToTask);
-            UpdateSubtasks(idToTask);
-            UpdateProjectWorkers();
-            UpdateTaskWorkers();
-            connection.Close();
-
-            PostUpdate();
-            updateCount++;
-            isUpdating = false;
+            if (Connected)
+            {
+                isUpdating = true;
+                using (connReader = new DBConnectionReader(true))
+                {
+                    UpdateUsers();
+                    UpdateProject();
+                    Dictionary<int, Task> idToTask = UpdateTasks();
+                    UpdateDependencies(idToTask);
+                    UpdateSubtasks(idToTask);
+                    UpdateProjectWorkers();
+                    UpdateTaskWorkers();
+                }
+                PostUpdate();
+                updateCount++;
+                isUpdating = false;
+            }
             if(receiver != null)
                 receiver.OnDBUpdate(CurrentProject);
         }
@@ -636,7 +632,7 @@ namespace SmartPert.Model
         /// <summary>
         /// After an update is finished, send out notifications
         /// </summary>
-        public void PostUpdate()
+        private void PostUpdate()
         {
             foreach (Project item in projects.Values)
                 item.PostUpdate();
