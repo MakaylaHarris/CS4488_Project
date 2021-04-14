@@ -29,11 +29,12 @@ namespace SmartPert.Model
     /// </summary>
     public abstract class IDBItem
     {
-        private SqlConnection connection;
-        private bool isOutdated;    // Out of date object (not tracked by model)
-        private bool isDeleted;     // Set when item is gone from database
+        protected bool isOutdated;    // Out of date object (not tracked by model)
+        protected bool isDeleted;     // Set when item is gone from database
         protected bool isUpdated;     // Set during updating, if it has updated
-        private bool isUpdating;    // Set during an update
+        protected bool isInserted;      // if item is inserted
+        protected bool isTracked;     // Set in PostInit, whether or not to track this item
+        protected bool isUpdating;    // Set during an update
         private List<IItemObserver> observers;
 
         #region Constructor
@@ -53,8 +54,9 @@ namespace SmartPert.Model
         /// </summary>
         /// <param name="insert">insertion</param>
         /// <param name="track">Track this as the latest object in dbreader</param>
-        public void PostInit(bool insert=true, bool track=true)
+        public virtual void PostInit(bool insert=true, bool track=true)
         {
+            isTracked = track;
             if (insert)  // insert first to set primary key
                 Insert();
             if (track)
@@ -62,13 +64,12 @@ namespace SmartPert.Model
                 try
                 {
                     DBReader.Instance.TrackItem(this);
-                } catch(ArgumentException)
+                }
+                catch (ArgumentException)
                 {
                     throw new DuplicateKeyError("Error creating " + this.ToString() + ", duplicate item exists with same primary key");
                 }
             }
-            else
-                isOutdated = true;
         }
         #endregion
 
@@ -117,6 +118,7 @@ namespace SmartPert.Model
         #endregion
 
         #region Properties
+        protected bool CanConnectDB { get => isTracked && DBConnection.CanConnect; }
 
         /// <summary>
         /// Has the item been deleted? Can not undelete!
@@ -129,6 +131,14 @@ namespace SmartPert.Model
                 isDeleted = true;
                 NotifyDelete();
             }
+        }
+
+        protected virtual void OnOutdatedBy(IDBItem item) { }
+
+        public void MarkOutdatedBy(IDBItem updated)
+        {
+            OnOutdatedBy(updated);
+            IsOutdated = true;
         }
 
         /// <summary>
@@ -144,14 +154,16 @@ namespace SmartPert.Model
             }
         }
 
+        public bool IsTracked { get => isTracked; }
+
 
         #endregion
 
         #region Private Methods
         private void NotifyDelete()
         {
-            foreach (IItemObserver observer in observers)
-                observer.OnDeleted(this);
+            for (int i = observers.Count - 1; i >= 0; i--)
+                observers[i].OnDeleted(this);
             observers.Clear();      // No more updates
         }
 
@@ -176,7 +188,8 @@ namespace SmartPert.Model
         /// <param name="observer">observer</param>
         public void UnSubscribe(IItemObserver observer)
         {
-            observers.Remove(observer);
+            if(!isDeleted && !isOutdated)
+                observers.Remove(observer);
         }
 
         /// <summary>
@@ -187,7 +200,8 @@ namespace SmartPert.Model
         {
             if (IsDeleted || IsOutdated)
                 throw new ItemDeletedException("Unable to delete deleted item");
-            PerformDelete();
+            if(CanConnectDB)
+                PerformDelete();
             IsDeleted = true;
         }
 
@@ -207,7 +221,7 @@ namespace SmartPert.Model
         /// <summary>
         /// After a refresh, send out updates to subscribers
         /// </summary>
-        public void PostUpdate()
+        public virtual void PostUpdate()
         {
             if(isUpdated)
             {
@@ -221,11 +235,12 @@ namespace SmartPert.Model
         /// <summary>
         /// Notify an update occurred
         /// </summary>
-        protected void NotifyUpdate()
+        public void NotifyUpdate()
         {
-            /* Notify newest subscribers first, this is important so the generic model update is sent last! */
-            for(int i = observers.Count - 1; i >= 0; i--)
-                observers[i].OnUpdate(this);
+            if(Model.Instance.Notify)
+                /* Notify newest subscribers first, this is important so the generic model update is sent last! */
+                for(int i = observers.Count - 1; i >= 0; i--)
+                    observers[i].OnUpdate(this);
         }
 
 
@@ -237,7 +252,9 @@ namespace SmartPert.Model
         {
             if (IsDeleted || IsOutdated)
                 throw new ItemDeletedException("Unable to insert deleted item");
-            PerformInsert();
+            if (CanConnectDB)
+                PerformInsert();
+            isInserted = true;
         }
 
         /// <summary>
@@ -250,42 +267,11 @@ namespace SmartPert.Model
                 return;
             if (IsDeleted || IsOutdated)
                 throw new ItemDeletedException("Unable to update deleted item");
-            PerformUpdate();
+            if(CanConnectDB)
+                    PerformUpdate();
             NotifyUpdate();
         }
 
-        /// <summary>
-        /// Open connection with the Default connection string. Use CloseConnection when done.
-        /// </summary>
-        /// <param name="query">Sql query to generate command</param>
-        /// <returns>SqlCommand to add params and/or execute</returns>
-        protected SqlCommand OpenConnection(string query)
-        {
-            connection = new SqlConnection(Properties.Settings.Default.ConnectionString);
-            connection.Open();
-            return new SqlCommand(query, connection);
-        }
-
-        /// <summary>
-        /// Executes the query and closes connection (no sql params)
-        /// </summary>
-        /// <param name="query">The sql statement</param>
-        /// <returns>the ExecuteNonQuery result</returns>
-        protected int ExecuteSql(string query)
-        {
-            SqlCommand cmd = OpenConnection(query);
-            int result = cmd.ExecuteNonQuery();
-            connection.Close();
-            return result;
-        }
-
-        /// <summary>
-        /// Closes sql connection
-        /// </summary>
-        protected void CloseConnection()
-        {
-            connection.Close();
-        }
         #endregion
 
         #region Abstract Methods

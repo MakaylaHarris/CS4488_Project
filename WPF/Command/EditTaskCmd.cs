@@ -14,49 +14,66 @@ namespace SmartPert.Command
     {
         private Task toEdit;
         private readonly string name;
-        private readonly DateTime start;
+        private readonly DateTime? start;
         private readonly DateTime? end;
         private readonly int likelyDuration;
         private readonly int maxDuration;
         private readonly int minDuration;
         private readonly string description;
+        private readonly bool markIncomplete;
         private readonly Task oldTask;
 
-        public EditTaskCmd(Task toEdit, string name, DateTime start, DateTime? end, int likelyDuration, int maxDuration, int minDuration, string description)
+        public EditTaskCmd(Task toEdit, string name=null, DateTime? start=null, DateTime? end = null, int likelyDuration=-1, int maxDuration=-1, int minDuration=-1, string description=null, bool markIncomplete=false)
         {
             this.toEdit = toEdit;
             this.name = name;
             this.start = start;
+            if (start == null && end != null && end < toEdit.SetStartDate)
+                this.start = end;
             this.end = end;
             this.likelyDuration = likelyDuration;
             this.maxDuration = maxDuration;
             this.minDuration = minDuration;
             this.description = description;
-            oldTask = new Task(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.LikelyDuration, toEdit.MaxDuration,
-                toEdit.MinDuration, toEdit.Description, toEdit.Proj, toEdit.Id, false, false);
+            this.markIncomplete = markIncomplete;
+            oldTask = new Task(toEdit);
         }
 
         protected override bool Execute()
         {
-            toEdit.Name = name;
-            toEdit.StartDate = start;
-            toEdit.EndDate = end;
-            toEdit.LikelyDuration = likelyDuration;
-            toEdit.MaxDuration = maxDuration;
-            toEdit.MinDuration = minDuration;
-            toEdit.Description = description;
+            if(name != null)
+                toEdit.Name = name;
+            if(start != null)
+                toEdit.StartDate = (DateTime)start;
+            if(end != null || markIncomplete)
+                toEdit.EndDate = end;
+            if(maxDuration > 0)
+                toEdit.MaxDuration = maxDuration;
+            if(likelyDuration > 0)
+                toEdit.LikelyDuration = likelyDuration;
+            if(minDuration > 0)
+                toEdit.MinDuration = minDuration;
+            if(description != null)
+                toEdit.Description = description;
             return true;
         }
 
         public override bool Undo()
         {
-            toEdit.Name = oldTask.Name;
-            toEdit.StartDate = oldTask.StartDate;
-            toEdit.EndDate = oldTask.EndDate;
-            toEdit.LikelyDuration = oldTask.LikelyDuration;
-            toEdit.MaxDuration = oldTask.MaxDuration;
-            toEdit.MinDuration = oldTask.MinDuration;
-            toEdit.Description = oldTask.Description;
+            if(name != null)
+                toEdit.Name = oldTask.Name;
+            if(start != null)
+                toEdit.StartDate = oldTask.StartDate;
+            if(end != null || markIncomplete)
+                toEdit.EndDate = oldTask.EndDate;
+            if(maxDuration > 0)
+                toEdit.MaxDuration = oldTask.MaxDuration;
+            if (likelyDuration > 0)
+                toEdit.LikelyDuration = oldTask.LikelyDuration;
+            if(minDuration > 0)
+                toEdit.MinDuration = oldTask.MinDuration;
+            if(description != null)
+                toEdit.Description = oldTask.Description;
             return true;
         }
 

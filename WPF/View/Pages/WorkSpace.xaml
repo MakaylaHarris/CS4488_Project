@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:SmartPert.View.Pages"
-      xmlns:model="clr-namespace:SmartPert.Model"
+      xmlns:model="clr-namespace:SmartPert.Model" 
+      xmlns:smartpert="clr-namespace:SmartPert"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       mc:Ignorable="d" 
       Loaded="Page_Loaded"
@@ -25,44 +26,56 @@
         </Style>
     </Page.Resources>
     
-    <Grid x:Name="workSpace">
-        <ScrollViewer x:Name="ScrollViewer" 
+    <Grid x:Name="workSpace" Grid.IsSharedSizeScope="True">
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Command="{x:Static smartpert:CustomCommands.AddTaskCommand}"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30px"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" MinWidth="100" MaxWidth="350"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <RadioButton x:Name="BestCaseRadio" Click="BestCaseRadio_Click">Best-Case Scenario</RadioButton>
+            <RadioButton x:Name="WorstCaseRadio" IsChecked="True" Click="WorstCaseRadio_Click">Worst-Case Scenario</RadioButton>
+        </StackPanel>
+        <ScrollViewer x:Name="HeaderView" Grid.Row="1" Grid.Column="1"
+            HorizontalContentAlignment="Left" Margin="0,0,20,0"
+                      VerticalContentAlignment="Top"
+                      ScrollChanged="HeaderView_ScrollChanged"
+                      VerticalScrollBarVisibility="Hidden" 
+                      HorizontalScrollBarVisibility="Hidden">
+            <Grid x:Name="HeaderGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+            </Grid>
+        </ScrollViewer>
+        <ScrollViewer x:Name="LeftView" Grid.Row="2"
+            HorizontalContentAlignment="Left" 
+                      VerticalContentAlignment="Top"
+                      ScrollChanged="LeftView_ScrollChanged"
+                      VerticalScrollBarVisibility="Hidden" 
+                      HorizontalScrollBarVisibility="Hidden">
+            <Grid x:Name="LeftGrid" Margin="0,0,0,20">
+            </Grid>
+        </ScrollViewer>
+        <ScrollViewer x:Name="ScrollViewer"
+                      Grid.Column="1" Grid.Row="2"
                       HorizontalContentAlignment="Left" 
-                      VerticalContentAlignment="top" 
+                      VerticalContentAlignment="Top" 
                       VerticalScrollBarVisibility="Visible" 
+                      ScrollChanged="ScrollViewer_ScrollChanged"
                       HorizontalScrollBarVisibility="Visible">
-            <Canvas x:Name="MainCanvas" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid x:Name="mainGrid" ShowGridLines="False">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" MinWidth="100" MaxWidth="300"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20"></RowDefinition>
-                        <RowDefinition Height="20"></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.Children>
-                        <Label 
-                Grid.Row="2"
-                Content="{Binding Path=Project.Name, Mode=OneWay}"/> 
-                        <!--<GridSplitter
-                Grid.Column="0" Grid.RowSpan="2147483647"
-                Width="3" 
-                Background="{DynamicResource PrimaryHueMidBrush}"
-                VerticalAlignment="Stretch" 
-                HorizontalAlignment="Right" />-->
-
-                        <!-- 2147483647 is the highest int, basically saying border spans all columns -->
-                        <Border 
-                Grid.Column="0" Grid.ColumnSpan="2147483647" 
-                Grid.Row="0" Grid.RowSpan="2" 
-                BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="2">
-                        </Border>
-                        <Border 
-                Grid.Column="0" Grid.ColumnSpan="2147483647" 
-                Grid.Row="0" Grid.RowSpan="2147483647" 
-                BorderBrush="{DynamicResource PrimaryHueMidBrush}" BorderThickness="1">
-                        </Border>
-                    </Grid.Children>
+            <Canvas x:Name="MainCanvas" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid x:Name="mainGrid" ShowGridLines="False" >
                 </Grid>
             </Canvas>
         </ScrollViewer>

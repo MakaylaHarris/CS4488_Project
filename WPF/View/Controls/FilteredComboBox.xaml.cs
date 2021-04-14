@@ -37,6 +37,7 @@ namespace SmartPert.View.Controls
         private ItemFilter filter;
         private string input;
         private object selected;
+        private SelectionChanged selectionChanged;
 
         #region Properties
         /// <summary>
@@ -44,31 +45,80 @@ namespace SmartPert.View.Controls
         /// </summary>
         public ObservableCollection<object> FilteredItems { get; set; }
 
+        #region Selected Property
         /// <summary>
         /// Get the selected object
         /// </summary>
-        public object Selected { get => selected; }
+        public object Selected { get => GetValue(SelectedProperty); set => SetValue(SelectedProperty, value); }
 
+        public static readonly DependencyProperty SelectedProperty = DependencyProperty.Register("Selected", typeof(object), typeof(FilteredComboBox),
+            new PropertyMetadata(null, new PropertyChangedCallback(OnSelectedChange)));
+        private static void OnSelectedChange(DependencyObject d, DependencyPropertyChangedEventArgs a) => ((FilteredComboBox)d).OnSelectedChange(a);
+        private void OnSelectedChange(DependencyPropertyChangedEventArgs a)
+        {
+            selected = a.NewValue;
+            cb.SelectedItem = selected;
+        }
+        #endregion
+
+        #region CanAddItems Property
+        /// <summary>
+        /// If true, they can add their own items.
+        /// </summary>
+        public bool CanAddItems
+        {
+            get => (bool)GetValue(CanAddItemsProperty);
+            set => SetValue(CanAddItemsProperty, value);
+        }
+        public static readonly DependencyProperty CanAddItemsProperty = DependencyProperty.Register("CanAddItems", typeof(bool), typeof(FilteredComboBox),
+            new PropertyMetadata(true, new PropertyChangedCallback(OnCanAddItemsChanged)));
+
+        private static void OnCanAddItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs a) => ((FilteredComboBox)d).OnCanAddItemsChanged(a);
+
+        private void OnCanAddItemsChanged(DependencyPropertyChangedEventArgs a)
+        {
+            bool value = (bool)a.NewValue;
+            CanAddButton.IsEnabled = value;
+            CanAddButton.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+        }
+        #endregion
+
+        #region Items Property
         /// <summary>
         /// All Items
         /// </summary>
         public ObservableCollection<object> Items
         {
-            get => allItems;
-            set
-            {
-                allItems = value;
-                filter(allItems, input, FilteredItems);
-                cb.ItemsSource = FilteredItems;
-            }
+            get => GetValue(AllItemsProperty) as ObservableCollection<object>;
+            set => SetValue(AllItemsProperty, value);
         }
+        public static readonly DependencyProperty AllItemsProperty = DependencyProperty.Register("Items", typeof(ObservableCollection<object>), typeof(FilteredComboBox),
+            new PropertyMetadata(null, new PropertyChangedCallback(OnItemsChanged)));
+        private static void OnItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs a) => ((FilteredComboBox)d).OnItemsChanged(a);
+        private void OnItemsChanged(DependencyPropertyChangedEventArgs a)
+        {
+            allItems = a.NewValue as ObservableCollection<object>;
+            filter(allItems, input, FilteredItems);
+            cb.ItemsSource = FilteredItems;
+        }
+        #endregion
 
         /// <summary>
         /// Gets the user input
         /// </summary>
         public string Input { get => input; }
 
-        public SelectionChanged SelectionChanged { get; set; }
+        #region SelectionChanged Property
+        public SelectionChanged SelectionChanged { get => GetValue(SelectionChangeProperty) as SelectionChanged; set => SetValue(SelectionChangeProperty, value); }
+        public static readonly DependencyProperty SelectionChangeProperty = DependencyProperty.Register("SelectionChanged", typeof(SelectionChanged), typeof(FilteredComboBox),
+            new PropertyMetadata(null, new PropertyChangedCallback(OnSelectionChanged)));
+        private static void OnSelectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs a) => ((FilteredComboBox)d).OnSelectionChanged(a);
+        private void OnSelectionChanged(DependencyPropertyChangedEventArgs a)
+        {
+            selectionChanged = a.NewValue as SelectionChanged;
+        }
+        #endregion
+
         #endregion
 
         #region Constructor
@@ -81,8 +131,8 @@ namespace SmartPert.View.Controls
             this.filter = stringFilter;
             selected = null;
             input = "";
-            allItems = new ObservableCollection<object>();
             FilteredItems = new ObservableCollection<object>();
+            SetValue(AllItemsProperty, new ObservableCollection<object>());            
         }
         #endregion
 
@@ -90,24 +140,24 @@ namespace SmartPert.View.Controls
         private void stringFilter(ObservableCollection<object> items, string input, ObservableCollection<object> filtered)
         {
             filtered.Clear();
-            foreach(object item in items)
+            foreach (object item in items)
             {
                 String str = item.ToString();
                 if (str.StartsWith(input))
+                {
                     filtered.Add(item);
+                    if (filtered.Count > 10)
+                        break;
+                }
             }
         }
 
         private void cb_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             input = cb.Text + e.Text;
-            if (input.Length > 0)
-            {
-                if (input.Length == 1)
-                    cb.IsDropDownOpen = true;
-                filter(allItems, input, FilteredItems);
-                cb.ItemsSource = FilteredItems;
-            }
+            cb.IsDropDownOpen = true;
+            filter(allItems, input, FilteredItems);
+            cb.ItemsSource = FilteredItems;
         }
 
         private void cb_SelectionChanged(object sender, SelectionChangedEventArgs e)

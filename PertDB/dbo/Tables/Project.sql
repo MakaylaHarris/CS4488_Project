@@ -3,6 +3,9 @@
 	[Name] [varchar](50) NOT NULL,
 	[StartDate] [datetime] NOT NULL,
 	[EndDate] [datetime] NULL,
+	[MinEstDuration] [int] NULL,
+	[MaxEstDuration] [int] NULL,
+	[MostLikelyEstDuration] [int] NOT NULL,
 	[Description] [varchar](max) NULL,
 	[Creator] VARCHAR(50) NULL, 
     [CreationDate] DATETIME NOT NULL, 
@@ -27,3 +30,10 @@ REFERENCES [dbo].[User] ([UserName])
 GO
 ALTER TABLE [dbo].[Project] CHECK CONSTRAINT [FK_Project_Creator]
 GO
+ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [CK_Project_Max] CHECK  (([MaxEstDuration]>=[MostLikelyEstDuration]))
+GO
+ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [CK_Project_Max]
+GO
+ALTER TABLE [dbo].[Task]  WITH CHECK ADD  CONSTRAINT [CK_Project_Min] CHECK  (([MinEstDuration]<=[MostLikelyEstDuration] AND [MinEstDuration]>=0))
+GO
+ALTER TABLE [dbo].[Task] CHECK CONSTRAINT [CK_Project_Min]

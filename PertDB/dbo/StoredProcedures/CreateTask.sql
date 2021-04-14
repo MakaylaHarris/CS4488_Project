@@ -19,13 +19,17 @@ CREATE PROCEDURE [dbo].[CreateTask]
 	@Creator varchar(50),		/* Added 2/13/2021 by Robert Nelson */
 	@CreationDate datetime OUTPUT,  /* Added 2/13/2021 by Robert Nelson */
 	@Result BIT OUTPUT,
-	@ResultId int OUTPUT		/* Added 2/13/2021 by Robert Nelson */
+	@ResultId int OUTPUT,		/* Added 2/13/2021 by Robert Nelson */
+	/* Added 3/8/2021 by Robert Nelson for subtasks */
+	@ProjectRow int OUTPUT,
+	@HasParent bit,
+	@ParentTaskId int
 )
 AS
 BEGIN
 
  SET @Result = 0;
-
+  
  /* Check if there is an active project */
   IF (SELECT COUNT(*) FROM [Project] WHERE [Project].ProjectId = @ProjectID) = 0
 	/* Project does not exist, return with result=0 */
@@ -37,14 +41,16 @@ BEGIN
 	RETURN;
 
  SET @CreationDate = GETDATE();
+ SET @ProjectRow = dbo.GetNextChildRow(@ProjectId);
+
  /* Task is created referencing the current project (have project ID) */
- INSERT INTO dbo.[Task] (Name, Description, MinEstDuration, MostLikelyEstDuration, MaxEstDuration, StartDate, EndDate, ProjectID, CreatorUsername, CreationDate) 
-	Values(@TaskName, @Description, @MinEstDuration, @LikelyEstDuration, @MaxEstDuration, @StartDate, @EndDate, @ProjectID, @Creator, @CreationDate);
+ INSERT INTO dbo.[Task] (Name, Description, MinEstDuration, MostLikelyEstDuration, MaxEstDuration, StartDate, EndDate, ProjectID, CreatorUsername, CreationDate, [ProjectRow]) 
+	Values(@TaskName, @Description, @MinEstDuration, @LikelyEstDuration, @MaxEstDuration, @StartDate, @EndDate, @ProjectID, @Creator, @CreationDate, @ProjectRow);
  SET @ResultId = SCOPE_IDENTITY();	/* Set the id to return */
-
-
- /* Add Task to task list */
-
+ /* Insert the sub task data and get child row number */
+ IF @HasParent = 1
+	INSERT INTO dbo.[SubTask] (ParentTaskId, SubTaskId) VALUES (@ParentTaskId, @ResultId);
+ /* Added Task to task list successfully */
  SET @Result=1;
 
 END

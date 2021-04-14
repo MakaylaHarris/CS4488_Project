@@ -11,7 +11,7 @@ namespace SmartPert
     /// Custom Commands with keyboard shortcuts used by main menu.
     /// Created 2/2/2021 by Robert Nelson and Kaden Marchetti
     /// </summary>
-    static class CustomCommands
+    public static class CustomCommands
     {
         public static readonly RoutedCommand AddTaskCommand = new RoutedUICommand("Add Task", "AddTaskCommand", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
 {

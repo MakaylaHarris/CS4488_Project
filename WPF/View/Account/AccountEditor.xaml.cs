@@ -59,6 +59,8 @@ namespace SmartPert.View.Account
                 new System.Security.Cryptography.SHA256Managed().ComputeHash(
                     Encoding.UTF8.GetBytes(viewModel.TempUser.ConfirmNewPw)));
             viewModel.TempUser.CurrentPw = encryptedPw;
+
+
         }
     }
 }

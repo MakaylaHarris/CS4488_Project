@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PertTest.DAL;
 using SmartPert.Model;
 using System;
 using System.Collections.Generic;
@@ -11,44 +12,69 @@ namespace PertTest.Model
     /// Created 2/22/2021 by Robert Nelson
     /// </summary>
     [TestClass]
-    public class UserTest
+    public class UserTest : DBUpdateReceiver
     {
-        private string name;
-        private string pass;
-        private string email;
-        private User user;
-        private bool isCreated;
+        private DBReader reader;
+
+        public bool SaveSettings { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         #region Constructor
         public UserTest()
         {
-            name = "TestUser_33018t5";
-            pass = "TestPass3330";
-            email = "User@Test.com";
-            isCreated = false;
+            reader = DBReader.Instantiate(this);
         }
 
-        ~UserTest()
+        [ClassInitialize]
+        public static void init(TestContext context)
         {
-            if (isCreated)
-            {
-                user.Delete();
-            }
+            new TestDB(new List<string> { "some_user.sql" });
         }
         #endregion
 
-        #region Public Methods
-        public User Create()
+        #region Test Methods
+        [TestMethod]
+        public void Test_Register()
         {
-            if(!isCreated)
-            {
-                if (!SmartPert.Model.Model.Instance.Register(name, email, pass, name))
-                    SmartPert.Model.Model.Instance.Login(email, pass);
-                user = SmartPert.Model.Model.Instance.GetCurrentUser();
-                isCreated = true;
-            }
-            return user;
+            string name = "TestUser_33018t5";
+            string pass = "TestPass3330";
+            string email = "User@Test.com";
+            // Now we should be able to register and test
+            Assert.IsTrue(reader.Register(name, pass, name, email));
         }
+
+        [TestMethod]
+        public void Test_CreateUserRegister()
+        {
+            string newName = "Mindy";
+            Assert.IsTrue(SmartPert.Model.Model.Instance.CreateUser(newName) != null);
+            // Register Test
+            Assert.IsTrue(reader.Register(newName, "password", newName, "MindyLoo@gmail.com"));
+        }
+
+        [TestMethod]
+        public void Test_BadLogin()
+        {
+            Assert.IsFalse(reader.Login("some_user", "WrongPass"));
+            Assert.IsFalse(reader.Login("WrongUser", "password"));
+        }
+
+        [TestMethod]
+        public void Test_Login()
+        {
+            Assert.IsTrue(reader.Login("some_user", "password"));
+        }
+
+        public void OnDBDisconnect()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnDBUpdate(Project p)
+        {
+            Console.WriteLine("updated");
+        }
+
         #endregion
+
     }
 }

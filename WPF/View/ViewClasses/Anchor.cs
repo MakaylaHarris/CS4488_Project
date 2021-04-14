@@ -17,13 +17,14 @@ namespace SmartPert.View
     /// </summary>
     public class Anchor : Button
     {
-        private List<Connector> connectors;
+        protected List<Connector> connectors;
         private Connectable connectable;
         private Canvas canvas;
 
         #region Properties
-        public Point Point { get =>
-                TransformToAncestor(Canvas as Visual).Transform(new Point(ActualWidth / 2, ActualHeight / 2));
+        public virtual Point Point { get {
+                    return TransformToAncestor(Canvas as Visual).Transform(new Point(ActualWidth / 2, ActualHeight / 2));
+            }
         }
         public Canvas Canvas { get => canvas;
             set {
@@ -41,6 +42,7 @@ namespace SmartPert.View
             Content = "o";
             Background = Brushes.Transparent;
             BorderThickness = new Thickness(0);
+            Foreground = (SolidColorBrush) FindResource("SecondaryHueMidBrush");
             Click += StartConnect;
         }
 
@@ -65,6 +67,10 @@ namespace SmartPert.View
             if (connectors == null)
                 connectors = new List<Connector>();
             connectors.Add(connector);
+        }
+
+        public void AfterConnect(Connector connector, Connectable connected, bool isReceiver)
+        {
             Connectable.OnConnect(this, connected, isReceiver);
         }
 
@@ -88,29 +94,35 @@ namespace SmartPert.View
             anchor.connectors.Add(connector);
         }
 
-
         /// <summary>
-        /// Disconnects the connection
+        /// Disconnect silently
         /// </summary>
-        /// <param name="connector">connector</param>
-        /// <param name="connected">connectable that's disconnecting</param>
-        /// <param name="isReceiver">is receiver</param>
-        public void Disconnect(Connector connector, Connectable connected, bool isReceiver)
+        /// <param name="connector">connector to drop</param>
+        public void Disconnect(Connector connector)
         {
             if (connectors != null)
                 connectors.Remove(connector);
-            Connectable.OnDisconnect(this, connected, isReceiver);
+        }
+
+        public void DisconnectAll()
+        {
+            if (connectors != null)
+            {
+                for (int i = 0; i < connectors.Count; i++)
+                    connectors[i].Disconnect(false);
+                connectors.Clear();
+            }
         }
 
         /// <summary>
         /// Determines if two anchors can be connected
         /// </summary>
         /// <param name="anchor">anchor</param>
-        /// <param name="anchorIsReceiver">if the parameter anchor is receiver</param>
+        /// <param name="isReceiver">if this is receiver</param>
         /// <returns>true if they can connect</returns>
-        public virtual bool CanConnect(Anchor anchor, bool anchorIsReceiver)
+        public virtual bool CanConnect(Anchor anchor, bool isReceiver)
         {
-            return Connectable.CanConnect(anchor.Connectable, anchor, anchorIsReceiver);
+            return Connectable.CanConnect(anchor.Connectable, anchor, isReceiver);
         }
 
         /// <summary>
@@ -121,16 +133,31 @@ namespace SmartPert.View
             //Point = point;
             if (connectors != null)
                 foreach (Connector c in connectors)
-                    c.OnAnchorMove(this, Point);
+                    try
+                    {
+                        c.OnAnchorMove(this, Point);
+                    } catch(InvalidOperationException) { }
+        }
+
+        /// <summary>
+        /// After disconnect callback
+        /// </summary>
+        /// <param name="connector">connector</param>
+        /// <param name="connected">item connected</param>
+        /// <param name="isReceiver">true if this is the receiver</param>
+        public void AfterDisconnect(Connector connector, Connectable connected, bool isReceiver)
+        {
+            Connectable.OnDisconnect(this, connected, isReceiver);
         }
         #endregion
 
-        #region Private Methods
-        private void StartConnect(object sender, RoutedEventArgs e)
+        #region Protected Methods
+        protected virtual void StartConnect(object sender, RoutedEventArgs e)
         {
             Connector con = new Connector(Canvas) { Anchor1 = this };
             con.StartConnecting(this);
         }
+
         #endregion
 
     }
@@ -140,12 +167,18 @@ namespace SmartPert.View
     /// </summary>
     public class ReceiverAnchor : Anchor 
     {
-        public override bool CanConnect(Anchor anchor, bool anchorIsReceiver)
+        public override bool CanConnect(Anchor anchor, bool isReceiver)
         {
-            if (anchorIsReceiver)
+            if (!isReceiver || anchor.GetType() != typeof(SenderAnchor) && !anchor.GetType().IsSubclassOf(typeof(SenderAnchor)))
                 return false;
-            return base.CanConnect(anchor, anchorIsReceiver);
+            return base.CanConnect(anchor, isReceiver);
         }
+        protected override void StartConnect(object sender, RoutedEventArgs e)
+        {
+            Connector con = new Connector(Canvas);
+            con.StartConnecting(this, false);
+        }
+
     }
 
     /// <summary>
@@ -153,11 +186,24 @@ namespace SmartPert.View
     /// </summary>
     public class SenderAnchor : Anchor
     {
-        public override bool CanConnect(Anchor anchor, bool anchorIsReceiver)
+        public override bool CanConnect(Anchor anchor, bool isReceiver)
         {
-            if (!anchorIsReceiver)
+            if (isReceiver || anchor.GetType() != typeof(ReceiverAnchor))
                 return false;
-            return base.CanConnect(anchor, anchorIsReceiver);
+            return base.CanConnect(anchor, isReceiver);
         }
+
     }
+
+    /// <summary>
+    /// Sender Anchor that shows connections at a variable location
+    /// </summary>
+    public class VariableLinePositionAnchor : SenderAnchor
+    {
+        public delegate Point GetStartPoint(Anchor a);
+        public GetStartPoint GetStart { get; set; }
+
+        public override Point Point => GetStart(this);
+    }
+
 }

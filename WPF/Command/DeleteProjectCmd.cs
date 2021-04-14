@@ -31,7 +31,7 @@ namespace SmartPert.Command
             IModel model = Model.Model.Instance;
             Project newProject = model.CreateProject(project.Name, project.StartDate, project.EndDate, project.Description);
             if(newProject != null) {
-                List<Model.Task> tasks = project.Tasks; 
+                List<Model.Task> tasks = project.SortedTasks; 
                 // Re-add tasks
                 foreach (Model.Task task in tasks)
                 {
@@ -47,7 +47,7 @@ namespace SmartPert.Command
                 {
                     foreach(Model.Task dependent in task.Dependencies)
                     {
-                        Model.Task match = newProject.Tasks.Find(x => x.Id == dependent.Id);
+                        Model.Task match = newProject.GetTaskById(dependent.Id);
                         task.AddDependency(match);
                     }
                 }

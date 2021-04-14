@@ -5,10 +5,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using SmartPert.Annotations;
 using SmartPert.Model;
+using SmartPert.View;
+using SmartPert.View.Pages;
 using SmartPert.View.ViewClasses;
 
 namespace SmartPert.ViewModels
@@ -17,24 +18,27 @@ namespace SmartPert.ViewModels
     /// The interaction logic for the workspace view
     /// Implemented by: Makayla Linnastruth
     /// </summary>
-    class WorkSpaceViewModel : INotifyPropertyChanged
+    public class WorkSpaceViewModel : INotifyPropertyChanged, IViewModel
     {
         private ObservableCollection<RowData> _rowData;
         private ObservableCollection<ToolTipData> _tooltipData;
         private ToolTipProjectData _projectTooltip;
         private Project _Project;
+        private WorkSpace workspace;
         private List<string> _headers = new List<string>();
         private String[] _weekDayAbbrev = { "S", "M", "T", "W", "T", "F", "S" };
 
         /// <summary>
         /// Initializes an instance of the WorkSpaceViewModel class
         /// </summary>
-        public WorkSpaceViewModel()
+        public WorkSpaceViewModel(WorkSpace workSpace)
         {
+            this.workspace = workSpace;
             //Would get the Project we are working with
             this._rowData = new ObservableCollection<RowData>();
+            Model.Model model = Model.Model.GetInstance(this);
+            _Project = model.GetProject();
             this._tooltipData = new ObservableCollection<ToolTipData>();
-            _Project = Model.Model.Instance.GetProject();
             _headers = GetWeekHeader();
             LoadData();
             LoadToolTipData();
@@ -49,7 +53,7 @@ namespace SmartPert.ViewModels
 
         public int DaySpan
         {
-            get { 
+            get {
                 int days = (((DateTime)this.Project.CalculateLastProjectDate()).Date - this.Project.StartDate.Date).Days;
                 if (days <= 0)      /* Ensure natural number for span */
                     return 1;
@@ -120,7 +124,7 @@ namespace SmartPert.ViewModels
 
         public int TodayCol
         {
-            get { if (TodayInProject) { return (DateTime.Now - this.Project.StartDate.AddDays(-GridOffset)).Days + 1; }
+            get { if (TodayInProject) { return (DateTime.Now - this.Project.StartDate.AddDays(-GridOffset)).Days; }
                 else { return 0; }
             }
         }
@@ -133,22 +137,30 @@ namespace SmartPert.ViewModels
         /// </summary>
         public void LoadData()
         {
-            RowData num1 = new RowData(Project.Name, GridOffset + 1, DaySpan, true);
+            RowData num1 = new RowData(Project.Name, GridOffset, DaySpan, true);
             this.RowData.Add(num1);
-            foreach (Model.Task task in Project.Tasks)
+            foreach (Model.Task task in Project.SortedTasks)
             {
-                RowData num2 = new RowData(task.Name, 
-                    startDateCol: (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1, 
-                    colSpan: (((DateTime)task.CalculateLastTaskDate()).Date - ((DateTime)task.StartDate).Date).Days, 
+                RowData num2 = new RowData(task.Name,
+                    startDateCol: (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset,
+                    colSpan: (((DateTime)task.CalculateLastTaskDate()).Date - ((DateTime)task.StartDate).Date).Days,
                     isProject: false,
                     endDateSpan: task.EndDate != null ? ((DateTime)task.EndDate - task.StartDate).Days : -1,
                     minEstSpan: task.MinDuration,
                     maxEstSpan: task.MaxDuration - task.LikelyDuration,
                     likelyEstSpan: task.LikelyDuration - task.MinDuration,
-                    timedItem: task
+                    timedItem: task,
+                    subTaskLevel: GetSubLevel(task)
                     );
                 this.RowData.Add(num2);
             }
+        }
+
+        private int GetSubLevel(Task t)
+        {
+            if (t.ParentTask == null)
+                return 0;
+            return GetSubLevel(t.ParentTask) + 1;
         }
 
         /// <summary>
@@ -160,7 +172,7 @@ namespace SmartPert.ViewModels
             for(int i = 0; i < Project.Tasks.Count; i++)
             {
                 //Task could also have been a reference to System.Threading.Task, so below declaration was necessary.
-                SmartPert.Model.Task t = Project.Tasks[i];
+                SmartPert.Model.Task t = Project.SortedTasks[i];
 
                 ToolTipData data = new ToolTipData(t.Name, t.StartDate, t.EndDate, t.LikelyDuration, t.MaxDuration, t.MinDuration, t.Description);
                 this.TooltipData.Add(data);
@@ -201,6 +213,23 @@ namespace SmartPert.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void OnDisconnect()
+        {
+            // do nothing
+        }
+
+        public void OnModelUpdate(Project p)
+        {
+            _Project = p;
+            _headers = GetWeekHeader();
+            this.RowData.Clear();
+            TooltipData.Clear();
+            LoadData();
+            LoadToolTipData();
+            LoadProjectData();
+            workspace.OnWorkspaceModelUpdate(this);
         }
         #endregion
     }

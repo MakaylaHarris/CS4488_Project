@@ -6,9 +6,9 @@
     - nuget restore
     - msbuild /t:restore
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
-    # create Pert database
-    - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
-    - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\Scripts\Insert.sql
+
+  install:
+    pip install pathlib
 
   build:
     project: SmartPert.sln
@@ -22,7 +22,6 @@
   configuration: Release
   environment:
     SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\
-
   artifacts:
   - path: SmartPert.zip
     name: SmartPert
@@ -37,6 +36,9 @@
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
     # create Pert database
     - cmd: sqlcmd -S (LocalDB)\MSSQLLocalDB -i PertDB\bin\Output\Pert_Create.sql
+
+  install:
+    pip install pathlib
 
   build:
     project: SmartPert.sln

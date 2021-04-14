@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using SmartPert.Model;
 using SmartPert.View;
+using PertTest.DAL;
 
 namespace PertTest.Model
 {
@@ -17,11 +18,37 @@ namespace PertTest.Model
             model = SmartPert.Model.Model.GetInstance(this);
         }
 
-        #region Interface Methods
-        public bool IsConnected()
+        [ClassInitialize]
+        public static void init(TestContext context)
         {
-            throw new NotImplementedException();
+            new TestDB(new List<string> { "project_foo.sql" });
+            
         }
+
+        [TestMethod]
+        public void Test_GetFiveTasks()
+        {
+            // Setup
+            model.SetProject(model.GetProjectList()[0]);
+            Assert.AreEqual(model.GetTasks().Count, 5);
+        }
+
+        [TestMethod]
+        public void Test_GetFooProject()
+        {
+            List<Project> projects = model.GetProjectList();
+            Assert.IsTrue(projects.Count == 1);
+            Assert.IsTrue(projects[0].Name == "Foo");
+        }
+
+        [TestMethod]
+        public void Test_GetUserJoe()
+        {
+            List<User> users = model.GetUsers();
+            Assert.IsNotNull(users.Find(x => x.Username == "Joe"));
+        }
+
+        #region Interface Methods
 
         public void OnDisconnect()
         {
@@ -33,10 +60,6 @@ namespace PertTest.Model
             Console.WriteLine("Update received");
         }
 
-        public void Refresh()
-        {
-            throw new NotImplementedException();
-        }
 
         public bool SetConnectionString(string s)
         {

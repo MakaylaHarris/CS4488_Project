@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:SmartPert.View.Controls"
              mc:Ignorable="d"
              MouseDown="UserControl_MouseDown"
+             MouseMove="UserControl_MouseMove"
              MouseUp="UserControl_MouseUp"
              MouseDoubleClick="UserControl_MouseDoubleClick"
              d:DesignHeight="100" d:DesignWidth="100">
@@ -28,13 +29,17 @@
 
                 <Grid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem x:Name="mi_editTask" Header="Edit" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_editTask_Click"/>
-                        <MenuItem x:Name="mi_deleteTask" Header="Delete" HorizontalAlignment="Left" Height="20" Width="auto" Click="mi_deleteTask_Click"/>
+                        <MenuItem x:Name="mi_editTask" Header="Edit" HorizontalAlignment="Left" Click="mi_editTask_Click"/>
+                        <MenuItem x:Name="mi_deleteTask" Header="Delete" HorizontalAlignment="Left" Click="mi_deleteTask_Click"/>
+                        <MenuItem x:Name="mi_MarkComplete" Header="Complete" IsCheckable="True" Checked="mi_MarkComplete_Checked" Unchecked="mi_MarkComplete_Unchecked"/>
+                        <Separator/>
+                        <MenuItem x:Name="mi_AddSubtask" Header="Create Subtask" Click="mi_AddSubtask_Click"/>
+                        <MenuItem x:Name="Add_New" Header="Create Task" Click="Add_New_Click"/>
                     </ContextMenu>
                 </Grid.ContextMenu>
             </Grid>
         </Border>
         <view:ReceiverAnchor FontSize="8" x:Name="LeftAnchor" HorizontalAlignment="Left" Margin="0, 5, 0,5" Visibility="Hidden"/>
-        <view:SenderAnchor FontSize="8" x:Name="RightAnchor" HorizontalAlignment="Right" Margin="0, 5, 0, 5" Visibility="Hidden"/>
+        <view:VariableLinePositionAnchor FontSize="8" x:Name="RightAnchor" HorizontalAlignment="Right" Margin="0, 5, 0, 5" Visibility="Hidden"/>
     </Grid>
 </view:Connectable>

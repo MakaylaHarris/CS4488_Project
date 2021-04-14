@@ -14,18 +14,77 @@ namespace SmartPert.Command
     /// </summary>
     public abstract class ICmd
     {
+        private static TransactionCmd transaction;
+        private static bool transactionIsInternal;
+        private static ICmd current;  // Wether a command is currently running
+
+        public ICmd()
+        {
+            if (transaction != null)
+                transaction.Add(this);
+        }
+
+        public static void BeginTransaction(ICmd cmd=null, bool hasRun=false, bool isInternal=false)
+        {
+            transaction = new TransactionCmd();
+            transactionIsInternal = isInternal;
+            if (cmd != null)
+                transaction.Add(cmd, hasRun);
+        }
+
+        public static bool PostTransaction()
+        {
+            bool result = transaction.Run();
+            transaction = null;
+            return result;
+        }
+
         /// <summary>
         /// Runs the command and adds it to the stack if successful
         /// </summary>
         /// <returns>True on success</returns>
-        public bool Run(bool isRedo=false)
+        public bool Run(bool isRedo=false, bool pushStack=true)
         {
-            if(Execute())
+            // Are we attempting to run another command mid-way through?
+            if (current != null)
             {
-                CommandStack.Instance.PushCommand(this, isRedo);
-                return true;
+                if (transaction == null)
+                {
+                    BeginTransaction(current, true, true);
+                    transaction.Add(this);
+                }
             }
-            return false;
+            else
+            {
+                current = this;
+                if (current.GetType() == typeof(TransactionCmd))
+                    transaction = (TransactionCmd) this;
+            }
+
+            if (transaction != null && transaction != this && pushStack)
+                return transaction.Run(this);
+            try
+            {
+                bool result = Execute();
+                if (result)
+                {
+                    if (transaction == null || this == transaction)
+                        CommandStack.Instance.PushCommand(this, isRedo);
+                }
+                // Reset current
+                if (current == this)
+                {
+                    if (transaction != null && current != transaction && transactionIsInternal)
+                        result = result && PostTransaction();
+                    current = null;
+                }
+                return result;
+            }
+            catch (Exception) {
+                current = null;
+                transaction = null;
+                throw;
+            }
         }
 
         /// <summary>
@@ -39,8 +98,8 @@ namespace SmartPert.Command
         /// </summary>
         /// <param name="old">old object</param>
         /// <param name="newItem">new object</param>
-        public abstract void OnIdUpdate(TimedItem old, TimedItem newItem);
-        public abstract void OnModelUpdate(Project p);
+        public virtual void OnIdUpdate(TimedItem old, TimedItem newItem) { }
+        public virtual void OnModelUpdate(Project p) { }
 
         #region Protected Methods
         /// <summary>

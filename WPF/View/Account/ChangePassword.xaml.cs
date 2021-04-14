@@ -38,6 +38,8 @@ namespace SmartPert.View.Account
         {
             string hashValue = System.Text.Encoding.ASCII.GetString(new System.Security.Cryptography.SHA256Managed().ComputeHash(Encoding.UTF8.GetBytes(PassBoxCurrent.Password.ToString())));
             window.HandEncryptedPw(hashValue);
+
+            PassBoxCurrent.Clear();
         }
     }
 }
