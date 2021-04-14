@@ -184,12 +184,16 @@
     <Compile Include="ViewModelCommands\PasswordUpdateCommand.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="StateSwitcher.cs" />
+    <Compile Include="ViewModels\ThemeViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
     <Compile Include="View\Account\AccountInfo.xaml.cs">
       <DependentUpon>AccountInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Account\ChangePassword.xaml.cs">
       <DependentUpon>ChangePassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Theme\ThemeEditor.xaml.cs">
+      <DependentUpon>ThemeEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ViewClasses\Anchor.cs" />
     <Compile Include="View\ViewClasses\Connectable.cs" />
@@ -320,6 +324,10 @@
     <Page Include="View\Account\AccountEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Theme\ThemeEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Windows\ProjectCreator.xaml">
       <SubType>Designer</SubType>

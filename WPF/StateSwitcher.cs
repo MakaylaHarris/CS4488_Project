@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using SmartPert.View.Account;
+using SmartPert.View.Theme;
 
 namespace SmartPert
 {
@@ -237,6 +238,11 @@ namespace SmartPert
                 Update();
             else
                 OpenDialog(new AccountEditor());
+        }
+
+        public void OnThemeEdit()
+        {
+            OpenDialog(new ThemeEditor());
         }
         #endregion
     }

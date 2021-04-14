@@ -162,6 +162,7 @@ namespace SmartPert.ViewModels
             }
         }
 
+        #region INotifyPropertyChanged Members
         protected void OnPropertyChanged(string propertyName)
         {
             if (this.PropertyChanged != null)
@@ -169,6 +170,7 @@ namespace SmartPert.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
 
         public void SaveAccountInfo()
         {
@@ -189,10 +191,17 @@ namespace SmartPert.ViewModels
             )
             {
                 User.Password = TempUser.NewPw;
+                IsPwMismatch = false;
                 IsPwUpdated = true;
+                IsUpdated = false;
+                IsError = false;
+
             }
             else
             {
+                IsPwMismatch = false;
+                IsPwUpdated = false;
+                IsUpdated = false;
                 IsError = true;
             }
         }

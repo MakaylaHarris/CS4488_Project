@@ -308,7 +308,7 @@ namespace SmartPert
 
         private void Theme_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            // For Makayla
+            StateSwitcher.Instance.OnThemeEdit();
         }
 
         private void SignOut_Execute(object sender, ExecutedRoutedEventArgs e)
