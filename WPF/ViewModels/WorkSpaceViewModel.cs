@@ -124,7 +124,7 @@ namespace SmartPert.ViewModels
 
         public int TodayCol
         {
-            get { if (TodayInProject) { return (DateTime.Now - this.Project.StartDate.AddDays(-GridOffset)).Days + 1; }
+            get { if (TodayInProject) { return (DateTime.Now - this.Project.StartDate.AddDays(-GridOffset)).Days; }
                 else { return 0; }
             }
         }
@@ -137,12 +137,12 @@ namespace SmartPert.ViewModels
         /// </summary>
         public void LoadData()
         {
-            RowData num1 = new RowData(Project.Name, GridOffset + 1, DaySpan, true);
+            RowData num1 = new RowData(Project.Name, GridOffset, DaySpan, true);
             this.RowData.Add(num1);
             foreach (Model.Task task in Project.SortedTasks)
             {
                 RowData num2 = new RowData(task.Name,
-                    startDateCol: (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset + 1,
+                    startDateCol: (((DateTime)task.StartDate).Date - ((DateTime)this.Project.StartDate).Date).Days + GridOffset,
                     colSpan: (((DateTime)task.CalculateLastTaskDate()).Date - ((DateTime)task.StartDate).Date).Days,
                     isProject: false,
                     endDateSpan: task.EndDate != null ? ((DateTime)task.EndDate - task.StartDate).Days : -1,

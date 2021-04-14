@@ -5,6 +5,8 @@
     /// </summary>
     public interface DBUpdateReceiver
     {
+        bool SaveSettings { get; set; }
+
         /// <summary>
         /// When the database disconnects
         /// </summary>

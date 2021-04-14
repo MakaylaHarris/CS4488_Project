@@ -66,7 +66,7 @@ namespace PertTest.Model
             DateTime prevLikely = task.LikelyDate;
             Task sub = project.GetTask("Seal with Glue");
             ICmd cmd = new AddSubTaskCmd(task, sub);
-            cmd.Run();
+            Assert.IsTrue(cmd.Run());
             CommandStack.Instance.Undo();
             Assert.AreEqual(prevLikely, task.LikelyDate);
         }

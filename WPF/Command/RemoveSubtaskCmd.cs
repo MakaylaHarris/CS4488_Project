@@ -14,6 +14,7 @@ namespace SmartPert.Command
     {
         private Task parent;
         private Task subtask;
+        private List<Task> prevOrdered;
 
         public RemoveSubtaskCmd(Task parent, Task subtask)
         {
@@ -37,11 +38,30 @@ namespace SmartPert.Command
 
         public override bool Undo()
         {
+            if(prevOrdered != null)
+            {
+                subtask.Project.SortedTasks = prevOrdered;
+                prevOrdered = null;
+            }
             return parent.AddSubTask(subtask);
+        }
+
+        private bool IsAtGroupBottom(Task task)
+        {
+            List<Task> tasks = task.Project.SortedTasks;
+            int i = tasks.IndexOf(task) + 1;
+            return i >= tasks.Count || tasks[i].ParentTask == null;
         }
 
         protected override bool Execute()
         {
+            if (!IsAtGroupBottom(subtask))
+            {
+                prevOrdered = subtask.Project.SortedTasks;
+                subtask.Project.SortedTasks = AddSubTaskCmd.ReorderRows(subtask, subtask.ParentTask, AddSubTaskCmd.InsertAfterOutmost);
+            }
+            else
+                prevOrdered = null;
             return parent.RemoveSubTask(subtask);
         }
     }

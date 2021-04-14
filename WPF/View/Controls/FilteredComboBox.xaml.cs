@@ -132,7 +132,7 @@ namespace SmartPert.View.Controls
             selected = null;
             input = "";
             FilteredItems = new ObservableCollection<object>();
-            SetValue(AllItemsProperty, new ObservableCollection<object>());
+            SetValue(AllItemsProperty, new ObservableCollection<object>());            
         }
         #endregion
 
@@ -144,20 +144,20 @@ namespace SmartPert.View.Controls
             {
                 String str = item.ToString();
                 if (str.StartsWith(input))
+                {
                     filtered.Add(item);
+                    if (filtered.Count > 10)
+                        break;
+                }
             }
         }
 
         private void cb_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             input = cb.Text + e.Text;
-            if (input.Length > 0)
-            {
-                if (input.Length == 1)
-                    cb.IsDropDownOpen = true;
-                filter(allItems, input, FilteredItems);
-                cb.ItemsSource = FilteredItems;
-            }
+            cb.IsDropDownOpen = true;
+            filter(allItems, input, FilteredItems);
+            cb.ItemsSource = FilteredItems;
         }
 
         private void cb_SelectionChanged(object sender, SelectionChangedEventArgs e)

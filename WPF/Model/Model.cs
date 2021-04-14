@@ -16,6 +16,8 @@ namespace SmartPert.Model
         private List<IViewModel> viewModels;
         private DBReader reader;
         private bool isUpdating;
+        private List<IViewModel> toRemove;
+        public bool Notify = true;
 
         #region Model Instance
         /// <summary>
@@ -23,11 +25,12 @@ namespace SmartPert.Model
         /// </summary>
         /// <param name="viewModel">view model to register</param>
         /// <returns>Model instance</returns>
-        static public Model GetInstance(IViewModel viewModel)
+        static public Model GetInstance(IViewModel viewModel=null, bool ConnectDB=true)
         {
             if (instance == null)
-                StartInstance();
-            instance.Subscribe(viewModel);
+                StartInstance(ConnectDB);
+            if(viewModel != null)
+                instance.Subscribe(viewModel);
             return instance;
         }
 
@@ -36,15 +39,17 @@ namespace SmartPert.Model
         /// </summary>
         /// <returns>model</returns>
         static public Model Instance { get => instance == null ? StartInstance() : instance; }
+        public bool SaveSettings { get => reader.SaveSettings; set => reader.SaveSettings = value; }
 
         private Model()
         {
             viewModels = new List<IViewModel>();
+            toRemove = new List<IViewModel>();
         }
-        static private Model StartInstance()
+        static private Model StartInstance(bool ConnectDB=true)
         {
             instance = new Model();
-            instance.reader = DBReader.Instantiate(instance);
+            instance.reader = DBReader.Instantiate(instance, ConnectDB);
             return instance;
         }
 
@@ -262,22 +267,35 @@ namespace SmartPert.Model
 
         public void UnSubscribe(IViewModel viewModel)
         {
-            if (viewModels.Contains(viewModel))
+            if (isUpdating) // Can't unsubscribe mid-update
+                toRemove.Add(viewModel);
+            else if (viewModels.Contains(viewModel))
                 viewModels.Remove(viewModel);
         }
         #endregion
 
         #region Database Methods
+        private void AfterModelUpdate()
+        {
+            if(toRemove.Count > 0)
+            {
+                foreach (IViewModel x in toRemove)
+                    viewModels.Remove(x);
+                toRemove.Clear();
+            }
+        }
+
         public void OnModelUpdate(Project p = null)
         {
-            if(reader != null && !reader.IsUpdating && ! this.isUpdating)  // Don't send updates if we're in the middle of updating
+            if(Notify && reader != null && !reader.IsUpdating && ! this.isUpdating)  // Don't send updates if we're in the middle of updating
             {
                 isUpdating = true;
                 if (p == null)
                     p = GetProject();
-                foreach (IViewModel viewModel in viewModels)
-                    viewModel.OnModelUpdate(p);
+                for(int i = 0; i < viewModels.Count; i++)
+                    viewModels[i].OnModelUpdate(p);
                 isUpdating = false;
+                AfterModelUpdate();
             }
         }
 
@@ -323,7 +341,7 @@ namespace SmartPert.Model
         #endregion
 
         #region Get Updated Version of objects
-        public void UpdateProject(ref Project project, bool updateIfNull=true)
+        public Project UpdateProject(ref Project project, bool updateIfNull=true)
         {
             Project ret;
             if (reader.Projects.TryGetValue(project.Id, out ret))
@@ -334,14 +352,15 @@ namespace SmartPert.Model
                     if(p.Name == project.Name)
                     {
                         project = p;
-                        return;
+                        return p;
                     }
                 if (updateIfNull)
                     project = null;
             }
+            return ret;
         }
 
-        public void UpdateUser(ref User user, bool updateIfNull=true)
+        public User UpdateUser(ref User user, bool updateIfNull=true)
         {
             string uname = user.Username;
             User ret;
@@ -349,9 +368,10 @@ namespace SmartPert.Model
                 user = ret;
             else if (updateIfNull)
                 user = null;
+            return ret;
         }
 
-        public void UpdateTask(ref Task t, bool updateIfNull=true)
+        public Task UpdateTask(ref Task t, bool updateIfNull=true)
         {
             int id = t.Id;
             Task updated;
@@ -359,12 +379,13 @@ namespace SmartPert.Model
             {
                 // Find by name
                 string name = t.Name;
-                foreach (Task task in reader.Tasks.Values)
+                foreach (Task task in GetTasks())
                     if (task.Name == name)
                         updated = task;
             }
             if (updated != null || updateIfNull)
                 t = updated;
+            return updated;
         }
 
         #endregion

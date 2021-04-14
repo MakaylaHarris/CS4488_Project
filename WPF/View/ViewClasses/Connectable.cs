@@ -75,7 +75,7 @@ namespace SmartPert.View
         /// </summary>
         /// <param name="target">connectable target</param>
         /// <returns>true if it can</returns>
-        virtual public bool CanConnect(Connectable target, Anchor targetAnchor, bool isReceiver)
+        virtual public bool CanConnect(Connectable target, Anchor targetAnchor, bool isOrigin)
         {
             if (target == this)
                 return false;

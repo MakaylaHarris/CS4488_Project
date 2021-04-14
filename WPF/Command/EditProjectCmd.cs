@@ -30,7 +30,7 @@ namespace SmartPert.Command
             this.minDuration = minDuration;
             this.maxDuration = maxDuration;
             old = new Project(toEdit.Name, toEdit.StartDate, toEdit.EndDate, toEdit.Description, toEdit.Id, false, false, 
-                likelyDuration: likelyDuration, maxDuration: maxDuration, minDuration: minDuration);
+                likelyDuration: toEdit.LikelyDuration, maxDuration: toEdit.MaxDuration, minDuration: toEdit.MinDuration);
             
         }
 

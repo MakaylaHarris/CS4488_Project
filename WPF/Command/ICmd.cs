@@ -63,21 +63,28 @@ namespace SmartPert.Command
 
             if (transaction != null && transaction != this && pushStack)
                 return transaction.Run(this);
-            bool result = Execute();
-            if(result)
+            try
             {
-                if(transaction == null || this == transaction)
-                    CommandStack.Instance.PushCommand(this, isRedo);
+                bool result = Execute();
+                if (result)
+                {
+                    if (transaction == null || this == transaction)
+                        CommandStack.Instance.PushCommand(this, isRedo);
+                }
+                // Reset current
+                if (current == this)
+                {
+                    if (transaction != null && current != transaction && transactionIsInternal)
+                        result = result && PostTransaction();
+                    current = null;
+                }
+                return result;
             }
-
-            // Reset current
-            if (current == this)
-            {
-                if (transaction != null && current != transaction && transactionIsInternal)
-                    result = result && PostTransaction();
+            catch (Exception) {
                 current = null;
+                transaction = null;
+                throw;
             }
-            return result;
         }
 
         /// <summary>
