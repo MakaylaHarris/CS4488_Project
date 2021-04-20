@@ -18,7 +18,7 @@
 -
   branches:
     only:
-      - develop-robert-subtasks
+      - main
   configuration: Release
   environment:
     SHFBROOT: C:\Program Files (x86)\EWSoftware\Sandcastle Help File Builder\

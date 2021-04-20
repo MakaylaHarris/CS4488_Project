@@ -30,7 +30,7 @@ namespace PertTest.Model
         {
             // Setup
             model.SetProject(model.GetProjectList()[0]);
-            Assert.AreEqual(model.GetTasks().Count, 5);
+            Assert.AreEqual(5, model.GetTasks().Count);
         }
 
         [TestMethod]
