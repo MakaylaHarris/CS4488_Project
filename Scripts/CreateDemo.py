@@ -53,7 +53,7 @@ prj_base = "WPF"
 bin_dir = os.path.join(base_dir, "WPF/bin/Demo")
 smartpert_prj = os.path.join(prj_base, 'SmartPert.csproj')
 apps_file = os.path.join(prj_base, 'App.config')
-startup = os.path.join(prj_base, "CLICK_ME_FIRST_DEMO.bat")
+startup = os.path.join(base_dir, "CLICK_ME_FIRST_DEMO.bat")
 msbuild = 'msbuild'
 if not which(msbuild):
     print('Unable to find msbuild, please add it to your path environment')
