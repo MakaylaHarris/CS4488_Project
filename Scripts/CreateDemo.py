@@ -40,6 +40,7 @@ print("Create Demo started...")
 # Some important variables
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(base_dir)
+print('Working in {}'.format(os.getcwd()))
 server = "(localdb)\\MSSQLLocalDB"
 sql_create = os.path.join(base_dir, "PertDB/bin/Demo/Pert_Create.sql")
 sql_insert = os.path.join(base_dir, "PertDB/Scripts/Insert.sql")
@@ -52,7 +53,7 @@ prj_base = "WPF"
 bin_dir = os.path.join(base_dir, "WPF/bin/Demo")
 smartpert_prj = os.path.join(prj_base, 'SmartPert.csproj')
 apps_file = os.path.join(prj_base, 'App.config')
-startup = os.path.join(prj_base, "CLICK_ME_FIRST_DEMO.bat")
+startup = os.path.join(base_dir, "CLICK_ME_FIRST_DEMO.bat")
 msbuild = 'msbuild'
 if not which(msbuild):
     print('Unable to find msbuild, please add it to your path environment')
@@ -103,7 +104,7 @@ if not os.path.exists(os.path.join(demo_folder, exe_name)):
 print("Copying Database Scripts...")
 searchReplace(sql_create, os.path.join(demo_folder, 'Create.sql'), search, replace)
 searchReplace(sql_insert, os.path.join(demo_folder, 'Insert.sql'), search, replace)
-searchReplace(os.path.join(os.path.dirname(__file__), 'CleanTestDB.sql'), os.path.join(demo_folder, 'clean.sql'), 'Test_SmartPertDB', replace)
+searchReplace(os.path.join(os.path.join(base_dir, 'Scripts'), 'CleanTestDB.sql'), os.path.join(demo_folder, 'clean.sql'), 'Test_SmartPertDB', replace)
 
 # Now Make start up script
 print(f"Creating {startup} Script...")

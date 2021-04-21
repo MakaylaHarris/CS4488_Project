@@ -30,7 +30,6 @@
     name: SmartPert_Demo
 
   before_build:
-    - choco install sandcastle
     - nuget restore
     - msbuild /t:restore
     - msbuild PertDB\SmartPertDB.sqlproj   # Build SmartPertDB
