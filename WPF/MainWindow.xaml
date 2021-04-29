@@ -107,6 +107,12 @@
                     <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.AboutCommand}" />
                 </MenuItem>
+                <MenuItem Header="_Log In" HorizontalAlignment="Right" Visibility="{Binding IsNotLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}" Click="LogIn_Click">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="AccountCircle" 
+                                                 Foreground="{StaticResource PrimaryHueMidBrush}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="_Account" HorizontalAlignment="Right" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="AccountCircle" 
@@ -117,8 +123,8 @@
                     <MenuItem Command="{x:Static local:CustomCommands.ThemeCommand}"/>
                     <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.SignOutCommand}"/>
-                    
                 </MenuItem>
+                
             </Menu>
             <TextBox AcceptsReturn="True" />
         </DockPanel>

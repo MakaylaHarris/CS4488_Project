@@ -10,6 +10,7 @@ namespace SmartPert
     /// <summary>
     /// Custom Commands with keyboard shortcuts used by main menu.
     /// Created 2/2/2021 by Robert Nelson and Kaden Marchetti
+    /// Edited by Makayla Linnastruth
     /// </summary>
     public static class CustomCommands
     {
@@ -63,6 +64,10 @@ namespace SmartPert
             new KeyGesture(Key.C,  ModifierKeys.Alt)
         }));
         public static readonly RoutedCommand SignOutCommand = new RoutedUICommand("Sign Out", "SignOut", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        {
+            new KeyGesture(Key.M,  ModifierKeys.Alt)
+        }));
+        public static readonly RoutedCommand LogInCommand = new RoutedUICommand("Log In", "LogIn", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
         {
             new KeyGesture(Key.L,  ModifierKeys.Alt)
         }));

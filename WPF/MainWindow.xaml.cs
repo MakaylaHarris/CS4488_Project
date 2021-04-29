@@ -48,11 +48,18 @@ namespace SmartPert
         }
 
         public static readonly DependencyProperty IsLoggedInProp = DependencyProperty.Register("IsLoggedIn", typeof(Boolean), typeof(MainWindow));
+        public static readonly DependencyProperty IsNotLoggedInProp = DependencyProperty.Register("IsNotLoggedIn", typeof(Boolean), typeof(MainWindow));
 
         public bool IsLoggedIn
         {
             get { return (bool) GetValue(IsLoggedInProp); }
             set { SetValue(IsLoggedInProp, value); }
+        }
+
+        public bool IsNotLoggedIn
+        {
+            get { return (bool)GetValue(IsNotLoggedInProp); }
+            set { SetValue(IsNotLoggedInProp, value); }
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
@@ -345,6 +352,11 @@ namespace SmartPert
         private void Window_Closed(object sender, EventArgs e)
         {
             model.Shutdown();
+        }
+
+        private void LogIn_Click(object sender, RoutedEventArgs e)
+        {
+            StateSwitcher.Instance.TryLogin();
         }
     }
 }
