@@ -27,7 +27,8 @@ namespace SmartPert.View.Windows
 
         private void Yes_Click(object sender, RoutedEventArgs e)
         {
-            
+            Model.Model.Instance.Logout();
+            Close();
         }
 
         private void No_Click(object sender, RoutedEventArgs e)
