@@ -11,20 +11,28 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using SmartPert.ViewModels;
 
-namespace SmartPert.View.Theme
+namespace SmartPert.View.Windows
 {
     /// <summary>
-    /// Interaction logic for ThemeEditor.xaml
+    /// Interaction logic for Signout.xaml
     /// </summary>
-    public partial class ThemeEditor : Window
+    public partial class Signout : Window
     {
-        public ThemeEditor()
+        public Signout()
         {
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            DataContext = new ThemeViewModel();
+        }
+
+        private void Yes_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void No_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

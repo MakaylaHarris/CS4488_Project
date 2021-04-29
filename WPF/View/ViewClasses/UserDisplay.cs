@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using SmartPert.Model;
+using System.ComponentModel;
 
 namespace SmartPert.View.ViewClasses
 {
@@ -13,7 +14,7 @@ namespace SmartPert.View.ViewClasses
     /// This will allow users to get validation for updates
     /// Created BY: Makayla Linnastruth 03/14/2021
     /// </summary>
-    class UserDisplay
+    class UserDisplay : INotifyPropertyChanged
     {
         private string _name;
         private string _email;
@@ -45,13 +46,15 @@ namespace SmartPert.View.ViewClasses
         public string NewPw
         {
             get { return _newPw; }
-            set { _newPw = value; }
+            set { _newPw = value; 
+                OnPropertyChanged(NewPw); }
         }
 
         public string ConfirmNewPw
         {
             get { return _confirmNewPw; }
-            set { _confirmNewPw = value; }
+            set { _confirmNewPw = value;
+                OnPropertyChanged(ConfirmNewPw); }
         }
 
         public string CurrentPw
@@ -59,5 +62,15 @@ namespace SmartPert.View.ViewClasses
             get { return _currentPw; }
             set { _currentPw = value; }
         }
+
+        #region INotifyPropertyChanged Members
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
     }
 }

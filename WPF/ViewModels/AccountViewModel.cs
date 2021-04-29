@@ -191,6 +191,8 @@ namespace SmartPert.ViewModels
             )
             {
                 User.Password = TempUser.NewPw;
+                TempUser.NewPw = "";
+                TempUser.ConfirmNewPw = "";
                 IsPwMismatch = false;
                 IsPwUpdated = true;
                 IsUpdated = false;

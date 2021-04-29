@@ -232,6 +232,7 @@ namespace SmartPert.View.Pages
                     txt2.HorizontalAlignment = HorizontalAlignment.Center;
                     Grid.SetRow(txt2, 1);
                     Grid.SetColumn(txt2, colPosition + j);
+                    Grid.SetZIndex(txt2, 5);
                     HeaderGrid.Children.Add(txt2);
                 }
                 //spans outer loop headers to fill the week

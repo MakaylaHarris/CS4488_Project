@@ -31,6 +31,9 @@ namespace SmartPert.View.Account
 
         private void Account_Click(object sender, RoutedEventArgs e)
         {
+            changesSaved.Visibility = Visibility.Hidden;
+            Error.Visibility = Visibility.Hidden;
+            PwMismatch.Visibility = Visibility.Hidden;
             window.SwitchToAccount();
         }
 

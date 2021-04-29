@@ -37,6 +37,7 @@ namespace SmartPert
 
         public MainWindow()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.Dispatcher.UnhandledException += this.HandleException;
             InitializeComponent();
             items = new ObservableCollection<MenuItemViewModel>();
@@ -311,7 +312,7 @@ namespace SmartPert
 
         private void SignOut_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            // For Makayla
+            StateSwitcher.Instance.OnSignout();
         }
         #endregion
 

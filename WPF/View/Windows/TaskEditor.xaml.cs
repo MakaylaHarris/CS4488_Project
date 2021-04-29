@@ -49,6 +49,7 @@ namespace SmartPert.View.Windows
         /// <param name="task">The underlying task</param>
         public TaskEditor(Task task = null, Task parentTask = null)
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
             DataContext = this;
             isLoading = false;

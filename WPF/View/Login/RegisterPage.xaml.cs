@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Text;
 using System.Windows.Controls;
 
 namespace SmartPert.View.Login
@@ -84,8 +85,7 @@ namespace SmartPert.View.Login
             {
                 //encryot
                 string pwEncrypt = System.Text.Encoding.ASCII.GetString(
-                    new System.Security.Cryptography.SHA256Managed().ComputeHash(
-                        Encoding.UTF8.GetBytes(password.Password)));
+                    new System.Security.Cryptography.SHA256Managed().ComputeHash(Encoding.UTF8.GetBytes(password.Password)));
                 window.Register(username.Text, pwEncrypt, email.Text, fullname.Text);
             }
                 

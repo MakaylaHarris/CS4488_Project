@@ -18,6 +18,7 @@ namespace SmartPert.View.Account
 
         public AccountEditor()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
             viewModel = new AccountViewModel();
             DataContext = viewModel;
@@ -30,12 +31,10 @@ namespace SmartPert.View.Account
         /// </summary>
         public void SwitchToPassword()
         {
-            if (changePasswordPage == null)
-            {
-                changePasswordPage = new ChangePassword(this);
-            }
-
+            changePasswordPage = new ChangePassword(this);
+            viewModel.IsUpdated = false;
             this.Content = changePasswordPage;
+           
         }
 
         /// <summary>
@@ -43,6 +42,11 @@ namespace SmartPert.View.Account
         /// </summary>
         public void SwitchToAccount()
         {
+            viewModel.IsError = false;
+            viewModel.IsPwMismatch = false;
+            viewModel.IsPwUpdated = false;
+            viewModel.TempUser.NewPw = "";
+            viewModel.TempUser.ConfirmNewPw = "";
             this.Content = accountInfoPage;
         }
 

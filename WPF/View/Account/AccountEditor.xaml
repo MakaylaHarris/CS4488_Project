@@ -14,7 +14,7 @@
             Background="{DynamicResource MaterialDesignPaper}"
             FontFamily="{DynamicResource MaterialDesignFont}"
             mc:Ignorable="d"
-            Title="AccountEditor" Height="535" Width="460">
+            Title="Account Editor" Height="535" Width="460">
         <Grid>
     </Grid>
 </Window>

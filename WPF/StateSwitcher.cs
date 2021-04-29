@@ -248,6 +248,11 @@ namespace SmartPert
         {
             OpenDialog(new ThemeEditor());
         }
+
+        public void OnSignout()
+        {
+            OpenDialog(new Signout());
+        }
         #endregion
     }
 }
