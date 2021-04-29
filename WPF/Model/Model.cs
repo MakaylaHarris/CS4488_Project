@@ -219,7 +219,20 @@ namespace SmartPert.Model
         /// <param name="email">email or username</param>
         /// <param name="password">password</param>
         /// <returns>true on success</returns>
-        public bool Login(string email, string password) => reader.Login(email, password);
+        public bool Login(string email, string password) { 
+            bool result = reader.Login(email, password);
+            OnModelUpdate();
+            return result;
+        }
+
+        /// <summary>
+        /// Logout the user
+        /// </summary>
+        public void Logout()
+        {
+            reader.Logout();
+            OnModelUpdate();
+        }
 
         /// <summary>
         /// Registers new user

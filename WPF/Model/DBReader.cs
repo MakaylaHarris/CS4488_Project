@@ -460,6 +460,14 @@ namespace SmartPert.Model
         }
 
         /// <summary>
+        /// Logout
+        /// </summary>
+        public void Logout()
+        {
+            currentUser = null;
+        }
+
+        /// <summary>
         /// Attempts to Login
         /// </summary>
         /// <param name="userId">UserName or Email</param>
