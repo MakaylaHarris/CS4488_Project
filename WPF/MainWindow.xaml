@@ -15,6 +15,9 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
+    </Window.Resources>
     <!--#region Commands -->
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="CommandBinding_CanIfLoggedIn" Executed="New_Executed" />
@@ -104,7 +107,7 @@
                     <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.AboutCommand}" />
                 </MenuItem>
-                <MenuItem Header="_Account" HorizontalAlignment="Right">
+                <MenuItem Header="_Account" HorizontalAlignment="Right" Visibility="{Binding isLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="AccountCircle" 
                                                  Foreground="{StaticResource PrimaryHueMidBrush}"/>

@@ -31,6 +31,7 @@ namespace SmartPert
         static private Random random = new Random();
         private Model.Model model;
         private WorkSpace workSpace;
+        private bool isLoggedIn;
         private ObservableCollection<MenuItemViewModel> items;
         public ObservableCollection<MenuItemViewModel> OpenItems { get => items; }
 
@@ -45,6 +46,11 @@ namespace SmartPert
             InitModel();
             StateSwitcher.Instance.Start(this);
             PopulateProjects();
+        }
+
+        public bool IsLoggedIn
+        {
+            get { return StateSwitcher.Instance.IsLoggedIn; }
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
