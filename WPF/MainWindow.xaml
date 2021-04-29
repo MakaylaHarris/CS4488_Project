@@ -107,7 +107,7 @@
                     <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.AboutCommand}" />
                 </MenuItem>
-                <MenuItem Header="_Account" HorizontalAlignment="Right" Visibility="{Binding isLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}">
+                <MenuItem Header="_Account" HorizontalAlignment="Right" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="AccountCircle" 
                                                  Foreground="{StaticResource PrimaryHueMidBrush}"/>
