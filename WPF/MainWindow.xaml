@@ -107,24 +107,19 @@
                     <Separator />
                     <MenuItem Command="{x:Static local:CustomCommands.AboutCommand}" />
                 </MenuItem>
-                <MenuItem Header="_Log In" HorizontalAlignment="Right" Visibility="{Binding IsNotLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}" Click="LogIn_Click">
+                <MenuItem Header="_Account" HorizontalAlignment="Right">
                     <MenuItem.Icon>
                         <materialDesign:PackIcon Kind="AccountCircle" 
                                                  Foreground="{StaticResource PrimaryHueMidBrush}"/>
                     </MenuItem.Icon>
+                    <MenuItem Header="_Log In" HorizontalAlignment="Right" Visibility="{Binding IsNotLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}" Click="LogIn_Click">
+                    </MenuItem>
+                    <MenuItem Command="{x:Static local:CustomCommands.AcctSettingsCommand}" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    <Separator Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    <MenuItem Command="{x:Static local:CustomCommands.ThemeCommand}" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    <Separator Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    <MenuItem Command="{x:Static local:CustomCommands.SignOutCommand}" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
                 </MenuItem>
-                <MenuItem Header="_Account" HorizontalAlignment="Right" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}">
-                    <MenuItem.Icon>
-                        <materialDesign:PackIcon Kind="AccountCircle" 
-                                                 Foreground="{StaticResource PrimaryHueMidBrush}"/>
-                    </MenuItem.Icon>
-                    <MenuItem Command="{x:Static local:CustomCommands.AcctSettingsCommand}"/>
-                    <Separator />
-                    <MenuItem Command="{x:Static local:CustomCommands.ThemeCommand}"/>
-                    <Separator />
-                    <MenuItem Command="{x:Static local:CustomCommands.SignOutCommand}"/>
-                </MenuItem>
-                
             </Menu>
             <TextBox AcceptsReturn="True" />
         </DockPanel>
