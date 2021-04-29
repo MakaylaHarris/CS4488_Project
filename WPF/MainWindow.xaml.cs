@@ -47,9 +47,12 @@ namespace SmartPert
             PopulateProjects();
         }
 
+        public static readonly DependencyProperty IsLoggedInProp = DependencyProperty.Register("IsLoggedIn", typeof(Boolean), typeof(MainWindow));
+
         public bool IsLoggedIn
         {
-            get { return StateSwitcher.Instance.IsLoggedIn; }
+            get { return (bool) GetValue(IsLoggedInProp); }
+            set { SetValue(IsLoggedInProp, value); }
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)

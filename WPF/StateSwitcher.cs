@@ -74,7 +74,7 @@ namespace SmartPert
         {
             isConnected = model.IsConnected();
             isLoggedIn = isConnected && model.IsLoggedIn();
-            OnPropertyChanged("IsLoggedIn");
+            main.IsLoggedIn = isLoggedIn;
             hasActiveProject = isLoggedIn && model.GetProject() != null;
         }
 
