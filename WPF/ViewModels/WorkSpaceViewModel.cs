@@ -133,7 +133,7 @@ namespace SmartPert.ViewModels
 
         #region Methods
         /// <summary>
-        /// This is the method that creates RowData objects from the Project
+        /// Creates RowData objects from the Project
         /// </summary>
         public void LoadData()
         {

@@ -37,6 +37,7 @@ namespace SmartPert
 
         public MainWindow()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.Dispatcher.UnhandledException += this.HandleException;
             InitializeComponent();
             items = new ObservableCollection<MenuItemViewModel>();
@@ -44,6 +45,21 @@ namespace SmartPert
             InitModel();
             StateSwitcher.Instance.Start(this);
             PopulateProjects();
+        }
+
+        public static readonly DependencyProperty IsLoggedInProp = DependencyProperty.Register("IsLoggedIn", typeof(Boolean), typeof(MainWindow));
+        public static readonly DependencyProperty IsNotLoggedInProp = DependencyProperty.Register("IsNotLoggedIn", typeof(Boolean), typeof(MainWindow));
+
+        public bool IsLoggedIn
+        {
+            get { return (bool) GetValue(IsLoggedInProp); }
+            set { SetValue(IsLoggedInProp, value); }
+        }
+
+        public bool IsNotLoggedIn
+        {
+            get { return (bool)GetValue(IsNotLoggedInProp); }
+            set { SetValue(IsNotLoggedInProp, value); }
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
@@ -195,7 +211,7 @@ namespace SmartPert
             InputTextBox.Text = Properties.Settings.Default.ConnectionString;
             InputBox.Visibility = Visibility.Visible;
             if (model != null && model.IsConnected())
-                UpdateDBStatus("Connected", Brushes.Green);
+                UpdateDBStatus("Connected", (SolidColorBrush)FindResource("MaterialDesignBody"));
             else
                 UpdateDBStatus("Disconnected", Brushes.Red);
 
@@ -301,11 +317,21 @@ namespace SmartPert
         
         private void Account_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            // For Makayla
+            StateSwitcher.Instance.OnAccountEdit();
         }
-#endregion
 
-#region Model Update
+        private void Theme_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            StateSwitcher.Instance.OnThemeEdit();
+        }
+
+        private void SignOut_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            StateSwitcher.Instance.OnSignout();
+        }
+        #endregion
+
+        #region Model Update
         public void OnModelUpdate(Project p)
         {
             PopulateProjects();
@@ -326,6 +352,11 @@ namespace SmartPert
         private void Window_Closed(object sender, EventArgs e)
         {
             model.Shutdown();
+        }
+
+        private void LogIn_Click(object sender, RoutedEventArgs e)
+        {
+            StateSwitcher.Instance.TryLogin();
         }
     }
 }

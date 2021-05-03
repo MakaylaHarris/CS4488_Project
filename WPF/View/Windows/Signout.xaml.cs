@@ -11,19 +11,29 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using SmartPert.ViewModels;
 
 namespace SmartPert.View.Windows
 {
     /// <summary>
-    /// Interaction logic for AccountEditor.xaml
+    /// Interaction logic for Signout.xaml
     /// </summary>
-    public partial class AccountEditor : Window
+    public partial class Signout : Window
     {
-        public AccountEditor()
+        public Signout()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            DataContext = new AccountViewModel();
+        }
+
+        private void Yes_Click(object sender, RoutedEventArgs e)
+        {
+            Model.Model.Instance.Logout();
+            Close();
+        }
+
+        private void No_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

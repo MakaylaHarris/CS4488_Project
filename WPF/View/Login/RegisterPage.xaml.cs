@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Text;
 using System.Windows.Controls;
 
 namespace SmartPert.View.Login
@@ -80,8 +81,14 @@ namespace SmartPert.View.Login
 
         private void registerButton_Click(object sender, RoutedEventArgs e)
         {
-            if(isValidInput(ignoreNull: false))
-                window.Register(username.Text, password.Password, email.Text, fullname.Text);
+            if (isValidInput(ignoreNull: false))
+            {
+                //encryot
+                string pwEncrypt = System.Text.Encoding.ASCII.GetString(
+                    new System.Security.Cryptography.SHA256Managed().ComputeHash(Encoding.UTF8.GetBytes(password.Password)));
+                window.Register(username.Text, pwEncrypt, email.Text, fullname.Text);
+            }
+                
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
