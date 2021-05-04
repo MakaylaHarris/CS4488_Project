@@ -19,7 +19,7 @@ using System.Windows.Threading;
 using SmartPert.View.Windows;
 using MessageBox = System.Windows.MessageBox;
 using PrintDialog = System.Windows.Controls.PrintDialog;
-
+using System.Printing;
 
 namespace SmartPert
 {
@@ -109,35 +109,27 @@ namespace SmartPert
         /// <summary>
         /// Prints the main content area (whatever is shown).
         /// Created 2/2/2021 by Robert Nelson
+        /// Modified by Dan Walker 5/3/2021
         /// </summary>
         /// <param name="sender">object</param>
         /// <param name="e">ExecutedRoutedEventArgs</param>
         private void Print_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            // Render the control as bitmap
-            RenderTargetBitmap rtb = new RenderTargetBitmap((int)MainContent.ActualWidth, (int)MainContent.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-            rtb.Render(MainContent);
-            PngBitmapEncoder png = new PngBitmapEncoder();
-            png.Frames.Add(BitmapFrame.Create(rtb));
-            MemoryStream stream = new MemoryStream();
-            png.Save(stream);
-            var bi = new BitmapImage();
-            bi.BeginInit();
-            bi.CacheOption = BitmapCacheOption.OnLoad;
-            bi.StreamSource = stream;
-            bi.EndInit();
+            
+            PrintDialog printDlg = new PrintDialog();
+            PrintTicket pt = printDlg.PrintTicket;
+            Double printableWidth = pt.PageMediaSize.Width.Value;
+            Double printableHeight = pt.PageMediaSize.Height.Value;
+            pt.PageOrientation = PageOrientation.Landscape;
 
-            // Then create the drawing
-            var vis = new DrawingVisual();
-            using (var dc = vis.RenderOpen())
+            Double xScale = printableWidth;
+            Double yScale = printableHeight;
+
+            this.LayoutTransform = new MatrixTransform(xScale, 0, 0, yScale, 0, 0);
+
+            if (printDlg.ShowDialog() == true)
             {
-                dc.DrawImage(bi, new Rect { Width = bi.Width, Height = bi.Height });
-            }
-            // Finally print
-            var pdialog = new PrintDialog();
-            if (pdialog.ShowDialog() == true)
-            {
-                pdialog.PrintVisual(vis, "My Image");
+            printDlg.PrintVisual(this, "Print Page");
             }
         }
 
