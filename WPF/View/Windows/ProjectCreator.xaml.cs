@@ -71,6 +71,7 @@ namespace SmartPert.View.Windows
         /// </summary>
         public ProjectCreator()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
             StartDatePicker.SelectedDate = DateTime.Now;
         }

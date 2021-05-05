@@ -10,6 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using SmartPert.View.Account;
+using SmartPert.View.Theme;
+using System.ComponentModel;
 
 namespace SmartPert
 {
@@ -17,7 +20,7 @@ namespace SmartPert
     /// State Switcher Singleton that controls what is displayed
     /// Created 2/26/2021 by Robert Nelson
     /// </summary>
-    public class StateSwitcher : IViewModel
+    public class StateSwitcher : IViewModel, INotifyPropertyChanged
     {
         private static readonly StateSwitcher instance = new StateSwitcher();
         private MainWindow main;
@@ -71,6 +74,8 @@ namespace SmartPert
         {
             isConnected = model.IsConnected();
             isLoggedIn = isConnected && model.IsLoggedIn();
+            main.IsLoggedIn = isLoggedIn;
+            main.IsNotLoggedIn = !isLoggedIn;
             hasActiveProject = isLoggedIn && model.GetProject() != null;
         }
 
@@ -233,6 +238,34 @@ namespace SmartPert
             CommandStack.Instance.OnModelUpdate(p);
             Update();
         }
+
+        public void OnAccountEdit()
+        {
+            if (!isConnected || !isLoggedIn)
+                Update();
+            else
+                OpenDialog(new AccountEditor());
+        }
+
+        public void OnThemeEdit()
+        {
+            OpenDialog(new ThemeEditor());
+        }
+
+        public void OnSignout()
+        {
+            OpenDialog(new Signout());
+        }
+        #endregion
+
+        #region INotifyPropertyChanged Members
+        protected void OnPropertyChanged(string propertyName)
+        {
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
     }
 }

@@ -27,23 +27,22 @@ namespace SmartPert.View.Pages
     public partial class WorkSpace : Page
     {
         WorkSpaceViewModel viewModel;
-        //starts the grid content rows at 2 since the headers take up two rows
-        //starts the grid content columns at 1 since the Project/task column is the first
-        private const int rowStart = 2;
-        private const int colStart = 0;
         //This is the max integer number used to mean span all
         private const int maxInt = 2147483647;
         private List<int> weekendCols = new List<int>();
         private Dictionary<Task, TaskControl> taskControls;
+        private bool isInitializing;
 
         public WorkSpace()
         {
+            isInitializing = true;
             InitializeComponent();
             viewModel = new WorkSpaceViewModel(this);
             taskControls = new Dictionary<Task, TaskControl>();
             DataContext = viewModel.RowData;
             mainGrid.SizeChanged += MainGrid_SizeChanged;
             BuildGrid();
+            isInitializing = false;
         }
 
         /// <summary>
@@ -53,6 +52,8 @@ namespace SmartPert.View.Pages
         /// <param name="viewModel">view model</param>
         public void OnWorkspaceModelUpdate(WorkSpaceViewModel viewModel)
         {
+            if (isInitializing)
+                return;
             foreach (TaskControl taskControl in taskControls.Values)
                 taskControl.DisconnectAllLines();
             taskControls.Clear();
@@ -66,17 +67,18 @@ namespace SmartPert.View.Pages
                 MainCanvas.Children.Remove(uI);
 
             weekendCols.Clear();
-            for (int i = mainGrid.RowDefinitions.Count - 1; i >= rowStart; i--)
-            {
-                mainGrid.RowDefinitions.RemoveAt(i);
-                LeftGrid.RowDefinitions.RemoveAt(i);
-            }
-            for (int i = mainGrid.ColumnDefinitions.Count - 1; i >= colStart; i--)
-                mainGrid.ColumnDefinitions.RemoveAt(i);
+            LeftGrid.RowDefinitions.Clear();
+            mainGrid.RowDefinitions.Clear();
+            mainGrid.ColumnDefinitions.Clear();
+            HeaderGrid.ColumnDefinitions.Clear();
             mainGrid.Children.Clear();
             LeftGrid.Children.Clear();
+            HeaderGrid.Children.Clear();
             BuildGrid();
-            Dispatcher.Invoke(new Action(() => { AddDependencies(); }), DispatcherPriority.ContextIdle);
+            try
+            {
+                Dispatcher.Invoke(new Action(() => { AddDependencies(); }), DispatcherPriority.ContextIdle);
+            } catch (InvalidOperationException) { }
         }
 
         private void MainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -128,17 +130,17 @@ namespace SmartPert.View.Pages
         public int GetRowShift(double start, double end)
         {
             int startRow = -1, endRow = -1, currentRow = 0;
-            double totalWidth = 0;
-            foreach (var columnDef in mainGrid.RowDefinitions)
+            double totalHeight = 0;
+            foreach (var rowDef in mainGrid.RowDefinitions)
             {
-                totalWidth += columnDef.ActualHeight;
-                if (startRow == -1 && totalWidth > start)
+                totalHeight += rowDef.ActualHeight;
+                if (startRow == -1 && totalHeight > start)
                 {
                     startRow = currentRow;
                     if (endRow > 0)     // Shortcut if we found columns
                         break;
                 }
-                if (endRow == -1 && totalWidth > end)
+                if (endRow == -1 && totalHeight > end)
                 {
                     endRow = currentRow;
                     if (startRow > 0)
@@ -184,12 +186,18 @@ namespace SmartPert.View.Pages
         /// </summary>
         private void AddHeaders()
         {
-            int colPosition = colStart;
+            int colPosition = 0;
             //outer loop adds the Date (i.e. "Feb 04") column headers
             for (int i = 0; i < viewModel.Headers.Count; i++)
             {
                 ColumnDefinition colDef = new ColumnDefinition();
+                string group = "G" + colPosition;
+                colDef.SharedSizeGroup = group;
+                HeaderGrid.ColumnDefinitions.Add(colDef);
+                colDef.MinWidth = 15;
+                colDef = new ColumnDefinition();
                 mainGrid.ColumnDefinitions.Add(colDef);
+                colDef.SharedSizeGroup = group;
                 colDef.MinWidth = 15;
                 TextBlock txt1 = new TextBlock();
                 txt1.Text = viewModel.Headers[i];
@@ -197,16 +205,22 @@ namespace SmartPert.View.Pages
                 txt1.Margin = new Thickness(0, 0, 0, 0);
                 Grid.SetRow(txt1, 0);
                 Grid.SetColumn(txt1, colPosition);
-                mainGrid.Children.Add(txt1);
+                HeaderGrid.Children.Add(txt1);
 
                 //inner loop adds the abbreviated day (S,M,T,W,T,F,S) column headers
                 for (int j = 0; j < 7; j++)
                 {
                     if (j != 0)
                     {
-                        ColumnDefinition colDef2 = new ColumnDefinition();
-                        mainGrid.ColumnDefinitions.Add(colDef2);
-                        colDef2.MinWidth = 15;
+                        colDef = new ColumnDefinition();
+                        mainGrid.ColumnDefinitions.Add(colDef);
+                        group = "G" + colPosition;
+                        colDef.SharedSizeGroup = group;
+                        colDef.MinWidth = 15;
+                        colDef = new ColumnDefinition();
+                        HeaderGrid.ColumnDefinitions.Add(colDef);
+                        colDef.SharedSizeGroup = group;
+                        colDef.MinWidth = 15;
                     }
                     TextBlock txt2 = new TextBlock();
                     txt2.Text = viewModel.weekDayAbbrev[j];
@@ -218,7 +232,8 @@ namespace SmartPert.View.Pages
                     txt2.HorizontalAlignment = HorizontalAlignment.Center;
                     Grid.SetRow(txt2, 1);
                     Grid.SetColumn(txt2, colPosition + j);
-                    mainGrid.Children.Add(txt2);
+                    Grid.SetZIndex(txt2, 5);
+                    HeaderGrid.Children.Add(txt2);
                 }
                 //spans outer loop headers to fill the week
                 Grid.SetColumnSpan(txt1, 7);
@@ -237,7 +252,11 @@ namespace SmartPert.View.Pages
             {
                 rowData = viewModel.RowData[i];
                 if (rowData.IsProject)
-                    MyControl = new Button();
+                {
+                    var button = new Button();
+                    button.Command = CustomCommands.SettingsCommand;
+                    MyControl = button;
+                }
                 else
                 {
                     TaskControl control = new TaskControl(this, rowData) { Canvas = MainCanvas };
@@ -246,7 +265,7 @@ namespace SmartPert.View.Pages
                 }
                 MyControl.Margin = new Thickness(0, 4, 0, 4);
 
-                Grid.SetRow(MyControl, i + 2);
+                Grid.SetRow(MyControl, i);
                 Grid.SetColumn(MyControl, TaskControl.NaturalNum(rowData.StartDateCol));
                 Grid.SetColumnSpan(MyControl, TaskControl.NaturalNum(rowData.ColSpan));
                 Grid.SetZIndex(MyControl, 100);
@@ -273,7 +292,7 @@ namespace SmartPert.View.Pages
         /// </summary>
         private void AddRows()
         {
-            int rowChange = rowStart;
+            int rowChange = 0;
             for (int i = 0; i < viewModel.RowData.Count; i++)
             {
                 RowDefinition rowDef = new RowDefinition();
@@ -365,15 +384,14 @@ namespace SmartPert.View.Pages
         {
             SolidColorBrush midbrush = FindResource("PrimaryHueMidBrush") as SolidColorBrush;
             // Border around header
-            Border border = CreateBorder(mainGrid, midbrush, 2, 1);
-            Grid.SetColumnSpan(border, mainGrid.ColumnDefinitions.Count);
-            Grid.SetRowSpan(border, 2);
-            border = CreateBorder(LeftGrid, midbrush, 2, 1);
+            Border border = CreateBorder(HeaderGrid, midbrush, 2, 1);
+            Grid.SetColumnSpan(border, HeaderGrid.ColumnDefinitions.Count);
             Grid.SetRowSpan(border, 2);
 
             // Border around entire grid
             border = CreateBorder(workSpace, midbrush, 1, 1);
             Grid.SetColumnSpan(border, workSpace.ColumnDefinitions.Count);
+            Grid.SetRowSpan(border, workSpace.RowDefinitions.Count);
         }
 
         // Helper function to create borders
@@ -395,7 +413,7 @@ namespace SmartPert.View.Pages
             Border border;
             SolidColorBrush lightbrush = (SolidColorBrush)Application.Current.Resources["PrimaryHueLightBrush"];
             AddGridOuterBorder();
-            for (int i = rowStart; i < mainGrid.RowDefinitions.Count; i++)
+            for (int i = 0; i < mainGrid.RowDefinitions.Count; i++)
             {
                 // Create a primary hue light Brush  
                 border = CreateBorder(mainGrid, lightbrush);
@@ -405,27 +423,43 @@ namespace SmartPert.View.Pages
                 Grid.SetRow(border, i);
             }
 
-            for (int i = colStart; i < mainGrid.ColumnDefinitions.Count; i++)
+            for (int i = 0; i < mainGrid.ColumnDefinitions.Count; i++)
             {
                 // Create a primary hue light Brush  
-                if (weekendCols.Contains(i))
-                {
-                    border = CreateBorder(mainGrid, lightbrush, opacity: 0.25);
-                    border.Background = (SolidColorBrush)Application.Current.Resources["PrimaryHueDarkBrush"];
-                } else
-                    border = CreateBorder(mainGrid, lightbrush);
-
-                Grid.SetZIndex(border, 0);
-                Grid.SetColumn(border, i);
-                Grid.SetRow(border, 1);
-                Grid.SetRowSpan(border, maxInt);
+                AddColumnBorder(i, weekendCols.Contains(i), lightbrush);
             }
+        }
+
+        private void AddColumnBorder(int column, bool isWeekend, SolidColorBrush lightbrush)
+        {
+            Border border, border2;
+            // Add header border
+            if(isWeekend)
+            {
+                border = CreateBorder(mainGrid, lightbrush, opacity: 0.25);
+                border.Background = (SolidColorBrush)Application.Current.Resources["PrimaryHueDarkBrush"];
+                border2 = CreateBorder(HeaderGrid, lightbrush, opacity: 0.25);
+                border2.Background = (SolidColorBrush)Application.Current.Resources["PrimaryHueDarkBrush"];
+
+            } else
+            {
+                border = CreateBorder(mainGrid, lightbrush);
+                border2 = CreateBorder(HeaderGrid, lightbrush);
+            }
+            Grid.SetZIndex(border, 0);
+            Grid.SetColumn(border, column);
+            Grid.SetRowSpan(border, maxInt);
+            Grid.SetZIndex(border2, 0);
+            Grid.SetColumn(border2, column);
+            Grid.SetRow(border2, 1);
         }
 
         private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
             if(LeftView.VerticalOffset != e.VerticalOffset)
                 LeftView.ScrollToVerticalOffset(e.VerticalOffset);
+            if (HeaderView.HorizontalOffset != e.HorizontalOffset)
+                HeaderView.ScrollToHorizontalOffset(e.HorizontalOffset);
         }
 
         private void LeftView_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -433,5 +467,22 @@ namespace SmartPert.View.Pages
             if (ScrollViewer.VerticalOffset != e.VerticalOffset)
                 ScrollViewer.ScrollToVerticalOffset(e.VerticalOffset);
         }
+
+        private void HeaderView_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (ScrollViewer.HorizontalOffset != e.HorizontalOffset)
+                ScrollViewer.ScrollToHorizontalOffset(e.HorizontalOffset);
+        }
+
+        private void BestCaseRadio_Click(object sender, RoutedEventArgs e)
+        {
+            Model.Task.CalculateDependentsMaxEstimate = false;
+        }
+
+        private void WorstCaseRadio_Click(object sender, RoutedEventArgs e)
+        {
+            Model.Task.CalculateDependentsMaxEstimate = true;
+        }
+
     }
 }

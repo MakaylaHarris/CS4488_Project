@@ -152,6 +152,7 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=3.2.0.1979, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.3.2.0\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="ShowMeTheXAML, Version=2.0.0.62, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ShowMeTheXAML.2.0.0\lib\net472\ShowMeTheXAML.dll</HintPath>
     </Reference>
@@ -162,6 +163,7 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.2\System.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -187,10 +189,24 @@
     <Compile Include="Command\ShiftToRowCmd.cs" />
     <Compile Include="Command\TaskShiftCmd.cs" />
     <Compile Include="Command\TransactionCmd.cs" />
+    <Compile Include="Model\DBConnection.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModelCommands\AccountUpdateCommand.cs" />
+    <Compile Include="ViewModelCommands\PasswordUpdateCommand.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="StateSwitcher.cs" />
+    <Compile Include="ViewModels\ThemeViewModel.cs" />
+    <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
+    <Compile Include="View\Account\AccountInfo.xaml.cs">
+      <DependentUpon>AccountInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Account\ChangePassword.xaml.cs">
+      <DependentUpon>ChangePassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Theme\ThemeEditor.xaml.cs">
+      <DependentUpon>ThemeEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\TaskRowLabelViewModel.cs" />
     <Compile Include="ViewModels\WorkSpaceViewModel.cs" />
     <Compile Include="View\Controls\TaskControlPreview.xaml.cs">
       <DependentUpon>TaskControlPreview.xaml</DependentUpon>
@@ -228,7 +244,8 @@
     </Compile>
     <Compile Include="View\ViewClasses\ToolTipData.cs" />
     <Compile Include="View\ViewClasses\ToolTipProjectData.cs" />
-    <Compile Include="View\Windows\AccountEditor.xaml.cs">
+    <Compile Include="View\ViewClasses\UserDisplay.cs" />
+    <Compile Include="View\Account\AccountEditor.xaml.cs">
       <DependentUpon>AccountEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Pages\HintAndLink.xaml.cs">
@@ -237,6 +254,9 @@
     <Compile Include="View\ViewClasses\CtrlHitTest.cs" />
     <Compile Include="View\Windows\ProjectCreator.xaml.cs">
       <DependentUpon>ProjectCreator.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Windows\Signout.xaml.cs">
+      <DependentUpon>Signout.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Windows\TaskEditor.xaml.cs">
       <DependentUpon>TaskEditor.xaml</DependentUpon>
@@ -272,6 +292,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Account\AccountInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Account\ChangePassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Controls\FilteredComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -316,15 +344,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Windows\AccountEditor.xaml">
+    <Page Include="View\Account\AccountEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Theme\ThemeEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Windows\ProjectCreator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Pages\WorkSpace.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Windows\Signout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

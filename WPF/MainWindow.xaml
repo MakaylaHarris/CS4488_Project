@@ -15,6 +15,9 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibleIfTrueConverter" />
+    </Window.Resources>
     <!--#region Commands -->
     <Window.CommandBindings>
         <CommandBinding Command="New" CanExecute="CommandBinding_CanIfLoggedIn" Executed="New_Executed" />
@@ -33,7 +36,9 @@
         <CommandBinding Command="{x:Static local:CustomCommands.DocsCommand}" Executed="Docs_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AboutCommand}" Executed="About_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.AddHelpCommand}" Executed="Additional_Help"/>
-        <CommandBinding Command="{x:Static local:CustomCommands.AcctSettings}" Executed="Account_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.AcctSettingsCommand}" Executed="Account_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.ThemeCommand}" Executed="Theme_Execute"/>
+        <CommandBinding Command="{x:Static local:CustomCommands.SignOutCommand}" Executed="SignOut_Execute"/>
         <CommandBinding Command="{x:Static local:CustomCommands.SettingsCommand}" CanExecute="CommandBinding_CanIfActiveProject" Executed="Settings_Execute"/>
     </Window.CommandBindings>
     <Window.InputBindings>
@@ -107,7 +112,13 @@
                         <materialDesign:PackIcon Kind="AccountCircle" 
                                                  Foreground="{StaticResource PrimaryHueMidBrush}"/>
                     </MenuItem.Icon>
-                    <MenuItem Command="{x:Static local:CustomCommands.AcctSettings}"/>
+                    <MenuItem Header="_Log In" HorizontalAlignment="Right" Visibility="{Binding IsNotLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}" Click="LogIn_Click">
+                    </MenuItem>
+                    <MenuItem Command="{x:Static local:CustomCommands.AcctSettingsCommand}" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    <Separator Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    <MenuItem Command="{x:Static local:CustomCommands.ThemeCommand}" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    <Separator Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
+                    <MenuItem Command="{x:Static local:CustomCommands.SignOutCommand}" Visibility="{Binding IsLoggedIn, Converter={StaticResource VisibleIfTrueConverter}}"/>
                 </MenuItem>
             </Menu>
             <TextBox AcceptsReturn="True" />
@@ -126,24 +137,24 @@
             <Grid Background="Black" Opacity="0.5"/>
             <Border
                 MinWidth="250"
-                Background="LightBlue" 
-                BorderBrush="Black" 
+                Background="{StaticResource PrimaryHueDarkBrush}" 
+                BorderBrush="Transparent" 
                 BorderThickness="1" 
                 CornerRadius="0,55,0,55" 
                 HorizontalAlignment="Center" 
                 VerticalAlignment="Center">
                 <StackPanel>
-                    <TextBlock Margin="10" FontWeight="Bold" FontFamily="Cambria"><Run Text="Database Connection String:     "/><InlineUIContainer>
-                            <Button HorizontalAlignment="Right" Content="?" Background="{x:Null}" Foreground="Yellow" BorderBrush="{x:Null}" 
+                    <TextBlock Margin="10" FontWeight="Bold"><Run Text="Database Connection String:  "/><InlineUIContainer>
+                            <Button HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" 
                                     ToolTip="Used to connect to database. Consists of a series of Key Value pairs separated by semicolons (SqlConnection.ConnectionString)"
                                     Click="ConnectString_GetHelp"
-                                    />
+                                    ><materialDesign:PackIcon Kind="HelpCircleOutline" Foreground="{StaticResource SecondaryHueLightBrush}"/></Button>
                         </InlineUIContainer></TextBlock>
                     <TextBox Margin="5" MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="InputTextBox"/>
                     <TextBlock Margin="10" Text="Disconnected" Foreground="Red" HorizontalAlignment="Center" x:Name="DBStatus"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button x:Name="Connect" Margin="5" Content="Connect" Background="{x:Null}" Click="DBString_Change"/>
-                        <Button x:Name="Cancel" Margin="5" Content="Cancel" Background="{x:Null}" Click="DBConnect_Cancel" />
+                        <Button x:Name="Connect" Margin="5" Content="CONNECT" Style="{StaticResource MaterialDesignRaisedLightButton}" Click="DBString_Change"/>
+                        <Button x:Name="Cancel" Margin="5" Content="CANCEL" Style="{StaticResource MaterialDesignRaisedLightButton}" Click="DBConnect_Cancel" />
                     </StackPanel>
                 </StackPanel>
             </Border>

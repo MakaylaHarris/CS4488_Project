@@ -8,6 +8,11 @@ using SmartPert.ViewModels;
 
 namespace SmartPert.ViewModelCommands
 {
+    /// <summary>
+    /// Command for updating the user information from the account page
+    /// @author: Makayla Linnastruth
+    /// @date: 03/14/2021
+    /// </summary>
     class AccountUpdateCommand : ICommand
     {
         private AccountViewModel _viewModel;
@@ -29,12 +34,12 @@ namespace SmartPert.ViewModelCommands
 
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            return _viewModel.CanUpdate;
         }
 
         public void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            _viewModel.SaveAccountInfo();
         }
         #endregion
     }

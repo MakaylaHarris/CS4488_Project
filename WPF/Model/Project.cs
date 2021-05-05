@@ -17,8 +17,8 @@ namespace SmartPert.Model
         {
             get
             {
-                if(sorted == null)
-                    sorted = Tasks.OrderBy(x => x.ProjectRow).ToList();
+                if (sorted == null)
+                    sorted = SortTasks();
                 return sorted;
             }
             set
@@ -47,19 +47,109 @@ namespace SmartPert.Model
             return EndDate == null || maxEstimate > EndDate ? maxEstimate : (DateTime)EndDate;
         }
 
+        public void Recalculate()
+        {
+            int likelyDuration = 1, maxDuration = 1, ndays;
+            DateTime start = StartDate;
+            foreach(Task t in tasks)
+            {
+                ndays = (t.LikelyDate - start).Days;
+                if (ndays > likelyDuration)
+                    likelyDuration = ndays;
+                ndays = (t.MaxEstDate - start).Days;
+                if (ndays > maxDuration)
+                    maxDuration = ndays;
+            }
+            LikelyDuration = likelyDuration;
+            MaxDuration = maxDuration;
+        }
         #endregion
 
         #region Task Methods
-        
+        /// <summary>
+        /// Determines if the sorted task list is a valid order based on having unique project rows and subtasks underlying their parents.
+        /// </summary>
+        /// <param name="tasks">sorted tasks</param>
+        /// <returns>true if valid</returns>
+        protected static bool IsValidSort(List<Task> tasks)
+        {
+            HashSet<int> rows = new HashSet<int>();
+            Stack<Task> stack = new Stack<Task>();
+            foreach (Task t in tasks)
+            {
+                // Must have unique row number
+                if (rows.Contains(t.ProjectRow))
+                    return false;
+                rows.Add(t.ProjectRow);
+
+                // test stack, subtasks should be ordered in a stack-like way
+                if (t.ParentTask == null)
+                    stack.Clear();
+                else
+                {
+                    try
+                    {
+                        while (t.ParentTask != stack.First())
+                            stack.Pop();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return false;
+                    }
+                }
+                if (t.Tasks.Count > 0)
+                    stack.Push(t);
+            }
+            return true;
+        }
+
+        private static void ResortTasksAddRecursively(List<Task> resorted, Task subtaskToAdd)
+        {
+            resorted.Add(subtaskToAdd);
+            foreach (Task t in subtaskToAdd.Tasks.OrderBy(x => x.ProjectRow))
+                ResortTasksAddRecursively(resorted, t);
+        }
+
+        /// <summary>
+        /// Resorts the task's list to have subtasks under their parent
+        /// </summary>
+        /// <param name="currentSort">the current sort by project row</param>
+        /// <returns>sorted list</returns>
+        protected static List<Task> ResortTasks(List<Task> currentSort)
+        {
+            List<Task> newSort = new List<Task>();
+            foreach (Task t in currentSort)
+            {
+                if (t.ParentTask == null)
+                    ResortTasksAddRecursively(newSort, t);
+            }
+            return newSort;
+        }
+
+        private List<Task> SortTasks()
+        {
+            List<Task> sorted = Tasks.OrderBy(x => x.ProjectRow).ToList();
+            if (IsValidSort(sorted))
+                return sorted;
+            return ResortTasks(sorted);
+        }
+
         public void AddTask(Task t)
         {
             if (!tasks.Contains(t))
             {
-                sorted = null;
-                tasks.Add(t);
+                AddTaskNoCheck(t);
+                if (t.ProjectRow == -1)
+                    t.ProjectRow = tasks.Count > 0 ? tasks.Max(x => x.ProjectRow) + 1 : 0;
                 OnChild_Change(t);
                 NotifyUpdate();
             }
+        }
+
+        public void AddTaskNoCheck(Task t)
+        {
+            sorted = null;
+            tasks.Add(t);
         }
 
         public void RemoveTask(Task t)
@@ -86,11 +176,12 @@ namespace SmartPert.Model
             {
                 try
                 {
-                    SqlCommand command = OpenConnection("INSERT INTO UserProject (UserName, ProjectId) VALUES(@username, @projectId);");
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.Parameters.AddWithValue("@projectId", this.Id);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
+                    using(var connection = new DBConnection("INSERT INTO UserProject (UserName, ProjectId) VALUES(@username, @projectId);")) {
+                        var command = connection.Command;
+                        command.Parameters.AddWithValue("@username", worker.Username);
+                        command.Parameters.AddWithValue("@projectId", this.Id);
+                        command.ExecuteNonQuery();
+                    }
                     workers.Add(worker);
                     added = true;
                     NotifyUpdate();
@@ -113,11 +204,13 @@ namespace SmartPert.Model
             {
                 try
                 {
-                    SqlCommand command = OpenConnection("DELETE FROM UserProject WHERE ProjectId = @projectId AND UserName = @username);");
-                    command.Parameters.AddWithValue("@projectId", Id);
-                    command.Parameters.AddWithValue("@username", worker.Username);
-                    command.ExecuteNonQuery();
-                    CloseConnection();
+                    using(var conn = new DBConnection("DELETE FROM UserProject WHERE ProjectId = @projectId AND UserName = @username);"))
+                    {
+                        var command = conn.Command;
+                        command.Parameters.AddWithValue("@projectId", Id);
+                        command.Parameters.AddWithValue("@username", worker.Username);
+                        command.ExecuteNonQuery();
+                    }
                     workers.Remove(worker);
                     removed = true;
                     NotifyUpdate();
@@ -144,10 +237,7 @@ namespace SmartPert.Model
         /// </summary>
         protected override void PerformDelete()
         {
-            SqlCommand command = OpenConnection("EXEC ProjectDelete @ProjectID");
-            command.Parameters.AddWithValue("@ProjectID", Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            DBConnection.ExecuteNonQuery("EXEC ProjectDelete " + Id);
         }
 
         /// <summary>
@@ -159,34 +249,37 @@ namespace SmartPert.Model
         {
             string query = "EXEC CreateProject @ProjectName, @StartDate, @EndDate, @Description, @Creator," 
                 + "@LikelyDuration, @MinDuration, @MaxDuration, @CreationDate OUT, @Result OUT, @ResultId OUT";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@ProjectName", Name);
-            command.Parameters.AddWithValue("@StartDate", StartDate);
-            if (EndDate != null)
-                command.Parameters.AddWithValue("@EndDate", EndDate);
-            else
-                command.Parameters.AddWithValue("@EndDate", DBNull.Value);
-            command.Parameters.AddWithValue("@Description", Description);
-            creator = Model.Instance.GetCurrentUser();
-            if (creator != null)
-                command.Parameters.AddWithValue("@Creator", creator.Username);
-            else
-                command.Parameters.AddWithValue("@Creator", DBNull.Value);
-            command.Parameters.AddWithValue("@LikelyDuration", LikelyDuration);
-            command.Parameters.AddWithValue("@MinDuration", MinDuration);
-            command.Parameters.AddWithValue("@MaxDuration", MaxDuration);
-            var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
-            createDate.Direction = System.Data.ParameterDirection.Output;
-            var insertedId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
-            insertedId.Direction = System.Data.ParameterDirection.Output;
-            var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
-            result.Direction = System.Data.ParameterDirection.Output;
-            command.ExecuteNonQuery(); 
-            if (!(bool)result.Value)
-                throw new InsertionError("Failed to insert project " + Name + " into database!");
-            creationDate = (DateTime) createDate.Value;
-            id = (int) insertedId.Value;
-            return id;
+            using (var conn = new DBConnection(query))
+            {
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@ProjectName", Name);
+                command.Parameters.AddWithValue("@StartDate", StartDate);
+                if (EndDate != null)
+                    command.Parameters.AddWithValue("@EndDate", EndDate);
+                else
+                    command.Parameters.AddWithValue("@EndDate", DBNull.Value);
+                command.Parameters.AddWithValue("@Description", Description);
+                creator = Model.Instance.GetCurrentUser();
+                if (creator != null)
+                    command.Parameters.AddWithValue("@Creator", creator.Username);
+                else
+                    command.Parameters.AddWithValue("@Creator", DBNull.Value);
+                command.Parameters.AddWithValue("@LikelyDuration", LikelyDuration);
+                command.Parameters.AddWithValue("@MinDuration", MinDuration);
+                command.Parameters.AddWithValue("@MaxDuration", MaxDuration);
+                var createDate = command.Parameters.Add("@CreationDate", System.Data.SqlDbType.DateTime);
+                createDate.Direction = System.Data.ParameterDirection.Output;
+                var insertedId = command.Parameters.Add("@ResultId", System.Data.SqlDbType.Int);
+                insertedId.Direction = System.Data.ParameterDirection.Output;
+                var result = command.Parameters.Add("@Result", System.Data.SqlDbType.Bit);
+                result.Direction = System.Data.ParameterDirection.Output;
+                command.ExecuteNonQuery();
+                if (!(bool)result.Value)
+                    throw new InsertionError("Failed to insert project " + Name + " into database!");
+                creationDate = (DateTime)createDate.Value;
+                id = (int)insertedId.Value;
+                return id;
+            }
         }
 
         /// <summary>
@@ -196,17 +289,19 @@ namespace SmartPert.Model
         {
             string query = "UPDATE Project SET Name=@Name, Description=@Description, StartDate=@StartDate, EndDate=@EndDate, MinEstDuration=" 
                 + MinDuration + ", MaxEstDuration=" + MaxDuration + ", MostLikelyEstDuration=" + LikelyDuration + " WHERE ProjectId=@Id;";
-            SqlCommand command = OpenConnection(query);
-            command.Parameters.AddWithValue("@Name", Name);
-            command.Parameters.AddWithValue("@Description", Description);
-            command.Parameters.AddWithValue("@StartDate", StartDate);
-            if (EndDate == null)
-                command.Parameters.AddWithValue("@EndDate", DBNull.Value);
-            else
-                command.Parameters.AddWithValue("@EndDate", EndDate);
-            command.Parameters.AddWithValue("@Id", Id);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            using (var conn = new DBConnection(query))
+            {
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@Name", Name);
+                command.Parameters.AddWithValue("@Description", Description);
+                command.Parameters.AddWithValue("@StartDate", StartDate);
+                if (EndDate == null)
+                    command.Parameters.AddWithValue("@EndDate", DBNull.Value);
+                else
+                    command.Parameters.AddWithValue("@EndDate", EndDate);
+                command.Parameters.AddWithValue("@Id", Id);
+                command.ExecuteNonQuery();
+            }
         }
 
         static public Project Parse(SqlDataReader reader, Dictionary<string, User> users)

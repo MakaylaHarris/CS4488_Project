@@ -19,7 +19,7 @@ using System.Windows.Threading;
 using SmartPert.View.Windows;
 using MessageBox = System.Windows.MessageBox;
 using PrintDialog = System.Windows.Controls.PrintDialog;
-
+using System.Printing;
 
 namespace SmartPert
 {
@@ -37,6 +37,7 @@ namespace SmartPert
 
         public MainWindow()
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.Dispatcher.UnhandledException += this.HandleException;
             InitializeComponent();
             items = new ObservableCollection<MenuItemViewModel>();
@@ -44,6 +45,21 @@ namespace SmartPert
             InitModel();
             StateSwitcher.Instance.Start(this);
             PopulateProjects();
+        }
+
+        public static readonly DependencyProperty IsLoggedInProp = DependencyProperty.Register("IsLoggedIn", typeof(Boolean), typeof(MainWindow));
+        public static readonly DependencyProperty IsNotLoggedInProp = DependencyProperty.Register("IsNotLoggedIn", typeof(Boolean), typeof(MainWindow));
+
+        public bool IsLoggedIn
+        {
+            get { return (bool) GetValue(IsLoggedInProp); }
+            set { SetValue(IsLoggedInProp, value); }
+        }
+
+        public bool IsNotLoggedIn
+        {
+            get { return (bool)GetValue(IsNotLoggedInProp); }
+            set { SetValue(IsNotLoggedInProp, value); }
         }
 
         void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
@@ -93,35 +109,27 @@ namespace SmartPert
         /// <summary>
         /// Prints the main content area (whatever is shown).
         /// Created 2/2/2021 by Robert Nelson
+        /// Modified by Dan Walker 5/3/2021
         /// </summary>
         /// <param name="sender">object</param>
         /// <param name="e">ExecutedRoutedEventArgs</param>
         private void Print_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            // Render the control as bitmap
-            RenderTargetBitmap rtb = new RenderTargetBitmap((int)MainContent.ActualWidth, (int)MainContent.ActualHeight, 96, 96, PixelFormats.Pbgra32);
-            rtb.Render(MainContent);
-            PngBitmapEncoder png = new PngBitmapEncoder();
-            png.Frames.Add(BitmapFrame.Create(rtb));
-            MemoryStream stream = new MemoryStream();
-            png.Save(stream);
-            var bi = new BitmapImage();
-            bi.BeginInit();
-            bi.CacheOption = BitmapCacheOption.OnLoad;
-            bi.StreamSource = stream;
-            bi.EndInit();
+            
+            PrintDialog printDlg = new PrintDialog();
+            PrintTicket pt = printDlg.PrintTicket;
+            Double printableWidth = pt.PageMediaSize.Width.Value;
+            Double printableHeight = pt.PageMediaSize.Height.Value;
+            pt.PageOrientation = PageOrientation.Landscape;
 
-            // Then create the drawing
-            var vis = new DrawingVisual();
-            using (var dc = vis.RenderOpen())
+            Double xScale = printableWidth;
+            Double yScale = printableHeight;
+
+            this.LayoutTransform = new MatrixTransform(xScale, 0, 0, yScale, 0, 0);
+
+            if (printDlg.ShowDialog() == true)
             {
-                dc.DrawImage(bi, new Rect { Width = bi.Width, Height = bi.Height });
-            }
-            // Finally print
-            var pdialog = new PrintDialog();
-            if (pdialog.ShowDialog() == true)
-            {
-                pdialog.PrintVisual(vis, "My Image");
+            printDlg.PrintVisual(this, "Print Page");
             }
         }
 
@@ -195,7 +203,7 @@ namespace SmartPert
             InputTextBox.Text = Properties.Settings.Default.ConnectionString;
             InputBox.Visibility = Visibility.Visible;
             if (model != null && model.IsConnected())
-                UpdateDBStatus("Connected", Brushes.Green);
+                UpdateDBStatus("Connected", (SolidColorBrush)FindResource("MaterialDesignBody"));
             else
                 UpdateDBStatus("Disconnected", Brushes.Red);
 
@@ -301,11 +309,21 @@ namespace SmartPert
         
         private void Account_Execute(object sender, ExecutedRoutedEventArgs e)
         {
-            // For Makayla
+            StateSwitcher.Instance.OnAccountEdit();
         }
-#endregion
 
-#region Model Update
+        private void Theme_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            StateSwitcher.Instance.OnThemeEdit();
+        }
+
+        private void SignOut_Execute(object sender, ExecutedRoutedEventArgs e)
+        {
+            StateSwitcher.Instance.OnSignout();
+        }
+        #endregion
+
+        #region Model Update
         public void OnModelUpdate(Project p)
         {
             PopulateProjects();
@@ -326,6 +344,11 @@ namespace SmartPert
         private void Window_Closed(object sender, EventArgs e)
         {
             model.Shutdown();
+        }
+
+        private void LogIn_Click(object sender, RoutedEventArgs e)
+        {
+            StateSwitcher.Instance.TryLogin();
         }
     }
 }

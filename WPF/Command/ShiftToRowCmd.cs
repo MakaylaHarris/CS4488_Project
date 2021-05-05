@@ -30,7 +30,7 @@ namespace SmartPert.Command
             get
             {
                 if (groupRange == null)
-                    groupRange = GetSubTaskGroup(task.Project.SortedTasks, task);
+                    groupRange = GetSubTaskGroup(task);
                 return groupRange;
             }
         }
@@ -86,9 +86,9 @@ namespace SmartPert.Command
                 }
                 else // i > GroupRange.Item2 
                 {
+                    tasks.Add(sorted[i]);
                     if (insertIndex == -1 && sorted[i].ProjectRow >= targetRow)
                         insertIndex = tasks.Count;
-                    tasks.Add(sorted[i]);
                 }
             }
             possibleParents = GetTasksThatCouldBeParent();
@@ -109,7 +109,7 @@ namespace SmartPert.Command
             if(insertIndex - 1 >= 0)
                 for(Task t = tasks[insertIndex - 1]; t != null; t = t.ParentTask)
                 {
-                    if(t.CanAddSubTask(task))
+                    if(t.CanAddSubTask(task) || task.ParentTask == t)
                         ret.Add(t);
                     if (insertIndex < tasks.Count && tasks[insertIndex].TaskIsAncestor(t))
                     {
@@ -154,13 +154,22 @@ namespace SmartPert.Command
         }
 
         /// <summary>
+        /// Gets the row after the subtask group ends
+        /// </summary>
+        /// <param name="parent"></param>
+        public static int GetRowAfterSubtaskGroup(Task parent)
+        {
+            return parent.Project.SortedTasks[GetSubTaskGroup(parent).Item2].ProjectRow + 1;
+        }
+
+        /// <summary>
         /// Gets the group of subtasks under a parent task
         /// </summary>
-        /// <param name="sorted">list of all tasks, ordered</param>
         /// <param name="parent">the parent of the group</param>
         /// <returns>integer range [min,max]</returns>
-        private static Tuple<int, int> GetSubTaskGroup(List<Task> sorted, Task parent)
+        public static Tuple<int, int> GetSubTaskGroup(Task parent)
         {
+            List<Task> sorted = parent.Project.SortedTasks;
             int start = -1, end = -1;
             for (int i = 0; i < sorted.Count; i++)
             {

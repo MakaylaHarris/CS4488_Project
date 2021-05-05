@@ -1,6 +1,7 @@
 ﻿using SmartPert.Command;
 using SmartPert.Model;
 using SmartPert.View.Windows;
+using SmartPert.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,45 +25,22 @@ namespace SmartPert.View.Controls
     public partial class TaskRowLabel : UserControl
     {
         private readonly Task task;
+        private readonly TaskRowLabelViewModel viewModel;
 
         public TaskRowLabel(Task task)
         {
             InitializeComponent();
             this.task = task;
+            viewModel = new TaskRowLabelViewModel(task);
             DataContext = this.task;
-        }
-
-        private bool CanShiftLeft()
-        {
-            return task.ParentTask != null;
-        }
-
-        private Task GetTaskAbove()
-        {
-            int index = task.Project.SortedTasks.IndexOf(task);
-            if (index > 0)
-                return task.Project.SortedTasks[index - 1];
-            return null;
-        }
-
-
-        private bool CanShiftRight()
-        {
-            // if it's at the same level...
-            Task above = GetTaskAbove();
-            return above != null && above != task.ParentTask;
         }
 
         private void UserControl_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (CanShiftLeft())
-            {
+            if (viewModel.CanShiftLeft())
                 LeftButton.Visibility = Visibility.Visible;
-            }
-            if (CanShiftRight())
-            {
+            if (viewModel.CanShiftRight())
                 RightButton.Visibility = Visibility.Visible;
-            }
         }
 
         private void UserControl_MouseLeave(object sender, MouseEventArgs e)
@@ -87,30 +65,12 @@ namespace SmartPert.View.Controls
 
         private void LeftButton_Click(object sender, RoutedEventArgs e)
         {
-            if(CanShiftLeft())
-            {
-                // Test if we can keep at this row, if subtasks are below then we must move outside shifting rows
-                if (HasSubtasksBelow(task.ParentTask, task.ProjectRow)) 
-                    new ShiftToRowCmd(task, task.ParentTask.ProjectRow).Run();
-                // Adding as subtask to grandparent?
-                else if (task.ParentTask.ParentTask != null) 
-                    new AddSubTaskCmd(task.ParentTask.ParentTask, task).Run();
-                // Outer layer
-                else
-                    new RemoveSubtaskCmd(task.ParentTask, task).Run();
-            }
+            viewModel.ShiftLeft();
         }
 
         private void RightButton_Click(object sender, RoutedEventArgs e)
         {
-            if(CanShiftRight())
-            {
-                Task above = GetTaskAbove();
-                Task myParent = task.ParentTask;
-                while (above.ParentTask != myParent && above != null)
-                    above = above.ParentTask;
-                new AddSubTaskCmd(above, task).Run();
-            }
+            viewModel.ShiftRight();
         }
 
         private void mi_editTask_Click(object sender, RoutedEventArgs e)
@@ -128,6 +88,21 @@ namespace SmartPert.View.Controls
             new TaskEditor().ShowDialog();
         }
 
+        private void mi_MarkComplete_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!task.IsComplete)
+                new EditTaskCmd(task, end: DateTime.Now).Run();
+        }
+        private void mi_MarkComplete_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (task.IsComplete)
+                new EditTaskCmd(task, markIncomplete: true).Run();
+        }
+
+        private void mi_AddSubtask_Click(object sender, RoutedEventArgs e)
+        {
+            new TaskEditor(parentTask: task).ShowDialog();
+        }
 
     }
 }

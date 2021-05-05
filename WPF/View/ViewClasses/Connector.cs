@@ -144,15 +144,6 @@ namespace SmartPert.View
             else
             {
                 Disconnect();
-                //// Find closest endpoint
-                //Point end1, end2, point;
-                //point = e.GetPosition(Canvas);
-                //end1 = Anchor1.Point;
-                //end2 = Anchor2.Point;
-                //if (Distance(point, end1) > Distance(point, end2))
-                //    StartConnecting(Anchor1, anchor2IsReceiver);
-                //else
-                //    StartConnecting(Anchor2, !anchor2IsReceiver);
             }
         }
 
@@ -170,7 +161,7 @@ namespace SmartPert.View
             double dist;
             foreach (Anchor anchor in anchors)
             {
-                if (origin.CanConnect(anchor, true) && anchor.CanConnect(origin, false))
+                if (origin.CanConnect(anchor, false) && anchor.CanConnect(origin, true))
                 {
                     Point point = anchor.Point;
                     // distance
@@ -197,6 +188,11 @@ namespace SmartPert.View
             Canvas.ReleaseMouseCapture();
             if (!isConnecting)
                 throw new InvalidOperationException("Can't finish connection if it's not connecting");
+            if(Anchor1 == null)
+            {
+                OnConnectingFinish();
+                return;
+            }
             CtrlHitTest test = new CtrlHitTest(typeof(Connectable), Canvas);
             Point p = Mouse.GetPosition(Canvas);
             List<DependencyObject> hits = test.Run(p, Anchor1.Connectable as DependencyObject);

@@ -49,6 +49,7 @@ namespace SmartPert.View.Windows
         /// <param name="task">The underlying task</param>
         public TaskEditor(Task task = null, Task parentTask = null)
         {
+            WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             InitializeComponent();
             DataContext = this;
             isLoading = false;
@@ -79,8 +80,8 @@ namespace SmartPert.View.Windows
             if(t.Creator != null)
                 CreatedLabel.Content += " by " + t.Creator.Name;
             Complete.IsChecked = t.IsComplete;
-            isLoading = false;
             UpdatePopup();
+            isLoading = false;
         }
         #endregion
 
@@ -92,9 +93,9 @@ namespace SmartPert.View.Windows
                 MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text);
             if(cmd.Run())
             {
-                if (parentTask != null)
-                    new AddSubTaskCmd(parentTask, cmd.Task).Run();
                 Task = cmd.Task;
+                if (parentTask != null)
+                    new AddSubTaskCmd(parentTask, Task).Run();
                 LoadTaskData(task);
             }
             ICmd.PostTransaction();
@@ -103,7 +104,7 @@ namespace SmartPert.View.Windows
         private void runTaskEdit()
         {
             new EditTaskCmd(task, TaskName.Text, (DateTime) StartDate.SelectedDate, EndDate.SelectedDate,
-                MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text).Run();
+                MostLikelyDuration.Value, MaxDuration.Value, MinDuration.Value, TaskDescription.Text, true).Run();
         }
         #endregion
 
@@ -252,8 +253,7 @@ namespace SmartPert.View.Windows
             Assignees.Clear();
             foreach(User user in task.Workers)
                 Assignees.Add(user);
-            ObservableCollection<object> items = cb_assign.Items;
-            items.Clear();
+            ObservableCollection<object> items = new ObservableCollection<object>();
             foreach (object o in Model.Model.Instance.GetUsers())
                 items.Add(o);
             cb_assign.Items = items;

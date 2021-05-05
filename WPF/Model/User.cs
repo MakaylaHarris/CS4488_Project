@@ -80,10 +80,12 @@ namespace SmartPert.Model
         /// </summary>
         protected override void PerformDelete()
         {
-            SqlCommand command = OpenConnection("Delete from [User] Where [User].[UserName]=@username;");
-            command.Parameters.AddWithValue("@username", username);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            using (var conn = new DBConnection("Delete from [User] Where [User].[UserName]=@username;"))
+            {
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@username", username);
+                command.ExecuteNonQuery();
+            }
         }
 
         /// <summary>
@@ -95,16 +97,18 @@ namespace SmartPert.Model
             bool registered = false;
             try
             {
-                SqlCommand command = OpenConnection("Exec dbo.Register @username, @password, @email, @name, @result out");
-                command.Parameters.AddWithValue("@username", username);
-                command.Parameters.AddWithValue("@password", password);
-                command.Parameters.AddWithValue("@email", email);
-                command.Parameters.AddWithValue("@name", name);
-                var result = command.Parameters.Add("@result", System.Data.SqlDbType.Bit);
-                result.Direction = System.Data.ParameterDirection.Output;
-                command.ExecuteNonQuery();
-                registered = (bool)result.Value;
-                CloseConnection();
+                using (var conn = new DBConnection("Exec dbo.Register @username, @password, @email, @name, @result out"))
+                {
+                    SqlCommand command = conn.Command;
+                    command.Parameters.AddWithValue("@username", username);
+                    command.Parameters.AddWithValue("@password", password);
+                    command.Parameters.AddWithValue("@email", email);
+                    command.Parameters.AddWithValue("@name", name);
+                    var result = command.Parameters.Add("@result", System.Data.SqlDbType.Bit);
+                    result.Direction = System.Data.ParameterDirection.Output;
+                    command.ExecuteNonQuery();
+                    registered = (bool)result.Value;
+                }
             }
             catch (SqlException) { }
             if (!registered)
@@ -117,13 +121,15 @@ namespace SmartPert.Model
         /// </summary>
         protected override void PerformUpdate()
         {
-            SqlCommand command = OpenConnection("Update [User] set [Name]=@name, Email=@email, [Password]=@password WHERE UserName=@username");
-            command.Parameters.AddWithValue("@name", name);
-            command.Parameters.AddWithValue("@email", email);
-            command.Parameters.AddWithValue("@password", password);
-            command.Parameters.AddWithValue("@username", username);
-            command.ExecuteNonQuery();
-            CloseConnection();
+            using (var conn = new DBConnection("Update [User] set [Name]=@name, Email=@email, [Password]=@password WHERE UserName=@username"))
+            {
+                SqlCommand command = conn.Command;
+                command.Parameters.AddWithValue("@name", name);
+                command.Parameters.AddWithValue("@email", email);
+                command.Parameters.AddWithValue("@password", password);
+                command.Parameters.AddWithValue("@username", username);
+                command.ExecuteNonQuery();
+            }
         }
 
         static public User Parse(SqlDataReader reader)

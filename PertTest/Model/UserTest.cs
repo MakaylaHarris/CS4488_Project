@@ -16,6 +16,8 @@ namespace PertTest.Model
     {
         private DBReader reader;
 
+        public bool SaveSettings { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         #region Constructor
         public UserTest()
         {

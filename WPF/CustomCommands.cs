@@ -10,8 +10,9 @@ namespace SmartPert
     /// <summary>
     /// Custom Commands with keyboard shortcuts used by main menu.
     /// Created 2/2/2021 by Robert Nelson and Kaden Marchetti
+    /// Edited by Makayla Linnastruth
     /// </summary>
-    static class CustomCommands
+    public static class CustomCommands
     {
         public static readonly RoutedCommand AddTaskCommand = new RoutedUICommand("Add Task", "AddTaskCommand", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
 {
@@ -53,9 +54,22 @@ namespace SmartPert
             new KeyGesture(Key.S, ModifierKeys.Control)
         }));
 
-        public static readonly RoutedCommand AcctSettings = new RoutedUICommand("Account", "Account", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        public static readonly RoutedCommand AcctSettingsCommand = new RoutedUICommand("Account", "Account", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
         {
-            new KeyGesture(Key.T,  ModifierKeys.Alt)
+            new KeyGesture(Key.A,  ModifierKeys.Alt)
+        }));
+
+        public static readonly RoutedCommand ThemeCommand = new RoutedUICommand("Theme", "Theme", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        {
+            new KeyGesture(Key.C,  ModifierKeys.Alt)
+        }));
+        public static readonly RoutedCommand SignOutCommand = new RoutedUICommand("Sign Out", "SignOut", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        {
+            new KeyGesture(Key.M,  ModifierKeys.Alt)
+        }));
+        public static readonly RoutedCommand LogInCommand = new RoutedUICommand("Log In", "LogIn", typeof(MainWindow), new InputGestureCollection(new InputGesture[]
+        {
+            new KeyGesture(Key.L,  ModifierKeys.Alt)
         }));
     }
 }

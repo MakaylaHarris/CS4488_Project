@@ -70,6 +70,17 @@ namespace SmartPert.View.Login
             {
                 Close();
             }
+            else //TODO: encrypt before passing string in here - this is just to update the db until we are all encrypted
+            {
+                bool result2 = model.Login(username,
+                    System.Text.Encoding.ASCII.GetString(
+                        new System.Security.Cryptography.SHA256Managed().ComputeHash(
+                            Encoding.UTF8.GetBytes(password))));
+                if (result2)
+                {
+                    Close();
+                }
+            }
             return result;
         }
 
